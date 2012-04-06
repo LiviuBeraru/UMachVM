@@ -1,0 +1,57 @@
+\documentclass[fontsize=12pt,parskip=full,index=totoc]{scrreprt}
+
+\addtokomafont{disposition}{\rmfamily}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+
+\usepackage{ellipsis}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{xcolor}
+
+\usepackage{scrhack}%entfernt warnmeldungen von listings
+\usepackage{listings}
+\lstset{basicstyle=\small\ttfamily}
+\lstset{commentstyle=\footnotesize\slshape}
+\lstset{showstringspaces=false}
+\lstset{frame=leftline}
+\lstset{morecomment=[l][\color{blue!20!black}]{\#}}
+
+\usepackage{makeidx}
+\makeindex
+
+\title{UMach Spezifikation}
+%\author{ Werner Linne \and Willi Fink \and Simon Beer \and Liviu Beraru }
+\author{}
+
+\usepackage[
+    pdftitle={UMach VM Spezifikation},
+    colorlinks=true,
+    linkcolor=blue!20!black]
+{hyperref} 
+
+\usepackage{blindtext}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+%--- Jedes Kapitel in eigener Datei und eigenem Verzeichnis 
+%--- Jede Kapitel-Datei fängt mit \chapter an (markiert Kapitel)
+%--- und kann nach belieben andere \section enthalten
+%--- Empfehlung: jeder Abschnitt \section in eigener Datei
+
+\input{einfuehrung/Einfuehrung}
+
+\input{struktur/Struktur}
+
+\input{instruktionen/Instruktionssatz}
+
+
+
+\appendix
+\printindex
+
+\end{document}

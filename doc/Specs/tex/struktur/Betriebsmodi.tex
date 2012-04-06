@@ -1,0 +1,19 @@
+\section{Betriebsmodi}\index{Betriebsmodi}
+Ein Betriebmodus bezieht sich auf die Art, wie die UMach VM läuft.
+Die UMach VM kann in einem der folgenden Betriebsmodi laufen:
+
+\begin{enumerate}
+  \item Normalmodus
+  \item Einzelschrittmodus
+\end{enumerate}
+
+\paragraph{Normalmodus} Die virtuelle Maschine führt ohne Unterbrechung ein
+Programm aus. Nach der Ausführung befindet sich die Maschine in einem
+Wartezustand, falls sie nicht ausdrücklich ausgeschaltet wird.
+
+\paragraph{Einzelschrittmodus} Die virtuelle Maschine führt immer eine einzige
+Instruktion aus und nach der Ausführung wartet sie auf einen externen Signal um
+mit der nächsten Instruktion fortzufahren. Dieser Modus soll dem Entwickler
+erlauben, ein Programm schrittweise zu debuggen.
+
+

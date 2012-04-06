@@ -1,0 +1,26 @@
+\chapter{Einführung}
+UMach ist eine einfache virtuelle Maschine (VM), die einen definierten Instruktionssatz
+und eine definierte Architektur hat. UMach orientiert sich dabei an Prinzipien
+von RISC Architekturen: feste Instruktionslänge,
+kleine Anzahl von einfachen Befehlen, Speicherzugriff durch Load- und
+Store-Befehlen, u.s.w.
+
+
+Für den Anwender der virtuellen Maschine wird zuerst eine Assembler-Sprache zur
+Verfügung gestellt. In dieser Sprache werden Programme geschrieben die
+anschließend kompiliert werden. Die kompilierte Dateien (Maschinen-Code) wird
+von der virtuellen Maschine ausgeführt.
+
+
+\section{Anwendungsbeispiel}
+
+
+
+\begin{lstlisting}
+LOAD R1 90
+LOAD R2 09
+REV  R3 R1
+\end{lstlisting}
+
+
+
