@@ -4,34 +4,42 @@
 \paragraph{Befehlsbreite}
 \index{Befehlsbreite}
 Jeder UMach-Befehl hat eine feste Bitlänge von 32 Bit (4 mal 8 Bit).
-Das gilt unabhängig davon, was der Befehl tut. Befehle die weniger als 32 Bit
-brauchen, wie z.B. \texttt{NOP}, werden mit Nullbits gefüllt.
-Alle Daten und Informationen, die mit einem Befehl übergeben werden, müssen in
-diesen 32 Bit untergebracht werden. Die übrigen 24 Bit werden für Operanden oder
-Daten benutzt.
+Das gilt unabhängig davon, was der Befehl tut. Befehle, die für ihren
+Informationsgehalt weniger als 32 Bit brauchen, wie z.B. \texttt{NOP},
+werden mit Nullbits gefüllt. Alle Daten und Informationen, die mit einem
+Befehl übergeben werden, müssen in diesen 32 Bit untergebracht werden.
 
 \paragraph{Byte Order}
 \index{Byte Order}
-Die Byte Order (Endianness) der gelesenen Bytes (Gruppen von 8 Bit jeweils) ist
-big-endian, die Byte-Reihenfolge, die für den Mensch selbstverständlich wäre.
+Die Byte Order (Endianness) der gelesenen \glspl{Byte} (Gruppen von 8 Bit jeweils) ist
+big-endian, die Byte-Reihenfolge, die für den Mensch selbstverständlich wäre
+(von links nach rechts lesen):
+die zuerst gelesenen 8 Bits sind die 8 höchstwertigen (Wertigkeiten $2^{31}$ bis
+$2^{24}$) und die zuletzt gelesenen Bits sind die niedrigstwertigen
+(Wertigkeiten $2^{7}$ bis $2^{0}$).
+Bits werden in Stücken von $n$ Bits gelesen, wobei $n = k \cdot 8$ und
+$k \in \mathbb{N} \setminus\{0\}$ (Byte für Byte).
 
 
 \paragraph{Allgemeines Format}
-Jeder Befehl hat zwei Teile: der erste Teil ist 8 Bit lang und beinhaltet den
-tatsächlichen Befehl, bzw. die Operation, die ausgeführt werden sollte. Es gibt
-$2^{8} = 256$ mögliche Befehle.
+Jeder Befehl besteht aus zwei Teilen: der erste Teil ist 8 Bit lang und
+beinhaltet den tatsächlichen Befehl, bzw. die Operation, die von der UMach
+virtuelle Maschine ausgeführt werden soll.
+Diese 8 Bits belegen also die 8 höchstwertigen Bits in einem Befehl
+(Instruktionswort).
+Es gibt $256$ Befehle, gemäß $2^{8} = 256$.
+Die übrigen 24 Bit werden für Operanden oder Daten benutzt.
 
 \begin{center}
   \begin{tabular}{l|*{4}{c|}}
     Binär &
     \texttt{0000} & \texttt{0001} & \texttt{0010} & \texttt{0011} \\\hline
     Hexa  &
-    \texttt{00} & \texttt{01} & \texttt{02} & \texttt{03}         \\\hline
+    \texttt{00}   & \texttt{01}   & \texttt{02}   & \texttt{03}   \\\hline
     Byte Order &
-    erstes Byte & zweites Byte & drittes Byte & viertes Byte      \\\hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte  \\\hline
     Interpretation &
-    Befehl &
-    \multicolumn{3}{c|}{Operanden, Daten} \\\hline
+    Befehl    &  \multicolumn{3}{c|}{Operanden, Daten, Füllbits} \\\hline
   \end{tabular}
 \end{center}
 
