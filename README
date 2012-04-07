@@ -1,1 +1,11 @@
-This project will create a simple virtual machine.
+The purpose of this project is to create a simple virtual machine called UMach.
+The project consists of the following components:
+1 - The virtual machine specification and usage instructions (doc folder).
+2 - The implementation of the virtual machine in C. The implementation will 
+    have two parts: 
+    * the assembler, which generates machine code for the UMach VM and
+    * the machine itself, which executes the machine code.
+3 - Sample assembler Code demonstrating the machine instruction set.
+
+This is a university project.
+The specification language is German.
