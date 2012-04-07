@@ -1,3 +1,10 @@
 src/
 doc/About/
 *.latexmain
+*.aux
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.toc
