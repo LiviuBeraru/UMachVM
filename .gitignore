@@ -8,3 +8,7 @@ src/
 *.out
 *.toc
 *.swp
+*.glg
+*.glo
+*.gls
+*.ist

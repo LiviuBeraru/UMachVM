@@ -1,15 +1,18 @@
 \documentclass[fontsize=12pt,parskip=full,index=totoc]{scrreprt}
 
 \addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 
+\usepackage{lmodern}
 \usepackage{ellipsis}
 \usepackage{microtype}
-\usepackage{lmodern}
 \usepackage{xcolor}
+\usepackage{amsmath,amsfonts}
 
 \usepackage{scrhack}%entfernt warnmeldungen von listings
 \usepackage{listings}
@@ -32,6 +35,8 @@
     linkcolor=blue!20!black]
 {hyperref} 
 
+\input{misc/Glossary}
+
 \usepackage{blindtext}
 
 \begin{document}
@@ -50,8 +55,9 @@
 \input{instruktionen/Instruktionssatz}
 
 
-
 \appendix
+
+\printglossary[title=Glossar,toctitle=Glossar]
 \printindex
 
 \end{document}
