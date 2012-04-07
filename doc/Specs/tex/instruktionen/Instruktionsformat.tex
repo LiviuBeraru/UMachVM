@@ -22,9 +22,9 @@ $k \in \mathbb{N} \setminus\{0\}$ (Byte für Byte).
 
 
 \paragraph{Allgemeines Format}
-Jeder Befehl besteht aus zwei Teilen: der erste Teil ist 8 Bit lang und
-beinhaltet den tatsächlichen Befehl, bzw. die Operation, die von der UMach
-virtuelle Maschine ausgeführt werden soll.
+Jeder Befehl (\gls{Instruktion}) besteht aus zwei Teilen: der erste Teil ist
+8 Bit lang und beinhaltet den tatsächlichen \gls{Befehl}, bzw. die Operation,
+die von der UMach virtuellen Maschine ausgeführt werden soll.
 Diese 8 Bits belegen also die 8 höchstwertigen Bits in einem Befehl
 (Instruktionswort).
 Es gibt $256$ Befehle, gemäß $2^{8} = 256$.
@@ -39,8 +39,10 @@ Die übrigen 24 Bit werden für Operanden oder Daten benutzt.
     Byte Order &
     erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte  \\\hline
     Interpretation &
-    Befehl    &  \multicolumn{3}{c|}{Operanden, Daten, Füllbits} \\\hline
+    Befehl    &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits} \\\hline
   \end{tabular}
 \end{center}
 
+Die Instruktionsformaten unterscheiden sich lediglich darin, dass sie die 24 Bits
+nach dem 8-Bitigen \gls{Befehl} untershiedlich verwenden.
 
