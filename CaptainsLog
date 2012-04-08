@@ -15,3 +15,19 @@
   ####  #     #  #    #   ####   #    #    #    #     #
 
 ### TODO: delete this text whenever necessary! ###
+
+=== 08.04.2012 ===
+Malk.
+Es gibt auch sprachlich einen Unterschied zwischen "Instruktion"
+(engl. instruction) und "Befehl" (engl. command), besonders in dem Kontext
+dieses Projektes.
+Befehl ist etwas kurzes und deutet auf eine einfache Aktion hin: "tue das".
+Instruktion deutet darauf hin, wie die Aktion getan werden sollte:
+"tue das so und so".
+Wir sollten daher in der Dokumentation aufpassen, wenn wir
+Befehl oder Instruktion verwenden. Den Unterschied habe ich im Glossar
+aufgenommen.
+Befehl ist die Operation, die ausgeführt werden sollte. Beispiel: add, sub.
+instruktion ist das ganze Ding: add r1 r2 r3. Enthält also auch die Argumenten.
+Instruktionen, die lediglich aus einem Befehl ohne Argumenten bestehen sind
+immernoch Instruktionen.
