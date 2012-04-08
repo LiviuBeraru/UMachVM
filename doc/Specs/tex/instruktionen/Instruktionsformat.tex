@@ -32,7 +32,7 @@ Instruktionszerlegung:
 \begin{center}
   \begin{tabular}{|l|*{4}{c|}}
     \hline
-    Instruktion &
+    Instruktion (32 Bit) &
     \texttt{00000001} & \texttt{00000010} & \texttt{00000011} & \texttt{00000100}
     \\\hline
     Hexa  &
@@ -42,7 +42,7 @@ Instruktionszerlegung:
     erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline
     Interpretation &
-    Befehl    &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits}
+    Befehl (8 Bit) &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits}
     \\\hline
   \end{tabular}
 \end{center}
@@ -50,3 +50,72 @@ Instruktionszerlegung:
 Die Instruktionsformate unterscheiden sich lediglich darin, dass sie die 24 Bits
 nach dem 8-Bitigen \gls{Befehl} unterschiedlich verwenden.
 
+In den folgenden Abschnitten werden die UMach-Instruktionsformate vorgestellt.
+Jede Angegebene Tabelle gibt in der ersten Zeile die Reihenfolge der Bytes an. 
+Alle folgenden Zeilen geben die spezielle Belegung der einzelnen Bytes an.
+Falls es mehrere Alternativen zu einer Belegung möglich ist, werden die
+Alternativen untereinander aufgelistet (jede in eigener Zeile).
+Alle festen Zahlen sind im Hexadezimalsystem angegeben.
+
+\subsection{Format 1}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}}
+    \hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline\hline
+    Befehl        & \texttt{00} & \texttt{00} & \texttt{00} 
+    \\\hline
+    Befehl        & \multicolumn{3}{c|}{don't care}
+    \\\hline
+  \end{tabular}
+\end{center}
+
+Der Befehl hat keine Argumenten. Die letzen drei Bytes werden von der Maschine
+nicht ausgewertet und sind somit Füllbytes.
+
+\subsection{Format 2}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}}
+    \hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline\hline
+    Befehl        & \multicolumn{3}{c|}{feste Zahl}
+    \\\hline
+  \end{tabular}
+\end{center}
+
+
+\subsection{Format 3}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}}
+    \hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline\hline
+    Befehl        & $Z$ & $R_{1}$ & $R_{2}$ 
+    \\\hline
+  \end{tabular}
+\end{center}
+
+\begin{itemize}
+  \item $Z$ ist das Zielregister
+  \item $R_{1}$ ist der erste Registeroperand
+  \item $R_{2}$ ist der zweite Registeroperand
+\end{itemize}
+
+
+\subsection{Format 4}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}}
+    \hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline\hline
+    Befehl        & $R$ & \multicolumn{2}{c|}{feste Zahl}
+    \\\hline
+  \end{tabular}
+\end{center}
+Das zweite Byte ist ein Register $R$. Die letzten 16 Bits (2 Bytes) sind als eine
+Einheit zu betrachten und deren Bedeutung wird dem jeweiligen Befehl überlassen.
