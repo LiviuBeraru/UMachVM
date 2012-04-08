@@ -1,3 +1,6 @@
+#####################################################################
+#####################################################################
+
 #     #                 #
 #  #  #  ######         #         ####   #    #  ######
 #  #  #  #              #        #    #  #    #  #
@@ -6,7 +9,7 @@
 #  #  #  #              #        #    #   #  #   #
  ## ##   ######         #######   ####     ##    ######
 
-        #     #                         #     # #     #
+ #    # #     #                         #     # #     #
  #    # ##   ##    ##     ####   #    # #     # ##   ##
  #    # # # # #   #  #   #    #  #    # #     # # # # #
  #    # #  #  #  #    #  #       ###### #     # #  #  #
@@ -14,20 +17,44 @@
  #    # #     #  #    #  #    #  #    #   # #   #     #
   ####  #     #  #    #   ####   #    #    #    #     #
 
-### TODO: delete this text whenever necessary! ###
+#####################################################################
+#####################################################################
+
+#########      ###      ########    ##           #######    #########
+##     ##    ##   ##    ##     ##   ##          ##     ##   ##     ##
+##          ##     ##   ##     ##   ##          ##     ##   ##       
+##          ##     ##   ##     ##   ##          ##     ##   ##       
+##          #########   ########    ##          ##     ##   ##   ####
+##          ##     ##   ##          ##          ##     ##   ##     ##
+##     ##   ##     ##   ##          ##          ##     ##   ##     ##
+#########   ##     ##   ##          #########    #######    #########
+
+#####################################################################
+#####                        The Conquest                       #####
+#####################################################################
 
 === 08.04.2012 ===
 Malk.
 Es gibt auch sprachlich einen Unterschied zwischen "Instruktion"
-(engl. instruction) und "Befehl" (engl. command), besonders in dem Kontext
-dieses Projektes.
-Befehl ist etwas kurzes und deutet auf eine einfache Aktion hin: "tue das".
+(engl. instruction) und "Befehl" (engl. command), besonders in dem
+Kontext dieses Projektes.
+Befehl ist etwas kurzes und deutet auf eine einfache Aktion hin:
+"tue das".
 Instruktion deutet darauf hin, wie die Aktion getan werden sollte:
 "tue das so und so".
 Wir sollten daher in der Dokumentation aufpassen, wenn wir
 Befehl oder Instruktion verwenden. Den Unterschied habe ich im Glossar
 aufgenommen.
-Befehl ist die Operation, die ausgeführt werden sollte. Beispiel: add, sub.
-Instruktion ist das ganze Ding: add r1 r2 r3. Enthält also auch die Argumenten.
-Instruktionen, die lediglich aus einem Befehl ohne Argumenten bestehen sind
-immernoch Instruktionen.
+Befehl ist die Operation, die ausgeführt werden sollte.
+Beispiel: add, sub.
+Instruktion ist das ganze Ding: add r1 r2 r3. Enthält also auch die
+Argumenten. Instruktionen, die lediglich aus einem Befehl ohne
+Argumenten bestehen sind immernoch Instruktionen.
+
+
+=== 08.04.2012 ===
+Malk.
+Obwohl es Ostern ist, habe ich trotzdem am Projekt gearbeitet.
+Wir müssen vorankommen.
+Wie ich mich kenne, werde ich weiter wie besessen arbeiten.
+Halt mich zurück!
