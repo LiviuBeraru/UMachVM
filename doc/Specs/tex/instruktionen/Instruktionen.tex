@@ -1,24 +1,36 @@
 \section{Instruktionen}\index{Instruktionen}
 
-Zur besseren Übersicht der verschiedenen UMach-Befehlen, unterteilen wir den
-\gls{Instruktionssatz} der UMach virtuellen Maschine in den folgenden Kategorien:
+Zur besseren Übersicht der verschiedenen UMach-\glspl{Instruktion}, unterteilen
+wir den \gls{Instruktionssatz} der UMach virtuellen Maschine in den folgenden
+Kategorien:
 \index{Instruktionen!Kategorien}
 
 \begin{enumerate}
-  \item Kontrollbefehle: das sind Befehle, die die Maschine selbst
-    kontrollieren, wie z.B. den Betriebsmodus umschalten oder Ausschalten.
-  \item Arithmetische Befehle: Addieren, Subtrahieren etc. Alle arithmetische
-    Befehle operieren auf Register Inhalte.
-  \item Logische Befehle, die eine logische Verknüpfung zwischen den Inhalten
+  \item Kontrollinstruktionen,  die die Maschine in ihrer Gesamtheit
+    steuern, wie z.B. den Betriebsmodus umschalten oder Ausschalten.
+  \item Arithmetische Instruktionen, wie z.B. Addieren, Subtrahieren etc.
+    Alle arithmetische Instruktionen operieren auf Register Inhalte.
+  \item Logische Instruktionen, die eine logische Verknüpfung zwischen den Inhalten
     von Registern veranlassen.
-  \item Vergleichsbefehle: Vergleichen von Registerinhalten.
-  \item Sprünge.
-  \item Load- und Store-Befehle: die einzigen Befehle, die einen Zugriff auf den
+  \item Vergleichsinstruktionen: Vergleichen von Registerinhalten.
+  \item Sprünge im Programmcode.
+  \item Load- und Store-Instruktionen die einzigen, die einen Zugriff auf den
     Speicher ausführen.
-  \item Input-Output-Befehle: operieren auf die I/O-Einheit der UMach VM.
+  \item Input-Output-Instruktionen operieren auf die I/O-Einheit der UMach VM.
+  \item Andere Befehle: diese Kategorie enthält Instruktionen, die in keiner
+    anderen Kategorie passen und zukünftige Erweiterungen.
 \end{enumerate}
 
+\paragraph{Verteilung des Befehlsraums}
+\index{Befehlsraum}
+Die oben angegebenen Instruktionskategorien unterteilen den \gls{Befehlsraum} in
+8 Bereiche.
+Es gibt $256$ Befehle, gemäß $2^{8} = 256$.
 
+
+Im den folgenden Abschnitten werden die einzelnen Instruktionen beschrieben.
+Zu jeder Intruktion wird der \glqq Mnemonic Code\grqq, der Maschinen Code, das
+Instruktionsformat und Verwendungsbeispiele angegeben.
 
 
 

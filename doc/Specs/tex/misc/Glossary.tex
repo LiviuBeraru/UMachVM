@@ -1,5 +1,5 @@
 \usepackage[nonumberlist,toc]{glossaries}
-\renewcommand{\glossaryname}{Glossar}
+\renewcommand*{\glspostdescription}{}% kein automatischer Punkt am Ende
 \makeglossaries
 
 % Glossary definitions
@@ -17,27 +17,46 @@
 
 \newglossaryentry{Byte}{
 name=Byte,
-description={eine Reihe oder Gruppe von 8 Bit},
+description={eine Reihe oder Gruppe von 8 Bit.},
 plural={Bytes}
 }
 
 \newglossaryentry{Befehl}{
 name=Befehl,
-description={Die ersten 8 Bits in einer Instruktion. Operation code},
+description={Die ersten 8 Bits in einer Instruktion. Operation code.},
 plural={Befehle}
 }
 
-
+\newglossaryentry{Befehlsbreite}{
+name=Befehlsbreite,
+description={Die Länge eines Befehls in Bits. Ein UMach-Befehl ist 8 Bit lang.},
+plural={Befehlsbreiten}
+}
 
 \newglossaryentry{Instruktion}{
 name=Instruktion,
-description={Eine Anweisung an die UMach VM etwas zu tun. Besteht aus einem
-Befehl (Operation Code) und eventuellen Argumenten},
+description={Eine Anweisung an die UMach VM etwas zu tun. Eine Instruktion
+besteht aus einem Befehl (Operation Code) und eventuellen Argumenten.},
 plural={Instructionen}
+}
+
+\newglossaryentry{Instruktionsbreite}{
+name=Instruktionsbreite,
+description={Die Länge einer Instruktion in Bits. Eine UMach-Instruktion ist 32 Bit lang.},
+plural={Instruktionsbreiten}
 }
 
 \newglossaryentry{Instruktionssatz}{
 name=Instruktionssatz,
-description={Die Menge aller Instruktionen},
+description={Die Menge aller Instruktionen, die von der UMach Maschine
+ausgeführt werden können.},
 plural=Instruktionssätze
+}
+
+\newglossaryentry{Befehlsraum}{
+name=Befehlsraum,
+description={Die Anzahl der möglichen Befehlen, abhängig von der
+Befehlsbreite. Beträgt die Befehlsbreite $8$ Bit, so ist der Befehlsraum
+$2^{8} = 256$.},
+plural=Befehlsräume
 }

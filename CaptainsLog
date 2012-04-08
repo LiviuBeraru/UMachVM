@@ -28,6 +28,6 @@ Wir sollten daher in der Dokumentation aufpassen, wenn wir
 Befehl oder Instruktion verwenden. Den Unterschied habe ich im Glossar
 aufgenommen.
 Befehl ist die Operation, die ausgeführt werden sollte. Beispiel: add, sub.
-instruktion ist das ganze Ding: add r1 r2 r3. Enthält also auch die Argumenten.
+Instruktion ist das ganze Ding: add r1 r2 r3. Enthält also auch die Argumenten.
 Instruktionen, die lediglich aus einem Befehl ohne Argumenten bestehen sind
 immernoch Instruktionen.

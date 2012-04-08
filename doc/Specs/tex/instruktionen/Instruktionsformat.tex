@@ -1,13 +1,13 @@
-\section{Instruktionsformat}
+\section{Instruktionsformate}
 \index{Instruktionsformat}
 
-\paragraph{Befehlsbreite}
-\index{Befehlsbreite}
-Jeder UMach-Befehl hat eine feste Bitlänge von 32 Bit (4 mal 8 Bit).
-Das gilt unabhängig davon, was der Befehl tut. Befehle, die für ihren
+\paragraph{Instruktionsbreite}
+\index{Instruktionsbreite}
+Jede UMach-Instruktion hat eine feste Bitlänge von 32 Bit (4 mal 8 Bit).
+Das gilt unabhängig davon, was die Instruktion tut. Instruktionen, die für ihren
 Informationsgehalt weniger als 32 Bit brauchen, wie z.B. \texttt{NOP},
-werden mit Nullbits gefüllt. Alle Daten und Informationen, die mit einem
-Befehl übergeben werden, müssen in diesen 32 Bit untergebracht werden.
+werden mit Nullbits gefüllt. Alle Daten und Informationen, die mit einer
+Instruktion übergeben werden, müssen in diesen 32 Bit untergebracht werden.
 
 \paragraph{Byte Order}
 \index{Byte Order}
@@ -22,27 +22,31 @@ $k \in \mathbb{N} \setminus\{0\}$ (Byte für Byte).
 
 
 \paragraph{Allgemeines Format}
-Jeder Befehl (\gls{Instruktion}) besteht aus zwei Teilen: der erste Teil ist
-8 Bit lang und beinhaltet den tatsächlichen \gls{Befehl}, bzw. die Operation,
+Jede \gls{Instruktion} besteht aus zwei Teilen: der erste Teil ist
+8 Bit lang und entspricht dem tatsächlichen \gls{Befehl}, bzw. der Operation,
 die von der UMach virtuellen Maschine ausgeführt werden soll.
-Diese 8 Bits belegen also die 8 höchstwertigen Bits in einem Befehl
-(Instruktionswort).
-Es gibt $256$ Befehle, gemäß $2^{8} = 256$.
-Die übrigen 24 Bit werden für Operanden oder Daten benutzt.
+Dieser 8-Bit-Befehl belegt also die 8 höchstwertigen Bits einer Instruktion.
+Die übrigen 24 Bit werden für Operanden oder Daten benutzt. Beispiel einer
+Instruktionszerlegung:
 
 \begin{center}
-  \begin{tabular}{l|*{4}{c|}}
-    Binär &
-    \texttt{0000} & \texttt{0001} & \texttt{0010} & \texttt{0011} \\\hline
+  \begin{tabular}{|l|*{4}{c|}}
+    \hline
+    Instruktion &
+    \texttt{00000001} & \texttt{00000010} & \texttt{00000011} & \texttt{00000100}
+    \\\hline
     Hexa  &
-    \texttt{00}   & \texttt{01}   & \texttt{02}   & \texttt{03}   \\\hline
+    \texttt{01}   & \texttt{02}   & \texttt{03}   & \texttt{04}
+    \\\hline
     Byte Order &
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte  \\\hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline
     Interpretation &
-    Befehl    &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits} \\\hline
+    Befehl    &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits}
+    \\\hline
   \end{tabular}
 \end{center}
 
-Die Instruktionsformaten unterscheiden sich lediglich darin, dass sie die 24 Bits
-nach dem 8-Bitigen \gls{Befehl} untershiedlich verwenden.
+Die Instruktionsformate unterscheiden sich lediglich darin, dass sie die 24 Bits
+nach dem 8-Bitigen \gls{Befehl} unterschiedlich verwenden.
 
