@@ -3,6 +3,14 @@
 \addtokomafont{disposition}{\rmfamily}
 \addtokomafont{descriptionlabel}{\rmfamily}
 
+\usepackage[ilines,headsepline]{scrpage2}
+\pagestyle{scrheadings}
+\clearscrheadfoot
+%\automark[section]{chapter}
+\automark{section}
+%\ihead{\leftmark}
+\chead{\leftmark}
+\cfoot{\pagemark}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
