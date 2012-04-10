@@ -17,7 +17,7 @@
 
 \newglossaryentry{Byte}{
 name=Byte,
-description={eine Reihe oder Gruppe von 8 Bit.},
+description={Eine Reihe oder Gruppe von 8 Bit.},
 plural={Bytes}
 }
 
@@ -31,6 +31,14 @@ plural={Befehle}
 name=Befehlsbreite,
 description={Die Länge eines Befehls in Bits. Ein UMach-Befehl ist 8 Bit lang.},
 plural={Befehlsbreiten}
+}
+
+\newglossaryentry{Befehlsraum}{
+name=Befehlsraum,
+description={Die Anzahl der möglichen Befehlen, abhängig von der
+Befehlsbreite. Beträgt die Befehlsbreite $8$ Bit, so ist der Befehlsraum
+$2^{8} = 256$.},
+plural=Befehlsräume
 }
 
 \newglossaryentry{Instruktion}{
@@ -53,10 +61,10 @@ ausgeführt werden können.},
 plural=Instruktionssätze
 }
 
-\newglossaryentry{Befehlsraum}{
-name=Befehlsraum,
-description={Die Anzahl der möglichen Befehlen, abhängig von der
-Befehlsbreite. Beträgt die Befehlsbreite $8$ Bit, so ist der Befehlsraum
-$2^{8} = 256$.},
-plural=Befehlsräume
+\newglossaryentry{Register}{
+name={Register},
+description={Eine sich im Prozessor befindende Speichereinheit. Der Register
+ist dem Programmierer sichbar und kann mit Werten geladen werden. Siehe
+Abschnitt \ref{subsec:Register}, Seite \pageref{subsec:Register}.},
+plural={Register}
 }
