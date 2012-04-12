@@ -1,3 +1,4 @@
+ vim:filetype=txt textwidth=70 wrap
 #####################################################################
 #####################################################################
 
@@ -58,3 +59,39 @@ Obwohl es Ostern ist, habe ich trotzdem am Projekt gearbeitet.
 Wir müssen vorankommen.
 Wie ich mich kenne, werde ich weiter wie besessen arbeiten.
 Halt mich zurück!
+
+
+=== 12.04.2012 ===
+-- Stand bis jetzt --
+---------------------
+Die Spezifikation besteht aus allgemeinen Sachen, die man auch alleine
+hinschreiben konnte, ohne sich groß zu unterhalten. Alles kann und
+sollte korrigiert werden: Struktur umdenken, Kapitel umbennen, neue
+Abschnitte etc. Alles ist jetzt noch flexibel und kann nach Belieben
+verändert werden, später nicht mehr so ganz.
+Wir müssen jetzt aber auch ein paar grundlegendere Sachen entscheiden,
+sonst kommen wir nicht weiter:
+- Wie viele Register gibt es für den Programmierer? - Die sollte man
+  auflisten und beschreiben können.
+- Gibt es spezielle Register?
+- Wie nennen sich die Register? (Nich deren Ansprechung im Asm-Code,
+  sondern allgemein in der Maschinenspezifikation).
+  Möglichkeiten wären:
+  *) R1, R2, R3, T1, T2 ...
+  *) A, B, C, D, E, F ...
+  *) aax, abx, acx, adx, aex, afx ...
+  *) x, xx, xxx, xxxx, xxxxx, xxxxxx ...
+  *) 1, 2, 3, 4, 5, 6 ...
+  *) etc 
+- Welche andere Register gibt es?
+- Welche andere Befehlsformate gibt es? Reichen die, die schon da stehen?
+- Welche Namen sollen die Formate haben? Jetzt steh da "Format 1", 
+  "Format 2" etc. Sollen sie nicht anderes heißen?
+- Die Befehlskategorien: sind das alle? Sind es zu viele?
+- Wenn ein Befehl (opcode) 1 Byte lang ist (8 Bit), wie kann man die
+  möglichen 256 Befehle verteilen? Ich meine die Kategorien. Wäre es
+  sinnvoll zu sagen: wir haben 8 Kategorien, dann haben wir 256/8 = 32
+  Befehle per Kategorie, also teilen wir:
+  *) Befehle 0-31 Kontrolle
+  *) 32 - 62 Arithmetik etc
+- Glossar erweitern, falls möglich.
