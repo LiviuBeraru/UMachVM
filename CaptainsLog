@@ -62,6 +62,7 @@ Halt mich zurück!
 
 
 === 12.04.2012 ===
+Malk.
 -- Stand bis jetzt --
 ---------------------
 Die Spezifikation besteht aus allgemeinen Sachen, die man auch alleine
@@ -95,3 +96,64 @@ sonst kommen wir nicht weiter:
   *) Befehle 0-31 Kontrolle
   *) 32 - 62 Arithmetik etc
 - Glossar erweitern, falls möglich.
+
+
+=== 12.04.2012 ===
+Malk.
+Vorschlag bzgl. Register:
+- Es gibt 2 Gruppen von 64 Registern (warum nicht gleich 2^8 = 256
+  Register?):
+  1) allgemeine Register: sie sind dafür gedacht, dass der
+     Programmierer sie frei verwenden kann, ohne dass deren Inhalt von
+     der Maschine (im Hintergrund) verändert wird. Man kann denen
+     (wie den MIPS Registern) konventionellen Zwecke vergeben, die man
+     beim Programmieren einhalten soll, für die Maschine aber sind
+     sie frei und haben keinen bestimmten Zweck.
+  2) spezielle Register, die für bestimmte Zwecke von der Maschine
+     verwendet werden.
+     Beispiele für solche Dinge: aktuelle Instruktion, instruction
+     pointer, status register, stack pointer, Quotient/Rest der
+     Division, Default Register (default Wert für verschiedene Zwecke)
+     etc.
+Die Einteilung scheint mir sinnvoll zu sein.
+Die Namen der Register wären:
+  1) allgemeine Register: R1, R2, ...R64 (fängt bei 1 an, R0
+     vielleicht reserviert)
+  2) spezielle Register: S1, S2, ...S64.
+     Manche spezielle Register haben doppelte Namen (alias):
+     S1 = IN  (aktuelle Instruktion)
+     S2 = S   (status Register mit definierten Flags)
+     S3 = IC  (instruction pointer, instruction counter)
+     S4 = SP  (stack pointer)
+     S5 = PR  (protection: schreibschutz mancher Register)
+     ...
+     Diese Alias wären sozusagen offizielle Namen in der Spezifikation
+     und sollten entsprechend auch vom Assembler erkannt werden.
+Ich würde die Anzahl der Register einer Gruppe von 32 auf 64 erhöhen,
+damit wir Spielraum haben. Es bleiben halt ein paar Register
+unbenutzt.
+
+
+=== 12.04.2012 ===
+Malk.
+Vorschlag bzgl. Anatomie der Maschine:
+== IO
+Die Maschine sollte eine Ausgabe-Einheit haben. Diese Einheit sollte
+aber nicht ein Bildschirm oder Ähnliches sein, sondern eine
+parallele Schnittstelle. Es sind sozusagen 32 Kabelchen die
+rausgehen. Es ist Aufgabe eines Peripheriegerätes, diese 32 Bits zu
+interpretieren.
+== Bus
+Frage: zwischen der CPU und dem Speicher müss es Kommunikationswege
+geben. Weil die Maschine 32 Bit Instruktionen ausführt, ist es
+sinnvoll, dass es mindestens einen 32 Bit Bus zum Speicher gibt.
+Sollte man einen zusätzlichen 32 Bit Bus für Daten einführen?
+Man sollte sich hier den Ablauf einer Instruktion überlegen:
+fetch - decode - execute.
+Wie kann man sich das im Sinne eines Buses vorstellen?
+Besonders der 'fetch' Schritt. Kann man das mit einer einzigen
+Verbindung zwischen CPU und Speicher realisieren?
+Ich habe versucht (mit Inkscape) eine Skizze davon zu machen
+(doc/Specs/img).
+
+Es ist 2 Uhr in der Nacht.
