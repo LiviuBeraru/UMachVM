@@ -55,26 +55,37 @@ Jede Angegebene Tabelle gibt in der ersten Zeile die Reihenfolge der Bytes an.
 Alle folgenden Zeilen geben die spezielle Belegung der einzelnen Bytes an.
 Falls es mehrere Alternativen zu einer Belegung möglich ist, werden die
 Alternativen untereinander aufgelistet (jede in eigener Zeile).
-Alle festen Zahlen sind im Hexadezimalsystem angegeben.
 
-\subsection{Format 1}
+
+
+
+
+\subsection{Op0}
+\index{Instruktionsformat!Op0}
+\index{Op0}
 
 \begin{center}
   \begin{tabular}{|*{4}{c|}}
     \hline
     erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    Befehl        & \texttt{00} & \texttt{00} & \texttt{00} 
-    \\\hline
-    Befehl        & \multicolumn{3}{c|}{don't care}
+    Befehl        & \multicolumn{3}{c|}{nicht verwendet}
     \\\hline
   \end{tabular}
 \end{center}
 
-Der Befehl hat keine Argumenten. Die letzen drei Bytes werden von der Maschine
-nicht ausgewertet und sind somit Füllbytes.
+Eine Instruktion, die das Format Op0 hat, besteht lediglich aus einem Befehl
+ohne Argumenten. Die letzen drei Bytes werden von der Maschine nicht
+ausgewertet und sind somit Füllbytes. Es wird empfohlen, die letzten 3 Bytes mit
+Nullen zu füllen.
+Der Name kommt von \glqq Operation Zero\grqq, ein Befehl gefolgt von Nullen.
 
-\subsection{Format 2}
+
+
+
+\subsection{OpNo}
+\index{Instruktionsformat!OpNo}
+\index{OpNo}
 
 \begin{center}
   \begin{tabular}{|*{4}{c|}}
@@ -86,8 +97,61 @@ nicht ausgewertet und sind somit Füllbytes.
   \end{tabular}
 \end{center}
 
+Die Instruktion im Format OpNo besteht aus einem Befehl im ersten Byte und aus
+einer Zahl, die die letzten 3 Bytes belegt. Die Interpretation dieser Zahl wird
+dem jeweiligen Befehl überlassen, wird aber meistens eine Adresse oder ein
+Versatz bedeuten.
+Der Name kommt von \glqq Operation Number\grqq, ein Befehl gefolgt von einer
+Zahl.
 
-\subsection{Format 3}
+
+\subsection{OpRNo}
+\index{Instruktionsformat!OpRNo}
+\index{OpRNo}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}}
+    \hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline\hline
+    Befehl        & $R$ & \multicolumn{2}{c|}{feste Zahl}
+    \\\hline
+  \end{tabular}
+\end{center}
+
+Eine Instruktion im Format OpRNo besteht aus einem Befehl, gefolgt von einem
+Register, gefolgt von einer festen Zahl, die die letzten 2 Bytes der Instruktion
+belegt. Die genaue Interpretation der Zahl wird dem jeweiligen Befehl
+überlassen.
+Der Name kommt von \glqq Operation Register Number\grqq, ein Befehl, gefolgt von
+einem Register, gefolgt von einer Zahl.
+
+
+
+\subsection{OpRRNo}
+\index{Instruktionsformat!OpRRNo}
+\index{OpRR}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}}
+    \hline
+    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    \\\hline\hline
+    Befehl        & $R_{1}$       & $R_{2}$ & feste Zahl
+    \\\hline
+  \end{tabular}
+\end{center}
+Eine Instruktion im Format OpRR besteht aus einem Befehl, gefolgt von der
+Angabe zweier Registers, jeweils in einem Byte, gefolgt von einer festen Zahl
+im letzten Byte. Das erste Byte wird nicht verwendet.
+Der Name kommt von \glqq Operarion Register Register Number\grqq.
+
+
+
+
+\subsection{Op3R}
+\index{Instruktionsformat!Op3R}
+\index{Op3R}
 
 \begin{center}
   \begin{tabular}{|*{4}{c|}}
@@ -99,23 +163,49 @@ nicht ausgewertet und sind somit Füllbytes.
   \end{tabular}
 \end{center}
 
+Eine Instruktion im Format Op3R besteht aus der Angabe eines Befehls im ersten
+Byte, gefolgt von der Angabe dreier Register in den jeweiligen folgenden drei
+Bytes. Die Register werden als Zahlen angegeben und haben die folgenden
+Bedeutungen:
 \begin{itemize}
-  \item $Z$ ist das Zielregister
-  \item $R_{1}$ ist der erste Registeroperand
-  \item $R_{2}$ ist der zweite Registeroperand
+  \item $Z$ ist das Zielregister, wo das Ergebnis der Operation gespeichert
+    werden sollte. Die Operation wird vom Befehl angegeben.
+  \item $R_{1}$ ist der erste Registeroperand.
+  \item $R_{2}$ ist der zweite Registeroperand.
 \end{itemize}
 
+Dieses Format entspricht dem folgenden algebraischen Ausdruck:
+\[
+    Z \gets R_{1} \; (\text{Befehl}) \; R_{2}
+\]
 
-\subsection{Format 4}
+Der Name kommt von \glqq Operation 3 Registers\grqq, ein Befehl gefolgt von 3
+Registern.
+
+
+
+
+\subsection{Zusammenfassung}
+Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
+
 
 \begin{center}
-  \begin{tabular}{|*{4}{c|}}
+  \begin{tabular}{|l||*{4}{c|}}
     \hline
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
+    Format & erstes Byte & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    Befehl        & $R$ & \multicolumn{2}{c|}{feste Zahl}
+    Op0 & Befehl         & \multicolumn{3}{c|}{nicht verwendet}
+    \\\hline
+    OpNo & Befehl        & \multicolumn{3}{c|}{feste Zahl}
+    \\\hline
+    OpRNo & Befehl       & $R$ & \multicolumn{2}{c|}{feste Zahl}
+    \\\hline
+    OpRR & Befehl        & $R_{1}$       & $R_{2}$ & feste Zahl
+    \\\hline
+    Op3R & Befehl        & $Z$           & $R_{1}$ & $R_{2}$ 
     \\\hline
   \end{tabular}
 \end{center}
-Das zweite Byte ist ein Register $R$. Die letzten 16 Bits (2 Bytes) sind als eine
-Einheit zu betrachten und deren Bedeutung wird dem jeweiligen Befehl überlassen.
+
+
+
