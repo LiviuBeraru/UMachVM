@@ -1,2 +1,93 @@
 \section{Speichermodell}
-\blindtext
+\index{Speichermodell}
+
+\subsection{Adressierungsarten}
+\label{subsec:Adressierungsarten}
+\index{Adressierungsarten}
+
+Als RISC-orientierte Maschine, greift die UMach lediglich in zwei Situationen
+auf den Speicher zu: zum Schreiben von Registerinhalten in den Speicher
+(Schreibzugriff) und zum Lesen von Speicherinhalten in einen Register
+(Lesezugriff).  Die \gls{Adressierungsart} beschreibt dabei, wie der Zugriff
+auf den Speicher erfolgen sollte, bzw. wie die angesprochene Speicheradresse
+angegeben wird. Anders ausgedrückt, beantwortet die Adressierungsart die Frage
+\glqq wie kann eine Instruktion der Maschine eine Adresse angeben?\grqq. 
+
+
+Eine Instruktion kann die UMach Maschine auf zwei Arten dazu veranlassen,
+den Speicher zu adressieren: 
+\begin{enumerate}
+  \item Direkte Adressierung
+  \item Indirekte Adressierung
+\end{enumerate}
+
+
+\subsubsection{Direkte Adressierung}
+\index{Adressierung!Direkte}
+
+Die direkte Adressierung wird durch Angabe einer Speicheradresse spezifiziert.
+Die Adresse wird in den letzten 2 Bytes einer Instruktion angeben. Diese
+Instruktion hat das Format RNN (siehe auch \ref{subsec:RNN}). Eine Instruktion,
+die die direkte Adressierung verwendet, hat also das folgende Format:
+\begin{center}
+  \begin{tabular}{|*{4}{c|}|c|} \hline
+    erstes Byte    & zweites Byte  & drittes Byte  & viertes Byte & Algebraisch
+\\\hline\hline
+    Ladebefehl     & $R$ & \multicolumn{2}{c||}{Adresse $A$} &
+    $R \gets mem(A)$ \\\hline
+    Speicherbefehl & $R$ & \multicolumn{2}{c||}{Adresse $A$} &
+    $R \to mem(A)$   \\\hline
+  \end{tabular}
+\end{center}
+Die zweite Zeile weist die UMach Maschine an, dass sie den Inhalt der
+angegebenen Speicheradresse $A$ (die letzten 2 Bytes) in das Register $R$ laden
+soll. Die dritte Zeile gibt an, dass die Maschine den Inhalt des Registers $R$
+an die angegebene Adresse $A$ schreiben (speichern) soll ($mem(x)$ steht für
+Inhalt der Speicheradresse $x$).
+
+Vorteil dieser Adressierungsart ist, dass sie keine zusätzliche Befehle zum
+Lesen oder Schreiben in den Speicher benötigt. Nachteil ist, dass sie nur
+Adressen angeben kann, die sich mit 16 Bit darstellen lassen. Adressen, die
+größer als $2^{16} - 1$ sind können durch die zweite Adressierungsart angegeben
+werden.
+
+
+\subsubsection{Indirekte Adressierung}
+\index{Adressierung!Indirekte}
+
+Die indirekte Adressierung verwendet nicht, wie die direkte Adressierung,
+ein Register und eine Speicheradresse, sondern zwei Register $B$ und $I$, die
+von der Maschine verwendet werden um die endgültige Adresse zu berechnen:
+Eine Instruktion, die diese Adressierung verwendet, hat also das Format RRR
+(siehe auch \ref{subsec:RRR}).
+\begin{center}
+  \begin{tabular}{|*{4}{c|}|c|} \hline
+    erstes Byte    & zweites Byte  & drittes Byte  & viertes Byte & Algebraisch
+\\\hline\hline
+    Ladebefehl     & $R$  & $B$  & $I$  & $R \gets mem(B + I)$ \\\hline
+    Speicherbefehl & $R$  & $B$  & $I$  & $R \to   mem(B + I)$ \\\hline
+  \end{tabular}
+\end{center}
+Die fünfte Spalte gibt jeweils den äquivalenten algebraischen Ausdruck wieder.
+$mem(x)$ steht dabei für den Inhalt der Adresse $x$.
+
+
+Die zweite Zeile (Ladebefehl) bedeutet, dass die UMach Maschine die Inhalte der
+Register $B$ und $I$ aufaddieren soll, diese Summe als absolute Adresse im
+Speicher zu verwenden und den Inhalt an dieser Adresse in den Register $R$ zu
+kopieren.
+
+Die dritte Zeile (Speicherbefehl) bedeutet: die Maschine soll den Inhalt des
+Registers $R$ an die Adresse $B + I$ schreiben.
+
+Üblicherweise enthält $B$ eine Startadresse und $I$ einen Versatz oder Index zur
+Adresse in $B$.
+
+Vorteil der indirekten Adressierung ist, dass sie 
+$2^{32} \cdot 2^{32} = 2^{64}$ mögliche
+Adressen ansprechen kann ($2^{32}$ wegen der 32 Bit Register).
+Nachteil ist, dass zwei oder mehrere Instruktionen gebraucht werden, um diese
+Adressierung zu verwenden, denn die Register $B$ und $I$ erst entsprechend geladen
+werden müssen.
+
+Die Register $R$, $B$ und $I$ stehen für beliebige Register.

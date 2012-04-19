@@ -47,163 +47,142 @@ Instruktionszerlegung:
   \end{tabular}
 \end{center}
 
-Die Instruktionsformate unterscheiden sich lediglich darin, dass sie die 24 Bits
-nach dem 8-Bitigen \gls{Befehl} unterschiedlich verwenden.
+Die Instruktionsformate unterscheiden sich lediglich darin, wie sie die 24 Bits
+nach dem 8-Bit \gls{Befehl} verwenden. Das wird auch in der 3-buchstabigen
+Benennung deren Formate wiedergeben.
 
 In den folgenden Abschnitten werden die UMach-Instruktionsformate vorgestellt.
 Jede Angegebene Tabelle gibt in der ersten Zeile die Reihenfolge der Bytes an. 
-Alle folgenden Zeilen geben die spezielle Belegung der einzelnen Bytes an.
-Falls es mehrere Alternativen zu einer Belegung möglich ist, werden die
-Alternativen untereinander aufgelistet (jede in eigener Zeile).
+Die nächste Zeile gibt die spezielle Belegung der einzelnen Bytes an.
 
 
 
-
-
-\subsection{Op0}
-\index{Instruktionsformat!Op0}
-\index{Op0}
+\subsection{000}
+\index{Instruktionsformat!000}
+\index{000}
 
 \begin{center}
-  \begin{tabular}{|*{4}{c|}}
-    \hline
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
-    \\\hline\hline
-    Befehl        & \multicolumn{3}{c|}{nicht verwendet}
-    \\\hline
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    Befehl      & \multicolumn{3}{c|}{nicht verwendet}         \\\hline
   \end{tabular}
 \end{center}
 
-Eine Instruktion, die das Format Op0 hat, besteht lediglich aus einem Befehl
+Eine Instruktion, die das Format 000 hat, besteht lediglich aus einem Befehl
 ohne Argumenten. Die letzen drei Bytes werden von der Maschine nicht
 ausgewertet und sind somit Füllbytes. Es wird empfohlen, die letzten 3 Bytes mit
 Nullen zu füllen.
-Der Name kommt von \glqq Operation Zero\grqq, ein Befehl gefolgt von Nullen.
 
 
 
 
-\subsection{OpNo}
-\index{Instruktionsformat!OpNo}
-\index{OpNo}
-
-\begin{center}
-  \begin{tabular}{|*{4}{c|}}
-    \hline
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
-    \\\hline\hline
-    Befehl        & \multicolumn{3}{c|}{feste Zahl}
-    \\\hline
-  \end{tabular}
-\end{center}
-
-Die Instruktion im Format OpNo besteht aus einem Befehl im ersten Byte und aus
-einer Zahl, die die letzten 3 Bytes belegt. Die Interpretation dieser Zahl wird
-dem jeweiligen Befehl überlassen, wird aber meistens eine Adresse oder ein
-Versatz bedeuten.
-Der Name kommt von \glqq Operation Number\grqq, ein Befehl gefolgt von einer
-Zahl.
-
-
-\subsection{OpRNo}
-\index{Instruktionsformat!OpRNo}
-\index{OpRNo}
+\subsection{NNN}
+\index{Instruktionsformat!NNN}
+\index{NNN}
 
 \begin{center}
   \begin{tabular}{|*{4}{c|}}
     \hline
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
-    \\\hline\hline
-    Befehl        & $R$ & \multicolumn{2}{c|}{feste Zahl}
-    \\\hline
+    erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    Befehl       & \multicolumn{3}{c|}{numerische Angabe}       \\\hline
   \end{tabular}
 \end{center}
 
-Eine Instruktion im Format OpRNo besteht aus einem Befehl, gefolgt von einem
-Register, gefolgt von einer festen Zahl, die die letzten 2 Bytes der Instruktion
-belegt. Die genaue Interpretation der Zahl wird dem jeweiligen Befehl
-überlassen.
-Der Name kommt von \glqq Operation Register Number\grqq, ein Befehl, gefolgt von
-einem Register, gefolgt von einer Zahl.
+Die Instruktion im Format NNN besteht aus einem Befehl im ersten Byte und aus
+einer numerischen Angabe (einer Zahl), die die letzten 3 Bytes belegt.
+Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen,
+jedoch wird diese meistens eine Adresse oder ein Versatz bedeuten.
 
 
-
-\subsection{OpRRNo}
-\index{Instruktionsformat!OpRRNo}
-\index{OpRR}
+\subsection{RNN}
+\label{subsec:RNN}
+\index{Instruktionsformat!RNN}
+\index{RNN}
 
 \begin{center}
-  \begin{tabular}{|*{4}{c|}}
-    \hline
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
-    \\\hline\hline
-    Befehl        & $R_{1}$       & $R_{2}$ & feste Zahl
-    \\\hline
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    Befehl      & $R$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
   \end{tabular}
 \end{center}
-Eine Instruktion im Format OpRR besteht aus einem Befehl, gefolgt von der
-Angabe zweier Registers, jeweils in einem Byte, gefolgt von einer festen Zahl
-im letzten Byte. Das erste Byte wird nicht verwendet.
-Der Name kommt von \glqq Operarion Register Register Number\grqq.
+
+Eine Instruktion im Format RNN besteht aus einem Befehl, gefolgt von einer
+Register Nummer, gefolgt von einer festen Zahl, die die letzten 2 Bytes der
+Instruktion belegt. Die genaue Interpretation der Zahl wird dem jeweiligen
+Befehl überlassen.
+Zum Beispiel, die Instruktion
+\begin{center}
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    \texttt{0x12} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
+  \end{tabular}
+\end{center}
+wird folgenderweise von der UMach Maschine interpretiert: die Operation mit
+Nummer \texttt{0x12} soll ausgeführt werden, wobei die Argumenten dieser
+Operation sind das Register mit Nummer \texttt{0x01} und die numerische
+Angabe \texttt{0x0203}.
 
 
 
-
-\subsection{Op3R}
-\index{Instruktionsformat!Op3R}
-\index{Op3R}
+\subsection{RRN}
+\label{subsec:RRN}
+\index{Instruktionsformat!RRN}
+\index{RRN}
 
 \begin{center}
-  \begin{tabular}{|*{4}{c|}}
-    \hline
-    erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
-    \\\hline\hline
-    Befehl        & $Z$ & $R_{1}$ & $R_{2}$ 
-    \\\hline
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    Befehl       & $R_{1}$       & $R_{2}$ & numerische Angabe  \\\hline
+  \end{tabular}
+\end{center}
+Eine Instruktion im Format RRN besteht aus einem Befehl, gefolgt von der
+Angabe zweier Registers, jeweils in einem Byte, gefolgt von einer numerischen
+Angabe (festen Zahl) im letzten Byte. Zum Beispiel, die Instruktion
+\begin{center}
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    \texttt{0x12} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
+  \end{tabular}
+\end{center}
+soll wie folgt interpretiert werden: 
+die Operation mit Nummer \texttt{0x12} soll ausgeführt werden, wobei die
+Argumenten dieser Operation sind Register mit Nummer \texttt{0x01}, Register mit
+Nummer \texttt{0x02} und die Zahl \texttt{0x03}.
+
+
+
+\subsection{RRR}
+\label{subsec:RRR}
+\index{Instruktionsformat!RRR}
+\index{RRR}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    Befehl      & $R_{1}$       & $R_{2}$       & $R_{3}$      \\\hline
   \end{tabular}
 \end{center}
 
-Eine Instruktion im Format Op3R besteht aus der Angabe eines Befehls im ersten
+Eine Instruktion im Format RRR besteht aus der Angabe eines Befehls im ersten
 Byte, gefolgt von der Angabe dreier Register in den jeweiligen folgenden drei
-Bytes. Die Register werden als Zahlen angegeben und haben die folgenden
-Bedeutungen:
-\begin{itemize}
-  \item $Z$ ist das Zielregister, wo das Ergebnis der Operation gespeichert
-    werden sollte. Die Operation wird vom Befehl angegeben.
-  \item $R_{1}$ ist der erste Registeroperand.
-  \item $R_{2}$ ist der zweite Registeroperand.
-\end{itemize}
-
-Dieses Format entspricht dem folgenden algebraischen Ausdruck:
-\[
-    Z \gets R_{1} \; (\text{Befehl}) \; R_{2}
-\]
-
-Der Name kommt von \glqq Operation 3 Registers\grqq, ein Befehl gefolgt von 3
-Registern.
-
-
+Bytes. Die Register werden als Zahlen angegeben und deren Bedeutung hängt vom
+jeweiligen Befehl ab.
 
 
 \subsection{Zusammenfassung}
 Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
 
-
+\index{Instruktionsformat!Liste}
 \begin{center}
   \begin{tabular}{|l||*{4}{c|}}
     \hline
     Format & erstes Byte & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    Op0 & Befehl         & \multicolumn{3}{c|}{nicht verwendet}
-    \\\hline
-    OpNo & Befehl        & \multicolumn{3}{c|}{feste Zahl}
-    \\\hline
-    OpRNo & Befehl       & $R$ & \multicolumn{2}{c|}{feste Zahl}
-    \\\hline
-    OpRR & Befehl        & $R_{1}$       & $R_{2}$ & feste Zahl
-    \\\hline
-    Op3R & Befehl        & $Z$           & $R_{1}$ & $R_{2}$ 
-    \\\hline
+    000 & Befehl & \multicolumn{3}{c|}{nicht verwendet}       \\\hline
+    NNN & Befehl & \multicolumn{3}{c|}{numerische Angabe}       \\\hline
+    RNN & Befehl & $R$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
+    RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe        \\\hline
+    RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                  \\\hline
   \end{tabular}
 \end{center}
 
