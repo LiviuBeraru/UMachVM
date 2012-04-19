@@ -1,33 +1,37 @@
 \section{Instruktionsformate}
+\label{sec:Instruktionsformate}
 \index{Instruktionsformat}
+
+Eine Instruktion besteht aus einer Folge von 4 Bytes.
+Das \gls{Instruktionsformat} beschreibt die Struktur einer Instruktion auf
+Byte-Ebene. Das Format gibt an, ob ein Byte als eine Registerangabe oder als reine
+numerische Angabe zu interpretieren ist.
 
 \paragraph{Instruktionsbreite}
 \index{Instruktionsbreite}
 Jede UMach-Instruktion hat eine feste Bitlänge von 32 Bit (4 mal 8 Bit).
-Das gilt unabhängig davon, was die Instruktion tut. Instruktionen, die für ihren
+Instruktionen, die für ihren
 Informationsgehalt weniger als 32 Bit brauchen, wie z.B. \texttt{NOP},
 werden mit Nullbits gefüllt. Alle Daten und Informationen, die mit einer
 Instruktion übergeben werden, müssen in diesen 32 Bit untergebracht werden.
 
 \paragraph{Byte Order}
 \index{Byte Order}
-Die Byte Order (Endianness) der gelesenen \glspl{Byte} ist
-big-endian, die Byte-Reihenfolge, die für den Mensch selbstverständlich wäre
-(von links nach rechts lesen):
-die zuerst gelesenen 8 Bits sind die 8 höchstwertigen (Wertigkeiten $2^{31}$ bis
+Die Byte Order (Endianness) der gelesenen \glspl{Byte} ist big-endian.
+Die zuerst gelesenen 8 Bits sind die 8 höchstwertigen (Wertigkeiten $2^{31}$ bis
 $2^{24}$) und die zuletzt gelesenen Bits sind die niedrigstwertigen
 (Wertigkeiten $2^{7}$ bis $2^{0}$).
-Bits werden in Stücken von $n$ Bits gelesen, wobei $n = k \cdot 8$ und
-$k \in \mathbb{N} \setminus\{0\}$ (Byte für Byte).
+Bits werden in Stücken von $n$ Bits gelesen, wobei $n = k \cdot 8$ mit
+$k \in \{1, 4\}$ (byteweise oder wortweise).
 
 
 \paragraph{Allgemeines Format}
 Jede \gls{Instruktion} besteht aus zwei Teilen: der erste Teil ist
 8 Bit lang und entspricht dem tatsächlichen \gls{Befehl}, bzw. der Operation,
 die von der UMach virtuellen Maschine ausgeführt werden soll.
-Dieser 8-Bit-Befehl belegt also die 8 höchstwertigen Bits einer Instruktion.
-Die übrigen 24 Bit werden für Operanden oder Daten benutzt. Beispiel einer
-Instruktionszerlegung:
+Dieser 8-Bit-Befehl belegt also die 8 höchstwertigen Bits einer
+32-Bit-Instruktion.  Die übrigen 24 Bits, wenn sie verwendet werden, werden
+für Operanden oder Daten benutzt. Beispiel einer Instruktionszerlegung:
 
 \begin{center}
   \begin{tabular}{|l|*{4}{c|}}

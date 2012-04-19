@@ -10,22 +10,24 @@ Kategorien:
     steuern, wie z.B. den Betriebsmodus umschalten oder Ausschalten.
   \item Arithmetische Instruktionen, wie z.B. Addieren, Subtrahieren etc.
     Alle arithmetische Instruktionen operieren auf Register Inhalte.
-  \item Logische Instruktionen, die eine logische Verknüpfung zwischen den Inhalten
-    von Registern veranlassen.
-  \item Vergleichsinstruktionen: Vergleichen von Registerinhalten.
+  \item Logische Instruktionen, die eine logische Verknüpfung zwischen
+    Registerinhalten veranlassen.
+  \item Vergleichsinstruktionen, die einen arithmetischen Vergleich zwischen
+    Registerinhalten angeben.
   \item Sprünge im Programmcode.
-  \item Load- und Store-Instruktionen die einzigen, die einen Zugriff auf den
-    Speicher ausführen.
-  \item Input-Output-Instruktionen operieren auf die I/O-Einheit der UMach VM.
-  \item Andere Befehle: diese Kategorie enthält Instruktionen, die in keiner
-    anderen Kategorie passen und zukünftige Erweiterungen.
+  \item Lade- und Speicherbefehle, die byte- oder wortweise Speicherinhalte
+    aus dem Speicher in den Register lesen, oder aus einem Register in den
+    Speicher schreiben.
+  \item Eingabe- und Ausgabeinstruktionen operieren auf die I/O-Einheit der
+    UMach VM.
+  \item Andere Befehle: diese Kategorie wird für nicht-kategorisierbare
+    Instruktionen reserviert.
 \end{enumerate}
 
 \paragraph{Verteilung des Befehlsraums}
 \index{Befehlsraum}
 Die oben angegebenen Instruktionskategorien unterteilen den \gls{Befehlsraum} in
-8 Bereiche.
-Es gibt $256$ Befehle, gemäß $2^{8} = 256$.
+8 Bereiche. Es gibt $256$ mögliche Befehle, gemäß $2^{8} = 256$.
 
 
 Im den folgenden Abschnitten werden die einzelnen Instruktionen beschrieben.
