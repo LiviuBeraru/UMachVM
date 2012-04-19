@@ -83,9 +83,8 @@ Registers $R$ an die Adresse $B + I$ schreiben.
 Üblicherweise enthält $B$ eine Startadresse und $I$ einen Versatz oder Index zur
 Adresse in $B$.
 
-Vorteil der indirekten Adressierung ist, dass sie 
-$2^{32} \cdot 2^{32} = 2^{64}$ mögliche
-Adressen ansprechen kann ($2^{32}$ wegen der 32 Bit Register).
+Vorteil der indirekten Adressierung ist, dass sie $2^{33} - 1$ mögliche
+Adressen ansprechen kann.
 Nachteil ist, dass zwei oder mehrere Instruktionen gebraucht werden, um diese
 Adressierung zu verwenden, denn die Register $B$ und $I$ erst entsprechend geladen
 werden müssen.

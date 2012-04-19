@@ -2,11 +2,23 @@
 \index{Register}
 \label{sec:Register}
 
-Der \gls{Register} sind die Speichereinheiten im Prozessor, die dem
-Programmierer sichtbar sind.  Die meisten Anweisungen an die UMach Maschine
-operieren auf einer Art mit den Registern.
+Die \glspl{Register} sind die Speichereinheiten im Prozessor.
+Die meisten Anweisungen an die UMach Maschine operieren auf einer Art mit den
+Registern.
 
-Jedes Register hat eine Speicherkapazität von 32 Bits.
+Für alle Register gilt:
+\begin{enumerate}
+  \item Die Speicherkapazität beträgt 32 Bit.
+  \item Es gibt eine eindeutige Zahl $n \in \mathds{N}$, die innerhalb der
+    Maschine das Register identifiziert. Diese Zahl wird von einer Instruktion
+    verwendet, wenn sie das Register anspricht.
+  \item Die UMach Maschine erwartet die Angabe eines Registers als numerischer
+    Wert. Jedoch verwendet der Programmierer der Maschine auf Assembler Ebene
+    einen eindeutigen Namen dieses Registers.
+\end{enumerate}
+
+
+
 
 
 
