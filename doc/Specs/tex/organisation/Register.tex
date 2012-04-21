@@ -10,26 +10,21 @@ Registern.
 Für alle Register gilt:
 \begin{enumerate}
   \item Die Speicherkapazität beträgt 32 Bit.
-  \item Es gibt eine eindeutige Zahl $n \in \mathds{N}$, die innerhalb der
-    Maschine das Register identifiziert. Diese Zahl wird von einer Instruktion
-    verwendet, wenn sie das Register anspricht.
+  \item Es gibt eine eindeutige Maschinenzahl, die innerhalb der
+    Maschine das Register identifiziert. Diese Zahl heißt
+    \gls{Maschinenname}\index{Maschinenname}\index{Register!Maschinenname}
+    und wird von einer Instruktion auf Maschinencode-Ebene verwendet, wenn sie
+    das Register anspricht.
   \item Die UMach Maschine erwartet die Angabe eines Registers als numerischer
-    Wert. Jedoch verwendet der Programmierer der Maschine auf Assembler Ebene
-    einen eindeutigen Namen dieses Registers.
+    Wert (Maschinenname). Jedoch verwendet der Programmierer der Maschine auf
+    Assembler Ebene einen eindeutigen Namen dieses Registers.
+    Dieser Name heißt
+    \gls{Assemblername}.\index{Assemblername}\index{Register!Assemblername}
 \end{enumerate}
 
 Die UMach Maschine hat zwei Gruppen von Registern: die Allzweckregister und
 die Spezialregister. 
 
-
-\subsection{Allzweckregister}
-\index{Register!Allzweckregister}
-\index{Allzweckregister}
-Es gibt 32 Allzweckregister, die dem Programmierer zur Verfügung stehen.
-Diese 32 Register werden beim Hochfahren der Maschine auf Null gesetzt. Außer
-dieser Initialisierung, verändert die Maschine den Inhalt der Allzweckregister
-nur auf explizite Anfrage, bzw. infolge einer Instruktion. 
-
-\subsection{Spezialregister}
-
+\input{organisation/Register-Allzweck}
+\input{organisation/Register-Spezial}
 

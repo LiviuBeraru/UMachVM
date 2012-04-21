@@ -19,9 +19,16 @@
 \newglossaryentry{Adressierungsart}{
 name={Adressierungsart},
 description={Die Art, wie eine Instruktion die Umach Maschine dazu veranlasst,
-einen Speicherbereich zu adressieren. Siehe auch Abschnitt
-\ref{subsec:Adressierungsarten}.},
+             einen Speicherbereich zu adressieren. Siehe auch Abschnitt
+             \ref{subsec:Adressierungsarten}.},
 plural={Adressierungsarten}
+}
+
+\newglossaryentry{Assemblername}{
+name={Assemblername},
+description={Der Name eines Registers, so wie er in einem textuellen Programm
+             erscheint. $R1$, $R2$ sind Assemblernamen von Registern.},
+plural={Assemblernamen}
 }
 
 
@@ -46,43 +53,55 @@ plural={Befehlsbreiten}
 \newglossaryentry{Befehlsraum}{
 name=Befehlsraum,
 description={Die Anzahl der möglichen Befehle, abhängig von der
-Befehlsbreite. Beträgt die Befehlsbreite $8$ Bit, so ist der Befehlsraum
-$2^{8} = 256$.},
+             Befehlsbreite. Beträgt die Befehlsbreite $8$ Bit, so ist der
+             Befehlsraum $2^{8} = 256$.},
 plural=Befehlsräume
 }
 
 \newglossaryentry{Instruktion}{
 name=Instruktion,
 description={Eine Anweisung an die UMach VM etwas zu tun. Eine Instruktion
-besteht aus einem Befehl (Operation Code) und eventuellen Argumenten.},
+             besteht aus einem Befehl (Operation Code) und eventuellen
+             Argumenten.},
 plural={Instructionen}
 }
 
 \newglossaryentry{Instruktionsbreite}{
 name=Instruktionsbreite,
-description={Die Länge einer Instruktion in Bits. Eine UMach-Instruktion ist 32 Bit lang.},
+description={Die Länge einer Instruktion in Bits.
+             Eine UMach-Instruktion ist 32 Bit lang.},
 plural={Instruktionsbreiten}
 }
 
 \newglossaryentry{Instruktionsformat}{
 name={Instruktionsformat},
 description={Beschreibt die Struktur einer Instruktion auf Byte-Ebene und zwar
-es gibt an, ob ein Byte als eine Registerangabe oder als reine
-numerische Angabe zu interpretieren ist. Siehe \ref{sec:Instruktionsformate}.},
+             es gibt an, ob ein Byte als eine Registerangabe oder als reine
+             numerische Angabe zu interpretieren ist.
+             Siehe \ref{sec:Instruktionsformate}.},
 plural={Instruktionsformate}
 }
 
 \newglossaryentry{Instruktionssatz}{
 name=Instruktionssatz,
 description={Die Menge aller Instruktionen, die von der UMach Maschine
-ausgeführt werden können.},
+             ausgeführt werden können.},
 plural=Instruktionssätze
 }
+
+
+\newglossaryentry{Maschinenname}{
+name={Maschinenname},
+description={Der Name eines Registers, so wie er im Maschinencode erscheint.
+            \texttt{0x01}, \texttt{0x02} sind Maschinennamen von Registern.},
+plural={Maschinennamen}
+}
+
 
 \newglossaryentry{Register}{
 name={Register},
 description={Eine sich im Prozessor befindende Speichereinheit. Das Register
-ist dem Programmierer sichbar und kann mit Werten geladen werden. Siehe
-Abschnitt \ref{sec:Register}, Seite \pageref{sec:Register}.},
+            ist dem Programmierer sichbar und kann mit Werten geladen werden.
+            Siehe Abschnitt \ref{sec:Register}, Seite \pageref{sec:Register}.},
 plural={Register}
 }

@@ -1,0 +1,42 @@
+\subsection{Allzweckregister}
+\index{Register!Allzweckregister}
+\index{Allzweckregister}
+Es gibt 32 Allzweckregister, die dem Programmierer für allgemeine Zwecke zur
+Verfügung stehen.
+Diese 32 Register werden beim Hochfahren der Maschine auf Null (\texttt{0x00})
+gesetzt. Außer dieser Initialisierung, verändert die Maschine den Inhalt der
+Allzweckregister nur auf explizite Anfrage, bzw. infolge einer Instruktion. 
+
+Die 32 Register werden auf Maschinencode-Ebene von 1 bis 32 nummeriert
+(\texttt{0x01} bis einschliesslich \texttt{0x20} im Hexadezimalsystem).
+Diese Nummer ist der Maschinenname des Registers.
+Auf Assembler-Ebene, werden sie mit den Namen $R1, R2\dots$ bis $R32$
+angesprochen (Assemblername).
+Die Zahl nach dem Buchstaben $R$ ist im Dezimalsystem angegeben
+und ist fester Bestandteil des Registernamens.
+
+\begin{center}
+  \newcolumntype{T}{>{\ttfamily}c}
+  \begin{tabular}{l||*{5}{T|}}
+    Assemblername & R1   & R2   & R3   & \dots & R32 \\
+    Maschinenname & 0x01 & 0x01 & 0x03 & \dots & 0x20
+  \end{tabular}
+\end{center}
+
+Register mit Nummer Null ($R0$) gibt es nicht und die Verwendung des
+Null-Registers\index{Null-Register} wird von der Maschine als Fehler gemeldet.
+
+Beispiel für die Verwendung von Registernamen:
+\begin{center}
+  \begin{tabular}{|l||*{4}{c|}}                                       \hline
+    Assembler     & \texttt{ADD}  & \texttt{R1}   & \texttt{R2}   &
+                    \texttt{R3}                                      \\
+    Maschinencode & \texttt{0x40} & \texttt{0x01} & \texttt{0x02} &
+                    \texttt{0x03}                                    \\\hline
+    Bytes         & erstes Byte   & zweites Byte  & drittes Byte  & 
+                    viertes Byte                                     \\\hline
+    Algebraisch   & \multicolumn{4}{c|}{$R_{1} \gets R_{2} + R_{3}$} \\\hline
+  \end{tabular}
+\end{center}
+
+
