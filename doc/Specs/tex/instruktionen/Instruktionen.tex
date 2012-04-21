@@ -1,38 +1,57 @@
 \section{Instruktionen}\index{Instruktionen}
 
+\paragraph{Verteilung des Befehlsraums}
+\index{Befehlsraum}
 Zur besseren Übersicht der verschiedenen UMach-\glspl{Instruktion}, unterteilen
 wir den \gls{Instruktionssatz} der UMach virtuellen Maschine in den folgenden
 Kategorien:
 \index{Instruktionen!Kategorien}
 
+\index{Befehlsraum!Verteilung}
 \begin{enumerate}
-  \item Kontrollinstruktionen,  die die Maschine in ihrer Gesamtheit
-    steuern, wie z.B. den Betriebsmodus umschalten oder Ausschalten.
-  \item Arithmetische Instruktionen, wie z.B. Addieren, Subtrahieren etc.
-    Alle arithmetische Instruktionen operieren auf Register Inhalte.
-  \item Logische Instruktionen, die eine logische Verknüpfung zwischen
-    Registerinhalten veranlassen.
-  \item Vergleichsinstruktionen, die einen arithmetischen Vergleich zwischen
+  \item Kontrollinstruktionen,  die die Maschine in ihrer gesamten
+    Funktionalität betreffen, wie z.B. den Betriebsmodus umschalten.
+  \item Lade- und Speicherbefehle, die Register mit Werten aus dem Speicher, 
+    anderen Registern oder direkten numerischen Angaben laden und die
+    Registerinhalte in den Speicher schreiben.
+  \item Arithmetische Instruktionen, die einfache arithmetische Operationen
+    zwischen Registern veranlassen.
+  \item Logische Instruktionen, die logische Verknüpfungen zwischen
+    Registerinhalten oder Operationen auf Bit-Ebene in Registern anweisen.
+  \item Vergleichsinstruktionen, die einen Vergleich zwischen
     Registerinhalten angeben.
-  \item Sprünge im Programmcode.
-  \item Lade- und Speicherbefehle, die byte- oder wortweise Speicherinhalte
-    aus dem Speicher in den Register lesen, oder aus einem Register in den
-    Speicher schreiben.
-  \item Eingabe- und Ausgabeinstruktionen operieren auf die I/O-Einheit der
-    UMach VM.
-  \item Andere Befehle: diese Kategorie wird für nicht-kategorisierbare
-    Instruktionen reserviert.
+  \item Sprunginstruktionen, die bedingt oder unbedingt sein können.
+    Sie weisen die UMach Maschine an, die Programmausführung an einer anderen
+    Stelle fortzufahren.
+  \item Unterprogramm-Steuerung, bzw. Instruktionen, die die Ausführung von
+    Unterprogrammen (Subroutinen) steuern.
+  \item Systeminstruktionen, die die Unterstützung eines
+    Betriebssystem ermöglichen.
 \end{enumerate}
 
-\paragraph{Verteilung des Befehlsraums}
-\index{Befehlsraum}
 Die oben angegebenen Instruktionskategorien unterteilen den \gls{Befehlsraum} in
 8 Bereiche. Es gibt $256$ mögliche Befehle, gemäß $2^{8} = 256$.
+Die Verteilung der Kategorien auf die verschiedenen Maschinencode-Intervallen
+wird in der Tabelle \ref{tab:Befehlraumverteilung} auf Seite
+\pageref{tab:Befehlraumverteilung} angegeben.
 
+\input{instruktionen/Verteilungstabelle}
+\input{instruktionen/Instruktionen-Tabelle}
+
+Die Tabelle \ref{tab:Instruktionentabelle} auf der Seite 
+\pageref{tab:Instruktionentabelle} enthält eine Übersicht aller Befehle und
+deren Maschinencodes.
+Diese Tabelle wird folgenderweise gelesen:
+in der am weitesten linken Spalte wird die erste hexadezimale Ziffer eines
+Befehls angegeben (ein Befehl ist zweistellig im Hexadezimalsystem).
+Jede solche Ziffer hat rechts Zwei Zeilen, die von links nach rechts gelesen
+werden: eine Zeile für die Ziffern von 0 bis 8, die anderen für die übrigen
+Ziffern 9 bis F (im Hexadezimalsystem). Die Mnemonics der einzelnen Befehle sind
+an der entsprechenden Stelle angegeben.
 
 Im den folgenden Abschnitten werden die einzelnen Instruktionen beschrieben.
-Zu jeder Intruktion wird der \glqq Mnemonic Code\grqq, der Maschinen Code, das
-Instruktionsformat und Verwendungsbeispiele angegeben.
+Zu jeder Instruktion wird der \glqq Mnemonic Code\grqq, der Maschinen Code, das
+Instruktionsformat und Anwendungsbeispiele angegeben.
 
 
 

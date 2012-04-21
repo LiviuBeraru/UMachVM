@@ -13,3 +13,5 @@ src/
 *.gls
 *.ist
 *~
+*.lot
+*.backup

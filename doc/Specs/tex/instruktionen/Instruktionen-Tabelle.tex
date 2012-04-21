@@ -1,0 +1,46 @@
+
+\begin{table}%no, this is not normal human being LaTeX
+\newcolumntype{C}[1]{>{\ttfamily\footnotesize\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{L}{>{\ttfamily\footnotesize}l}
+\newcommand{\nhex}[1]{\multirow{2}{*}{#1}}
+\centering
+\begin{tabular}{|L||*{8}{C{1.2cm}|}}                                             \hline
+          &   0   &   1   &   2   &   3    & 4      & 5      & 6       & 7       \\\hline\hline
+\nhex{0}  &  NOP  &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline
+\nhex{1}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{2}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{3}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{4}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{5}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{6}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{7}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{8}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{9}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{A}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{B}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{C}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{D}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{E}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{F}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
+          &   8   &   9   &   A   &   B    &   C    &   D    &    E    &    F    \\\hline
+\end{tabular}
+\caption[Instruktionentabelle]
+        {Instruktionentabelle}
+\label{tab:Instruktionentabelle}
+\end{table} 

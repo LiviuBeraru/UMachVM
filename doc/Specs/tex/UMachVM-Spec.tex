@@ -1,4 +1,4 @@
-\documentclass[fontsize=12pt,parskip=full,index=totoc]{scrreprt}
+\documentclass[fontsize=12pt,parskip=full,index=totoc,listof=totoc]{scrreprt}
 
 \addtokomafont{disposition}{\rmfamily}
 \addtokomafont{descriptionlabel}{\rmfamily}
@@ -20,6 +20,8 @@
 \usepackage{ellipsis}
 \usepackage{microtype}
 \usepackage{fixltx2e}
+\usepackage{array}
+\usepackage{multirow}
 \usepackage{xcolor}
 
 \usepackage{scrhack}%entfernt warnmeldungen von listings
@@ -64,6 +66,7 @@
 
 \appendix
 
+\listoftables
 \printglossary[title=Glossar,toctitle=Glossar,style=altlisthypergroup]
 \printindex
 

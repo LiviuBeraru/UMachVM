@@ -1,6 +1,7 @@
 \section{Register}
-\index{Register}
 \label{sec:Register}
+\index{Register}
+\index{UMach!Register}
 
 Die \glspl{Register} sind die Speichereinheiten im Prozessor.
 Die meisten Anweisungen an die UMach Maschine operieren auf einer Art mit den
@@ -17,8 +18,18 @@ Für alle Register gilt:
     einen eindeutigen Namen dieses Registers.
 \end{enumerate}
 
+Die UMach Maschine hat zwei Gruppen von Registern: die Allzweckregister und
+die Spezialregister. 
 
 
+\subsection{Allzweckregister}
+\index{Register!Allzweckregister}
+\index{Allzweckregister}
+Es gibt 32 Allzweckregister, die dem Programmierer zur Verfügung stehen.
+Diese 32 Register werden beim Hochfahren der Maschine auf Null gesetzt. Außer
+dieser Initialisierung, verändert die Maschine den Inhalt der Allzweckregister
+nur auf explizite Anfrage, bzw. infolge einer Instruktion. 
 
+\subsection{Spezialregister}
 
 

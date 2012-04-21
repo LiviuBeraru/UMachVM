@@ -105,8 +105,8 @@ jedoch wird diese meistens eine Adresse oder ein Versatz bedeuten.
 
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
-    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl      & $R$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte   \\\hline\hline
+    Befehl      & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
   \end{tabular}
 \end{center}
 
@@ -182,11 +182,11 @@ Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
     \hline
     Format & erstes Byte & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    000 & Befehl & \multicolumn{3}{c|}{nicht verwendet}       \\\hline
-    NNN & Befehl & \multicolumn{3}{c|}{numerische Angabe}       \\\hline
-    RNN & Befehl & $R$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
-    RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe        \\\hline
-    RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                  \\\hline
+    000 & Befehl & \multicolumn{3}{c|}{nicht verwendet}             \\\hline
+    NNN & Befehl & \multicolumn{3}{c|}{numerische Angabe}           \\\hline
+    RNN & Befehl & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
+    RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe            \\\hline
+    RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                      \\\hline
   \end{tabular}
 \end{center}
 
