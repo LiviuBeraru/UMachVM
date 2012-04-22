@@ -4,13 +4,14 @@
 \newcolumntype{L}{>{\ttfamily\footnotesize}l}
 \newcommand{\nhex}[1]{\multirow{2}{*}{#1}}
 \centering
-\begin{tabular}{|L||*{8}{C{1.2cm}|}}                                             \hline
+\begin{tabular}{|L||*{8}{C{1.2cm}|}}
+\toprule\hline
           &   0   &   1   &   2   &   3    & 4      & 5      & 6       & 7       \\\hline\hline
 \nhex{0}  &  NOP  &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline
 \nhex{1}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{2}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+\nhex{2}  &  SET  & SETU  &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
 \nhex{3}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
@@ -39,6 +40,7 @@
 \nhex{F}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
           &   8   &   9   &   A   &   B    &   C    &   D    &    E    &    F    \\\hline
+\bottomrule
 \end{tabular}
 \caption[Instruktionentabelle]
         {Instruktionentabelle}

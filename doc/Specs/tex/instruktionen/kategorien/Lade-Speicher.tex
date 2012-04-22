@@ -1,0 +1,33 @@
+\subsection{Lade- und Speicherbefehle}
+
+\opdef{SET}{$X\in\Reg$, $N\in\mathds{Z}$}{0x20}{RNN}
+Setzt den Inhalt des Registers $X$ auf den ganzzahligen Wert $N$.
+Da $N$ mit 16 Bit und im Zweierkomplement dargestellt wird, kann $N$ Werte von
+$-2^{15}$ bis $2^{15} - 1$ aufnehmen, bzw. von $-32768$ bis $+32767$.
+Werte außerhalb dieses Intervalls werden auf Assembler-Ebene entsprechend
+gekürzt (es wird modulo berechnet, bzw. nur die ersten 16 Bits aufgenommen).
+
+Beispiele:
+\begin{lstlisting}
+  SET R1  8    # $R1 \gets 8$
+  SET R2 -3    # $R2 \gets -3$
+  SET R3 65536 # $R3 \gets 0$, da $65536 = 2^{16} \equiv 0 \bmod 2^{16}$
+  SET R4 70000 # $R3 \gets 4464 = 70000 \bmod 2^{16}$
+\end{lstlisting}
+
+
+\opdef{SETU}{$X\in\Reg$, $N\in\mathds{N}$}{0x21}{RNN}
+Setzt den Inhalt des Registers $X$ auf den positiven natürlichen Wert $N$.
+$N$ wird vorzeichenlos interpretiert. Entsprechend kann $N$ Werte von $0$ bis
+$+65535$ aufnehmen.
+Wird dem Assembler einen Wert außerhalb dieses Bereichs gegeben, so
+schneidet der Assembler alle Bits außer den ersten 16 weg und betrachtet das
+Ergebnis als vorzeichenlose Zahl.
+
+Beispiele:
+\begin{lstlisting}
+  SETU R1   8     # $R1 \gets 8$
+  SETU R2   70000 # $R2 \gets 4464$
+  SETU R2  -70000 # $R2 \gets 61072$
+\end{lstlisting}
+

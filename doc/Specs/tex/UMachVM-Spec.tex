@@ -22,6 +22,8 @@
 \usepackage{fixltx2e}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{booktabs}
 \usepackage{calc}
 \usepackage{multirow}
 \usepackage{xcolor}
@@ -29,9 +31,10 @@
 \usepackage{scrhack}%entfernt warnmeldungen von listings
 \usepackage{listings}
 \lstset{basicstyle=\small\ttfamily}
-\lstset{commentstyle=\footnotesize\slshape}
+\lstset{commentstyle=\slshape\color{blue!20!black}}
 \lstset{showstringspaces=false}
 \lstset{frame=leftline}
+\lstset{mathescape=true}
 \lstset{morecomment=[l][\color{blue!20!black}]{\#}}
 
 \usepackage{makeidx}
@@ -47,8 +50,27 @@
 {hyperref} 
 
 \input{glossar/Glossary}
-
 \usepackage{blindtext}
+
+% Ausgabe einer Befehlsdefinition in tabellarischer Form
+% Nutzung: \opdef{<opname>}{<params>}{<opcode>}{<format>}
+% opname: ADD, SUB etc
+% params: Parameter
+% opcode: hexa opcode
+% format: Abschnitt Name eines Instruktionsformats
+% Beispiel: \opdef{ADD}{X Y Z}{0x40}{RRR}
+\newcommand{\opdef}[4]{%
+\subsubsection{\texttt{#1}}\index{#1@\texttt{#1}}%
+\begin{center}%
+  \begin{tabular}{llll}                       \toprule
+    Assemblername & Parameter & Maschinencode & Format \\\midrule
+    \texttt{#1}   & #2        & \texttt{#3}   & \nameref{subsec:#4}\\\bottomrule
+  \end{tabular}
+\end{center}%
+}
+
+% Die Menge aller Register bekommt ein eigenes Zeichen
+\newcommand{\Reg}{\ensuremath{\mathcal{R}}}
 
 \begin{document}
 \maketitle

@@ -47,13 +47,48 @@ in der am weitesten linken Spalte wird die erste hexadezimale Ziffer eines
 Befehls angegeben (ein Befehl ist zweistellig im Hexadezimalsystem).
 Jede solche Ziffer hat rechts Zwei Zeilen, die von links nach rechts gelesen
 werden: eine Zeile für die Ziffern von 0 bis 8, die anderen für die übrigen
-Ziffern 9 bis F (im Hexadezimalsystem). Die Mnemonics der einzelnen Befehle sind
-an der entsprechenden Stelle angegeben.
+Ziffern 9 bis F (im Hexadezimalsystem). Die Assemblernamen (Mnemonics) der
+einzelnen Befehle sind an der entsprechenden Stelle angegeben.
 
-Im den folgenden Abschnitten werden die einzelnen Instruktionen beschrieben.
-Zu jeder Instruktion wird der \glqq Mnemonic Code\grqq, der Maschinen Code, das
-Instruktionsformat und Anwendungsbeispiele angegeben.
+\paragraph{Definitionsstruktur}
+Im den folgenden Abschnitten werden die einzelnen Instruktionen beschrieben. Zu
+jeder Instruktion wird der \gls{Assemblername}, die Parameter, der Maschinencode
+(\gls{Maschinenname}) und das Instruktionsformat, das die Typen der Parameter
+definiert, formal angegeben. Zudem werden Anwendungsbeispiele angegeben. Die
+Instruktionsformate können im Abschnitt \ref{sec:Instruktionsformate} ab der
+Seite \pageref{sec:Instruktionsformate} nachgeschlagen werden.
+
+\paragraph{Zur Notation}
+Mit \Reg\index{\Reg} wird die Menge aller Register
+gekennzeichnet\footnote{Nicht verwechseln mit den Symbolen $\mathds{R}$ und
+$\mathbb{R}$, die die Menge aller reelen Zahlen bedeuten.}.
+Die Notation $X \in \Reg$ bedeutet, dass $X$ ein Element aus dieser Menge ist,
+mit anderen Worten, dass $X$ ein Register ist. Analog bedeutet die
+Schreibweise $X,Y \in \Reg$, dass $X$ und $Y$ beide Register sind.
+
+Gilt $X, Y\in \Reg$ und ist $\sim$ eine durch einen Befehl definierte Relation
+zwischen $X$ und $Y$, so bezieht sich die Schreibweise $X \sim Y$ nicht auf die
+Maschinennamen von $X$ und $Y$, sondern auf deren Inhalte. Zum Beispiel, haben
+die Register $R1$ und $R2$ die Maschinencodes \texttt{0x01} und \texttt{0x02}
+und sind sie mit den Werten $4$ bzw. $5$ belegt, so bedeutet $R1 + R2$ das
+gleiche wie $4 + 5 = 9$ und nicht \texttt{0x01 + 0x02 = 0x03}.
+
+Andere verwendeten Schreibweisen:
+\begin{center}
+\begin{tabular}{l|l}\toprule
+ $\mathds{N}$ & Menge aller natürlichen Zahlen: $0,1,2,\ldots$         \\
+ $\mathds{Z}$ & Menge aller ganzen Zahlen: $\ldots,-2,-1,0,1,2,\ldots$ \\
+ $N \in \mathds{N}$
+              & $N$ ist Element von $\mathds{N}$, oder liegt im Bereich von
+              $\mathds{N}$                                             \\
+ $X \gets Y$  & $X$ wird auf $Y$ gesetzt                               \\
+\bottomrule
+\end{tabular}
+\end{center} 
 
 %%%%%%%%%%%% Jede Kategorie von Instruktionen in eigener Datei %%%%%%%%%%%%%
+
+\input{instruktionen/kategorien/Kontrolle}
+\input{instruktionen/kategorien/Lade-Speicher}
 \input{instruktionen/kategorien/Arithmetik}
 

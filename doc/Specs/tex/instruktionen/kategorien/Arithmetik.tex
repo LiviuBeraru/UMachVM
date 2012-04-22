@@ -1,43 +1,65 @@
 \subsection{Arithmetische Instruktionen} 
 
-\subsubsection{ADD}
-\begin{center}
-  \begin{tabular}{lll}
-    Assemblername & Maschinencode & Format \\
-    \texttt{ADD}  & \texttt{0x40} & RRR    
-  \end{tabular}
-\end{center}
-
-
-\subsubsection{ADDI}
-\begin{center}
-  \begin{tabular}{lll}
-    Assemblername & Maschinencode & Format \\
-    \texttt{ADDI} & \texttt{0x41} & RRN    
-  \end{tabular}
-\end{center}
-
-
-
-\subsubsection{ADDU}
-\begin{center}
-  \begin{tabular}{lll}
-    Assemblername & Maschinencode & Format \\
-    \texttt{ADDU} & \texttt{0x42} & RRR    
-  \end{tabular}
-\end{center}
+\opdef{ADD}{$X,Y,Z \in \Reg$}{0x40}{RRR}
+Vorzeichen behaftete Addition der Registerinhalte $Y$ und $Z$ und
+speichern des Ergebnisses in das Register $X$. Entspricht dem algebraischen
+Ausdruck
+\[
+    X \gets Y + Z
+\]
+Beispiel:
+\begin{lstlisting}
+  SET   R1 1     # $R1 \gets 1$
+  SET   R2 2     # $R2 \gets 2$
+  ADD   R3 R1 R2 # $R3 \gets R1 + R2 = 1 + 2 = 3$
+  #     X  Y  Z
+  SET   R2 -2    # $R2 \gets -2$
+  ADD   R3 R3 R2 # $R3 \gets R3 + R2 = 3 +(-2) = 1$
+  ADD   R3 R4  5 # Fehler! 5 kein Register
+\end{lstlisting}
+Vorzeichenlose Addition wird durch den Befehl \texttt{ADDU} ausgeführt.
 
 
 
-\subsubsection{ADDUI}
-\begin{center}
-  \begin{tabular}{lll}
-    Assemblername & Maschinencode & Format \\
-    \texttt{ADDUI} & \texttt{0x43} & RRN    
-  \end{tabular}
-\end{center}
+\opdef{ADDI}{$X,Y\in\Reg$, $N\in\mathds{Z}$}{0x41}{RRN}
+Hinzuaddieren eines festen vorzeichenbehafteten ganzzahligen Wert $N$ zum Inhalt
+des Registers $Y$ und speichern des Ergebnisses in das Register $X$.
+Entspricht dem algebraischen Ausdruck
+\[
+  X \gets Y + N
+\]
+$N$ wird als vorzeichenbehaftete 8-Bit Zahl in Zweierkomplement-Darstellung
+interpretiert und kann entsprechend Werte von $-128$ bis $127$ aufnehmen.
+
+Beispiel:
+\begin{lstlisting}
+  SET   R1 1     # $R1 \gets 1$
+  ADDI  R2 R1 2  # $R2 \gets R1 + 2 = 1 + 2 = 3$
+  #     X  Y  N
+  ADDI  R2 R2 -3 # $R2 \gets R2 + (-3) = 3 +(-2) = 1$
+  ADDI  R2 R3 R4 # Fehler! R4 kein $n \in \mathds{Z}$
+\end{lstlisting}
 
 
 
+\opdef{ADDU}{$X,Y,Z \in \Reg$}{0x42}{RRR}
+Vorzeichenlose Addition der Register $Y$ und $Z$. Das Ergebnis wird in das
+Register $X$ gespeichert. Enthält $Y$ oder $Z$ ein Vorzeichen (höchstwertiges
+Bit auf 1 gesetzt), so wird es nicht als solches interpretiert, sondern als
+Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
+
+\begin{lstlisting}
+  SET   R1 1     # $R1 \gets 1$
+  SET   R2 -2    # $R2 \gets -2$
+  ADDU  R3 R1 R2 # $R3 \gets (1 + 2 + 2^{31}) = 2147483651$
+\end{lstlisting}
+
+
+
+\opdef{ADDUI}{$X,Y \in \Reg$, $N\in\mathds{N}$}{0x43}{RRN}
+Vorzeichenlose Addition des ganzzahligen Wertes $N$ zum Inhalt des Registers $Y$
+und speichern des Ergebnisses in das Register $X$.
+Der Inhalt des Registers $Y$, die Zahl $N$ und das Ergebnis $Y + N$ werden als
+vorzeichenlose Werte interpretiert.
 
 

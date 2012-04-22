@@ -62,6 +62,7 @@ Die nächste Zeile gibt die spezielle Belegung der einzelnen Bytes an.
 
 
 \subsection{000}
+\label{subsec:000}
 \index{Instruktionsformat!000}
 \index{000}
 
@@ -81,6 +82,7 @@ Nullen zu füllen.
 
 
 \subsection{NNN}
+\label{subsec:NNN}
 \index{Instruktionsformat!NNN}
 \index{NNN}
 
@@ -88,14 +90,13 @@ Nullen zu füllen.
   \begin{tabular}{|*{4}{c|}}
     \hline
     erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl       & \multicolumn{3}{c|}{numerische Angabe}       \\\hline
+    Befehl       & \multicolumn{3}{c|}{numerische Angabe $N$}   \\\hline
   \end{tabular}
 \end{center}
 
 Die Instruktion im Format NNN besteht aus einem Befehl im ersten Byte und aus
-einer numerischen Angabe (einer Zahl), die die letzten 3 Bytes belegt.
-Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen,
-jedoch wird diese meistens eine Adresse oder ein Versatz bedeuten.
+einer numerischen Angabe  $N$ (einer Zahl), die die letzten 3 Bytes belegt.
+Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen.
 
 
 \subsection{RNN}
@@ -106,23 +107,23 @@ jedoch wird diese meistens eine Adresse oder ein Versatz bedeuten.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte   \\\hline\hline
-    Befehl      & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
+    Befehl      & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe $N$} \\\hline
   \end{tabular}
 \end{center}
 
 Eine Instruktion im Format RNN besteht aus einem Befehl, gefolgt von einer
-Register Nummer, gefolgt von einer festen Zahl, die die letzten 2 Bytes der
-Instruktion belegt. Die genaue Interpretation der Zahl wird dem jeweiligen
-Befehl überlassen.
+Register Nummer $R_{1}$, gefolgt von einer festen Zahl $N$, die die letzten
+2 Bytes der Instruktion belegt.
+Die genaue Interpretation der Zahl $N$ wird dem jeweiligen Befehl überlassen.
 Zum Beispiel, die Instruktion
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    \texttt{0x12} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
+    \texttt{0x20} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
   \end{tabular}
 \end{center}
 wird folgenderweise von der UMach Maschine interpretiert: die Operation mit
-Nummer \texttt{0x12} soll ausgeführt werden, wobei die Argumenten dieser
+Nummer \texttt{0x20} soll ausgeführt werden, wobei die Argumenten dieser
 Operation sind das Register mit Nummer \texttt{0x01} und die numerische
 Angabe \texttt{0x0203}.
 
@@ -136,20 +137,21 @@ Angabe \texttt{0x0203}.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl       & $R_{1}$       & $R_{2}$ & numerische Angabe  \\\hline
+    Befehl       & $R_{1}$       & $R_{2}$ & numerische Angabe $N$  \\\hline
   \end{tabular}
 \end{center}
 Eine Instruktion im Format RRN besteht aus einem Befehl, gefolgt von der
-Angabe zweier Registers, jeweils in einem Byte, gefolgt von einer numerischen
-Angabe (festen Zahl) im letzten Byte. Zum Beispiel, die Instruktion
+Angabe zweier Registers $R_{1}$ und $R_{2}$, jeweils in einem Byte, gefolgt von
+einer numerischen Angabe $N$ (festen Zahl) im letzten Byte. Zum Beispiel, die
+Instruktion
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    \texttt{0x12} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
+    \texttt{0x41} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
   \end{tabular}
 \end{center}
 soll wie folgt interpretiert werden: 
-die Operation mit Nummer \texttt{0x12} soll ausgeführt werden, wobei die
+die Operation mit Nummer \texttt{0x41} soll ausgeführt werden, wobei die
 Argumenten dieser Operation sind Register mit Nummer \texttt{0x01}, Register mit
 Nummer \texttt{0x02} und die Zahl \texttt{0x03}.
 
@@ -168,12 +170,14 @@ Nummer \texttt{0x02} und die Zahl \texttt{0x03}.
 \end{center}
 
 Eine Instruktion im Format RRR besteht aus der Angabe eines Befehls im ersten
-Byte, gefolgt von der Angabe dreier Register in den jeweiligen folgenden drei
-Bytes. Die Register werden als Zahlen angegeben und deren Bedeutung hängt vom
+Byte, gefolgt von der Angabe dreier Register $R_{1}$, $R_{2}$ und $R_{3}$ in den
+jeweiligen folgenden drei Bytes.
+Die Register werden als Zahlen angegeben und deren Bedeutung hängt vom
 jeweiligen Befehl ab.
 
 
 \subsection{Zusammenfassung}
+\label{subsec:Instr-Formate-Zusammenfassung}
 Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
 
 \index{Instruktionsformat!Liste}
@@ -182,11 +186,11 @@ Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
     \hline
     Format & erstes Byte & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    000 & Befehl & \multicolumn{3}{c|}{nicht verwendet}             \\\hline
-    NNN & Befehl & \multicolumn{3}{c|}{numerische Angabe}           \\\hline
-    RNN & Befehl & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe} \\\hline
-    RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe            \\\hline
-    RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                      \\\hline
+    000 & Befehl & \multicolumn{3}{c|}{nicht verwendet}                 \\\hline
+    NNN & Befehl & \multicolumn{3}{c|}{numerische Angabe $N$}           \\\hline
+    RNN & Befehl & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe $N$} \\\hline
+    RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe $N$            \\\hline
+    RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                          \\\hline
   \end{tabular}
 \end{center}
 
