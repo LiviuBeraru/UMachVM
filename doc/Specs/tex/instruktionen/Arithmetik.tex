@@ -21,6 +21,7 @@ Vorzeichenlose Addition wird durch den Befehl \texttt{ADDU} ausgeführt.
 
 
 \opdef{ADDU}{$X,Y,Z \in \Reg$}{0x51}{RRR}
+\glqq Add Unsigned\grqq.
 Vorzeichenlose Addition der Register $Y$ und $Z$. Das Ergebnis wird in das
 Register $X$ gespeichert. Enthält $Y$ oder $Z$ ein Vorzeichen (höchstwertiges
 Bit auf 1 gesetzt), so wird es nicht als solches interpretiert, sondern als
@@ -35,6 +36,7 @@ Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
 
 
 \opdef{ADDI}{$X,Y\in\Reg$, $N\in\mathds{Z}$}{0x52}{RRN}
+\glqq Add Immediate\grqq.
 Hinzuaddieren eines festen vorzeichenbehafteten ganzzahligen Wert $N$ zum Inhalt
 des Registers $Y$ und speichern des Ergebnisses in das Register $X$.
 Entspricht dem algebraischen Ausdruck
@@ -56,6 +58,7 @@ Beispiel:
 
 
 \opdef{ADDIU}{$X,Y \in \Reg$, $N\in\mathds{N}$}{0x53}{RRN}
+\glqq Add Unsigned Immediate\grqq.
 Vorzeichenlose Addition des ganzzahligen Wertes $N$ zum Inhalt des Registers $Y$
 und speichern des Ergebnisses in das Register $X$.
 Der Inhalt des Registers $Y$, die Zahl $N$ und das Ergebnis $Y + N$ werden als
@@ -63,12 +66,91 @@ vorzeichenlose Werte interpretiert.
 
 
 
+\opdef{SUB}{$X, Y, Z \in \Reg$}{0x58}{RRR}
+
+
+\opdef{SUBU}{$X, Y, Z \in \Reg$}{0x59}{RRR}
+\glqq Subtract Unsigned\grqq.
+
+
+\opdef{SUBI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x5A}{RRN}
+\glqq Subtract Immediate\grqq.
+
+
+\opdef{SUBIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x5B}{RRN}
+\glqq Subtract Immediate Unsigned\grqq.
+
+
+
+\opdef{MUL}{$X, Y, Z \in \Reg$}{0x60}{RRR}
+
+
+
+\opdef{MULU}{$X, Y, Z \in \Reg$}{0x61}{RRR}
+\glqq Multiplicate Unsigned\grqq.
+
+
+
+\opdef{MULI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x62}{RRN}
+\glqq Multiplicate Immediate\grqq.
+
+
+
+\opdef{MULIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x63}{RRN}
+\glqq Multiplicate Immediate Unsigned\grqq.
 
 
 
 
+\opdef{DIV}{$X, Y, Z \in \Reg$}{0x68}{RRR}
 
 
+
+\opdef{DIVU}{$X, Y, Z \in \Reg$}{0x69}{RRR}
+\glqq Divide Unsigned\grqq.
+
+
+
+\opdef{DIVI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x6A}{RRN}
+\glqq Divide Immediate\grqq.
+
+
+
+\opdef{DIVIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x6B}{RRN}
+\glqq Divide Immediate Unsigned\grqq.
+
+
+
+\opdef{MOD}{$X, Y, Z \in \Reg$}{0x70}{RRR}
+Modulo.
+
+
+\opdef{MODI}{$X, Y, Z \in \Reg$, $N \in \mathds{N}$}{0x72}{RRN}
+Modulo Immediate.
+
+
+
+\opdef{NEG}{$X, Y \in \Reg$}{0x78}{RR0}
+\glqq Negate\grqq.
+Wechselt das Vorzeichen des Registers $Y$ und speichert das Ergebnis in das 
+Register $X$.
+
+
+
+\opdef{ABS}{$X, Y \in \Reg$}{0x79}{RR0}
+\glqq Absolute\grqq.
+Speichert den absoluten Wert des Registers $Y$ in das Register $X$.
+
+
+\opdef{INC}{$X \in \Reg$}{0x7A}{R00}
+\glqq Increment\grqq.
+Inkrementiert den Inhalt des Registers $X$.
+
+
+
+\opdef{DEC}{$X \in \Reg$}{0x7B}{R00}
+\glqq Decrement\grqq.
+Dekrementiert den Inhalt des Registers $X$.
 
 
 

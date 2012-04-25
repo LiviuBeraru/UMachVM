@@ -99,6 +99,24 @@ einer numerischen Angabe  $N$ (einer Zahl), die die letzten 3 Bytes belegt.
 Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen.
 
 
+\subsection{R00}
+\label{R00}
+\index{Instruktionsformat!R00}
+\index{R00}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte & zweites Byte  & drittes Byte  & viertes Byte   \\\hline\hline
+    Befehl      & $R_{1}$ & \multicolumn{2}{c|}{nicht verwendet} \\\hline
+  \end{tabular}
+\end{center}
+Die Instruktion im Format R00 besteht aus einem Befehl im ersten Byte gefolgt
+von der Angabe eines Registers im zweiten Byte. Die letzten zwei Bytes werden
+nicht verwendet, bzw. werden ignoriert.
+
+
+
+
 \subsection{RNN}
 \label{RNN}
 \index{Instruktionsformat!RNN}
@@ -127,6 +145,23 @@ Nummer \texttt{0x20} soll ausgeführt werden, wobei die Argumenten dieser
 Operation sind das Register mit Nummer \texttt{0x01} und die numerische
 Angabe \texttt{0x0203}.
 
+
+
+\subsection{RR0}
+\label{RR0}
+\index{Instruktionsformat!RR0}
+\index{RR0}
+
+\begin{center}
+  \begin{tabular}{|*{4}{c|}} \hline
+    erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
+    Befehl       & $R_{1}$       & $R_{2}$ &  nicht verwendet   \\\hline
+  \end{tabular}
+\end{center}
+Eine Instruktion im Format RR0 besteht aus einem Befehl im ersten Byte, gefolgt
+von der Angabe zweier Register in den folgenden 2 Bytes.
+Das dritte Byte wird nicht verwendet, bzw. wird ignoriert.
+Entspricht einer unären Operation auf das Register $R_{2}$.
 
 
 \subsection{RRN}
@@ -186,9 +221,11 @@ Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
     \hline
     Format & erstes Byte & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    000 & Befehl & \multicolumn{3}{c|}{nicht verwendet}                 \\\hline
-    NNN & Befehl & \multicolumn{3}{c|}{numerische Angabe $N$}           \\\hline
-    RNN & Befehl & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe $N$} \\\hline
+    000 & Befehl & \multicolumn{3}{r|}{nicht verwendet}                 \\\hline
+    NNN & Befehl & \multicolumn{3}{l|}{numerische Angabe $N$}           \\\hline
+    R00 & Befehl & $R_{1}$ & \multicolumn{2}{r|}{nicht verwendet}       \\\hline
+    RNN & Befehl & $R_{1}$ & \multicolumn{2}{l|}{numerische Angabe $N$} \\\hline
+    RR0 & Befehl & $R_{1}$ & $R_{2}$ &  nicht verwendet                 \\\hline
     RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe $N$            \\\hline
     RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                          \\\hline
   \end{tabular}
