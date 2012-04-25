@@ -4,45 +4,45 @@
 \newcolumntype{L}{>{\ttfamily\footnotesize}l}
 \newcommand{\nhex}[1]{\multirow{2}{*}{#1}}
 \centering
+\caption[Befehlentabelle]
+        {Befehlentabelle}
+\label{tab:Befehlentabelle}
 \begin{tabular}{|L||*{8}{C{1.2cm}|}}
 \toprule\hline
-          &   0   &   1   &   2   &   3    & 4      & 5      & 6       & 7       \\\hline\hline
-\nhex{0}  &  NOP  &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\hline
-\nhex{1}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &   0   &   1   &   2   &   3    &   4    &   5    &    6    &    7    \\\hline\hline
+\nhex{0}  &  NOP  &  RST  &  CRM  &  CSM   &  DIE   &  RSR   &  AUTSM  &  SOCL   \\\cline{2-9}
+          & HATE  & TRST  &  ZMB  &  ALIV  &        &        &         &         \\\hline\hline
+\nhex{1}  & SET   & SETU  & COPY  &  MOVE  &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{2}  &  SET  & SETU  &       &        &        &        &         &         \\\cline{2-9}
+\nhex{2}  &  LB   &  LBU  &  LH   &  LHU   &  LW    &  LWU   &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{3}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+\nhex{3}  &  SB   &  SBU  &  SH   &  SHU   &  SW    &  SWU   &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{4}  &  ADD  & ADDI  & ADDU  & ADDUI  &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{5}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{6}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{7}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{4}  & PUSHB & PUSHH & PUSH  &        &        &        &         &         \\\cline{2-9}
+          & POPB  & POPH  &  POP  &        &        &        &         &         \\\hline\hline
+\nhex{5}  &  ADD  & ADDU  & ADDI  & ADDIU  &        &        &         &         \\\cline{2-9}
+          &  SUB  & SUBU  & SUBI  & SUBIU  &        &        &         &         \\\cline{1-9}
+\nhex{6}  &  MUL  & MULU  & MULI  & MULIU  &        &        &         &         \\\cline{2-9}
+          &  DIV  & DIVU  & DIVI  & DIVIU  &        &        &         &         \\\cline{1-9}
+\nhex{7}  &  MOD  &       &       &        &        &        &         &         \\\cline{2-9}
+          &  NEG  &  ABS  &  INC  &  DEC   &        &        &         &         \\\cline{1-9}
 \nhex{8}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{9}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{A}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{B}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{C}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{D}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{E}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{F}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
+\nhex{9}  &  AND  & ANDI  &  OR   &  ORI   &  XOR   &  XORI  &         &         \\\cline{2-9}
+          & NAND  & NANDI &  NOR  &  NORI  &        &        &         &         \\\cline{1-9}
+\nhex{A}  &  SHL  & SHLI  &  SHR  &  SHRI  &  SHRA  & SHRAI  &  ROTL   & ROTR    \\\cline{2-9}
+          &  NOT  &       &       &        &        &        &         &         \\\hline\hline
+\nhex{B}  &  CMP  & CMPU  & CMPI  & CMPIU  &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
+\nhex{C}  &  BZ   &  BNZ  &  BLZ  &  BLEZ  &  BGZ   &  BGEZ  &         &         \\\cline{2-9}
+          &  BEI  &  BNI  &  BLI  &  BLEI  &  BGI   &  BGEI  &         &         \\\cline{1-9}
+\nhex{D}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &  JMP  &       &       &        &        &        &         &         \\\hline\hline
+\nhex{E}  &  CALL &  RET  &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
+\nhex{F}  &  WAKE &       &       &        &        &        &         &         \\\cline{2-9}
+          &  KILL &       &       &        &        &        &         &         \\\hline\hline
           &   8   &   9   &   A   &   B    &   C    &   D    &    E    &    F    \\\hline
 \bottomrule
 \end{tabular}
-\caption[Instruktionentabelle]
-        {Instruktionentabelle}
-\label{tab:Instruktionentabelle}
 \end{table} 

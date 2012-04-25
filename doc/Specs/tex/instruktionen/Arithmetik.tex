@@ -1,6 +1,6 @@
-\subsection{Arithmetische Instruktionen} 
+\section{Arithmetische Instruktionen} 
 
-\opdef{ADD}{$X,Y,Z \in \Reg$}{0x40}{RRR}
+\opdef{ADD}{$X,Y,Z \in \Reg$}{0x50}{RRR}
 Vorzeichen behaftete Addition der Registerinhalte $Y$ und $Z$ und
 speichern des Ergebnisses in das Register $X$. Entspricht dem algebraischen
 Ausdruck
@@ -20,8 +20,21 @@ Beispiel:
 Vorzeichenlose Addition wird durch den Befehl \texttt{ADDU} ausgeführt.
 
 
+\opdef{ADDU}{$X,Y,Z \in \Reg$}{0x51}{RRR}
+Vorzeichenlose Addition der Register $Y$ und $Z$. Das Ergebnis wird in das
+Register $X$ gespeichert. Enthält $Y$ oder $Z$ ein Vorzeichen (höchstwertiges
+Bit auf 1 gesetzt), so wird es nicht als solches interpretiert, sondern als
+Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
 
-\opdef{ADDI}{$X,Y\in\Reg$, $N\in\mathds{Z}$}{0x41}{RRN}
+\begin{lstlisting}
+  SET   R1 1     # $R1 \gets 1$
+  SET   R2 -2    # $R2 \gets -2$
+  ADDU  R3 R1 R2 # $R3 \gets (1 + 2 + 2^{31}) = 2147483651$
+\end{lstlisting}
+
+
+
+\opdef{ADDI}{$X,Y\in\Reg$, $N\in\mathds{Z}$}{0x52}{RRN}
 Hinzuaddieren eines festen vorzeichenbehafteten ganzzahligen Wert $N$ zum Inhalt
 des Registers $Y$ und speichern des Ergebnisses in das Register $X$.
 Entspricht dem algebraischen Ausdruck
@@ -42,24 +55,22 @@ Beispiel:
 
 
 
-\opdef{ADDU}{$X,Y,Z \in \Reg$}{0x42}{RRR}
-Vorzeichenlose Addition der Register $Y$ und $Z$. Das Ergebnis wird in das
-Register $X$ gespeichert. Enthält $Y$ oder $Z$ ein Vorzeichen (höchstwertiges
-Bit auf 1 gesetzt), so wird es nicht als solches interpretiert, sondern als
-Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
-
-\begin{lstlisting}
-  SET   R1 1     # $R1 \gets 1$
-  SET   R2 -2    # $R2 \gets -2$
-  ADDU  R3 R1 R2 # $R3 \gets (1 + 2 + 2^{31}) = 2147483651$
-\end{lstlisting}
-
-
-
-\opdef{ADDUI}{$X,Y \in \Reg$, $N\in\mathds{N}$}{0x43}{RRN}
+\opdef{ADDIU}{$X,Y \in \Reg$, $N\in\mathds{N}$}{0x53}{RRN}
 Vorzeichenlose Addition des ganzzahligen Wertes $N$ zum Inhalt des Registers $Y$
 und speichern des Ergebnisses in das Register $X$.
 Der Inhalt des Registers $Y$, die Zahl $N$ und das Ergebnis $Y + N$ werden als
 vorzeichenlose Werte interpretiert.
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,6 +1,6 @@
-\subsection{Lade- und Speicherbefehle}
+\section{Lade- und Speicherbefehle}
 
-\opdef{SET}{$X\in\Reg$, $N\in\mathds{Z}$}{0x20}{RNN}
+\opdef{SET}{$X\in\Reg$, $N\in\mathds{Z}$}{0x10}{RNN}
 Setzt den Inhalt des Registers $X$ auf den ganzzahligen Wert $N$.
 Da $N$ mit 16 Bit und im Zweierkomplement dargestellt wird, kann $N$ Werte von
 $-2^{15}$ bis $2^{15} - 1$ aufnehmen, bzw. von $-32768$ bis $+32767$.
@@ -16,7 +16,7 @@ Beispiele:
 \end{lstlisting}
 
 
-\opdef{SETU}{$X\in\Reg$, $N\in\mathds{N}$}{0x21}{RNN}
+\opdef{SETU}{$X\in\Reg$, $N\in\mathds{N}$}{0x11}{RNN}
 Setzt den Inhalt des Registers $X$ auf den positiven natürlichen Wert $N$.
 $N$ wird vorzeichenlos interpretiert. Entsprechend kann $N$ Werte von $0$ bis
 $+65535$ aufnehmen.

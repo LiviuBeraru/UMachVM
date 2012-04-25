@@ -23,7 +23,6 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
-\usepackage{booktabs}
 \usepackage{calc}
 \usepackage{multirow}
 \usepackage{xcolor}
@@ -59,13 +58,16 @@
 % opcode: hexa opcode
 % format: Abschnitt Name eines Instruktionsformats
 % Beispiel: \opdef{ADD}{X Y Z}{0x40}{RRR}
+% Referenzieren mit \nameref{opcode:<opname>}
+% Beispiel: \nameref{opcode:ADD}
 \newcommand{\opdef}[4]{%
-\subsubsection{\texttt{#1}}\index{#1@\texttt{#1}}%
+\subsection{\texttt{#1}}\index{#1@\texttt{#1}}%
+\label{opcode:#1}%
 \begin{center}%
-  \begin{tabular}{llll}                       \toprule
-    Assemblername & Parameter & Maschinencode & Format \\\midrule
-    \texttt{#1}   & #2        & \texttt{#3}   & \nameref{subsec:#4}\\\bottomrule
-  \end{tabular}
+  \begin{tabular}{llll}                       \toprule%
+    Assemblername & Parameter & Maschinencode & Format \\\midrule%
+    \texttt{#1}   & #2        & \texttt{#3}   & \nameref{#4}\\\bottomrule%
+  \end{tabular}%
 \end{center}%
 }
 

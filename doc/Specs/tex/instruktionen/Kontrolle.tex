@@ -1,0 +1,76 @@
+\section{Kontrollinstruktionen}
+
+\opdef{NOP}{keine}{0x00}{000}
+Diese Instruktion (\glqq No Operation\grqq) bewirkt nichts.
+Der Sinn dieser Instruktion ist, den Maschinencode mit Nullen füllen zu können,
+ohne dabei die gesamte Ausführung zu beeinflussen, außer, Zeitlupen zu schaffen. 
+
+
+\opdef{RST}{keine}{0x01}{000}
+Setzt alle Register außer dem Befehlszähler auf Null.
+
+
+\opdef{CRM}{$N \in \mathds{N}$}{0x02}{NNN}
+\glqq Change Run Mode\grqq.
+Setzt das \gls{Betriebsmodus}.\index{Betriebsmodus}
+Dabei ist das Parameter einer der folgenden konstanten Werten:
+\begin{center}
+  \begin{tabular}[l]{ll}
+    0 & Normalmodus \\
+    1 & Einzelschrittmodus \\
+  \end{tabular}
+\end{center}
+Siehe Abschnitt \ref{subsec:Betriebsmodi} auf Seite
+\pageref{subsec:Betriebsmodi}.
+
+
+
+\opdef{CSM}{$N \in \mathds{N}$}{0x03}{NNN}
+Change System Mode.
+
+
+
+\opdef{DIE}{keine}{0x04}{000}
+Die Maschine ausschalten.
+
+
+
+\opdef{RSR}{keine}{0x05}{000}
+\glqq Resurrect\grqq.
+Die Maschine neustarten.
+
+
+
+\opdef{AUTSM}{keine}{0x06}{000}
+\glqq Become autistic\grqq.
+Bewirkt, dass alle Lese- und Schreibbefehle, die sich nicht ausschließlich auf
+Register beziehen, wirkungslos sind. Praktisch wird die Kommunikation mit dem
+Bussystem ausgeschaltet.
+
+
+\opdef{SOCL}{keine}{0x07}{000}
+\glqq Become social\grqq. Schaltet die Kommunikation mit dem Bussystem ein.
+
+
+\opdef{HATE}{keine}{0x08}{000}
+\glqq Hate\grqq. Schaltet alle Schutzmechanismen ein.
+
+
+\opdef{TRST}{keine}{0x09}{000}
+\glqq Trust\grqq. Schaltet alle Schutzmechanismen aus.
+
+
+\opdef{ZMB}{keine}{0x0A}{000}
+\glqq Become a zombie\grqq.
+Schaltet alle Registeränderungen aus. Nach der Ausführung dieses Befehls, alle
+Operationen, die einen Register modifizieren sollen, sind wirkungslos.
+Die Maschine ändert ihren Zustand nicht mehr, außer, dass sie weitere Befehle
+liest.
+
+
+\opdef{ALIV}{keine}{0x0B}{000}
+\glqq Become alive\grqq.
+Nach der Ausführung dieses Befehls, alle Register können wie normal modifiziert
+werden.
+
+
