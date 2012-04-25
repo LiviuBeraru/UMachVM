@@ -157,3 +157,17 @@ Ich habe versucht (mit Inkscape) eine Skizze davon zu machen
 (doc/Specs/img).
 
 Es ist 2 Uhr in der Nacht.
+
+
+
+=== 25.04.2012 ===
+Malk.
+Ich arbeite wie ein Verrückter an der Spezifikation.
+Es sollte gut werden, oder möglichst gut werden.
+Ich brauche aber mehr Zeit, viel mehr Zeit.
+Zwei Dinge sind schwer:
+- die sinnvolle Verteilung der opcodes, die sinnvolle Strukturierung.
+  die Maschine sollte RISC bleiben, aber keine sinnvolle Dinge
+  vermissen.
+- das schnelle TeX-en. die Strukturierung der Dateien ist auch nicht
+  leicht. Ich habe sie mehrmals geändert.

@@ -1,1 +1,27 @@
 \section{Vergleichsinstruktionen}
+
+\opdef{CMP}{$X,Y,Z \in \Reg$}{0xB0}{RRR}
+\glqq Compare\grqq.
+
+\[
+    X \gets
+    \begin{cases}
+     -1 & \text{ falls } Y < Z \\
+     \pm0 & \text{ falls } Y = Z  \\
+     +1 & \text{ falls } Y > Z 
+    \end{cases}
+\]
+
+
+\opdef{CMPU}{$X,Y,Z \in \Reg$}{0xB1}{RRR}
+\glqq Compare Unsigned\grqq.
+
+
+\opdef{CMPI}{$X,Y \in \Reg$, $N \in \mathds{Z}$}{0xB2}{RRN}
+\glqq Compare Immediate\grqq.
+
+
+\opdef{CMPIU}{$X,Y \in \Reg$, $N \in \mathds{N}$}{0xB3}{RRN}
+\glqq Compare Immediate Unsigned\grqq.
+
+

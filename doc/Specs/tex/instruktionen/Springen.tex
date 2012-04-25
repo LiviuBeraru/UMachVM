@@ -1,2 +1,79 @@
 \section{Sprungbefehle}
 \label{sec:Sprungbefehle}
+
+Alle Sprungbefehle, außer dem \nameref{opcode:GO} Befehl, veranlassen einen 
+relativen Sprung im Programmcode. Relativ im Sinne, dass die Paramter der
+Sprungbefehle einen Versatz zur aktuellen Programmadresse angeben.
+
+Die Sprungbefehle bauen auf die Vergleichsbefehle auf.
+
+\opdef{BZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC0}{RNN}
+\glqq Branch if Zero\grqq.
+\[
+    X = 0 \; \Rightarrow \;
+    IP \gets IP + 4 \cdot N
+\]
+
+
+\opdef{BNZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC1}{RNN}
+\glqq Branch if Not Zero\grqq.
+
+
+
+\opdef{BLZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC2}{RNN}
+\glqq Branch if Less than Zero\grqq.
+
+
+
+\opdef{BLEZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC3}{RNN}
+\glqq Branch if Less or Equal than Zero\grqq.
+
+
+\opdef{BGZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC4}{RNN}
+\glqq Branch if Greater than Zero\grqq.
+
+
+\opdef{BGEZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC5}{RNN}
+\glqq Branch if Greater or Equal Zero\grqq.
+
+
+
+
+\opdef{BEI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xC8}{RNN}
+\glqq Branch if Equal Immediate\grqq.
+
+Fall $X = N$, springe $M$ Instruktionen weiter.
+
+
+
+\opdef{BNI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xC9}{RNN}
+\glqq Branch if Not equal Immediate\grqq.
+
+
+\opdef{BLI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCA}{RNN}
+\glqq Branch if Less then Immediate\grqq.
+
+
+
+\opdef{BLEI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCB}{RNN}
+\glqq Branch if Less or Equal then Immediate\grqq.
+
+
+\opdef{BGI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCC}{RNN}
+\glqq Branch if Greater then Immediate\grqq.
+
+\opdef{BGEI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCD}{RNN}
+\glqq Branch if Greater or Equal then Immediate\grqq.
+
+
+
+\opdef{JMP}{$N \in \mathds{N}$}{0xD8}{NNN}
+
+
+
+
+\opdef{GO}{$N \in \mathds{N}$}{0xDF}{NNN}
+Absolute Adresse.
+
+
+

@@ -1,1 +1,111 @@
 \section{Logische Instruktionen}
+
+\opdef{AND}{$X, Y, Z \in \Reg$}{0x90}{RRR}
+
+
+\opdef{ANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x91}{RRN}
+
+
+\opdef{OR}{$X, Y, Z \in \Reg$}{0x92}{RRR}
+
+
+\opdef{ORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x93}{RRN}
+
+
+\opdef{XOR}{$X, Y, Z \in \Reg$}{0x94}{RRR}
+\[
+    X \gets (Y \oplus Z)
+\]
+
+
+\opdef{XORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x95}{RRN}
+
+
+\opdef{NOT}{$X, Y\in \Reg$}{0x96}{RR0}
+\[
+    X \gets \overline{Y}
+\]
+\begin{lstlisting}
+ NOT R1 R2
+\end{lstlisting}
+
+
+
+\opdef{NOTI}{$X\in \Reg$, $N \in \mathds{N}$}{0x97}{RNN}
+
+\begin{lstlisting}
+ NOT R1 5
+\end{lstlisting}
+
+
+\opdef{NAND}{$X, Y, Z \in \Reg$}{0x98}{RRR}
+\[
+    X \gets (Y \overline{\land} Z)
+\]
+
+
+\opdef{NANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x99}{RRN}
+
+
+
+\opdef{NOR}{$X, Y, Z \in \Reg$}{0x9A}{RRR}
+\[
+    X \gets (Y \overline{\lor} Z)
+\]
+
+\opdef{NORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x9B}{RRN}
+
+
+
+\opdef{SHL}{$X, Y, Z \in \Reg$}{0xA0}{RRR}
+\glqq Shift Left\grqq.
+
+
+
+\opdef{SHLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA1}{RRN}
+\glqq Shift Left Immediate\grqq.
+Shifte die Bits im Register $Y$ $N$ Stellen nach links. $N$ ist eine positive 
+Zahl im Bereich $[0, 255]$.
+
+
+
+
+\opdef{SHR}{$X, Y, Z \in \Reg$}{0xA2}{RRR}
+\glqq Shift Right\grqq.
+
+
+\opdef{SHRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA3}{RRN}
+\glqq Shift Right Immediate\grqq.
+Das Bitmuster im Register $Y$ wird $N$ Stellen nach rechts geshiftet.
+Auf der linken Seite werden die versetzten Bits mit Nullen ersetzt.
+Siehe auch \nameref{opcode:SHRAI}.
+
+
+
+\opdef{SHRA}{$X, Y, Z \in \Reg$}{0xA4}{RRR}
+\glqq Shift Right Arithmetical\grqq.
+
+
+\opdef{SHRAI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA5}{RRN}
+\glqq Shift Right Arithmetical Immediate\grqq.
+
+
+
+\opdef{ROTL}{$X, Y, Z \in \Reg$}{0xA8}{RRR}
+\glqq Rotate Left\grqq.
+
+
+\opdef{ROTLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA9}{RRN}
+\glqq Rotate Left Immediate\grqq.
+
+
+
+\opdef{ROTR}{$X, Y, Z \in \Reg$}{0xAA}{RRR}
+\glqq Rotate Right\grqq.
+
+
+\opdef{ROTRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xAB}{RRN}
+\glqq Rotate Left Immediate\grqq.
+
+
+

@@ -9,10 +9,12 @@ gekürzt (es wird modulo berechnet, bzw. nur die ersten 16 Bits aufgenommen).
 
 Beispiele:
 \begin{lstlisting}
+label:
   SET R1  8    # $R1 \gets 8$
   SET R2 -3    # $R2 \gets -3$
   SET R3 65536 # $R3 \gets 0$, da $65536 = 2^{16} \equiv 0 \bmod 2^{16}$
   SET R4 70000 # $R3 \gets 4464 = 70000 \bmod 2^{16}$
+  SET R7 label # Adresse 'label' ins R7
 \end{lstlisting}
 
 
@@ -30,4 +32,159 @@ Beispiele:
   SETU R2   70000 # $R2 \gets 4464$
   SETU R2  -70000 # $R2 \gets 61072$
 \end{lstlisting}
+
+
+\opdef{COPY}{$X, Y \in \Reg$}{0x18}{RR0}
+
+
+\opdef{MOVE}{$X, Y \in \Reg$}{0x1A}{RR0}
+
+
+\opdef{LB}{$X, Y, Z \in \Reg$}{0x20}{RRR}
+\begin{lstlisting}
+ LB R1 R2 R3 # $R1 \gets mem(R2 + R3)$
+\end{lstlisting}
+
+
+\opdef{LBU}{$X, Y, Z \in \Reg$}{0x21}{RRR}
+\glqq Load Byte Unsigned\grqq.
+
+
+\opdef{LH}{$X, Y, Z \in \Reg$}{0x22}{RRR}
+\glqq Load Half\grqq.
+
+
+\opdef{LHU}{$X, Y, Z \in \Reg$}{0x23}{RRR}
+\glqq Load Half Unsigned\grqq.
+
+
+\opdef{LW}{$X, Y, Z \in \Reg$}{0x24}{RRR}
+\glqq Load Word\grqq.
+
+
+\opdef{LWU}{$X, Y, Z \in \Reg$}{0x25}{RRR}
+\glqq Load Word Unsigned\grqq.
+
+
+\opdef{LBI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x28}{RRN}
+\glqq Load Byte Immediate\grqq.
+
+
+\opdef{LBUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x29}{RRN}
+\glqq Load Byte Unsigned Immediate\grqq.
+
+
+
+\opdef{LHI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x2A}{RRN}
+\glqq Load Half Immediate\grqq.
+
+
+\opdef{LHUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x2B}{RRN}
+\glqq Load Half Unsigned Immediate\grqq.
+
+
+\opdef{LWI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x2C}{RRN}
+\glqq Load Word Immediate\grqq.
+\[
+    X \gets mem(Y + N)
+\]
+
+
+\opdef{LWUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x2D}{RRN}
+\glqq Load Word Unsigned Immediate\grqq.
+
+
+
+\opdef{SB}{$X, Y, Z \in \Reg$}{0x30}{RRR}
+\glqq Store Byte\grqq.
+
+
+
+\opdef{SBU}{$X, Y, Z \in \Reg$}{0x31}{RRR}
+\glqq Store Byte Unsigned\grqq.
+
+
+
+\opdef{SH}{$X, Y, Z \in \Reg$}{0x32}{RRR}
+\glqq Store Half\grqq.
+
+
+
+\opdef{SHU}{$X, Y, Z \in \Reg$}{0x33}{RRR}
+\glqq Store Half Unsigned\grqq.
+
+
+
+\opdef{SW}{$X, Y, Z \in \Reg$}{0x34}{RRR}
+\glqq Store Word\grqq.
+
+\[
+    X \to mem(Y + Z)
+\]
+
+
+\opdef{SWU}{$X, Y, Z \in \Reg$}{0x35}{RRR}
+\glqq Store Word Unsigned\grqq.
+
+
+
+\opdef{SBI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x38}{RRN}
+\glqq Store Byte Immediate\grqq.
+
+
+
+\opdef{SBUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x39}{RRN}
+\glqq Store Byte Unsigned Immediate\grqq.
+Sowohl der Inhalt des Registers $Y$, als auch die Zahl $N$ werden 
+vorzeichenlos interpretiert.
+
+
+
+\opdef{SHI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x3A}{RRN}
+\glqq Store Half Immediate\grqq.
+
+
+
+\opdef{SHUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x3B}{RRN}
+\glqq Store Half Unsigned Immediate\grqq.
+
+
+
+\opdef{SWI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x3C}{RRN}
+\glqq Store Word Immediate\grqq.
+
+
+
+\opdef{SWUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x3D}{RRN}
+\glqq Store Word Unsigned Immediate\grqq.
+
+
+
+\opdef{PUSHB}{$X \in \Reg$}{0x40}{R00}
+\glqq Push Byte\grqq.
+
+
+
+\opdef{PUSHH}{$X \in \Reg$}{0x41}{R00}
+\glqq Push Half\grqq.
+
+
+
+\opdef{PUSH}{$X \in \Reg$}{0x42}{R00}
+\glqq Push Word\grqq.
+
+
+
+\opdef{POPB}{$X \in \Reg$}{0x48}{R00}
+\glqq Pop Byte\grqq.
+
+
+\opdef{POPH}{$X \in \Reg$}{0x49}{R00}
+\glqq Pop Half\grqq.
+
+
+
+\opdef{POP}{$X \in \Reg$}{0x4A}{R00}
+\glqq Pop Word\grqq.
+
 
