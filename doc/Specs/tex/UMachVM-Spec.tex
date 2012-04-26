@@ -30,11 +30,11 @@
 \usepackage{scrhack}%entfernt warnmeldungen von listings
 \usepackage{listings}
 \lstset{basicstyle=\small\ttfamily}
-\lstset{commentstyle=\slshape\color{blue!20!black}}
+\lstset{commentstyle=\slshape}
 \lstset{showstringspaces=false}
 \lstset{frame=leftline}
 \lstset{mathescape=true}
-\lstset{morecomment=[l][\color{blue!20!black}]{\#}}
+%\lstset{morecomment=[l][\color{blue!10!black}]{\#}}
 
 \usepackage{makeidx}
 \makeindex
@@ -69,6 +69,11 @@
   \end{tabular}%
 \end{center}%
 }
+
+%% Referenziere einen Befehl. Es wird der Name des Befehls angezeigt
+%% und man kann drauf klicken.
+%% Nutzung: \opref{ADD}
+\newcommand{\opref}[1]{\nameref{opcode:#1}}
 
 % Die Menge aller Register bekommt ein eigenes Zeichen
 \newcommand{\Reg}{\ensuremath{\mathcal{R}}}

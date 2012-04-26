@@ -1,4 +1,5 @@
 \section{Lade- und Speicherbefehle}
+\label{sec:Lade-Speicher-Instruktionen}
 
 \opdef{SET}{$X\in\Reg$, $N\in\mathds{Z}$}{0x10}{RNN}
 Setzt den Inhalt des Registers $X$ auf den ganzzahligen Wert $N$.
@@ -35,63 +36,196 @@ Beispiele:
 
 
 \opdef{COPY}{$X, Y \in \Reg$}{0x18}{RR0}
+Kopiert den Inhalt des Registers $Y$ in das Register $X$. Register $Y$ wird
+dabei nicht geändert.
+
+Beispiel:
+\begin{lstlisting}
+ SET  R1 5  # $R1 \gets 5$
+ COPY R2 R1 # $R2 \gets 5$
+\end{lstlisting}
+
 
 
 \opdef{MOVE}{$X, Y \in \Reg$}{0x1A}{RR0}
+Ähnlich wie \opref{COPY}, kopiert dieser Befehl den Inhalt des Registers $Y$
+in das Register $X$.
+Anders aber als \opref{COPY}, setzt \texttt{MOVE} das Register $Y$ auf Null.
+Entspricht einer echten Verschiebung eines Wertes von $Y$ nach $X$.
+Gemäß der Formatspezifikation, können nur Register als Argumenten verwendet
+werden. Um den Inhalt eines Registers auf einen konstanten Wert zu setzen, ist
+\opref{SET} zu verwenden. Um den Inhalt eines Registers mit einem Speicherinhalt
+zu belegen, ist z.B. \opref{LW} zu verwenden.
+\begin{lstlisting}
+  SET  R1  5   # Inhalt von R1 ist 5
+  MOVE R2 R1   # R1 = 0, R1 = 5
+  MOVE R1 R2   # R1 = 5, R1 = 0
+  MOVE R2  7   # Fehler, da 7 kein Register
+\end{lstlisting}
+
+
 
 
 \opdef{LB}{$X, Y, Z \in \Reg$}{0x20}{RRR}
+Lade ein Byte aus dem Speicher mit Adresse $Y + Z$ in das niedrigstwertige
+Byte des Registers $X$. Die anderen Bytes von $X$ werden von diesem Befehl nicht
+betroffen. Besonders, sie werden nicht auf Null gesetzt.
+Alle Registerinhalte werden als vorzeichenbehaftet behandelt.
+Algebraisch äquivalent:
+\[
+    X \gets (X \div 2^{8}) \cdot 2^{8} + \left(mem(Y + Z) \bmod 2^{8} \right)
+\]
+Äquivalenter C Code:
 \begin{lstlisting}
- LB R1 R2 R3 # $R1 \gets mem(R2 + R3)$
+  x = (x & 0xFFFFFF00) | (mem(y + z) & 0x00FF);
 \end{lstlisting}
+
+\paragraph{Beispiel}
+Angenommen, der Speicher an den Adressen $100$ und $101$ hat den Wert $5$,
+bzw. $6$.
+\begin{lstlisting}
+  SET  R1   100   # Basisadresse R1 = 100
+  SET  R2     0   # Index R2 = 0
+  SET  R3     0
+  LB   R3 R1 R2   # R3 = 5 ($mem(100+0)$)
+  SHLI R3 R3  8   # shift left 8 Bit, R3 = 1280
+  INC  R2         # R2++, R2 = 1
+  LB   R3 R1 R2   # R3 = 1286 (R3 + $mem(100+1)$)
+\end{lstlisting}
+Hier werden zwei nacheinander folgenden Bytes aus dem Speicher gelesen und in
+die zwei niedrigstwertigen Bytes von $R3$ abgelegt.
+Das gleiche kann man kürzer mit dem Befehl \opref{LH} erreicht werden.
+
+
 
 
 \opdef{LBU}{$X, Y, Z \in \Reg$}{0x21}{RRR}
 \glqq Load Byte Unsigned\grqq.
+Analog dem Befehle \opref{LB} mit dem Unterschied, dass alle Registerinhalte als
+vorzeichenlos interpretiert werden. Somit ergeben sich größere Wertebereiche für
+die Adressen.
 
 
 \opdef{LH}{$X, Y, Z \in \Reg$}{0x22}{RRR}
 \glqq Load Half\grqq.
+Lade ein halbes Word (2 Bytes) aus der Adresse $Y + Z$ in die zwei
+niedrigstwertigen Bytes des Registers $X$.
+Die beiden höchstwertigen Bytes von $X$ werden nicht verändert.
+
+\paragraph{Beispiel}
+Angenommen, der Speicher an den Adressen $100$ und $101$ hat den Wert $5$,
+bzw. $6$. Die Adressen $100$ und $101$ bilden also zusammen den Wert
+\texttt{0x0506} ($1286$).
+\begin{lstlisting}
+  SET  R1   100     # Basisadresse R1 = 100
+  SET  R2     0     # Index R2 = 0
+  SET  R3     0
+  LH   R3 R1 R2     # R3 = 1286 ($mem_{2}(100+0)$)
+
+  SET  R3  0x010000 # R3 = 65536 (3. Byte auf 1 gesetzt)
+  LH   R3 R1 R2     # R3 = 66822 = 65536+1286
+\end{lstlisting}
+
 
 
 \opdef{LHU}{$X, Y, Z \in \Reg$}{0x23}{RRR}
 \glqq Load Half Unsigned\grqq.
+Analog zur Instruktion \opref{LH} mit dem Unterschied, dass alle Registerinhalte
+als vorzeichenlos interpretiert werden.
 
 
 \opdef{LW}{$X, Y, Z \in \Reg$}{0x24}{RRR}
 \glqq Load Word\grqq.
+Lade ein Wort (4 Byte) aus dem Speicher mit Adresse $Y + Z$ in das Register $X$.
+Alle Bytes von $X$ werden dabei überschrieben.
+Die Bytes aus dem Speicher werden nacheinander gelesen. Es werden also die
+Bytes mit Adressen $Y + Z + 0$, $Y + Z + 1$, $Y + Z + 2$ und $Y + Z + 3$ zu
+einem 4-Byte Wort zusammengesetzt und so in $X$ ablegt.
+
+\paragraph{Beispiel}
+Abgenommen, die Adressen von 100 bis 103 sind mit den Werten 0, 1, 2 und 3
+belegt und bilden somit den Wert $66051$.
+\begin{lstlisting}
+  SET R1   100
+  SET R2     0
+  LW  R3 R1 R2  # $R3 \gets mem_{4}(R1 + R2) = 66051$
+  LW  R3 R1  8  # Fehler! 8 ist kein Register nutze LWI dafuer
+\end{lstlisting}
 
 
 \opdef{LWU}{$X, Y, Z \in \Reg$}{0x25}{RRR}
 \glqq Load Word Unsigned\grqq.
+Analog zur Instruktion \opref{LW} mit dem Unterschied, dass alle Registerinhalte
+vorzeichenlos interpretiert werden.
+
+
 
 
 \opdef{LBI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x28}{RRN}
 \glqq Load Byte Immediate\grqq.
+Lade ein Byte aus dem Speicher mit Adresse $Y + N$ in das niedrigstwertige Byte
+des Registers $X$. $N$ ist dabei eine feste, konstante Zahl, die zum Inhalt von
+$Y$ hinzuaddiert wird.
+
+\paragraph{Beispiel}
+Das folgende Beispiel setzt das niedrigstwertige Byte des Registers $R2$ auf
+denn Speicherinhalt mit Adresse $116$:
+
+\begin{lstlisting}
+  SET R1   100  # $R1 \gets 100$
+  SET R2     0
+  LBI R2 R1 16  # $R2 \gets mem(100 + 16)$
+\end{lstlisting}
+
+
 
 
 \opdef{LBUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x29}{RRN}
 \glqq Load Byte Unsigned Immediate\grqq.
+Analog zur Instruktion \opref{LBI} mit dem Unterschied, dass sowohl $Y$ als auch
+$N$ vorzeichenlos interpretiert werden.
 
 
 
 \opdef{LHI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x2A}{RRN}
 \glqq Load Half Immediate\grqq.
+Lädt aus dem Speicher ab der Adresse $Y + N$ zwei nacheinander folgenden Bytes
+in die zwei niedrigstwertigen Bytes des Registers $X$.
+$Y$ ist ein Register und $N$ eine ganze Zahl im Bereich $[-128, 127]$.
+Die Instruktion funktioniert wie \opref{LH}, außer, dass $N$ eine feste Zahl und
+kein Register ist.
 
 
 \opdef{LHUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x2B}{RRN}
 \glqq Load Half Unsigned Immediate\grqq.
+Analog zur Instruktion \opref{LHI} mit dem Unterschied, dass alle Operanden
+vorzeichenlos interpretiert werden.
 
 
 \opdef{LWI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x2C}{RRN}
 \glqq Load Word Immediate\grqq.
+Lädt ein Wort (4 Bytes) ab der Adresse $Y + N$ in das Register $X$. Entspricht
+dem algebraischen Ausdruck
 \[
-    X \gets mem(Y + N)
+    X \gets mem_{4}(Y + N)
 \]
+Funktioniert wie \opref{LW} mit dem Unterschied, dass $N$ eine feste konstante
+ganze Zahl ist.
+
+\paragraph{Beispiel}
+Angenommen, an den Speicheradressen 100 bis 104 stehen die Werte \texttt{0x01},
+\texttt{0x02}, \texttt{0x03}, \texttt{0x04} und \texttt{0x05}.
+\begin{lstlisting}
+  SET R1 100
+  LWI R2 R1 0 # R2 = 0x01020304
+  LWI R2 R1 1 # R2 = 0x02030405
+\end{lstlisting}
 
 
 \opdef{LWUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x2D}{RRN}
 \glqq Load Word Unsigned Immediate\grqq.
+Analog zur Instruktion \opref{LWI} mit dem Unterschied, dass alle Werte
+(insbesondere $N$) vorzeichenlos interpretiert werden.
 
 
 

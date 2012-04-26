@@ -1,4 +1,4 @@
-\paragraph{Verteilung des Befehlsraums}
+\section{Verteilung des Befehlsraums}
 \index{Befehlsraum}
 Zur besseren Übersicht der verschiedenen UMach-\glspl{Instruktion}, unterteilen
 wir den \gls{Instruktionssatz} der UMach virtuellen Maschine in den folgenden
@@ -58,7 +58,7 @@ Seite \pageref{sec:Instruktionsformate} nachgeschlagen werden.
 \paragraph{Zur Notation}
 Mit \Reg\index{\Reg} wird die Menge aller Register
 gekennzeichnet\footnote{Nicht verwechseln mit den Symbolen $\mathds{R}$ und
-$\mathbb{R}$, die die Menge aller reelen Zahlen bedeuten.}.
+$\mathbb{R}$, die die Menge aller reellen Zahlen bedeuten.}.
 Die Notation $X \in \Reg$ bedeutet, dass $X$ ein Element aus dieser Menge ist,
 mit anderen Worten, dass $X$ ein Register ist. Analog bedeutet die
 Schreibweise $X,Y \in \Reg$, dass $X$ und $Y$ beide Register sind.
@@ -79,6 +79,8 @@ Andere verwendeten Schreibweisen:
               & $N$ ist Element von $\mathds{N}$, oder liegt im Bereich von
               $\mathds{N}$                                             \\
  $X \gets Y$  & $X$ wird auf $Y$ gesetzt                               \\
+ $mem(X)$     & Speicherinhalt an der Adresse $X$ (1 Byte)             \\
+ $mem_{n}(X)$ & Speicherinhalt an der Adresse $X$ ($n$ Bytes)          \\
 \bottomrule
 \end{tabular}
 \end{center} 

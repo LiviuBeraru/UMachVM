@@ -2,7 +2,7 @@
 \index{Register!Spezialregister}
 \index{Spezialregister}
 Die Spezialregister werden von der UMach Maschine für spezielle Zwecke
-verwendet, sind aber dem Programmiere sichtbar. Der Inhalt der Spezialregister
+verwendet, sind aber dem Programmierer sichtbar. Der Inhalt der Spezialregister
 kann von der Maschine während der Ausführung eines Programms ohne Einfluss
 seitens Programmierers verändert werden.
 
@@ -13,7 +13,7 @@ Die Maschinennamen der Spezialregister setzen die Nummerierung der
 Allzweckregister zwar fort, die Assemblernamen aber nicht: es gibt kein Register
 $R33$.
 Die Tabelle \ref{tab:Spezialregister} auf Seite \pageref{tab:Spezialregister}
-enthält die Liste aller Spezialregister.  In der ersten
+enthält die Liste aller Spezialregister. In der ersten
 Spalte steht der Assemblername, so wie er vom Programmierer verwendet wird. In
 der zweiten Spalte steht der Maschinenname im Hexadezimalsystem, so wie er im
 Maschinencode steht.
@@ -24,12 +24,12 @@ ist, ist das Register nicht schreibgeschützt.
 \begin{longtable}
 {
   >{\ttfamily}p{1cm} 
-  >{\ttfamily}p{0.5cm}
-  p{\textwidth-1.5cm-6\tabcolsep}
+  >{\ttfamily}p{1cm}
+  p{\textwidth-2cm-6\tabcolsep}
 }
 \caption{Liste der Spezialregister}
 \label{tab:Spezialregister}\\
-IP   & 33 & \glqq Instruction Pointer\grqq. Enthält zu jeder Zeit die Adresse
+IP   & 0x33 & \glqq Instruction Pointer\grqq. Enthält zu jeder Zeit die Adresse
             der nächsten Instruktion. Wird auf Null gesetzt, wenn die Maschine
             hochfährt.
             Wird nach dem Abfangen einer Instruktion in das Register
@@ -38,41 +38,49 @@ IP   & 33 & \glqq Instruction Pointer\grqq. Enthält zu jeder Zeit die Adresse
             Schreibgeschützt.
             \index{IP@\texttt{IP}}
 \\
-CIN  & ?? & \glqq Current Instruction\grqq. Enthält die nächste Instruktion.
-            Vor der Ausführung einer Instruktion gilt, dass der Inhalt dieses
-            Registers und der Speicher an der Adresse \texttt{IP} gleich sind.
+SP   & 0x34 & \glqq Stack Pointer\grqq.
+            Enthält die Speicheradresse des höchsten Eintrag auf dem Stack.
+            \index{SP@\texttt{SP}}
+\\
+FP   & 0x35 & \glqq Frame Pointer\grqq.
+            Enthält die Startadresse der lokalen Variablen einer Subroutine
+            und unterstützt höhere Programmiersprachen.
+            \index{FP@\texttt{FP}}
+\\
+LIN  & 0x36 & \glqq Last Instruction\grqq. Enthält den Maschinencode der zuletzt
+            ausgeführten Instruktion.
+
+            Schreibgeschützt.
+            \index{LIN@\texttt{LIN}}
+\\
+CIN  & 0x37 & \glqq Current Instruction\grqq. Enthält die gerade ausgeführte
+            Instruktion.
 
             Schreibgeschützt.
             \index{CIN@\texttt{CIN}}
 \\
-ERR  & ?? & Fehlerregister. Die einzelnen Bits geben Auskunft über Fehler, die
-            mit der Ausführung des Programms verbunden sind.
+NIN  & 0x38 & \glqq Next Instruction\grqq.
+            Enthält die nächste Instruktion.
+            Während der Ausführung eines Instruktion, zeigt der Register IP auf
+            diese Instruktion, aber im Speicher.
 
             Schreibgeschützt.
+            \index{NIN@\texttt{NIN}}
+\\
+STAT & 0x39 & Enthält Status-Informationen
+\\
+ERR  & 0x3A & Fehlerregister. Die einzelnen Bits geben Auskunft über Fehler, die
+            mit der Ausführung des Programms verbunden sind.
             \index{ERR@\texttt{ERR}}
 \\
-RMOD & ?? & Betriebsmodus. (\glqq Run Mode\grqq).
-            \index{RMOD@\texttt{RMOD}}
+ERRM & 0x3B & Enthält zusätzliche Informationen zu den Fehler im signalisiert im
+            Register ERR.
+            \index{ERRM@\texttt{ERRM}}
 \\
-SMOD & ?? & Systemmodus. Kernel mode etc.
-            \index{SMOD@\texttt{SMOD}}
-\\
-ZERO & ?? & Enthält die Zahl Null.
+ZERO & 0x3C & Enthält die Zahl Null.
 
             Schreibgeschützt.
             \index{ZERO@\texttt{ZERO}}
 \\
-ARST & ?? & Arithmetischer Status. Division durch Null, Überlauf etc.
-
-            Schreibgeschützt.
-            \index{ARST@\texttt{ARST}}
-\\
-INT  & ?? & \glqq Interrupt Number\grqq, wird für syscalls benutzt.
-            \index{INT@\texttt{INT}}
-\\
-DEAD & ?? & Gesetzt, wenn der Zustand der Maschine keine weiteren Ausführungen
-            mehr erlaubt. Die Maschine ist \glqq tot\grqq, wenn dieses Register
-            einen Wert ungleich Null hat.
-            \index{DEAD@\texttt{DEAD}}
 \end{longtable}
 
