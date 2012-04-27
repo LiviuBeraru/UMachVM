@@ -15,6 +15,13 @@
 % \Gls{label}   for first letter uppercase
 % \Glspl{label} for first letter uppercase plural
 
+\newglossaryentry{Adressdekoder}{
+name={Adressdekoder},
+description={Das Herz des Bussystems. Wählt anhand einer eingegebenen Adresse
+             einen Bus-Port, an den ein Befehl weitergeleitet wird.
+             Funktioniert wie eine Art Demultiplexer.},
+plural={Adressdekoder}
+}
 
 \newglossaryentry{Adressierungsart}{
 name={Adressierungsart},
@@ -68,6 +75,12 @@ description={Die Art, wie die UMach Maschine die einzelnen Instruktionen
 plural={Betriebsmodi}
 }
 
+\newglossaryentry{Bussystem}{
+name={Bussystem},
+description={Die Mainboard.},
+plural={Bussysteme}
+}
+
 \newglossaryentry{Instruktion}{
 name=Instruktion,
 description={Eine Anweisung an die UMach VM etwas zu tun. Eine Instruktion
@@ -107,6 +120,14 @@ description={Der Name eines Registers oder eines Befehls, so wie er im
              \texttt{0x01}, \texttt{0x02}, \texttt{0x40} sind Maschinennamen
              von Registern und Befehlen.},
 plural={Maschinennamen}
+}
+
+\newglossaryentry{Speicher}{
+name={Speicher},
+description={Baukomponente, die am Bussystem angeschlossen ist und die eine
+             feste Anzahl von Bytes für die Laufzeit der Maschine aufnehmen
+             kann.},
+plural={Speicher}
 }
 
 
