@@ -2,7 +2,7 @@
 \index{Peripherie}
 Die UMach Maschine ist an einem \gls{Bussystem}\index{Bussystem} angeschlossen.
 Dieses Bussystem enthält unter anderem Baukomponenten (Ports), an denen
-peripherische Geräte physisch abgeschlossen sein können. Der
+peripherische Geräte physisch angeschlossen sein können. Der
 \gls{Speicher}\index{Speicher} der Maschine ist eine solche peripherische
 Komponente, die an einem Port angeschlossen ist (am
 Speicherport\index{Speicherport}). Eine andere peripherische Komponente ist das
@@ -51,6 +51,10 @@ physikalischen Eigenschaften zählt die Fähigkeit, bestimmte Befehle aufzunehme
 und auszuführen (mittels Port-lokalen Register, die Befehle speichern können),
 sowie die Fähigkeit, Daten und Signale zu produzieren. Diese Eigenschaften
 erlauben dem Bussystem, den Port als eine Speichereinheit zu betrachten. 
+Zusätzlich wird für jeden Port festgelegt, welche Befehle soll das
+angeschlossene Gerät ausführen können.
+Dies ermöglicht die Abwicklungs eines einfachen Abfrage-Protokolls am
+entsprechenden Port.
 
 Da jeder Port als Speicher adressierbar ist, sieht das Bussystem jeden Port als
 in einem einheitlichen, kontinuierlichen 32-Bit Speicherraum eingebettet (da
@@ -72,11 +76,18 @@ angeschlossene Gerät. Mittels eines einfachen Protokolls werden die konkrete
 physikalische Eigenschaften des Geräts abgefragt. Nach der Abfrage und Testphase
 hat das Bussystem in einem eigenen, internen Speicher eine Liste von Geräten und
 deren Eigenschaften aufgebaut. Anhand dieser Liste legt das Bussystem fest, wie
-groß ist der Adressbereich jedes einzelnen Ports. Die Abbildung
+groß ist der Adressbereich jedes einzelnen Ports. Damit ist das Bussystem in der
+Lage, eine Adressraumverteilung vorzunehmen, die später für die Adressierung der
+einzelnen Ports benutzt wird. Siehe dazu auch den Abschnitt
+\ref{subsec:Adressraumverteilung} ab der Seite
+\pageref{subsec:Adressraumverteilung}.
+Nach der Verteilung kann das Bussystem jede 32-Bit Adresse einem bestimmten Port
+zuweisen.
+
+Die Abbildung
 \ref{fig:UMach-Bussystem} auf der Seite \pageref{fig:UMach-Bussystem} zeigt sehr
 vereinfacht eine solche Verteilung der Speicherunterräume auf die Adressbereiche
-innerhalb des gesamten Speicherraums. Nach der Verteilung kann das Bussystem
-jede 32-Bit Adresse einem bestimmten Port zuweisen.
+innerhalb des gesamten Speicherraums. 
 
 
 
@@ -107,16 +118,9 @@ Maschine dem Bus \glqq lese aus der Adresse $289$\grqq.
 
 Um die Adressbereiche bekannt zu machen, muss das Bussystem seinen eigenen
 internen Speicher in den gesamten Adressbereich einbinden, und zwar an eine
-feste Adresse. Somit kann der Programmierer der Maschine beim Start des
+feste Adresse (siehe auch Abschnitt \ref{subsec:Adressraumverteilung} auf der
+Seite \pageref{subsec:Adressraumverteilung}).
+Somit kann der Programmierer der Maschine beim Start des
 Programms die einzelnen Bereiche abfragen, verwenden und weiter unterteilen.
-
-
-
-
-
-
-
-
-
 
 
