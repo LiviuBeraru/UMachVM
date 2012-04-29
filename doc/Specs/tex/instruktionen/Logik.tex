@@ -77,6 +77,7 @@ Zahl im Bereich $[0, 255]$.
 \opdef{SHRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA3}{RRN}
 \glqq Shift Right Immediate\grqq.
 Das Bitmuster im Register $Y$ wird $N$ Stellen nach rechts geshiftet.
+Dabei ist $N$ eine positive natürliche Zahl aus dem Intervall $[0, 255]$.
 Auf der linken Seite werden die versetzten Bits mit Nullen ersetzt.
 Siehe auch \nameref{opcode:SHRAI}.
 

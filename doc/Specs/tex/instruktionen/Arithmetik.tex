@@ -1,9 +1,9 @@
 \section{Arithmetische Instruktionen} 
 
 \opdef{ADD}{$X,Y,Z \in \Reg$}{0x50}{RRR}
-Vorzeichen behaftete Addition der Registerinhalte $Y$ und $Z$ und
-speichern des Ergebnisses in das Register $X$. Entspricht dem algebraischen
-Ausdruck
+Vorzeichen behaftete Addition der Registerinhalte $Y$ und $Z$.
+Das Ergebnis der Addition wird in das Register $X$ gespeichert.
+Entspricht dem algebraischen Ausdruck
 \[
     X \gets Y + Z
 \]
@@ -63,41 +63,82 @@ Vorzeichenlose Addition des ganzzahligen Wertes $N$ zum Inhalt des Registers $Y$
 und speichern des Ergebnisses in das Register $X$.
 Der Inhalt des Registers $Y$, die Zahl $N$ und das Ergebnis $Y + N$ werden als
 vorzeichenlose Werte interpretiert.
+Die Feste natürliche Zahl $N$ kann Werte aus dem Bereich $[0, 255]$ aufnehmen.
+Wird eine größere Zahl angegeben, so wird sie modulo $256$ berechnet.
 
 
 
 \opdef{SUB}{$X, Y, Z \in \Reg$}{0x58}{RRR}
+Subtrahiert die Registerinhalte von $Y$ und $Z$ und speichert das Ergebnis in
+das Register $X$. Entspricht dem Ausdruck
+\[
+    X \gets (Y - Z)
+\]
+Wobei $X$, $Y$ und $Z$ Register sind.
+
 
 
 \opdef{SUBU}{$X, Y, Z \in \Reg$}{0x59}{RRR}
 \glqq Subtract Unsigned\grqq.
+Analog zur Instruktion \opref{SUB} mit dem Unterschied, dass alle Werte und
+Operationen vorzeichenlos sind.
 
 
 \opdef{SUBI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x5A}{RRN}
 \glqq Subtract Immediate\grqq.
+Funktioniert wie \opref{SUB} aber $N$ ist eine direkt angegebene Zahl
+(kein Register).
+
+\paragraph{Beispiel}
+Folgendes Beispiel demonstriert die Verwendung von \opref{SUBI} und zeigt
+zugleich einen Fehler.
+\begin{lstlisting}
+  SET  R1 50     # $R1 \gets 50$
+  SUBI R2 R1 30  # $R2 \gets (R1 - 30) = 20$
+  SUBI R2 R1 R1  # Fehler! da $R1 \not\in \mathds{Z}$
+\end{lstlisting}
 
 
 \opdef{SUBIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x5B}{RRN}
 \glqq Subtract Immediate Unsigned\grqq.
+Funktioniert wie die Instruktion \opref{SUBI} mit dem Unterschied, dass
+\opref{SUBIU} ausschliesslich mit vorzeichenlosen Werten arbeitet. 
 
 
 
-\opdef{MUL}{$X, Y, Z \in \Reg$}{0x60}{RRR}
+\opdef{MUL}{$X, Y \in \Reg$}{0x60}{RR0}
+\glqq Multiply\grqq. 
+Multipliziert die Inhalte der Register $X$ und $Y$ und speichert das Ergebnis in
+die Spezialregister \texttt{HI} und \texttt{LO}. Dabei werden die höchstwertigen
+32 Bit des Ergebnisses in das Register \texttt{HI} und die 32 niedrigstwertigen
+Bits des Ergebnisses in das Register \texttt{LO} gespeichert.
+Siehe auch die Tabelle \ref{tab:Spezialregister} auf der Seite
+\pageref{tab:Spezialregister}.
+
+\paragraph{Beispiel} Der folgende Code demonstriert die Verwendung der
+\texttt{MUL} Instruktion.
+\begin{lstlisting}
+  SET R1 4  # $R1 \gets 4$
+  SET R2 5  # $R2 \gets 5$
+  MUL R1 R2 # $HI \gets 0$
+            # $LO \gets 20$
+\end{lstlisting}
+
 
 
 
 \opdef{MULU}{$X, Y, Z \in \Reg$}{0x61}{RRR}
-\glqq Multiplicate Unsigned\grqq.
+\glqq Multiply Unsigned\grqq.
 
 
 
 \opdef{MULI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x62}{RRN}
-\glqq Multiplicate Immediate\grqq.
+\glqq Multiply Immediate\grqq.
 
 
 
 \opdef{MULIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x63}{RRN}
-\glqq Multiplicate Immediate Unsigned\grqq.
+\glqq Multiply Immediate Unsigned\grqq.
 
 
 

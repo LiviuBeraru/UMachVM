@@ -56,6 +56,7 @@ Instruktionsformate können im Abschnitt \ref{sec:Instruktionsformate} ab der
 Seite \pageref{sec:Instruktionsformate} nachgeschlagen werden.
 
 \paragraph{Zur Notation}
+\index{Notation}
 Mit \Reg\index{\Reg} wird die Menge aller Register
 gekennzeichnet\footnote{Nicht verwechseln mit den Symbolen $\mathds{R}$ und
 $\mathbb{R}$, die die Menge aller reellen Zahlen bedeuten.}.
@@ -80,7 +81,9 @@ Andere verwendeten Schreibweisen:
               $\mathds{N}$                                             \\
  $X \gets Y$  & $X$ wird auf $Y$ gesetzt                               \\
  $mem(X)$     & Speicherinhalt an der Adresse $X$ (1 Byte)             \\
- $mem_{n}(X)$ & Speicherinhalt an der Adresse $X$ ($n$ Bytes)          \\
+ $mem_{n}(X)$ & $n$-Bytes-Block im Speicher ab Adresse $X$             \\
+ \texttt{mem[n]}
+              & äquivalent zu $mem(n)$                                 \\
 \bottomrule
 \end{tabular}
 \end{center} 

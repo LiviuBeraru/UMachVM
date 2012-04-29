@@ -231,94 +231,380 @@ Analog zur Instruktion \opref{LWI} mit dem Unterschied, dass alle Werte
 
 \opdef{SB}{$X, Y, Z \in \Reg$}{0x30}{RRR}
 \glqq Store Byte\grqq.
+Speichert den Inhalt des niedrigstwertigen Byte von $X$ an der Speicherstelle
+$Y + Z$. $X$, $Y$ und $Z$ sind dabei Register. Deren Inhalt wird als
+vorzeichenbehaftet interpretiert.
 
+Entspricht dem algebraischen Ausdruck
+\[
+    X \to mem_{1} (Y + Z)
+\]
+$mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
+
+\paragraph{Beispiel}
+\begin{lstlisting}
+  SET R1 128     # R1 = Speicheradresse 128
+  SET R2 513     # R2 = 0x0201
+  SB  R2 R1 ZERO # Speicher mit Adresse 128 wird auf 1 gesetzt
+\end{lstlisting}
+\texttt{ZERO} ist dabei ein Spezialregister mit konstantem Wert $0$.
 
 
 \opdef{SBU}{$X, Y, Z \in \Reg$}{0x31}{RRR}
 \glqq Store Byte Unsigned\grqq.
+Analog zur Instruktion \opref{SB} mit dem Unterschied, dass $X$, $Y$ und $Z$
+vorzeichenlos behandelt werden.
 
 
 
 \opdef{SH}{$X, Y, Z \in \Reg$}{0x32}{RRR}
 \glqq Store Half\grqq.
+Speichert die 2 niedrigstwertigen Bytes von $X$ (rechte Hälfte von $X$) an die
+Adressen $Y + Z$ und $X + Y + 1$ so, dass diese zwei Adressen mit den letzten
+Bytes von $X$ übereinstimmen. Die folgende Tabelle zeigt die bitweise
+Übereinstimmung der betroffenen Stellen.
+\[
+  \begin{array}{l|*{8}{c}|*{8}{c}}
+   \toprule
+   X \text{ Wertigkeiten} &
+   2^{15} & 2^{14} & 2^{13} & 2^{12} & 2^{11} & 2^{10} & 2^{9} & 2^{8} & 
+   2^{7} & 2^{6} & 2^{5} & 2^{4} & 2^{3} & 2^{2} & 2^{1} & 2^{0}
+   \\
+   \text{Speicherstellen} &
+   \multicolumn{8}{c|}{X + Y} &
+   \multicolumn{8}{c}{X + Y + 1}
+   \\\bottomrule
+  \end{array}
+\]
+Entspricht dem algebraischen Ausdruck
+\[
+  X \to mem_{2} (Y + Z)
+\]
+
+\paragraph{Beispiel} Dieses Programm speicher die 2 niedrigstwertigen Bytes von
+$R2$ in den Speicher an die Adressen 128 und 129.
+\begin{lstlisting}
+  SET R1 128     # R1 = Speicheradresse 128
+  SET R2 513     # R2 = 0x0201
+  SH  R2 R1 ZERO # Speicher mit Adresse 128: 0x02
+                 # Speicher mit Adresse 129: 0x01
+\end{lstlisting}
 
 
 
 \opdef{SHU}{$X, Y, Z \in \Reg$}{0x33}{RRR}
 \glqq Store Half Unsigned\grqq.
-
+Analog zur Instruktion \opref{SH} mit dem Unterschied, dass $X$, $Y$ und $Z$
+vorzeichenlos interpretiert werden.
 
 
 \opdef{SW}{$X, Y, Z \in \Reg$}{0x34}{RRR}
 \glqq Store Word\grqq.
-
+Speichert den Inhalt aller Bytes in $X$ an die Speicheradressen $Y + Z$ bis 
+$X + Z + 3$.
 \[
-    X \to mem(Y + Z)
+    X \to mem_{4}(Y + Z)
 \]
+\paragraph{Beispiel}
+Es wird das Register $R2$ mit dem Wert \texttt{0x01020304} geladen und an die
+Adresse $128$ gespeichert. Dabei werden die Byte-Werten in 
+\glqq big-endian\grqq\ Reihenfolge gespeichert: das höchstwertige Byte aus $R2$
+(\texttt{0x01}) wird an der Adresse $128$ gespeichert, das niedrigstwertige
+Byte (\texttt{0x04}) an die Adresse $131$.
+
+\begin{lstlisting}
+  SET R1 128         # R1 = Speicheradresse 128
+  SET R2 0x01020304  # Wert zum Speichern
+  SH  R2 R1 ZERO     # mem[128] = 0x01
+                     # mem[129] = 0x02
+                     # mem[130] = 0x03
+                     # mem[131] = 0x04
+\end{lstlisting}
 
 
 \opdef{SWU}{$X, Y, Z \in \Reg$}{0x35}{RRR}
 \glqq Store Word Unsigned\grqq.
+Analog zur Instruktion \opref{SW}, aber die Register $X$, $Y$ und $Z$ werden
+vorzeichenlos gelesen.
 
 
 
 \opdef{SBI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x38}{RRN}
 \glqq Store Byte Immediate\grqq.
+Speichert das niedrigstwertige Byte aus dem Register $X$ an die Adresse $Y + N$.
+Der Unterschied zur Instruktion \opref{SB} ist, dass $N$ eine ganzahlige
+direkte Angabe ist.
 
+\paragraph{Beispiel}
+Der folgende Code schreibt die Zahl \texttt{0x0304} an die Adressen $128$ und
+$129$, wobei die zwei Bytes vertauscht werden.
+\begin{lstlisting}
+  SET  R1 0x0304   # Wert zum Speichern in R1
+  SET  R2 128      # Adresse in R2
+  SBI  R1 R2 0     # mem[128] = 0x04
+  SHRI R1 R1 8     # R1 = 0x0003 (shift right 8 Bit)
+  SBI  R1 R2 1     # mem[129] = 0x03
+\end{lstlisting}
+Nützlich, wenn die Adresse konstant ist und keine variablen Indizes verwendet
+werden.
 
 
 \opdef{SBUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x39}{RRN}
 \glqq Store Byte Unsigned Immediate\grqq.
-Sowohl der Inhalt des Registers $Y$, als auch die Zahl $N$ werden 
-vorzeichenlos interpretiert.
+Analog zur Instruktion \opref{SBI} mit dem Unterschied, dass $X$, $Y$ und $N$
+vorzeichenlose Angaben sind.
 
 
 
 \opdef{SHI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x3A}{RRN}
 \glqq Store Half Immediate\grqq.
+Speichert die 2 niedrigstwertigen Bytes von $X$ an die Adressen 
+$Y + N$ (3. Byte von $X$) und $Y + N + 1$ (4. Byte von $X$).
+$N$ ist dabei eine konstante ganze Zahl, die direkt angegeben wird. 
+
+\paragraph{Beispiel}
+\begin{lstlisting}
+  SET R1 0x0304 # Wert zum Speichen.
+                # Byte 3 = 0x03
+                # Byte 4 = 0x04
+  SET R2 128    # Die Adresse in R2
+  SHI R1 R2  0  # mem[128] = 0x03
+                # mem[129] = 0x04
+\end{lstlisting}
 
 
 
 \opdef{SHUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x3B}{RRN}
 \glqq Store Half Unsigned Immediate\grqq.
+Funktioniert wie \opref{SHI} aber mit vorzeichenlosen Werten.
 
 
 
 \opdef{SWI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x3C}{RRN}
 \glqq Store Word Immediate\grqq.
+Speichert den Inhalt des Registers $X$ an die Byte-Adressen von $Y+N+0$ bis 
+$Y + N + 3$. Die Bytes werden in \glqq Big-Endian\grqq\ Reihenfolge gelesen und
+gespeichert. $N$ ist eine direkt angegebene ganze Zahl aus dem Intervall 
+$[-128, 127]$.
+
+Entspricht dem algebraischen Ausdruck
+\[
+    X \to mem_{4}(Y + N)
+\]
+
+\paragraph{Beispiel}
+\begin{lstlisting}
+  SET R1 0x01020304 # Wert zum speichern in R1
+                    # 1. Byte = 0x01
+                    # 2. Byte = 0x02
+                    # 3. Byte = 0x03
+                    # 4. Byte = 0x04
+  SET R2 200        # Adresse 200 in R2
+  SWI R1 R2 56      # Addiere den Versatz 56 zu 200
+                    # mem[256] = 0x01
+                    # mem[257] = 0x02
+                    # mem[258] = 0x03
+                    # mem[259] = 0x04
+\end{lstlisting}
 
 
 
 \opdef{SWUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x3D}{RRN}
 \glqq Store Word Unsigned Immediate\grqq.
+Wie \opref{SWI} mit dem Unterschied, dass alle Register und Werten vorzeichenlos
+gelesen und gespeichert werden. Besonders gilt $N \in [0, 255]$. Wird eine
+größere Zahl angegeben, so wird die modulo $256$ berechnet.
 
 
 
 \opdef{PUSHB}{$X \in \Reg$}{0x40}{R00}
 \glqq Push Byte\grqq.
 
+Erniedrigt das Register \texttt{SP} um 1 und speichert das vierte
+(niedrigstwertige) Byte aus dem Register $X$ an die Adresse, die in \texttt{SP}
+gespeichert ist.
+Entspricht
+\begin{align*}
+  SP & \gets SP - 1    \\
+  X  & \to mem_{1}(SP)
+\end{align*}
+
 
 
 \opdef{PUSHH}{$X \in \Reg$}{0x41}{R00}
 \glqq Push Half\grqq.
+Erniedrigt das Register \texttt{SP} um 2 und speichert das 3. und 4. Byte (die
+zwei niedrigstwertigen) aus $X$ an die Adresse \texttt{SP}.
 
+Entspricht
+\begin{align*}
+  SP & \gets SP - 2    \\
+  X  & \to mem_{2}(SP)
+\end{align*}
+
+\paragraph{Beispiel}
+Dieser Code \glqq pusht\grqq\ das 3. und 4. Byte von $R1$ auf den Stack:
+\begin{lstlisting}
+  SET   R1 0x0102
+  PUSHH R1         # mem[SP + 0] = 0x01
+                   # mem[SP + 1] = 0x02
+\end{lstlisting}
 
 
 \opdef{PUSH}{$X \in \Reg$}{0x42}{R00}
 \glqq Push Word\grqq.
+Erniedrigt das Register \texttt{SP} um 4 und kopiert das ganze Register $X$ auf
+den Stack, wobei der \glqq Stack\grqq\ ist der Speicherbereich mit
+Anfangsadresse in \texttt{SP}.
+Die Byte-Reihenfolge der Lese- und Schreiboperationen ist \glqq Big-Endian\grqq\
+und wird in der nachfolgenden Tabelle dargestellt:
+\begin{center}
+\begin{tabular}{l|cccc}
+  \toprule
+  $X$  Wertigkeiten &
+  $2^{31} \leftrightarrow 2^{24}$ &
+  $2^{23} \leftrightarrow 2^{16}$ &
+  $2^{15} \leftrightarrow 2^{8}$  &
+  $2^{7}  \leftrightarrow 2^{0}$ 
+  \\
+  &
+  $\downarrow$ & $\downarrow$ & $\downarrow$ & $\downarrow$ 
+  \\
+  \text{Stack-Bereich} &
+  \texttt{mem[SP + 0]} &
+  \texttt{mem[SP + 1]} &
+  \texttt{mem[SP + 2]} &
+  \texttt{mem[SP + 3]}
+  \\\bottomrule
+\end{tabular}
+\end{center}
+
+
+
+
+Dieser Befehl ist somit äquivalent zu 
+\begin{lstlisting}
+  SUBI SP SP 4
+  SW   X  SP ZERO
+\end{lstlisting}
+Entspricht
+\begin{align*}
+  SP & \gets SP - 4    \\
+  X  & \to mem_{4}(SP)
+\end{align*}
+
+\paragraph{Beispiel}
+Der folgende Code speichert das 4-Byte Wort \texttt{0x01020304} auf den Stack.
+Die Stack-Struktur wird in Kommentaren gezeigt.
+\begin{lstlisting}
+  SET  R1 0x01020304 # Wert zum pushen
+  PUSH R1            # mem[SP + 0] = 0x01
+                     # mem[SP + 1] = 0x02
+                     # mem[SP + 2] = 0x03
+                     # mem[SP + 3] = 0x04
+\end{lstlisting}
+
 
 
 
 \opdef{POPB}{$X \in \Reg$}{0x48}{R00}
 \glqq Pop Byte\grqq.
+Ladet ein Byte aus dem Stack-Bereich in das niedrigstwertige Byte des Registers
+$X$ und erhöht das Spezialregister \texttt{SP} um 1.
+Entspricht somit den Befehlen 
+\begin{lstlisting}
+  LB   X SP ZERO
+  INC SP
+\end{lstlisting}
+Algebraische Formel:
+\begin{align*}
+  X  & \gets mem_{1}(SP) \\
+  SP & \gets SP + 1
+\end{align*}
+
+\paragraph{Beispiel}
+Angenommen, der \glqq Top of Stack\grqq\ (Speicherinhalt an der Adresse
+\texttt{SP}) ist mit dem Byte \texttt{0x05} belegt:
+\begin{lstlisting}
+  SET  R1 0x0201 # irgendein Wert im Byte 3 und 4 von R1
+  POPB R1        # R1 = 0x0205
+\end{lstlisting}
+Der obige Code zeigt, dass nur das letzte Byte von $R1$ überschrieben wird.
 
 
 \opdef{POPH}{$X \in \Reg$}{0x49}{R00}
 \glqq Pop Half\grqq.
+Lädt die ersten zwei Bytes aus dem Stack-Bereich in die 2 niedrigstwertigen
+Bytes von $X$ und erhöht das Register \texttt{SP} um 2.
+Äquivalente Instruktionen:
+\begin{lstlisting}
+  LHI   X SP 0
+  ADDI SP SP 2
+\end{lstlisting}
+
+Algebraische Formel:
+\begin{align*}
+  X  & \gets mem_{2}(SP) \\
+  SP & \gets SP + 2
+\end{align*}
+
+\paragraph{Beispiel}
+Angenommen, die ersten 4 Bytes vom Stack-Bereiche sind \texttt{0xAA 0xBB 0xCC 0xDD}
+\begin{lstlisting}
+               # mem[SP + 0] = 0xAA
+               # mem[SP + 1] = 0xBB
+  POPH R1      # R1 = 0xAABB
+               # mem[SP + 0] = 0xCC
+               # mem[SP + 1] = 0xDD
+\end{lstlisting}
+
 
 
 
 \opdef{POP}{$X \in \Reg$}{0x4A}{R00}
 \glqq Pop Word\grqq.
+Speichert 4 Bytes ab der Adresse \texttt{SP} in das Register $X$ und erhöht
+\texttt{SP} um 4.
+Die Byte-Reihenfolge der Lese- und Schreiboperationen ist \glqq Big-Endian\grqq\
+und wird in der nachfolgenden Tabelle dargestellt.
 
+\begin{center}
+\begin{tabular}{l|cccc}
+  \toprule
+  $X$  Wertigkeiten &
+  $2^{31} \leftrightarrow 2^{24}$ &
+  $2^{23} \leftrightarrow 2^{16}$ &
+  $2^{15} \leftrightarrow 2^{8}$  &
+  $2^{7}  \leftrightarrow 2^{0}$ 
+  \\
+  &
+  $\uparrow$ & $\uparrow$ & $\uparrow$ & $\uparrow$ 
+  \\
+  \text{Stack-Bereich} &
+  \texttt{mem[SP + 0]} &
+  \texttt{mem[SP + 1]} &
+  \texttt{mem[SP + 2]} &
+  \texttt{mem[SP + 3]}
+  \\\bottomrule
+\end{tabular}
+\end{center}
+
+Diese Instruktion kann algebraisch so ausgedrückt werden:
+\begin{align*}
+  X  & \gets mem_{4}(SP) \\
+  SP & \gets SP + 4
+\end{align*}
+Die Instruktion \texttt{POP} ist äquivalent zu den folgenden Instruktionen:
+\begin{lstlisting}
+  LWI   X SP 0
+  ADDI SP SP 4
+\end{lstlisting}
+
+
+\paragraph{Beispiel}
+Angenommen, die ersten 4 Bytes vom Stack-Bereiche sind
+\texttt{0xAA 0xBB 0xCC 0xDD}.
+\begin{lstlisting}
+  POPH R1      # R1 = 0xAABBCCDD
+\end{lstlisting}
 
