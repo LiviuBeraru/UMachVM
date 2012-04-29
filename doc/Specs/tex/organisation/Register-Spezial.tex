@@ -77,23 +77,29 @@ ERR  & 0x3A & \glqq Error\grqq.
             \index{ERR@\texttt{ERR}}
 \\
 ERRM & 0x3B & \glqq Error message\grqq.
-            Enthält zusätzliche Informationen zu den Fehler im signalisiert im
+            Enthält zusätzliche Informationen zu dem Fehler signalisiert im
             Register ERR.
             \index{ERRM@\texttt{ERRM}}
 \\
-LO   & 0x3C & \glqq Low\grqq.
-            Enthält die niedrigstwertigen 32 Bits des Ergebnisses einer
+HI   & 0x3C & \glqq High\grqq.
+            Falls eine Multiplikation durchgeführt wird, enthält dieses Register
+            die höchstwertigen 32 Bits des Ergebnisses der Multiplikation und
+            bildet zusammen mit dem Register \texttt{LO} das volle Ergebnis der
             Multiplikation.
-            Speichert zusammen mit dem Register \texttt{HI} das
-            volle Ergebnis der Multiplikation.
-            \index{LO@\texttt{LO}}
-\\
-HI   & 0x3D & \glqq High\grqq.
-            Enthält die höchstwertigen 32 Bits des Ergebnisses einer
-            Multiplikation.
-            Speichert zusammen mit dem Register \texttt{LO} das
-            volle Ergebnis der Multiplikation.
+
+            Falls eine Division durchgeführt wird, enthält dieses Register den
+            Quotient der Division.
             \index{HI@\texttt{HI}}
+\\
+LO   & 0x3D & \glqq Low\grqq.
+            Falls eine Multiplikation durchgeführt wird, enthält dieses Register
+            die niedrigstwertigen 32 Bits des Ergebnisses der Multiplikation und
+            bildet zusammen mit dem Register \texttt{HI} das volle Ergebnis der
+            Multiplikation.
+
+            Falls eine Division durchgeführt wird, enthält dieses Register den
+            Rest der Division.
+            \index{LO@\texttt{LO}}
 \\
 ZERO & 0x3E & Enthält die Zahl Null.
 

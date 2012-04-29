@@ -109,92 +109,257 @@ Funktioniert wie die Instruktion \opref{SUBI} mit dem Unterschied, dass
 \opdef{MUL}{$X, Y \in \Reg$}{0x60}{RR0}
 \glqq Multiply\grqq. 
 Multipliziert die Inhalte der Register $X$ und $Y$ und speichert das Ergebnis in
-die Spezialregister \texttt{HI} und \texttt{LO}. Dabei werden die höchstwertigen
-32 Bit des Ergebnisses in das Register \texttt{HI} und die 32 niedrigstwertigen
-Bits des Ergebnisses in das Register \texttt{LO} gespeichert.
+die Spezialregister \texttt{HI} und \texttt{LO}. Diese zwei Spezialregister
+werden als eine 64-Bit Einheit betrachtet, wobei jedes eine Hälfte des
+64-Bit Ergebnisses enthält.
+Dabei werden die höchstwertigen 32 Bit des Ergebnisses in das Register
+\texttt{HI}\index{HI@\texttt{HI}}
+und die 32 niedrigstwertigen Bits des Ergebnisses in das Register
+\texttt{LO}\index{LO@\texttt{LO}} gespeichert.
 Siehe auch die Tabelle \ref{tab:Spezialregister} auf der Seite
 \pageref{tab:Spezialregister}.
+
+Falls das Ergebnis der Multiplikation gänzlich in den 32 Bit des Registers
+\texttt{LO} passt, wird das Register \texttt{HI} trotzdem auf Null gesetzt.
+
+Äquivalenter algebraischer Ausdruck:
+\[
+    (HI, LO) \gets X \cdot Y
+\]
 
 \paragraph{Beispiel} Der folgende Code demonstriert die Verwendung der
 \texttt{MUL} Instruktion.
 \begin{lstlisting}
-  SET R1 4  # $R1 \gets 4$
-  SET R2 5  # $R2 \gets 5$
-  MUL R1 R2 # $HI \gets 0$
-            # $LO \gets 20$
+  SET  R1 4   # $R1 \gets 4$
+  SET  R2 5   # $R2 \gets 5$
+  MUL  R1 R2  # $HI \gets 0$
+              # $LO \gets 20$
+
+  SET  R1 0xAAAAAAAA
+  MUL  R1 R1  # $R1^{2}$
+              # HI = 0x71C71C70
+              # LO = 0xE38E38E4 
+  COPY R2 LO  # $R1^{2} \bmod 2^{32}$ 
+\end{lstlisting}
+Falls es bekannt ist, dass das Ergebnis der Multiplikation sich mit 32 Bit
+darstellen lässt, kann man den Weg über die \texttt{LO} und \texttt{HI} Register
+mit der Instruktion \opref{MULD} umgehen.
+
+
+
+
+\opdef{MULU}{$X, Y\in \Reg$}{0x61}{RR0}
+\glqq Multiply Unsigned\grqq.
+Funktioniert wie die Instruktion \opref{MUL} mit dem Unterschied, dass die
+Multiplikationoperanden $X$ und $Y$ vorzeichenlos behandelt werden. 
+
+
+
+\opdef{MULI}{$X \in \Reg$, $N\in\mathds{Z}$}{0x62}{RNN}
+\glqq Multiply Immediate\grqq.
+Multipliziert den Inhalt des Registers $X$ mit der ganzen Zahl $N$ und speichert
+das $64$-Bit Ergebnis in die Register \texttt{HI} und \texttt{LO}, die als ein
+einziges $64$-Register betrachtet werden: \texttt{HI} enthält die ersten $32$
+Bits (die höchstwertigen) und \texttt{LO} die letzten 32 Bits (die
+niedrigstwertigen).
+Siehe auch die Instruktion \opref{MUL}.
+
+
+\opdef{MULIU}{$X \in \Reg$, $N\in\mathds{N}$}{0x63}{RNN}
+\glqq Multiply Immediate Unsigned\grqq.
+Funktioniert wie die Instruktion \opref{MULI} mit dem Unterschied, dass sowohl
+die Operanden $X$ und $N$ als auch das Ergebnis vorzeichenlos sind.
+
+
+\opdef{MULD}{$X, Y, Z \in \Reg$}{0x64}{RRR}
+\glqq Multiply Direct\grqq.
+Multipliziert die Inhalte der Register $Y$ und $Z$ und speichert die
+niedrigstwertigen 32 Bits des Ergebnisses in das Register $X$. Anders wie bei
+der Instruktion \opref{MUL}, werden die Register \texttt{HI} und \texttt{LO}
+nicht verändert.
+
+\texttt{MULD} entspricht der Instruktionen:
+\begin{lstlisting}
+  MUL  Y Z
+  COPY X LO
+\end{lstlisting}
+wobei der alte Wert von \texttt{LO} erhalten bleibt.
+
+Algebraisch geschrieben:
+\[
+    X \gets (Y \cdot Z) \bmod 2^{32}
+\]
+
+
+
+\opdef{DIV}{$X, Y \in \Reg$}{0x68}{RR0}
+\glqq Divide\grqq, ganzzahlige Division.
+Dividiert den Inhalt des Registers $X$ durch den Inhalt des Registers $Y$ und
+speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
+\texttt{LO}.
+Nach der Ausführung gilt
+\[
+    X = Y \cdot HI + LO
+\]
+Algebraisch ausgedrückt:
+\begin{align*}
+  HI & \gets \left\lfloor X/Y \right\rfloor \\
+  LO & \gets X \bmod Y
+\end{align*}
+$\lfloor x \rfloor$ bedeutet in diesem Kontext, dass $x$ auf die betragsmässig
+nächstkleinste ganze Zahl gerundet wird, oder die Nachkommastellen von $x$
+werden abgeschnitten.
+
+Um den Weg über die Register \texttt{HI} und \texttt{LO} zu umgehen, dafür aber
+den Rest der Division zu verlieren, kann man die Instruktion \opref{DIVD}
+verwenden.
+
+\paragraph{Beispiel}
+Der folgende Code demonstriert die Verwendung von \texttt{DIV}.
+\begin{lstlisting}
+  SET R1 10   # $R1 \gets 10$
+  SET R2  3   # $R2 \gets 3$
+  DIV R1 R2   # $HI \gets 3$
+              # $LO \gets 1$
+\end{lstlisting}
+
+
+\opdef{DIVU}{$X, Y \in \Reg$}{0x69}{RR0}
+\glqq Divide Unsigned\grqq.
+Funktioniert wie \opref{DIV} mit dem Unterschied, dass ganzzahlige
+vorzeichenlose Division durchgeführt werden. Die Ergebnis-Register \texttt{HI}
+und \texttt{LO} enthalten entsprechend vorzeichenlose Werte.
+
+
+
+\opdef{DIVI}{$X \in \Reg$, $N\in\mathds{Z}_{\setminus 0}$}{0x6A}{RNN}
+\glqq Divide Immediate\grqq.
+Dividiert den Inhalt des Registers $X$ durch die feste ganze Zahl $N$ und
+speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
+\texttt{LO}.
+$N$ nimmt Werte aus dem Intervall $[-2^{15}, 2^{15}-1] \setminus 0$.
+Nach der Durchführung der Division gilt:
+\[
+    X = HI \cdot N + LO 
+\]
+\paragraph{Beispiel}
+Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
+\begin{lstlisting}
+  SET  R1 10   # $R1 \gets 10$
+  DIVI R1  3   # $HI \gets 3$
+               # $LO \gets 1$
 \end{lstlisting}
 
 
 
-
-\opdef{MULU}{$X, Y, Z \in \Reg$}{0x61}{RRR}
-\glqq Multiply Unsigned\grqq.
-
-
-
-\opdef{MULI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x62}{RRN}
-\glqq Multiply Immediate\grqq.
-
-
-
-\opdef{MULIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x63}{RRN}
-\glqq Multiply Immediate Unsigned\grqq.
-
-
-
-
-\opdef{DIV}{$X, Y, Z \in \Reg$}{0x68}{RRR}
-
-
-
-\opdef{DIVU}{$X, Y, Z \in \Reg$}{0x69}{RRR}
-\glqq Divide Unsigned\grqq.
-
-
-
-\opdef{DIVI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x6A}{RRN}
-\glqq Divide Immediate\grqq.
-
-
-
-\opdef{DIVIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x6B}{RRN}
+\opdef{DIVIU}{$X \in \Reg$, $N\in\mathds{N}_{\setminus 0}$}{0x6B}{RNN}
 \glqq Divide Immediate Unsigned\grqq.
+Analog zur Instruktion \opref{DIVI} mit dem Unterschied, dass $X$ und $N$
+vorzeichenlose Werte haben. Insbesondere nimmt $N$ Werte aus dem Intervall
+$[1, 2^{16}-1]$.
+
+
+
+\opdef{DIVD}{$X, Y, Z \in \Reg$}{0x6C}{RRR}
+\glqq Divide direct\grqq.
+Dividiert ganzzahlig den Inhalt des Registers $Y$ durch den Inhalt des Registers
+$Z$ und speichert den Quotient in das Register $X$. Die Spezialregister
+\texttt{HI} und \texttt{LO} werden nicht verändert.
+Entspricht den Instruktionen:
+\begin{lstlisting}
+  DIV  Y  Z
+  COPY X HI
+\end{lstlisting}
+Algebraische Schreibweise:
+\[
+    X \gets \left\lfloor \frac{Y}{Z}  \right\rfloor
+\]
+
+\paragraph{Beispiel}
+für die Verwendung der Instruktion \texttt{DIVD}:
+\begin{lstlisting}
+  SET  R1 10    # $R1 \gets 10$
+  SET  R2  3    # $R2 \gets 3$
+  DIVD R3 R1 R2 # $R3 \gets \lfloor 10/3 \rfloor = 3$
+  MOD  R4 R1 R3 # $R4 \gets ( 10 \bmod 3 ) = 1$
+\end{lstlisting}
 
 
 
 \opdef{MOD}{$X, Y, Z \in \Reg$}{0x70}{RRR}
-Modulo.
+Modulo Operation.
+Berechnet den Rest der Division $Y/Z$ und speichert den Rest in das Register
+$X$.
+Äquivalent zu den Instruktionen:
+\begin{lstlisting}
+  DIVU Y Z
+  COPY X LO
+\end{lstlisting}
+
+Algebraische Schreibweise:
+\[
+    X \gets Y \bmod Z
+\]
+oder
+\[
+    X \gets \left(
+      Y - \left\lfloor \frac{Y}{Z}  \right\rfloor \cdot Z
+      \right)
+\]
 
 
-\opdef{MODI}{$X, Y, Z \in \Reg$, $N \in \mathds{N}$}{0x72}{RRN}
-Modulo Immediate.
-
+\opdef{MODI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x72}{RRN}
+\glqq Modulo Immediate\grqq. Analog zur Instruktion \opref{MOD}, berechnet
+\texttt{MODI} den Rest der ganzzahligen Division $Y / N$ und speichert ihn in
+das Register $X$. Der Unterschied liegt darin, dass $N$ eine fest angegebene
+natürliche Zahl ist.
+\[
+    X \gets Y \bmod N
+\]
 
 
 \opdef{ABS}{$X, Y \in \Reg$}{0x78}{RR0}
 \glqq Absolute\grqq.
 Speichert den absoluten Wert des Registers $Y$ in das Register $X$.
+Algebraisch ausgedrückt:
+\[
+    X \gets
+    \begin{cases}
+      Y            & \text{ falls } Y \geq 0 \\
+      (-1) \cdot Y & \text{ falls } Y < 0
+    \end{cases}
+\]
 
 
 
 \opdef{NEG}{$X, Y \in \Reg$}{0x80}{RR0}
 \glqq Negate\grqq.
-Wechselt das Vorzeichen des Registers $Y$ und speichert das Ergebnis in das 
-Register $X$.
+Wechselt das arithmetische Vorzeichen des Registers $Y$ und speichert das
+Ergebnis in das Register $X$. Entspricht der Zweierkomplement Bildung.
+Algebraische Schreibweise:
+\[
+    X \gets \big( (-1) \cdot Y \big)
+\]
+Um eine bitweise Inversion zu erreichen (Einerkomplement), siehe die
+Instruktion \opref{NOT}.
 
 
 
 \opdef{INC}{$X \in \Reg$}{0x81}{R00}
 \glqq Increment\grqq.
 Inkrementiert den Inhalt des Registers $X$.
+\[
+    X \gets ( X + 1 )
+\]
 
 
 
 \opdef{DEC}{$X \in \Reg$}{0x82}{R00}
 \glqq Decrement\grqq.
 Dekrementiert den Inhalt des Registers $X$.
-
-
+\[
+    X \gets ( X - 1 )
+\]
 
 
 

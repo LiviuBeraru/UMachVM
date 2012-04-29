@@ -37,7 +37,10 @@ Beispiele:
 
 \opdef{COPY}{$X, Y \in \Reg$}{0x18}{RR0}
 Kopiert den Inhalt des Registers $Y$ in das Register $X$. Register $Y$ wird
-dabei nicht geändert.
+dabei nicht geändert. Entspricht
+\[
+    X \gets Y
+\]
 
 Beispiel:
 \begin{lstlisting}
@@ -56,6 +59,15 @@ Gemäß der Formatspezifikation, können nur Register als Argumenten verwendet
 werden. Um den Inhalt eines Registers auf einen konstanten Wert zu setzen, ist
 \opref{SET} zu verwenden. Um den Inhalt eines Registers mit einem Speicherinhalt
 zu belegen, ist z.B. \opref{LW} zu verwenden.
+
+Entspricht
+\begin{align*}
+  X & \gets Y \\
+  Y & \gets 0
+\end{align*}
+
+
+
 \begin{lstlisting}
   SET  R1  5   # Inhalt von R1 ist 5
   MOVE R2 R1   # R1 = 0, R1 = 5
