@@ -181,3 +181,67 @@ Bin sehr müde und möchte etwas anderes machen, wie... Perl oder
 Übungen für andere Fächer.
 Mitarbeit wäre schön gewesen.
 Es ist 02:32 Uhr und morgen um 8 muss ich da sein.
+
+
+
+=== 30.04.2012 ===
+Malk.
+Im Kapitel über Sprünge (Spezifikation) muss man deutlicher machen,
+dass die Maschine einen numerischen Versatz kennt. Nur auf
+Assembler-Ebene gibt es Labels. Eine deutlichere Formulierung wird
+gefragt.
+
+Ebenfalls stellt sich die folgende Frage, deren Antwort sich stark
+auf die Implementierung auswirkt:
+Ein Sprung-Versatz hat die Form 'springe x Instruktionen weiter
+(rückwärts)'. Also in etwa '0xD8 0x03' (JMP 3). 
+Die Frage ist ob x berücksichtigen sollte, dass die
+Maschine automatisch den Programmcounter IP inkrementiert, oder ist x
+der genaue Versatz? Mit Berücksichtigung müsse der Versatz 1 weniger
+als der eigentliche Versatz sein, denn nachdem branch oder jump das
+Register IP modifiziert hat, kommt die Maschine und addiert noch mal
+4 drauf.
+-- WHAT?
+-- Ok, Beispiel.
+
+--------------------------
+ip     | execute | ip
+vorher | opcode  | nachher
+--------------------------
+0      | ADD     |  4     
+4      | ADD     |  8
+8      | JMP x   | 24      ___
+16     | LB      | 20         | Abstand von JMP
+20     | KIL     | 24         | bis DIE ist 3
+24     | DIE     | 28      ___| Instruktionen
+--------------------------
+Im obigen Code kommt ein JMP vor. Es steht aber nicht JMP 2 oder 
+JMP 3, sondern JMP x. Es muss auf jeden Fall 3 Instruktionen weiter
+gesprungen werden, damit DIE nach dem Sprung ausgeführt wird
+(IP nach der Ausführung von JMP ist 24). Die Frage ist, was ist x,
+was steht in dem Maschinencode.
+Wenn x=2, dann heißt es, dass der Assembler damit rechnet, dass die
+Maschine einfach 2*4 zum IP addiert und dann automatisch noch mal 4,
+wie nach jeder Instruktion. Der Assembler ist also derjenige, der den
+Versatz von 3 auf 2 anpasst.
+Wenn x=3 sein sollte (spring 3 Instruktionen weiter), dann tut der
+Assembler einfach den Abstand bis DIE ausrechnen (das ist 3) und
+diesen Abstand in die Instruktion schreibt. Die Maschine ist diejenige
+die weiß: "aha, der will 3 weiter springen, aber ich inkrementier IP
+sowieso, also addiere ich nicht 3, wie er will, sondern nur 2*4
+drauf."
+Ich glaube, von Semantik her, wäre die zweite Version klarer.
+Die Instruktion würde heißen: "Mach 3 Instruktionen weiter".
+Wenn es 2 steht, dann ist die Semantik: "Ich möchte eigentlich 3
+weiter, aber du bist so dumm und addierst zum IP genau was ich sage,
+also sage ich nur 2 weiter und lasse dich blind weiter machen."
+
+Aber es gibt vielleicht auch andere Meinungen dazu. Vielleicht
+interpretiere ich das alles falsch.
+Vielleicht lebe ich in einem Traum.
+Vielleicht bin ich eigentlich tot und das alles ist nur Errinerung?
+Vielleicht bin ich eigentlich in einer psychiatrischen Anstalt
+eingesperrt und das alles ist mein Spinnen?
+Naja, VIM und /proc/* sind coole Sachen auf jeden Fall. Vielleicht
+kriege ich einen Kernel in der Anstalt. Zumindest in der
+Mittagspause.
