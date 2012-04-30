@@ -2,26 +2,58 @@
 
 \opdef{CMP}{$X,Y,Z \in \Reg$}{0xB0}{RRR}
 \glqq Compare\grqq.
-
+Vergleicht $Y$ mit $Z$. Sind die Werte gleich, so erhält $X$ den Wert $0$
+zugewiesen. Ist $Y$ kleiner $Z$, so erhält $X$ den Wert $-1$, $Y$ größer $Z$ den
+Wert $+1$.
 \[
     X \gets
     \begin{cases}
-     -1 & \text{ falls } Y < Z \\
-     \pm0 & \text{ falls } Y = Z  \\
-     +1 & \text{ falls } Y > Z 
+        -1 & \text{ falls } Y < Z  \\
+     \pm 0 & \text{ falls } Y = Z  \\
+        +1 & \text{ falls } Y > Z 
     \end{cases}
 \]
 
 
 \opdef{CMPU}{$X,Y,Z \in \Reg$}{0xB1}{RRR}
 \glqq Compare Unsigned\grqq.
+Vergleicht analog zu \opref{CMP} $Y$ mit $Z$.
+Werte werden als vorzeichenlos interpretiert.
+\[
+    X \gets
+    \begin{cases}
+        -1 & \text{ falls } Y < Z  \\
+     \pm 0 & \text{ falls } Y = Z  \\
+        +1 & \text{ falls } Y > Z 
+    \end{cases}
+\]
 
 
 \opdef{CMPI}{$X,Y \in \Reg$, $N \in \mathds{Z}$}{0xB2}{RRN}
-\glqq Compare Immediate\grqq.
+\glqq Compare Immediate\grqq. 
+Vergleicht $Y$ mit angegebenen Wert $N$. Dabei nimmt $N$ Werte aus dem Intervall
+$[-128, 127]$. $X$ wird entsprechend der folgenden Formel gesetzt:
+\[
+    X \gets
+    \begin{cases}
+        -1 & \text{ falls } Y < N  \\
+     \pm 0 & \text{ falls } Y = N  \\
+        +1 & \text{ falls } Y > N 
+    \end{cases}
+\]
 
 
 \opdef{CMPIU}{$X,Y \in \Reg$, $N \in \mathds{N}$}{0xB3}{RRN}
 \glqq Compare Immediate Unsigned\grqq.
-
+Vergleicht, wie \opref{CMPI} auch, $Y$ mit angegebenen Wert $N$ und setzt
+entsprechend das Register $X$. Der Unterschied ist, dass $Y$ und $N$ als 
+vorzeichenlos betrachtet werden.
+\[
+    X \gets
+    \begin{cases}
+       -1 & \text{ falls } Y < N  \\
+     \pm0 & \text{ falls } Y = N  \\
+       +1 & \text{ falls } Y > N 
+    \end{cases}
+\]
 

@@ -4,37 +4,72 @@
 Alle Sprungbefehle, außer dem \nameref{opcode:GO} Befehl, veranlassen einen 
 relativen Sprung im Programmcode. Relativ im Sinne, dass die Paramter der
 Sprungbefehle einen Versatz zur aktuellen Programmadresse angeben.
+Der Versatz\index{Versatz} wird nicht in Bytes angegeben, sondern in
+Instruktionen -- wobei eine Instruktion der UMach Maschine 4 Bytes beträgt.
 
-Die Sprungbefehle bauen auf die Vergleichsbefehle auf.
+Die Sprungbefehle bauen auf die Vergleichsbefehle auf:
+es wird meistens erst dann im Programmcode gesprungen, wenn ein Register einen
+bestimmten Wert hat, der als Ergebnis eines Vergleichs gesetzt wurde.
 
 \opdef{BZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC0}{RNN}
-\glqq Branch if Zero\grqq.
+\glqq Branch if Zero\grqq. Wenn $X$ den Wert $0$ hat, wird der mit dem im
+Assemblerprogramm angegebenen Label bezeichnete Branch verfolgt. Dies geschieht,
+in dem der Programmcounter IP um das vierfache von $N$ erhöht wird. Eine Adresse
+adressiert immer 1 Byte und ein Befehl besteht immer aus 4 Bytes, sodass der
+Adressoffset zwischen zwei Befehlen immer 4 ist. Somit ist $N$ die Anzahl der zu
+überspringenden Befehle die zu einem Label führen. Der dazu benötigte Offset $N$
+wird vom Assembler automatisch berechnet. 
 \[
     X = 0 \; \Rightarrow \;
     IP \gets IP + 4 \cdot N
 \]
+\paragraph{Beispiel}
+Der folgende Code lädt zwei Bytes in die Register $R2$ und $R3$ und Addiert diese
+Arithmetisch. Sind die Werte gleich, wird stattdessen der Inhalt von $R2$ mit 2
+multipliziert. Ein mögliches Überlaufen wird nicht berücksichtigt.
+\begin{lstlisting}
+  SET   R1 100    # $R1 \gets 100$
+  LBUI  R2 R1  0  # Lade Byte von Adresse 100 nach R2
+  LBUI  R3 R1  1  # Lade Byte von Adresse 100+1 nach R3
+  CMPU  R4 R2 R3  # Vergleiche Inhalt von R2 und R3
+  BZ    R4 equal  # Wenn R4 gleich 0, dann springe zu label
+                  # equal. N ist in diesem Fall 3
+  ADDU  R2 R2 R3  # Addiere inhalt von R2 und R3
+  SBUI  R2 R1 0   # Speichere R2 nach Adresse 100
+  JMP   finish    # Ueberspringen der folgenden 2 Befehle, 
+                  # N von JMP ist 2.
+equal:
+  MULIU R2 2      # Multipliziere Inhalt von R2 mit 2
+  SBUI  LO R1 0   # Speichere Inhalt von LO nach Adresse in R1
+finish:
+\end{lstlisting}
+
 
 
 \opdef{BNZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC1}{RNN}
-\glqq Branch if Not Zero\grqq.
-
+\glqq Branch if Not Zero\grqq. Entspricht dem Verhalten von BZ mit dem
+Unterschied, dass der angegebene Branch verfolgt wird, wenn $X$ nicht $0$ ist.
 
 
 \opdef{BLZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC2}{RNN}
-\glqq Branch if Less than Zero\grqq.
-
-
+\glqq Branch if Less than Zero\grqq. 
+Sprint zum angegebenem Label, wenn der Inhalt von $X$ kleiner $0$ ist.
 
 \opdef{BLEZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC3}{RNN}
-\glqq Branch if Less or Equal than Zero\grqq.
+\glqq Branch if Less or Equal Zero\grqq.
+Sprint zum angegebenem Label, wenn der Inhalt von $X$ kleiner oder gleich $0$
+ist.
 
 
 \opdef{BGZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC4}{RNN}
 \glqq Branch if Greater than Zero\grqq.
+Sprint zum angegebenem Label, wenn der Inhalt von $X$ größer als $0$ ist.
 
 
 \opdef{BGEZ}{$X \in \Reg$, $N \in \mathds{Z}$}{0xC5}{RNN}
-\glqq Branch if Greater or Equal Zero\grqq.
+\glqq Branch if Greater or Equal Zero\grqq. 
+Sprint zum angegebenem Label, wenn der Inhalt von $X$ größer oder gleich $0$
+ist.
 
 
 
@@ -42,38 +77,43 @@ Die Sprungbefehle bauen auf die Vergleichsbefehle auf.
 \opdef{BEI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xC8}{RNN}
 \glqq Branch if Equal Immediate\grqq.
 
-Fall $X = N$, springe $M$ Instruktionen weiter.
+Falls $X = N$, springe $M$ Instruktionen weiter.
 
 
 
 \opdef{BNI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xC9}{RNN}
 \glqq Branch if Not equal Immediate\grqq.
+Springt $M$ Instruktionen weiter, falls $X$ nicht $N$ entspricht.
 
 
 \opdef{BLI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCA}{RNN}
 \glqq Branch if Less then Immediate\grqq.
-
+Springt $M$ Instruktionen weiter, falls $X$ kleiner als $N$ ist.
 
 
 \opdef{BLEI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCB}{RNN}
-\glqq Branch if Less or Equal then Immediate\grqq.
+\glqq Branch if Less or Equal Immediate\grqq.
+Springt $M$ Instruktionen weiter, falls $X$ kleiner oder gleich $N$ ist.
 
 
 \opdef{BGI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCC}{RNN}
 \glqq Branch if Greater then Immediate\grqq.
+Springt $M$ Instruktionen weiter, falls $X$ größer als $N$ ist.
 
 \opdef{BGEI}{$X \in \Reg$, $N, M \in \mathds{Z}$}{0xCD}{RNN}
 \glqq Branch if Greater or Equal then Immediate\grqq.
+Springt $M$ Instruktionen weiter, falls $X$ größer oder gleich $N$ ist.
 
 
 
 \opdef{JMP}{$N \in \mathds{N}$}{0xD8}{NNN}
-
+Sprint zum angegebenen Label. Benötigter Offset $N$ wird vom Assembler
+automatisch ermittelt.
 
 
 
 \opdef{GO}{$N \in \mathds{N}$}{0xDF}{NNN}
-Absolute Adresse.
-
-
+Setzt $IP$ auf die angegebene absolute Adresse. Hierbei ist zu beachten, dass
+nicht in die Mitte eines Befehles gesprungen wird. Dies zu gewährleisten liegt
+in der Verantwortung des Programmierers.
 
