@@ -1,82 +1,207 @@
 \section{Logische Instruktionen}
 
 \opdef{AND}{$X, Y, Z \in \Reg$}{0x90}{RRR}
+Berechnet bitweise $Y \land Z$ (und-Verknüpfung) und speichert das Ergebnis in
+das Register $X$.
+\[
+    X \gets (Y \land Z)
+\]
 
 
 \opdef{ANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x91}{RRN}
+\glqq And Immediate\grqq.
+Berechnet bitweise $Y \land N$ (und-Verknüpfung) und speichert das Ergebnis in
+das Register $X$. $N$ ist dabei eine feste Zahl aus dem Bereich $[0, 255]$.
+Wird eine größere Zahl angegeben, so wird sie modulo $256$ berechnet -- mit
+anderen Worten, nur das letzte Byte zählt.
+Andere Schreibweise:
+\[
+    X \gets (Y \land (N \bmod 256))
+\]
+\paragraph{Bemerkung}
+Die natürliche Zahl $N$ wird auf die Länge von 32 Bit mit Nullen verlängert
+(Links-Verlängerung).
+Deshalb setzt diese Instruktion alle Bits mit Wertigkeiten von $2^{8}$ bis
+$2^{31}$ im Register $X$ auf Null.
+
+\paragraph{Beispiel}
+für die Verwendung von \texttt{ANDI}:
+\begin{lstlisting}
+  SET  R1    0x0102
+  ANDI R2 R1   0x01  # R2 = 0
+\end{lstlisting}
+
 
 
 \opdef{OR}{$X, Y, Z \in \Reg$}{0x92}{RRR}
+Berechnet bitweise $Y \lor Z$ (oder-Verknüpfung) und speichert das Ergebnis
+in das Register $X$.
+\[
+    X \gets (Y \lor Z)
+\]
 
 
 \opdef{ORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x93}{RRN}
+\glqq Or Immediate\grqq.
+Berechnet wie \opref{OR} ein bitweises \glqq oder\grqq zwischen $Y$ und $N$ und
+speichert das Ergebnis in das Register $X$. Dabei wird die natürliche Zahl 
+$N \in [0, 255]$ auf die Länge von 32 Bit mit Nullen verlängert
+(Links-Verlängerung).
+Wird für $N$ einen Wert größer als $255$ angegeben, so wird er modulo $256$
+berechnet.
+\[
+    X \gets (Y \lor (N \bmod 256))
+\]
 
 
 \opdef{XOR}{$X, Y, Z \in \Reg$}{0x94}{RRR}
+Berechnet bitweise $Y \oplus Z$ (xor-Verknüpfung) und speichert das Ergebnis in
+das Register $X$.
 \[
     X \gets (Y \oplus Z)
 \]
 
 
 \opdef{XORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x95}{RRN}
+\glqq Xor Immediate\grqq.
+Analog zur Instruktion \opref{XOR} mit dem Unterschied, dass $N$ eine direkt
+angegebene Zahl aus dem Intervall $[0, 255]$ ist.
+\[
+    X \gets (Y \oplus (N \bmod 256))
+\]
 
 
-\opdef{NOT}{$X, Y\in \Reg$}{0x96}{RR0}
+\opdef{NOT}{$X, Y \in \Reg$}{0x96}{RR0}
+Invertiert alle Bits aus dem Register $Y$ und speichert das Ergebnis in das
+Register $X$. Entspricht der Einerkomplement-Bildung.
 \[
     X \gets \overline{Y}
 \]
+
+\paragraph{Beispiel} 
+Der folgende Code invertiert alle Bits aus dem Register $R2$ und speichert das
+Ergebnis in das Register $R1$.
 \begin{lstlisting}
- NOT R1 R2
+  NOT R1 R2 # $R1 \gets \overline{R2}$
 \end{lstlisting}
 
 
 
 \opdef{NOTI}{$X\in \Reg$, $N \in \mathds{N}$}{0x97}{RNN}
+\glqq Not Immediate\grqq.
+Wie die Instruktion \opref{NOT} aber $N$ ist eine natürliche Zahl aus dem
+Intervall $[0, 2^{15}-1]$. Diese konstante Zahl nach links auf die Länge von 32
+Bit mit Nullen verlängert.
 
+\paragraph{Beispiel} 
+Der folgende Code invertiert alle Bits der Zahl $5$ und speichert das Ergebnis
+in das Register $R1$.
 \begin{lstlisting}
- NOT R1 5
+ NOT R1 5 # $R1 \gets \overline{5}$
 \end{lstlisting}
 
 
 \opdef{NAND}{$X, Y, Z \in \Reg$}{0x98}{RRR}
+Berechnet $Y \overline{\land} Z$ (nand-Verknüpfung) und speichert das Ergebnis
+in das Register $X$. Gemäß dem Format \nameref{RRR} sind $X$, $Y$ und $Z$
+Register.
+Algebraische Schreibweise:
 \[
     X \gets (Y \overline{\land} Z)
+\]
+oder
+\[
+    X \gets \overline{ (Y \land Z) }
 \]
 
 
 \opdef{NANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x99}{RRN}
-
+\glqq Nand Immediate\grqq.
+Berechnet eine nand-Verknüpfung zwischen dem Inhalt des Registers $Y$ und der
+konstanten Zahl $N$ und speichert das Ergebnis in das Register $X$.
+$N \in [0, 255]$.
+\[
+    X \gets \big(Y \overline{\land} (N \bmod 256) \big)
+\]
 
 
 \opdef{NOR}{$X, Y, Z \in \Reg$}{0x9A}{RRR}
+Verknüpft bitweise die Inhalte der Register $Y$ und $Z$ mit der nor-Operation
+und speichert das Ergebnis in das Register $X$.
+\glqq nor\grqq\ ist die Negation von \glqq or\grqq.
 \[
     X \gets (Y \overline{\lor} Z)
 \]
+\paragraph{Beispiel}
+\begin{lstlisting}
+  NOR R1 R2 R3 # $R1 \gets  \overline{R2 \lor R3}  $
+\end{lstlisting}
+
 
 \opdef{NORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x9B}{RRN}
+\glqq Nor Immediate\grqq.
+Analog zur Instruktion \opref{NOR} mit dem Unterschied, dass $N$ eine konstante
+Zahl aus dem Bereich $[0, 255]$ ist. Diese Zahl wird modulo $256$ berechnet und
+auf der linken Seite auf die Länge von 32 Bit mit Nullen aufgefüllt.
 
 
 
 \opdef{SHL}{$X, Y, Z \in \Reg$}{0xA0}{RRR}
 \glqq Shift Left\grqq.
+Verschiebt die Bits aus dem Register $Y$ $Z$ Stellen nach links und speichert
+das Ergebnis in das Register $X$.
+Auf der rechten Seite wird $X$ mit Nullen aufgefüllt.
+
+Andere Schreibweise:
+\[
+    X \gets Y << Z
+\]
+oder 
+\[
+    X \gets 
+    ( Y \cdot 2^{Z}  ) \bmod 2^{32}
+\]
 
 
 
 \opdef{SHLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA1}{RRN}
 \glqq Shift Left Immediate\grqq.
-Shifte die Bits im Register $Y$ $N$ Stellen nach links. $N$ ist eine positive 
-Zahl im Bereich $[0, 255]$.
-
+Verschiebt die Bits im Register $Y$ $N$ Stellen nach links und speichert das
+Ergebnis in das Register $X$.
+$N$ ist eine positive Zahl im Bereich $[0, 255]$.
+Anstelle der nach links verschobenen Bits werden Nullen aufgefüllt.
 
 
 
 \opdef{SHR}{$X, Y, Z \in \Reg$}{0xA2}{RRR}
 \glqq Shift Right\grqq.
+Verschiebt die Bits aus dem Register $Y$ $Z$ Stellen nach rechts und speichert
+das Ergebnis in das Register $X$. 
+Anstelle der verschobenen Bits werden im Register $X$ auf der linken Seite
+Nullen aufgefüllt.
+Gemäß dem Instruktionsformat \nameref{RRR} sind $X$, $Y$ und $Z$ Register.
+Alle Register-Inhalte werden vorzeichenlos interpretiert.
+
+\paragraph{Bemerkung}
+Wird in dem Register $Y$ eine negative Zahl gespeichert, so löscht diese
+Verschiebung das Vorzeichen, da auf der linken Seite Nullen aufgefüllt werden.
+Um das Vorzeichen zu behalten, sollte man die Instruktion \opref{SHRA}
+verwenden.
+
+\paragraph{Beispiel}
+Der folgende Code verschiebt die Bits im $R1$ eine Stelle nach rechts.
+Es wird praktisch $R3 \gets (5 \div 2)$ berechnet.
+\begin{lstlisting}
+  SET  R1 5      # $R1 \gets 5$
+  SET  R2 1      # $R2 \gets 1$
+  SHR  R3 R1 R2  # $R3 \gets 2$
+\end{lstlisting}
 
 
 \opdef{SHRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA3}{RRN}
 \glqq Shift Right Immediate\grqq.
-Das Bitmuster im Register $Y$ wird $N$ Stellen nach rechts geshiftet.
+Das Bitmuster im Register $Y$ wird $N$ Stellen nach rechts verschoben und das
+Ergebnis in das Register $X$ gespeichert.
 Dabei ist $N$ eine positive natürliche Zahl aus dem Intervall $[0, 255]$.
 Auf der linken Seite werden die versetzten Bits mit Nullen ersetzt.
 Siehe auch \nameref{opcode:SHRAI}.
@@ -85,28 +210,73 @@ Siehe auch \nameref{opcode:SHRAI}.
 
 \opdef{SHRA}{$X, Y, Z \in \Reg$}{0xA4}{RRR}
 \glqq Shift Right Arithmetical\grqq.
+Funktioniert wie die Instruktion \opref{SHR} mit dem Unterschied, dass auf der
+linken Seite nicht mit Nullen, sondern mit dem ersten (höchstwertigen) Bit
+aufgefüllt wird. Dies führt dazu, dass das Vorzeichenbit in $Y$ erhalten
+bleibt.
 
 
 \opdef{SHRAI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA5}{RRN}
 \glqq Shift Right Arithmetical Immediate\grqq.
+Wie \opref{SHRA}, $N$ ist aber eine natürliche Zahl aus dem Intervall
+$[0, 255]$.
 
 
 
 \opdef{ROTL}{$X, Y, Z \in \Reg$}{0xA8}{RRR}
 \glqq Rotate Left\grqq.
+Die Bits aus dem Register $Y$ werden so viele Stellen nach links \glqq
+rotiert\grqq\ wie der Inhalt des Registers $Z$ und das Ergebnis in das Register
+$X$ gespeichert.
+\[
+    X \gets Y \circlearrowleft Z
+\]
+Die Rotation\index{Rotation} bedeutet, dass die Bits nach links verschoben
+werden und diejenigen Bits, die über die linke Grenze hinausfallen auf der
+rechten Seite wieder eingefügt werden. 
+Dies bedeutet, dass mit jedem verschobenen Bit, ein Bit ganz links (Wertigkeit
+$2^{31}$) fällt aus und wird wieder ganz rechts mit Wertigkeit $2^{0}$ eingefügt.
+Nach 32 Rotationen eine Stelle nach links ist das ursprüngliche Bitmuster
+wieder hergestellt.
+
+\paragraph{Beispiel}
+Der folgende Code zeigt ein Beispiel für die Verwendung dieser Instruktion.
+\begin{lstlisting}
+  SET  R1 2
+  SET  R2 1
+  ROTL R3 R1 R2      # links-rotation von R1 eine Stelle
+                     # R3 = 4
+  SET  R1 0x80000000 # nur das linke Bit gesetzt
+  ROTL R4 R1 R2      # R4 = 0x01
+\end{lstlisting}
 
 
 \opdef{ROTLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA9}{RRN}
 \glqq Rotate Left Immediate\grqq.
+Wie \opref{ROTL} aber $N$ ist eine konstante Zahl aus dem Intervall $[0, 255]$.
+
+\paragraph{Beispiel}
+Verwendung:
+\begin{lstlisting}
+  ROTL R4 R1  6 # rotiere die Bits in R1 6 stellen
+  ROTL R4 R1 -6 # Fehler! da $-6 \not\in \mathds{N}$
+\end{lstlisting}
 
 
 
 \opdef{ROTR}{$X, Y, Z \in \Reg$}{0xAA}{RRR}
 \glqq Rotate Right\grqq.
+Funktioniert genauso wie die Instruktion \opref{ROTL} mit dem Unterschied, dass
+die Rotationen (Verschiebungen) nach rechts geführt werden.
+\[
+    X \gets Y \circlearrowright Z
+\]
 
 
 \opdef{ROTRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xAB}{RRN}
-\glqq Rotate Left Immediate\grqq.
+\glqq Rotate Right Immediate\grqq.
+Funktioniert genauso wie \opref{ROTLI}, nur die Rotationen sind nach rechts
+geführt.
 
 
 

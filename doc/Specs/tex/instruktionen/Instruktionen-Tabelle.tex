@@ -10,36 +10,54 @@
 \begin{tabular}{|L||*{8}{C{1.2cm}|}}
 \toprule\hline
           &   0   &   1   &   2   &   3    &   4    &   5    &    6    &    7    \\\hline\hline
+\marginnote{cntrl}
 \nhex{0}  &  NOP  &  RST  &  CRM  &  CSM   &  DIE   &  RSR   &  AUTSM  &  SOCL   \\\cline{2-9}
           & HATE  & TRST  &  ZMB  &  ALIV  &        &        &         &         \\\hline\hline
+\marginnote{set copy}
 \nhex{1}  & SET   & SETU  &       &        &        &        &         &         \\\cline{2-9}
           & COPY  &       & MOVE  &        &        &        &         &         \\\cline{1-9}
+\marginnote{load}
 \nhex{2}  &  LB   &  LBU  &  LH   &  LHU   &  LW    &  LWU   &         &         \\\cline{2-9}
           &  LBI  &  LBUI &  LHI  &  LHUI  &  LWI   &  LWUI  &         &         \\\cline{1-9}
+\marginnote{store}
 \nhex{3}  &  SB   &  SBU  &  SH   &  SHU   &  SW    &  SWU   &         &         \\\cline{2-9}
           &  SBI  &  SBUI &  SHI  &  SHUI  &  SWI   &  SWUI  &         &         \\\cline{1-9}
+\marginnote{push/pop}
 \nhex{4}  & PUSHB & PUSHH & PUSH  &        &        &        &         &         \\\cline{2-9}
           & POPB  & POPH  &  POP  &        &        &        &         &         \\\hline\hline
+\marginnote{add}
 \nhex{5}  &  ADD  & ADDU  & ADDI  & ADDIU  &        &        &         &         \\\cline{2-9}
+\marginnote{sub}
           &  SUB  & SUBU  & SUBI  & SUBIU  &        &        &         &         \\\cline{1-9}
+\marginnote{mult}
 \nhex{6}  &  MUL  & MULU  & MULI  & MULIU  &  MULD  &        &         &         \\\cline{2-9}
+\marginnote{div}
           &  DIV  & DIVU  & DIVI  & DIVIU  &  DIVD  &        &         &         \\\cline{1-9}
+\marginnote{mod}
 \nhex{7}  &  MOD  &       & MODI  &        &        &        &         &         \\\cline{2-9}
+\marginnote{unary}
           &  ABS  &       &       &        &        &        &         &         \\\cline{1-9}
 \nhex{8}  &  NEG  &  INC  &  DEC  &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
+\marginnote{and or\dots}
 \nhex{9}  &  AND  & ANDI  &  OR   &  ORI   &  XOR   &  XORI  &  NOT    & NOTI    \\\cline{2-9}
           & NAND  & NANDI &  NOR  &  NORI  &        &        &         &         \\\cline{1-9}
+\marginnote{shift}
 \nhex{A}  &  SHL  & SHLI  &  SHR  &  SHRI  &  SHRA  & SHRAI  &         &         \\\cline{2-9}
+\marginnote{rotate}
           &  ROTL & ROTLI &  ROTR &  ROTRI &        &        &         &         \\\hline\hline
+\marginnote{compare}
 \nhex{B}  &  CMP  & CMPU  & CMPI  & CMPIU  &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
+\marginnote{branch}
 \nhex{C}  &  BZ   &  BNZ  &  BLZ  &  BLEZ  &  BGZ   &  BGEZ  &         &         \\\cline{2-9}
           &  BEI  &  BNI  &  BLI  &  BLEI  &  BGI   &  BGEI  &         &         \\\cline{1-9}
 \nhex{D}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &  JMP  &       &       &        &        &        &         &  GO     \\\hline\hline
+\marginnote{call}
 \nhex{E}  &  CALL &  RET  &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
+\marginnote{syscall}
 \nhex{F}  &  WAKE &       &       &        &        &        &         &         \\\cline{2-9}
           &  KILL &       &       &        &        &        &         &         \\\hline\hline
           &   8   &   9   &   A   &   B    &   C    &   D    &    E    &    F    \\\hline
