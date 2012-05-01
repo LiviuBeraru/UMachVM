@@ -3,24 +3,34 @@ UMach ist eine einfache virtuelle Maschine (VM), die einen definierten
 Instruktionssatz und eine definierte Architektur hat. UMach orientiert
 sich dabei an Prinzipien von RISC Architekturen: feste Instruktionslänge,
 kleine Anzahl von einfachen Befehlen, Speicherzugriff durch Load- und
-Store-Befehlen, u.s.w. Die UMach Maschine ist Register-basiert.
+Store-Befehlen, usw. Die UMach Maschine ist Register-basiert.
 Der genaue Aufbau dieser Rechenmaschine ist im Abschnitt
 \ref{sec:Aufbau} ab der Seite \pageref{sec:Aufbau} beschrieben.
 
 
 Für den Anwender der virtuellen Maschine wird zuerst eine Assembler-Sprache zur
-Verfügung gestellt. In dieser Sprache werden Programme geschrieben die
-anschließend kompiliert werden. Die kompilierte Dateien (Maschinen-Code) wird
+Verfügung gestellt. In dieser Sprache werden Programme geschrieben und
+anschließend kompiliert. Die kompilierte Datei (Maschinen-Code) wird
 von der virtuellen Maschine ausgeführt.
 
-\section{Anwendungsbeispiel}
-
-
-
+Obwohl in diesem Dokument Namen von Assembler-Befehlen angegeben werden (siehe 
+Kapitel \ref{chap:Instruktionssatz}, \nameref{chap:Instruktionssatz})
+spezifiziert dieses Dokument die UMach Maschine auf Maschinencode Ebene
+(Register, Bussystem, Instruktionen).
+Die Implementierung eines Assemblers ist frei, zusätzliche Befehle,
+Instruktionsformate, Aliase und sprachliche Konstrukte auf der Assembler-Ebene
+zu definieren. Z.B. auf Maschinencode-Ebene, sind die Befehle
 \begin{lstlisting}
-LOAD R1 90
-LOAD R2 09
-REV  R3 R1
+  ADD R1 R2 5
+  SUB R2 4
+\end{lstlisting}
+fehlerhaft, denn das Format der \opref{ADD} und \opref{SUB} Befehle verlangt die
+Angabe von drei Registern. Der Assembler ist frei, diese zusätzliche Formate zu
+definieren und zu erkennen, solange er gültigen UMach Maschinencode produziert.
+Gültiger Maschinencode für die obigen Befehle wäre
+\begin{lstlisting}
+  ADDI R1 R2 5 # Maschinencode 0x52 0x01 0x02 0x05
+  SUBI R2 R2 4 # Maschinencode 0x5A 0x02 0x02 0x04
 \end{lstlisting}
 
 
