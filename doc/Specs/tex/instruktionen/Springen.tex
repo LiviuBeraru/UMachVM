@@ -1,47 +1,56 @@
-\section{Sprungbefehle}
+\section{Übersprungsbefehle}
 \label{sec:Sprungbefehle}
 
-Alle Sprungbefehle, außer dem \nameref{opcode:GO} Befehl, veranlassen einen 
-relativen Sprung im Programmcode. Relativ im Sinne, dass die Parameter der
-Sprungbefehle einen ganzzahligen Versatz zur aktuellen Programmadresse angeben.
-Der Versatz\index{Versatz} wird nicht in Bytes angegeben, sondern in
-Instruktionen -- wobei eine Instruktion der UMach Maschine 4 Bytes beträgt.
-So bedeutet die Instruktion 
+Alle Sprungbefehle, außer dem \opref{GO} Befehl, veranlassen einen relativen
+Übersprung im Programmcode -- relativ im Sinne, dass die Parameter der
+Übersprungbefehle einen ganzzahligen Versatz zur aktuellen Programmadresse
+angeben. Dabei bedeutet der Versatz\index{Versatz}, wieviele Instruktionen
+müssen bis zur Zielinstruktion übersprungen werden. Z.B. die Instruktion
 \begin{lstlisting}
-  BZ -2
+  JMP 2
 \end{lstlisting}
-\glqq Fahre 2 Instruktionen rückwärts fort\grqq.
+bedeutet
+\glqq Überspringe 2 Instruktionen und fahre mit der 3. fort\grqq.
+Die Instruktion
+\begin{lstlisting}
+  BE 5
+\end{lstlisting}
+bedeutet
+\glqq Falls das Register \texttt{CMP} den Wert $0$ hat, überspringe $5$
+Instruktionen und fahre mit der 6. fort\grqq.
 
+Der Versatz wird nicht in Bytes angegeben, sondern in
+Instruktionen -- wobei eine Instruktion der UMach Maschine 4 Bytes beträgt.
 
-Die Sprungbefehle bauen auf die Vergleichsbefehle auf:
-jeder Sprungbefehl (außer \opref{JMP} und \opref{GO}) untersuchen das
+Die Übersprungbefehle bauen auf die Vergleichsbefehle auf: jeder
+Übersprungbefehl (außer \opref{JMP} und \opref{GO}) untersuchen das
 Spezialregister \texttt{CMP} und verzweigen die Programmausführung anhand seines
 Wertes.
 
 
 \opdef{BE}{$N \in \mathds{Z}$}{0xD0}{NNN}
-\glqq Branch if Equal Zero\grqq.
-Wenn das Register \texttt{CMP} den Wert $0$ hat, wird $N$ Instruktionen vorwärts
-oder rückwärts fortgefahren. Ein negatives $N$ bedeutet einen Sprung rückwärts,
-ein positives $N$ bewirkt einen Sprung vorwärts. Der Sprung wird dadurch
-erreicht, dass das Register \texttt{IP} entsprechend modifiziert wird.
-
-\paragraph{Bemerkung}
-Die UMach Maschine erhöht den Programmcounter (Register \texttt{IP}) nach
-der Ausführung jeder Instruktion
-(siehe \ref{subsec:Ausfuehrungszyklus}, Seite
-\pageref{subsec:Ausfuehrungszyklus}).
-Würde die Maschine diese automatische Erhöhung nicht berücksichtigen, so würde
-das Sprungziel um eine Instruktion vorwärts von der automatischen
-Erhöhung verschoben. Deshalb muss die Maschine die Zahl $N$ um 1 verringern. Es
-ergibt sich die folgende Berechnung des Registers \texttt{IP}:
+\glqq Branch Equal\grqq.
+Wenn das Register \texttt{CMP} den Wert $0$ hat, wird über $N$ Instruktionen
+vorwärts oder rückwärts gesprungen. Ein negatives $N$ bedeutet einen Sprung
+rückwärts, ein positives $N$ bewirkt einen Sprung vorwärts. Der Sprung wird
+dadurch erreicht, dass das Register \texttt{PC} gemäß der folgenden Formel
+modifiziert wird:
 \[
-    IP \gets IP + 4 \cdot (N - 1)
+    PC \gets PC + 4 \cdot N
 \]
 Die Multiplikation mit $4$ wird deshalbt ausgeführt, weil ein Befehl immer aus 4
 Bytes besteht, sodass der Adressoffset zwischen zwei Befehlen immer 4 ist. Somit
 ist $N$ die Anzahl der zu überspringenden Befehle bis zur nächsten Instruktion.
 Der dazu benötigte Offset $N$ wird vom Assembler automatisch berechnet. 
+
+\paragraph{Bemerkung}
+Die UMach Maschine erhöht den Programmcounter (Register \texttt{PC}) nach
+der Ausführung jeder Instruktion
+(siehe \ref{subsec:Neumann-Zyklus}, Seite
+\pageref{subsec:Neumann-Zyklus}).
+Die Modifizierung des \texttt{PC}-Registers durch den \opref{BE} Befehl wirkt
+sich nicht störend auf die automatische Inkrementierung des Programmcounters.
+
 
 \paragraph{Beispiel}
 Der folgende Code lädt zwei Bytes in die Register $R2$ und $R3$ und addiert
@@ -55,15 +64,15 @@ wird stattdessen der Inhalt von $R2$ mit 2 multipliziert. Ein mögliches
   CMPU  R2 R3     # Vergleiche Inhalt von R2 und R3
                   # Ergebnis geht ins CMP
   #BE    equal    # Asm Schreibweise
-  BE    4         # Wenn CMP gleich 0, dann springe 
-                  # 4 Instruktionen weiter
-                  # (zum label equal)
-                  # N ist in diesem Fall 4
-  ADDU  R2 R2 R3  # Addiere inhalt von R2 und R3
+  BE    3         # Wenn CMP gleich 0 ist, überspringe 
+                  # die folgenden 3 Instruktionen
+                  # (gehe zum label equal)
+                  # N ist in diesem Fall 3
+  ADDU  R2 R2 R3  # Addiere Inhalt von R2 und R3
   SBUI  R2 R1 0   # Speichere R2 nach Adresse 100
   #JMP   finish   # Asm Schreibweise
-  JMP   3         # Ueberspringen der folgenden 2 Befehle, 
-                  # N von JMP ist 3.
+  JMP   2         # Überspringe die folgenden 2 Befehle, 
+                  # N von JMP ist 2.
 equal:
   MULIU R2 2      # Multipliziere Inhalt von R2 mit 2
   SBUI  LO R1 0   # Speichere Inhalt von LO nach Adresse in R1
@@ -73,48 +82,45 @@ finish:
 
 
 \opdef{BNE}{$N \in \mathds{Z}$}{0xD1}{NNN}
-\glqq Branch if Not Equal Zero\grqq. Entspricht dem Verhalten von \opref{BE} mit dem
-Unterschied, dass der angegebene Sprung ausgeführt wird, wenn \texttt{CMP} nicht
-$0$ ist.
+\glqq Branch Not Equal \grqq.
+Entspricht dem Verhalten von \opref{BE} mit dem Unterschied, dass der angegebene
+Übersprung ausgeführt wird, wenn \texttt{CMP} nicht $0$ ist.
 
 
 \opdef{BL}{$N \in \mathds{Z}$}{0xD2}{NNN}
-\glqq Branch if Less than Zero\grqq. 
-Springt $N$ Instruktionen weiter, wenn der Inhalt von \texttt{CMP} kleiner $0$
-ist.
+\glqq Branch Less\grqq. 
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} kleiner $0$ ist.
 
 
 \opdef{BLE}{$N \in \mathds{Z}$}{0xD3}{NNN}
-\glqq Branch if Less or Equal Zero\grqq.
-Springt $N$ Instruktionen weiter, wenn der Inhalt von \texttt{CMP} kleiner oder
+\glqq Branch Less Equal\grqq.
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} kleiner oder
 gleich $0$ ist.
 
 
 \opdef{BG}{$N \in \mathds{Z}$}{0xD4}{NNN}
-\glqq Branch if Greater than Zero\grqq.
-Springt $N$ Instruktionen weiter, wenn der Inhalt von \texttt{CMP} größer als
+\glqq Branch Greater\grqq.
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} größer als
 $0$ ist.
 
 
 \opdef{BGE}{$N \in \mathds{Z}$}{0xD5}{NNN}
-\glqq Branch if Greater or Equal Zero\grqq. 
-Springt $N$ Instruktionen weiter, wenn der Inhalt von \texttt{CMP} größer oder
+\glqq Branch Greater Equal\grqq. 
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} größer oder
 gleich $0$ ist.
 
 
 \opdef{JMP}{$N \in \mathds{N}$}{0xD8}{NNN}
 \glqq Jump\grqq.
-Sprint zum angegebenen Label. Benötigter Offset $N$ wird vom Assembler
-automatisch ermittelt.
+Überspringt $N$ Instruktionen.
 
 \opdef{JMPR}{$X \in \Reg$}{0xD9}{R00}
 \glqq Jump Register\grqq.
-Sprint $X$ Instruktionen weiter oder zurück.
-$X$ ist ein Register.
+Überspringt $X$ Instruktionen. $X$ ist ein Register.
 
 
 \opdef{GO}{$N \in \mathds{N}$}{0xDF}{NNN}
-Setzt $IP$ auf die angegebene absolute Adresse. Hierbei ist zu beachten, dass
+Setzt $PC$ auf die angegebene absolute Adresse. Hierbei ist zu beachten,  dass
 nicht in die Mitte eines Befehles gesprungen wird. Dies zu gewährleisten liegt
 in der Verantwortung des Programmierers.
 

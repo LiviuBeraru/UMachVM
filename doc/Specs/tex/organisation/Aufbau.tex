@@ -1,25 +1,25 @@
 \section{Aufbau}
 \index{UMach!Aufbau}
 \label{sec:Aufbau}
-Dieser Abschnitt beschreibt den Aufbau der UMach virtuellen Maschine.
-Die virtuelle Maschine besteht aus internen und aus externen Komponenten. Dabei
-sind die externen Komponenten nicht wesentlich für die Funktionsfähigkeit der
-gesamten Maschine, d.h. die Maschine kann im Prinzip auch ohne die externen
-Komponenten funktionieren -- in diesem Fall fehlt ihr eine Menge von Funktionen.
+Die virtuelle Maschine besteht aus einem Kern (der eigentlichen UMach Maschine)
+und aus einem Bussystem. Das Bussystem wird im Abschnitt \ref{sec:Peripherie}
+ab der Seite \pageref{sec:Peripherie} beschrieben.
 
-\paragraph{Interne Komponenten}
-sind diejenigen Komponenten, die für die Funktionsfähigkeit der UMach
-Maschine wesentlich sind:
+Der Kern der Maschine besteht aus den folgenden Komponenten:
+
 \begin{enumerate}
+  \item Befehlsabruf Einheit (Instruction Fetch Unit)
+  \item Decodierungseinheit
   \item Recheneinheit
-  \item Logische Einheit
   \item Register
 \end{enumerate}
 
+Die Decodierungseinheit ist dafür zuständig, eine abgerufene Instruktion zu
+decodieren, bzw. in ihren Komponenten zu zerteilen.
 
-\paragraph{Externe Komponenten}
+Die Recheneinheit ist für die tatsächliche Ausführung der Instruktionen
+zuständig. 
 
-\begin{enumerate}
-  \item Anbindung an einem I/O-Port
-\end{enumerate}
+Die Register sind die Speichereinheiten, die sich in der Maschine befinden.
+
 

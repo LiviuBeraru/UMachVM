@@ -30,14 +30,14 @@ ist, ist das Register nicht schreibgeschützt.
 \caption{Liste der Spezialregister}
 \label{tab:Spezialregister}
 \\\toprule
-IP   & 0x33 & \glqq Instruction Pointer\grqq. Enthält zu jeder Zeit die Adresse
+PC   & 0x33 & \glqq Instruction Pointer\grqq. Enthält zu jeder Zeit die Adresse
             der nächsten Instruktion. Wird auf Null gesetzt, wenn die Maschine
             hochfährt.
             Wird nach dem Abfangen einer Instruktion in das Register
-            \texttt{CIN} automatisch inkrementiert.
+            \texttt{IR} automatisch inkrementiert.
 
             Schreibgeschützt.
-            \index{IP@\texttt{IP}}
+            \index{PC@\texttt{PC}}
 \\
 SP   & 0x34 & \glqq Stack Pointer\grqq.
             Enthält die Speicheradresse des höchsten Eintrag auf dem Stack.
@@ -57,15 +57,15 @@ LIN  & 0x36 & \glqq Last Instruction\grqq. Enthält den Maschinencode der zuletz
             Schreibgeschützt.
             \index{LIN@\texttt{LIN}}
 \\
-CIN  & 0x37 & \glqq Current Instruction\grqq. Enthält die gerade ausgeführte
+IR  & 0x37 & \glqq Instruction Register\grqq. Enthält die gerade ausgeführte
             Instruktion.
 
             Schreibgeschützt.
-            \index{CIN@\texttt{CIN}}
+            \index{IR@\texttt{IR}}
 \\
 NIN  & 0x38 & \glqq Next Instruction\grqq.
             Enthält die nächste Instruktion.
-            Während der Ausführung eines Instruktion, zeigt der Register IP auf
+            Während der Ausführung eines Instruktion, zeigt der Register PC auf
             diese Instruktion, aber im Speicher.
 
             Schreibgeschützt.
