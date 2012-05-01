@@ -48,12 +48,12 @@
           &  ROTL & ROTLI &  ROTR &  ROTRI &        &        &         &         \\\hline\hline
 \marginnote{compare}
 \nhex{B}  &  CMP  & CMPU  & CMPI  & CMPIU  &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{C}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
 \marginnote{branch}
-\nhex{C}  &  BZ   &  BNZ  &  BLZ  &  BLEZ  &  BGZ   &  BGEZ  &         &         \\\cline{2-9}
-          &  BEI  &  BNI  &  BLI  &  BLEI  &  BGI   &  BGEI  &         &         \\\cline{1-9}
-\nhex{D}  &       &       &       &        &        &        &         &         \\\cline{2-9}
-          &  JMP  &       &       &        &        &        &         &  GO     \\\hline\hline
+\nhex{D}  &  BE   &  BNE  &  BL   &  BLE   &  BG    &  BGE   &         &         \\\cline{2-9}
+          &  JMP  & JMPR  &       &        &        &        &         &  GO     \\\hline\hline
 \marginnote{call}
 \nhex{E}  &  CALL &  RET  &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
