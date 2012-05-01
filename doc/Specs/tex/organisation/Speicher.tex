@@ -59,16 +59,58 @@ Die Register $R$, $B$ und $I$ stehen für beliebige Register.
 \label{subsec:Datentypen}
 \index{Datentypen}
 
-Die UMach Maschine kennt 3 Datentypen:
-\begin{enumerate}
-  \item Byte (8 Bit lang) 
-  \item Half (2 Byte)
-  \item Word (4 Byte)
-\end{enumerate}
+Ein Datentyp im Kontext der UMach Maschine ist ein fester Wertebereich, der von
+der Maschine in einer einzigen Instruktion angesprochen werden kann.
+
+Die UMach Maschine kennt 3 Datentypen, die sich lediglich in der Anzahl der 
+verwendeten Bytes unterscheiden.
+Die Tabelle \ref{tab:Wertebereiche-Datentypen} auf der Seite 
+\pageref{tab:Wertebereiche-Datentypen} gibt eine Übersicht der Wertebereiche der
+einzelnen Datentypen.
+
+\begin{table}
+  \centering
+  \begin{tabular}{lclrlr}                                         \toprule
+    Name & Bits & \multicolumn{2}{c}{Vorzeichenbehaftet}
+                & \multicolumn{2}{c}{Vorzeichenlos}             \\\cmidrule{3-6}
+         &      & Min       &   Max       & Min   & Max         \\\midrule
+    Byte &  8   & $-128$    & $127$       & $0$   & $255$       \\
+    Half & 16   & $-2^{15}$ & $2^{15}-1$  & $0$   & $2^{16}-1$  \\
+    Word & 32   & $-2^{31}$ & $2^{31}-1$  & $0$   & $2^{32}-1$  \\\bottomrule
+  \end{tabular}
+  \caption{Wertebereiche der UMach Datentypen}
+  \label{tab:Wertebereiche-Datentypen}
+\end{table}
+
+Die Einteilung dieser Datentypen wirkt sich auf die Gestaltung mancher
+Maschinen-Instruktionen, die mit verschiedenen Datentypen arbeiten.
+Z.B. \opref{PUSHB} arbeitet mit dem Datentyp \glqq Byte\grqq, \opref{PUSHH}
+arbeitet mit dem Datentyp \glqq Half\grqq.
 
 
 
 \subsection{Der Stack}
 \label{subsec:Stack}
 \index{Stack}
+
+Der Stack ist ein spezieller Bereich im Speicher. Mit \glqq Speicher\grqq\ wird
+hiermit der Speicher-Adressraum, der am Speicher-Port auf dem Bussystem
+angeschlossen ist gemeint (nicht also der gesamte Speicherraum innerhalb des Busses).
+
+Dieser Bereich fängt am Ende des Speichers mit der größten Adresse an und
+erstreckt sich bis zur derjenige Adresse, die im Register \texttt{SP}
+gespeichert ist. Die Stack-Größe ist damit dynamisch, denn das Register
+\texttt{SP} wird sowohl durch die Instruktionen \opref{PUSH} und  \opref{POP}, als
+auch direkt vom Programmierer geändert.
+Das Wachsen\index{Stack!Wachsen}
+des Stacks bedeutet, dass das Register \texttt{SP} immer kleinere Werte annimmt.
+Das Schrumpfen\index{Stack!Schrumpfen}
+des Stacks bedeutet, dass \texttt{SP} immer größere Werte annimmt. 
+Wird versucht, den Inhalt von \texttt{SP} kleiner Null oder größer als die
+maximale Speicheradresse zu setzen, so wird dies von der Maschine verweigert und
+als Fehler im Register \texttt{ERR} signalisiert.
+
+Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
+maximal-erreichbare Speicheradresse gesetzt (Stack-Größe ist ein Byte).
+
 

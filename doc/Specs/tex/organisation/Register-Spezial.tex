@@ -42,6 +42,7 @@ SP   & 0x34 & \glqq Stack Pointer\grqq.
             Enthält die Speicheradresse des höchsten Eintrag auf dem Stack.
             Wird beim Hochfahren der Maschine auf die maximal erreichbare
             Adresse im Speicher gesetzt.
+            Siehe auch \ref{subsec:Stack}, Seite \pageref{subsec:Stack}.
             \index{SP@\texttt{SP}}
 \\
 FP   & 0x35 & \glqq Frame Pointer\grqq.
@@ -73,7 +74,8 @@ STAT & 0x39 & Enthält Status-Informationen
 \\
 ERR  & 0x3A & \glqq Error\grqq.
             Fehlerregister. Die einzelnen Bits geben Auskunft über Fehler, die
-            mit der Ausführung des Programms verbunden sind.
+            mit der Ausführung des Programms verbunden sind. Liegt kein Fehler
+            vor, so ist der Inhalt dieses Registers gleich Null.
             \index{ERR@\texttt{ERR}}
 \\
 ERRM & 0x3B & \glqq Error message\grqq.

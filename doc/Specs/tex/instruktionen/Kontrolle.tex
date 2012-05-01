@@ -7,7 +7,7 @@ ohne dabei die gesamte Ausführung zu beeinflussen, außer, Zeitlupen zu schaffe
 
 
 \opdef{RST}{keine}{0x01}{000}
-Setzt alle Register außer dem Befehlszähler auf Null.
+Setzt alle Allzweckregister auf Null.
 
 
 \opdef{CRM}{$N \in \mathds{N}$}{0x02}{NNN}
@@ -65,7 +65,7 @@ Bussystem ausgeschaltet.
 Schaltet alle Registeränderungen aus. Nach der Ausführung dieses Befehls, alle
 Operationen, die einen Register modifizieren sollen, sind wirkungslos.
 Die Maschine ändert ihren Zustand nicht mehr, außer, dass sie weitere Befehle
-liest.
+liest (das IP Register wird weiter erhöht).
 
 
 \opdef{ALIV}{keine}{0x0B}{000}
