@@ -9,13 +9,13 @@ werden kann. Somit besteht der Zyklus aus einem beginnenden \textsc{Fetch}. Bei
 diesem wird der an der im Programmcounter \texttt{PC} liegende Adresse
 gespeicherte Befehl in das Instruktionsregister \texttt{IR} geladen. Danach
 wird der im ersten Byte liegende Befehl mit Hilfe des Befehlsdecoders decodiert
-und an der ALU entsprechend eingestellt. Danach folgt der dritte Schritt
-\textsc{Execute}, in dem die Instruktion ausgeführt wird. Da das Inkrementieren
-des Programmcounters \texttt{PC} parallel zum \textsc{Fetch} und \textsc{Decode}
-Schritt statt findet, hat dieser Vorgang, im Falle dass der \texttt{PC} im
-\textsc{Execute} Schritt überschrieben wird, keine Auswirkung auf den weiteren
-Programmablauf. 
-Siehe auch Abbildung \ref{fig:Neumann-Zyklus} auf der Seite
+und an der ALU entsprechend eingestellt. 
+
+In einem dritten Schritt \textsc{Execute} wird die Instruktion ausgeführt. Der
+theoretisch 4. Schritt, das Inkrementieren des Programmcounters PC, wird
+parallel zu den \textsc{Fetch} und \textsc{Decode} Vorgängen ausgeführt. Diese
+Tatsache ist bei Instruktionen, welche den Inhalt des PC manipulieren, zu
+berücksichtigen. Siehe auch Abbildung \ref{fig:Neumann-Zyklus} auf der Seite
 \pageref{fig:Neumann-Zyklus}.
 
 Auflistung der Schritte:
