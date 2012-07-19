@@ -13,11 +13,12 @@ Für alle Register gilt:
     beinhaltet.\index{\Reg}
     Die Notation $x \in \Reg$ bedeutet, dass $x$ ein Register ist.
   \item Die Speicherkapazität beträgt 32 Bit.
-  \item Es gibt eine eindeutige Maschinenzahl, die innerhalb der
-    Maschine das Register identifiziert. Diese Zahl heißt
-    \gls{Maschinenname}\index{Maschinenname}\index{Register!Maschinenname}
+  \item Es gibt eine eindeutige natürliche Nummer, die innerhalb der
+    Maschine das Register identifiziert. Diese Nummer heißt
+    \gls{Registernummer}\index{Registernummer}\index{Register!Registernummer}
     und wird von einer Instruktion auf Maschinencode-Ebene verwendet, wenn sie
-    das Register anspricht.
+    das Register anspricht -- mit anderen Worten, auf Maschinecode-Ebene wird 
+    das Register durch seine Nummer angegeben.
   \item Die UMach Maschine erwartet die Angabe eines Registers als numerischer
     Wert (Maschinenname). Jedoch verwendet der Programmierer der Maschine auf
     Assembler Ebene einen eindeutigen Namen dieses Registers.

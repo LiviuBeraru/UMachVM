@@ -14,6 +14,11 @@
 % \glspl{label} for plural
 % \Gls{label}   for first letter uppercase
 % \Glspl{label} for first letter uppercase plural
+% 
+% Um den glossar zu erzeugen verwendet man makeglossaries
+% pdflatex UMachVM-Spec
+% makeglossaries UMachVM-Spec
+% pdflatex UMachVM-Spec
 
 \newglossaryentry{Adressdekoder}{
 name={Adressdekoder},
@@ -113,21 +118,11 @@ plural=Instruktionssätze
 }
 
 
-\newglossaryentry{Maschinenname}{
-name={Maschinenname},
-description={Der Name eines Registers oder eines Befehls, so wie er im
-             Maschinencode erscheint.
-             \texttt{0x01}, \texttt{0x02}, \texttt{0x40} sind Maschinennamen
-             von Registern und Befehlen.},
-plural={Maschinennamen}
-}
-
-\newglossaryentry{Speicher}{
-name={Speicher},
-description={Baukomponente, die am Bussystem angeschlossen ist und die eine
-             feste Anzahl von Bytes für die Laufzeit der Maschine aufnehmen
-             kann.},
-plural={Speicher}
+\newglossaryentry{Registernummer}{
+name={Registernummer},
+description={Eine eindeutige Zahl, die ein Register identifiziert. Eine
+             Instruktion verwendet diese Zahl, wenn sie ein Register angibt.},
+plural={Registernummern}
 }
 
 
@@ -137,4 +132,11 @@ description={Eine sich im Prozessor befindende Speichereinheit. Das Register
             ist dem Programmierer sichbar und kann mit Werten geladen werden.
             Siehe Abschnitt \ref{sec:Register}, Seite \pageref{sec:Register}.},
 plural={Register}
+}
+\newglossaryentry{Speicher}{
+name={Speicher},
+description={Baukomponente, die am Bussystem angeschlossen ist und die eine
+             feste Anzahl von Bytes für die Laufzeit der Maschine aufnehmen
+             kann.},
+plural={Speicher}
 }
