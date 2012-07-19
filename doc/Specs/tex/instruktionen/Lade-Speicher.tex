@@ -19,23 +19,7 @@ label:
 \end{lstlisting}
 
 
-\opdef{SETU}{$X\in\Reg$, $N\in\mathds{N}$}{0x11}{RNN}
-Setzt den Inhalt des Registers $X$ auf den positiven natürlichen Wert $N$.
-$N$ wird vorzeichenlos interpretiert. Entsprechend kann $N$ Werte von $0$ bis
-$+65535$ aufnehmen.
-Wird dem Assembler einen Wert außerhalb dieses Bereichs gegeben, so
-schneidet der Assembler alle Bits außer den ersten 16 weg und betrachtet das
-Ergebnis als vorzeichenlose Zahl.
-
-Beispiele:
-\begin{lstlisting}
-  SETU R1   8     # $R1 \gets 8$
-  SETU R2   70000 # $R2 \gets 4464$
-  SETU R2  -70000 # $R2 \gets 61072$
-\end{lstlisting}
-
-
-\opdef{COPY}{$X, Y \in \Reg$}{0x18}{RR0}
+\opdef{CP}{$X, Y \in \Reg$}{0x18}{RR0}
 Kopiert den Inhalt des Registers $Y$ in das Register $X$. Register $Y$ wird
 dabei nicht geändert. Entspricht
 \[
@@ -45,51 +29,19 @@ dabei nicht geändert. Entspricht
 Beispiel:
 \begin{lstlisting}
  SET  R1 5  # $R1 \gets 5$
- COPY R2 R1 # $R2 \gets 5$
+ CP   R2 R1 # $R2 \gets 5$
 \end{lstlisting}
 
 
 
-\opdef{MOVE}{$X, Y \in \Reg$}{0x1A}{RR0}
-Ähnlich wie \opref{COPY}, kopiert dieser Befehl den Inhalt des Registers $Y$
-in das Register $X$.
-Anders aber als \opref{COPY}, setzt \texttt{MOVE} das Register $Y$ auf Null.
-Entspricht einer echten Verschiebung eines Wertes von $Y$ nach $X$.
-Gemäß der Formatspezifikation, können nur Register als Argumenten verwendet
-werden. Um den Inhalt eines Registers auf einen konstanten Wert zu setzen, ist
-\opref{SET} zu verwenden. Um den Inhalt eines Registers mit einem Speicherinhalt
-zu belegen, ist z.B. \opref{LW} zu verwenden.
-
-Entspricht
-\begin{align*}
-  X & \gets Y \\
-  Y & \gets 0
-\end{align*}
-
-
-
-\begin{lstlisting}
-  SET  R1  5   # Inhalt von R1 ist 5
-  MOVE R2 R1   # R1 = 0, R1 = 5
-  MOVE R1 R2   # R1 = 5, R1 = 0
-  MOVE R2  7   # Fehler, da 7 kein Register
-\end{lstlisting}
-
-
-
-
-\opdef{LB}{$X, Y, Z \in \Reg$}{0x20}{RRR}
-Lade ein Byte aus dem Speicher mit Adresse $Y + Z$ in das niedrigstwertige
+\opdef{LB}{$X, Y \in \Reg$}{0x20}{RR0}
+Lade ein Byte aus dem Speicher mit Adresse $Y$ in das niedrigstwertige
 Byte des Registers $X$. Die anderen Bytes von $X$ werden von diesem Befehl nicht
-betroffen. Besonders, sie werden nicht auf Null gesetzt.
-Alle Registerinhalte werden als vorzeichenbehaftet behandelt.
-Algebraisch äquivalent:
-\[
-    X \gets (X \div 2^{8}) \cdot 2^{8} + \left(mem(Y + Z) \bmod 2^{8} \right)
-\]
+betroffen. Insbesondere, werden sie nicht auf Null gesetzt.
+
 Äquivalenter C Code:
 \begin{lstlisting}
-  x = (x & 0xFFFFFF00) | (mem(y + z) & 0x00FF);
+  x = (x & 0xFFFFFF00) | (mem(y) & 0x00FF);
 \end{lstlisting}
 
 \paragraph{Beispiel}
@@ -106,52 +58,15 @@ bzw. $6$.
 \end{lstlisting}
 Hier werden zwei nacheinander folgenden Bytes aus dem Speicher gelesen und in
 die zwei niedrigstwertigen Bytes von $R3$ abgelegt.
-Das gleiche kann man kürzer mit dem Befehl \opref{LH} erreicht werden.
 
 
 
-
-\opdef{LBU}{$X, Y, Z \in \Reg$}{0x21}{RRR}
-\glqq Load Byte Unsigned\grqq.
-Analog dem Befehle \opref{LB} mit dem Unterschied, dass alle Registerinhalte als
-vorzeichenlos interpretiert werden. Somit ergeben sich größere Wertebereiche für
-die Adressen.
-
-
-\opdef{LH}{$X, Y, Z \in \Reg$}{0x22}{RRR}
-\glqq Load Half\grqq.
-Lade ein halbes Word (2 Bytes) aus der Adresse $Y + Z$ in die zwei
-niedrigstwertigen Bytes des Registers $X$.
-Die beiden höchstwertigen Bytes von $X$ werden nicht verändert.
-
-\paragraph{Beispiel}
-Angenommen, der Speicher an den Adressen $100$ und $101$ hat den Wert $5$,
-bzw. $6$. Die Adressen $100$ und $101$ bilden also zusammen den Wert
-\texttt{0x0506} ($1286$).
-\begin{lstlisting}
-  SET  R1   100     # Basisadresse R1 = 100
-  SET  R2     0     # Index R2 = 0
-  SET  R3     0
-  LH   R3 R1 R2     # R3 = 1286 ($mem_{2}(100+0)$)
-
-  SET  R3  0x010000 # R3 = 65536 (3. Byte auf 1 gesetzt)
-  LH   R3 R1 R2     # R3 = 66822 = 65536+1286
-\end{lstlisting}
-
-
-
-\opdef{LHU}{$X, Y, Z \in \Reg$}{0x23}{RRR}
-\glqq Load Half Unsigned\grqq.
-Analog zur Instruktion \opref{LH} mit dem Unterschied, dass alle Registerinhalte
-als vorzeichenlos interpretiert werden.
-
-
-\opdef{LW}{$X, Y, Z \in \Reg$}{0x24}{RRR}
+\opdef{LW}{$X, Y \in \Reg$}{0x24}{RR0}
 \glqq Load Word\grqq.
-Lade ein Wort (4 Byte) aus dem Speicher mit Adresse $Y + Z$ in das Register $X$.
+Lade ein Wort (4 Byte) aus dem Speicher mit Adresse $Y$ in das Register $X$.
 Alle Bytes von $X$ werden dabei überschrieben.
 Die Bytes aus dem Speicher werden nacheinander gelesen. Es werden also die
-Bytes mit Adressen $Y + Z + 0$, $Y + Z + 1$, $Y + Z + 2$ und $Y + Z + 3$ zu
+Bytes mit Adressen $Y + 0$, $Y + 1$, $Y + 2$ und $Y + 3$ zu
 einem 4-Byte Wort zusammengesetzt und so in $X$ ablegt.
 
 \paragraph{Beispiel}
@@ -165,91 +80,16 @@ belegt und bilden somit den Wert $66051$.
 \end{lstlisting}
 
 
-\opdef{LWU}{$X, Y, Z \in \Reg$}{0x25}{RRR}
-\glqq Load Word Unsigned\grqq.
-Analog zur Instruktion \opref{LW} mit dem Unterschied, dass alle Registerinhalte
-vorzeichenlos interpretiert werden.
 
 
-
-
-\opdef{LBI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x28}{RRN}
-\glqq Load Byte Immediate\grqq.
-Lade ein Byte aus dem Speicher mit Adresse $Y + N$ in das niedrigstwertige Byte
-des Registers $X$. $N$ ist dabei eine feste, konstante Zahl, die zum Inhalt von
-$Y$ hinzuaddiert wird.
-
-\paragraph{Beispiel}
-Das folgende Beispiel setzt das niedrigstwertige Byte des Registers $R2$ auf
-denn Speicherinhalt mit Adresse $116$:
-
-\begin{lstlisting}
-  SET R1   100  # $R1 \gets 100$
-  SET R2     0
-  LBI R2 R1 16  # $R2 \gets mem(100 + 16)$
-\end{lstlisting}
-
-
-
-
-\opdef{LBUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x29}{RRN}
-\glqq Load Byte Unsigned Immediate\grqq.
-Analog zur Instruktion \opref{LBI} mit dem Unterschied, dass sowohl $Y$ als auch
-$N$ vorzeichenlos interpretiert werden.
-
-
-
-\opdef{LHI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x2A}{RRN}
-\glqq Load Half Immediate\grqq.
-Lädt aus dem Speicher ab der Adresse $Y + N$ zwei nacheinander folgenden Bytes
-in die zwei niedrigstwertigen Bytes des Registers $X$.
-$Y$ ist ein Register und $N$ eine ganze Zahl im Bereich $[-128, 127]$.
-Die Instruktion funktioniert wie \opref{LH}, außer, dass $N$ eine feste Zahl und
-kein Register ist.
-
-
-\opdef{LHUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x2B}{RRN}
-\glqq Load Half Unsigned Immediate\grqq.
-Analog zur Instruktion \opref{LHI} mit dem Unterschied, dass alle Operanden
-vorzeichenlos interpretiert werden.
-
-
-\opdef{LWI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x2C}{RRN}
-\glqq Load Word Immediate\grqq.
-Lädt ein Wort (4 Bytes) ab der Adresse $Y + N$ in das Register $X$. Entspricht
-dem algebraischen Ausdruck
-\[
-    X \gets mem_{4}(Y + N)
-\]
-Funktioniert wie \opref{LW} mit dem Unterschied, dass $N$ eine feste konstante
-ganze Zahl ist.
-
-\paragraph{Beispiel}
-Angenommen, an den Speicheradressen 100 bis 104 stehen die Werte \texttt{0x01},
-\texttt{0x02}, \texttt{0x03}, \texttt{0x04} und \texttt{0x05}.
-\begin{lstlisting}
-  SET R1 100
-  LWI R2 R1 0 # R2 = 0x01020304
-  LWI R2 R1 1 # R2 = 0x02030405
-\end{lstlisting}
-
-
-\opdef{LWUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x2D}{RRN}
-\glqq Load Word Unsigned Immediate\grqq.
-Analog zur Instruktion \opref{LWI} mit dem Unterschied, dass alle Werte
-(insbesondere $N$) vorzeichenlos interpretiert werden.
-
-
-
-\opdef{SB}{$X, Y, Z \in \Reg$}{0x30}{RRR}
+\opdef{SB}{$X, Y \in \Reg$}{0x30}{RR0}
 \glqq Store Byte\grqq.
 Speichert den Inhalt des niedrigstwertigen Byte von $X$ an der Speicherstelle
-$Y + Z$. $X$, $Y$ und $Z$ sind dabei Register. Deren Inhalt wird als
-vorzeichenbehaftet interpretiert.
+$Y$. $X$ und $Y$ sind dabei Register.
 
 Entspricht dem algebraischen Ausdruck
 \[
-    X \to mem_{1} (Y + Z)
+    X \to mem_{1} (Y)
 \]
 $mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
 
@@ -262,60 +102,14 @@ $mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
 \texttt{ZERO} ist dabei ein Spezialregister mit konstantem Wert $0$.
 
 
-\opdef{SBU}{$X, Y, Z \in \Reg$}{0x31}{RRR}
-\glqq Store Byte Unsigned\grqq.
-Analog zur Instruktion \opref{SB} mit dem Unterschied, dass $X$, $Y$ und $Z$
-vorzeichenlos behandelt werden.
 
 
-
-\opdef{SH}{$X, Y, Z \in \Reg$}{0x32}{RRR}
-\glqq Store Half\grqq.
-Speichert die 2 niedrigstwertigen Bytes von $X$ (rechte Hälfte von $X$) an die
-Adressen $Y + Z$ und $X + Y + 1$ so, dass diese zwei Adressen mit den letzten
-Bytes von $X$ übereinstimmen. Die folgende Tabelle zeigt die bitweise
-Übereinstimmung der betroffenen Stellen.
-\[
-  \begin{array}{l|*{8}{c}|*{8}{c}}
-   \toprule
-   X \text{ Wertigkeiten} &
-   2^{15} & 2^{14} & 2^{13} & 2^{12} & 2^{11} & 2^{10} & 2^{9} & 2^{8} & 
-   2^{7} & 2^{6} & 2^{5} & 2^{4} & 2^{3} & 2^{2} & 2^{1} & 2^{0}
-   \\
-   \text{Speicherstellen} &
-   \multicolumn{8}{c|}{X + Y} &
-   \multicolumn{8}{c}{X + Y + 1}
-   \\\bottomrule
-  \end{array}
-\]
-Entspricht dem algebraischen Ausdruck
-\[
-  X \to mem_{2} (Y + Z)
-\]
-
-\paragraph{Beispiel} Dieses Programm speicher die 2 niedrigstwertigen Bytes von
-$R2$ in den Speicher an die Adressen 128 und 129.
-\begin{lstlisting}
-  SET R1 128     # R1 = Speicheradresse 128
-  SET R2 513     # R2 = 0x0201
-  SH  R2 R1 ZERO # Speicher mit Adresse 128: 0x02
-                 # Speicher mit Adresse 129: 0x01
-\end{lstlisting}
-
-
-
-\opdef{SHU}{$X, Y, Z \in \Reg$}{0x33}{RRR}
-\glqq Store Half Unsigned\grqq.
-Analog zur Instruktion \opref{SH} mit dem Unterschied, dass $X$, $Y$ und $Z$
-vorzeichenlos interpretiert werden.
-
-
-\opdef{SW}{$X, Y, Z \in \Reg$}{0x34}{RRR}
+\opdef{SW}{$X, Y\in \Reg$}{0x34}{RR0}
 \glqq Store Word\grqq.
-Speichert den Inhalt aller Bytes in $X$ an die Speicheradressen $Y + Z$ bis 
-$X + Z + 3$.
+Speichert den Inhalt aller Bytes in $X$ an die Speicheradressen $Y$ bis 
+$X + 3$.
 \[
-    X \to mem_{4}(Y + Z)
+    X \to mem_{4}(Y)
 \]
 \paragraph{Beispiel}
 Es wird das Register $R2$ mit dem Wert \texttt{0x01020304} geladen und an die
@@ -334,133 +128,6 @@ Byte (\texttt{0x04}) an die Adresse $131$.
 \end{lstlisting}
 
 
-\opdef{SWU}{$X, Y, Z \in \Reg$}{0x35}{RRR}
-\glqq Store Word Unsigned\grqq.
-Analog zur Instruktion \opref{SW}, aber die Register $X$, $Y$ und $Z$ werden
-vorzeichenlos gelesen.
-
-
-
-\opdef{SBI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x38}{RRN}
-\glqq Store Byte Immediate\grqq.
-Speichert das niedrigstwertige Byte aus dem Register $X$ an die Adresse $Y + N$.
-Der Unterschied zur Instruktion \opref{SB} ist, dass $N$ eine ganzahlige
-direkte Angabe ist.
-
-\paragraph{Beispiel}
-Der folgende Code schreibt die Zahl \texttt{0x0304} an die Adressen $128$ und
-$129$, wobei die zwei Bytes vertauscht werden.
-\begin{lstlisting}
-  SET  R1 0x0304   # Wert zum Speichern in R1
-  SET  R2 128      # Adresse in R2
-  SBI  R1 R2 0     # mem[128] = 0x04
-  SHRI R1 R1 8     # R1 = 0x0003 (shift right 8 Bit)
-  SBI  R1 R2 1     # mem[129] = 0x03
-\end{lstlisting}
-Nützlich, wenn die Adresse konstant ist und keine variablen Indizes verwendet
-werden.
-
-
-\opdef{SBUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x39}{RRN}
-\glqq Store Byte Unsigned Immediate\grqq.
-Analog zur Instruktion \opref{SBI} mit dem Unterschied, dass $X$, $Y$ und $N$
-vorzeichenlose Angaben sind.
-
-
-
-\opdef{SHI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x3A}{RRN}
-\glqq Store Half Immediate\grqq.
-Speichert die 2 niedrigstwertigen Bytes von $X$ an die Adressen 
-$Y + N$ (3. Byte von $X$) und $Y + N + 1$ (4. Byte von $X$).
-$N$ ist dabei eine konstante ganze Zahl, die direkt angegeben wird. 
-
-\paragraph{Beispiel}
-\begin{lstlisting}
-  SET R1 0x0304 # Wert zum Speichen.
-                # Byte 3 = 0x03
-                # Byte 4 = 0x04
-  SET R2 128    # Die Adresse in R2
-  SHI R1 R2  0  # mem[128] = 0x03
-                # mem[129] = 0x04
-\end{lstlisting}
-
-
-
-\opdef{SHUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x3B}{RRN}
-\glqq Store Half Unsigned Immediate\grqq.
-Funktioniert wie \opref{SHI} aber mit vorzeichenlosen Werten.
-
-
-
-\opdef{SWI}{$X, Y \in \Reg$, $N \in \mathds{Z}$}{0x3C}{RRN}
-\glqq Store Word Immediate\grqq.
-Speichert den Inhalt des Registers $X$ an die Byte-Adressen von $Y+N+0$ bis 
-$Y + N + 3$. Die Bytes werden in \glqq Big-Endian\grqq\ Reihenfolge gelesen und
-gespeichert. $N$ ist eine direkt angegebene ganze Zahl aus dem Intervall 
-$[-128, 127]$.
-
-Entspricht dem algebraischen Ausdruck
-\[
-    X \to mem_{4}(Y + N)
-\]
-
-\paragraph{Beispiel}
-\begin{lstlisting}
-  SET R1 0x01020304 # Wert zum speichern in R1
-                    # 1. Byte = 0x01
-                    # 2. Byte = 0x02
-                    # 3. Byte = 0x03
-                    # 4. Byte = 0x04
-  SET R2 200        # Adresse 200 in R2
-  SWI R1 R2 56      # Addiere den Versatz 56 zu 200
-                    # mem[256] = 0x01
-                    # mem[257] = 0x02
-                    # mem[258] = 0x03
-                    # mem[259] = 0x04
-\end{lstlisting}
-
-
-
-\opdef{SWUI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x3D}{RRN}
-\glqq Store Word Unsigned Immediate\grqq.
-Wie \opref{SWI} mit dem Unterschied, dass alle Register und Werten vorzeichenlos
-gelesen und gespeichert werden. Besonders gilt $N \in [0, 255]$. Wird eine
-größere Zahl angegeben, so wird die modulo $256$ berechnet.
-
-
-
-\opdef{PUSHB}{$X \in \Reg$}{0x40}{R00}
-\glqq Push Byte\grqq.
-
-Erniedrigt das Register \texttt{SP} um 1 und speichert das vierte
-(niedrigstwertige) Byte aus dem Register $X$ an die Adresse, die in \texttt{SP}
-gespeichert ist.
-Entspricht
-\begin{align*}
-  SP & \gets SP - 1    \\
-  X  & \to mem_{1}(SP)
-\end{align*}
-
-
-
-\opdef{PUSHH}{$X \in \Reg$}{0x41}{R00}
-\glqq Push Half\grqq.
-Erniedrigt das Register \texttt{SP} um 2 und speichert das 3. und 4. Byte (die
-zwei niedrigstwertigen) aus $X$ an die Adresse \texttt{SP}.
-
-Entspricht
-\begin{align*}
-  SP & \gets SP - 2    \\
-  X  & \to mem_{2}(SP)
-\end{align*}
-
-\paragraph{Beispiel}
-Dieser Code \glqq pusht\grqq\ das 3. und 4. Byte von $R1$ auf den Stack:
-\begin{lstlisting}
-  SET   R1 0x0102
-  PUSHH R1         # mem[SP + 0] = 0x01
-                   # mem[SP + 1] = 0x02
-\end{lstlisting}
 
 
 \opdef{PUSH}{$X \in \Reg$}{0x42}{R00}
@@ -492,13 +159,6 @@ und wird in der nachfolgenden Tabelle dargestellt:
 \end{center}
 
 
-
-
-Dieser Befehl ist somit äquivalent zu 
-\begin{lstlisting}
-  SUBI SP SP 4
-  SW   X  SP ZERO
-\end{lstlisting}
 Entspricht
 \begin{align*}
   SP & \gets SP - 4    \\
@@ -514,60 +174,6 @@ Die Stack-Struktur wird in Kommentaren gezeigt.
                      # mem[SP + 1] = 0x02
                      # mem[SP + 2] = 0x03
                      # mem[SP + 3] = 0x04
-\end{lstlisting}
-
-
-
-
-\opdef{POPB}{$X \in \Reg$}{0x48}{R00}
-\glqq Pop Byte\grqq.
-Ladet ein Byte aus dem Stack-Bereich in das niedrigstwertige Byte des Registers
-$X$ und erhöht das Spezialregister \texttt{SP} um 1.
-Entspricht somit den Befehlen 
-\begin{lstlisting}
-  LB   X SP ZERO
-  INC SP
-\end{lstlisting}
-Algebraische Formel:
-\begin{align*}
-  X  & \gets mem_{1}(SP) \\
-  SP & \gets SP + 1
-\end{align*}
-
-\paragraph{Beispiel}
-Angenommen, der \glqq Top of Stack\grqq\ (Speicherinhalt an der Adresse
-\texttt{SP}) ist mit dem Byte \texttt{0x05} belegt:
-\begin{lstlisting}
-  SET  R1 0x0201 # irgendein Wert im Byte 3 und 4 von R1
-  POPB R1        # R1 = 0x0205
-\end{lstlisting}
-Der obige Code zeigt, dass nur das letzte Byte von $R1$ überschrieben wird.
-
-
-\opdef{POPH}{$X \in \Reg$}{0x49}{R00}
-\glqq Pop Half\grqq.
-Lädt die ersten zwei Bytes aus dem Stack-Bereich in die 2 niedrigstwertigen
-Bytes von $X$ und erhöht das Register \texttt{SP} um 2.
-Äquivalente Instruktionen:
-\begin{lstlisting}
-  LHI   X SP 0
-  ADDI SP SP 2
-\end{lstlisting}
-
-Algebraische Formel:
-\begin{align*}
-  X  & \gets mem_{2}(SP) \\
-  SP & \gets SP + 2
-\end{align*}
-
-\paragraph{Beispiel}
-Angenommen, die ersten 4 Bytes vom Stack-Bereiche sind \texttt{0xAA 0xBB 0xCC 0xDD}
-\begin{lstlisting}
-               # mem[SP + 0] = 0xAA
-               # mem[SP + 1] = 0xBB
-  POPH R1      # R1 = 0xAABB
-               # mem[SP + 0] = 0xCC
-               # mem[SP + 1] = 0xDD
 \end{lstlisting}
 
 

@@ -10,29 +10,28 @@
 \begin{tabular}{|L||*{8}{C{1.2cm}|}}
 \toprule\hline
           &   0   &   1   &   2   &   3    &   4    &   5    &    6    &    7    \\\hline\hline
-\marginnote{cntrl}
-\nhex{0}  &  NOP  &  RST  &  CRM  &  CSM   &  DIE   &  RSR   &  AUTSM  &  SOCL   \\\cline{2-9}
-          & HATE  & TRST  &  ZMB  &  ALIV  &        &        &         &         \\\hline\hline
+\nhex{0}  &  NOP  &       &       &        &  EOP   &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
 \marginnote{set copy}
-\nhex{1}  & SET   & SETU  &       &        &        &        &         &         \\\cline{2-9}
-          & COPY  &       & MOVE  &        &        &        &         &         \\\cline{1-9}
+\nhex{1}  & SET   &       &       &        &        &        &         &         \\\cline{2-9}
+          & CP    &       &       &        &        &        &         &         \\\cline{1-9}
 \marginnote{load}
-\nhex{2}  &  LB   &  LBU  &  LH   &  LHU   &  LW    &  LWU   &         &         \\\cline{2-9}
-          &  LBI  &  LBUI &  LHI  &  LHUI  &  LWI   &  LWUI  &         &         \\\cline{1-9}
+\nhex{2}  &  LB   &       &       &        &  LW    &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
 \marginnote{store}
-\nhex{3}  &  SB   &  SBU  &  SH   &  SHU   &  SW    &  SWU   &         &         \\\cline{2-9}
-          &  SBI  &  SBUI &  SHI  &  SHUI  &  SWI   &  SWUI  &         &         \\\cline{1-9}
+\nhex{3}  &  SB   &       &       &        &  SW    &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
 \marginnote{push/pop}
-\nhex{4}  & PUSHB & PUSHH & PUSH  &        &        &        &         &         \\\cline{2-9}
-          & POPB  & POPH  &  POP  &        &        &        &         &         \\\hline\hline
+\nhex{4}  &       &       & PUSH  &        &        &        &         &         \\\cline{2-9}
+          &       &       &  POP  &        &        &        &         &         \\\hline\hline
 \marginnote{add}
-\nhex{5}  &  ADD  & ADDU  & ADDI  & ADDIU  &        &        &         &         \\\cline{2-9}
+\nhex{5}  &  ADD  & ADDU  & ADDI  &        &        &        &         &         \\\cline{2-9}
 \marginnote{sub}
-          &  SUB  & SUBU  & SUBI  & SUBIU  &        &        &         &         \\\cline{1-9}
+          &  SUB  & SUBU  & SUBI  &        &        &        &         &         \\\cline{1-9}
 \marginnote{mult}
-\nhex{6}  &  MUL  & MULU  & MULI  & MULIU  &  MULD  &        &         &         \\\cline{2-9}
+\nhex{6}  &  MUL  & MULU  & MULI  &        &        &        &         &         \\\cline{2-9}
 \marginnote{div}
-          &  DIV  & DIVU  & DIVI  & DIVIU  &  DIVD  &        &         &         \\\cline{1-9}
+          &  DIV  & DIVU  & DIVI  &        &        &        &         &         \\\cline{1-9}
 \marginnote{mod}
 \nhex{7}  &  MOD  &       & MODI  &        &        &        &         &         \\\cline{2-9}
 \marginnote{unary}
@@ -47,19 +46,19 @@
 \marginnote{rotate}
           &  ROTL & ROTLI &  ROTR &  ROTRI &        &        &         &         \\\hline\hline
 \marginnote{compare}
-\nhex{B}  &  CMP  & CMPU  & CMPI  & CMPIU  &        &        &         &         \\\cline{2-9}
+\nhex{B}  &  CMP  & CMPU  & CMPI  &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
 \nhex{C}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
 \marginnote{branch}
 \nhex{D}  &  BE   &  BNE  &  BL   &  BLE   &  BG    &  BGE   &         &         \\\cline{2-9}
-          &  JMP  & JMPR  &       &        &        &        &         &  GO     \\\hline\hline
+          &  JMP  &       &       &        &        &        &         &  GO     \\\hline\hline
 \marginnote{call}
 \nhex{E}  &  CALL &  RET  &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
 \marginnote{syscall}
-\nhex{F}  &  WAKE &       &       &        &        &        &         &         \\\cline{2-9}
-          &  KILL &       &       &        &        &        &         &         \\\hline\hline
+\nhex{F}  &  INT  &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
           &   8   &   9   &   A   &   B    &   C    &   D    &    E    &    F    \\\hline
 \bottomrule
 \end{tabular}

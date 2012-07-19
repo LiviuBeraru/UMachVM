@@ -57,17 +57,6 @@ Beispiel:
 
 
 
-\opdef{ADDIU}{$X,Y \in \Reg$, $N\in\mathds{N}$}{0x53}{RRN}
-\glqq Add Unsigned Immediate\grqq.
-Vorzeichenlose Addition des ganzzahligen Wertes $N$ zum Inhalt des Registers $Y$
-und speichern des Ergebnisses in das Register $X$.
-Der Inhalt des Registers $Y$, die Zahl $N$ und das Ergebnis $Y + N$ werden als
-vorzeichenlose Werte interpretiert.
-Die Feste natürliche Zahl $N$ kann Werte aus dem Bereich $[0, 255]$ aufnehmen.
-Wird eine größere Zahl angegeben, so wird sie modulo $256$ berechnet.
-
-
-
 \opdef{SUB}{$X, Y, Z \in \Reg$}{0x58}{RRR}
 Subtrahiert die Registerinhalte von $Y$ und $Z$ und speichert das Ergebnis in
 das Register $X$. Entspricht dem Ausdruck
@@ -97,12 +86,6 @@ zugleich einen Fehler.
   SUBI R2 R1 30  # $R2 \gets (R1 - 30) = 20$
   SUBI R2 R1 R1  # Fehler! da $R1 \not\in \mathds{Z}$
 \end{lstlisting}
-
-
-\opdef{SUBIU}{$X, Y \in \Reg$, $N\in\mathds{N}$}{0x5B}{RRN}
-\glqq Subtract Immediate Unsigned\grqq.
-Funktioniert wie die Instruktion \opref{SUBI} mit dem Unterschied, dass
-\opref{SUBIU} ausschliesslich mit vorzeichenlosen Werten arbeitet. 
 
 
 
@@ -141,10 +124,6 @@ Falls das Ergebnis der Multiplikation gänzlich in den 32 Bit des Registers
               # LO = 0xE38E38E4 
   COPY R2 LO  # $R1^{2} \bmod 2^{32}$ 
 \end{lstlisting}
-Falls es bekannt ist, dass das Ergebnis der Multiplikation sich mit 32 Bit
-darstellen lässt, kann man den Weg über die \texttt{LO} und \texttt{HI} Register
-mit der Instruktion \opref{MULD} umgehen.
-
 
 
 
@@ -163,32 +142,6 @@ einziges $64$-Register betrachtet werden: \texttt{HI} enthält die ersten $32$
 Bits (die höchstwertigen) und \texttt{LO} die letzten 32 Bits (die
 niedrigstwertigen).
 Siehe auch die Instruktion \opref{MUL}.
-
-
-\opdef{MULIU}{$X \in \Reg$, $N\in\mathds{N}$}{0x63}{RNN}
-\glqq Multiply Immediate Unsigned\grqq.
-Funktioniert wie die Instruktion \opref{MULI} mit dem Unterschied, dass sowohl
-die Operanden $X$ und $N$ als auch das Ergebnis vorzeichenlos sind.
-
-
-\opdef{MULD}{$X, Y, Z \in \Reg$}{0x64}{RRR}
-\glqq Multiply Direct\grqq.
-Multipliziert die Inhalte der Register $Y$ und $Z$ und speichert die
-niedrigstwertigen 32 Bits des Ergebnisses in das Register $X$. Anders wie bei
-der Instruktion \opref{MUL}, werden die Register \texttt{HI} und \texttt{LO}
-nicht verändert.
-
-\texttt{MULD} entspricht der Instruktionen:
-\begin{lstlisting}
-  MUL  Y Z
-  COPY X LO
-\end{lstlisting}
-wobei der alte Wert von \texttt{LO} erhalten bleibt.
-
-Algebraisch geschrieben:
-\[
-    X \gets (Y \cdot Z) \bmod 2^{32}
-\]
 
 
 
@@ -210,9 +163,6 @@ $\lfloor x \rfloor$ bedeutet in diesem Kontext, dass $x$ auf die betragsmässig
 nächstkleinste ganze Zahl gerundet wird, oder die Nachkommastellen von $x$
 werden abgeschnitten.
 
-Um den Weg über die Register \texttt{HI} und \texttt{LO} zu umgehen, dafür aber
-den Rest der Division zu verlieren, kann man die Instruktion \opref{DIVD}
-verwenden.
 
 \paragraph{Beispiel}
 Der folgende Code demonstriert die Verwendung von \texttt{DIV}.
@@ -252,44 +202,12 @@ Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
 
 
 
-\opdef{DIVIU}{$X \in \Reg$, $N\in\mathds{N}_{\setminus 0}$}{0x6B}{RNN}
-\glqq Divide Immediate Unsigned\grqq.
-Analog zur Instruktion \opref{DIVI} mit dem Unterschied, dass $X$ und $N$
-vorzeichenlose Werte haben. Insbesondere nimmt $N$ Werte aus dem Intervall
-$[1, 2^{16}-1]$.
-
-
-
-\opdef{DIVD}{$X, Y, Z \in \Reg$}{0x6C}{RRR}
-\glqq Divide direct\grqq.
-Dividiert ganzzahlig den Inhalt des Registers $Y$ durch den Inhalt des Registers
-$Z$ und speichert den Quotient in das Register $X$. Die Spezialregister
-\texttt{HI} und \texttt{LO} werden nicht verändert.
-Entspricht den Instruktionen:
-\begin{lstlisting}
-  DIV  Y  Z
-  COPY X HI
-\end{lstlisting}
-Algebraische Schreibweise:
-\[
-    X \gets \left\lfloor \frac{Y}{Z}  \right\rfloor
-\]
-
-\paragraph{Beispiel}
-für die Verwendung der Instruktion \texttt{DIVD}:
-\begin{lstlisting}
-  SET  R1 10    # $R1 \gets 10$
-  SET  R2  3    # $R2 \gets 3$
-  DIVD R3 R1 R2 # $R3 \gets \lfloor 10/3 \rfloor = 3$
-  MOD  R4 R1 R3 # $R4 \gets ( 10 \bmod 3 ) = 1$
-\end{lstlisting}
-
 
 
 \opdef{MOD}{$X, Y, Z \in \Reg$}{0x70}{RRR}
 Modulo Operation.
 Berechnet den Rest der Division $Y/Z$ und speichert den Rest in das Register
-$X$.
+$X$. Dabei ist das Ergebnis immer positiv.
 Äquivalent zu den Instruktionen:
 \begin{lstlisting}
   DIVU Y Z

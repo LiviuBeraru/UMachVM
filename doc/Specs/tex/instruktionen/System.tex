@@ -1,14 +1,8 @@
 \section{Systeminstruktionen}
 
-\opdef{WAKE}{$N \in \mathds{N}$}{0xF0}{NNN}
+\opdef{INT}{$N \in \mathds{N}$}{0xF0}{NNN}
+\glqq Interrupt\grqq.
 Ruft das Betriebssystem auf, eine Aktion zu unternehmen. 
 Die Aktion wird als numerischer Code angegeben und ist systemspezifisch.
 Vergleichbar mit einem \glqq syscall\grqq.\index{syscall}
-
-
-
-\opdef{KILL}{keine}{0xF8}{000}
-\glqq Kill OS\grqq.
-Schaltet die Auswirkung des \nameref{opcode:WAKE}-Befehls aus.
-Damit wird praktisch das Betriebssystem ausgeschaltet.
 

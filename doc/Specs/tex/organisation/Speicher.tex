@@ -55,38 +55,6 @@ entsprechend geladen werden müssen.
 
 Die Register $R$, $B$ und $I$ stehen für beliebige Register.
 
-\subsection{Datentypen}
-\label{subsec:Datentypen}
-\index{Datentypen}
-
-Ein Datentyp im Kontext der UMach Maschine ist ein fester Wertebereich, der von
-der Maschine in einer einzigen Instruktion angesprochen werden kann.
-
-Die UMach Maschine kennt 3 Datentypen, die sich lediglich in der Anzahl der 
-verwendeten Bytes unterscheiden.
-Die Tabelle \ref{tab:Wertebereiche-Datentypen} auf der Seite 
-\pageref{tab:Wertebereiche-Datentypen} gibt eine Übersicht der Wertebereiche der
-einzelnen Datentypen.
-
-\begin{table}
-  \centering
-  \begin{tabular}{lclrlr}                                         \toprule
-    Name & Bits & \multicolumn{2}{c}{Vorzeichenbehaftet}
-                & \multicolumn{2}{c}{Vorzeichenlos}             \\\cmidrule{3-6}
-         &      & Min       &   Max       & Min   & Max         \\\midrule
-    Byte &  8   & $-128$    & $127$       & $0$   & $255$       \\
-    Half & 16   & $-2^{15}$ & $2^{15}-1$  & $0$   & $2^{16}-1$  \\
-    Word & 32   & $-2^{31}$ & $2^{31}-1$  & $0$   & $2^{32}-1$  \\\bottomrule
-  \end{tabular}
-  \caption{Wertebereiche der UMach Datentypen}
-  \label{tab:Wertebereiche-Datentypen}
-\end{table}
-
-Die Einteilung dieser Datentypen wirkt sich auf die Gestaltung mancher
-Maschinen-Instruktionen, die mit verschiedenen Datentypen arbeiten.
-Z.B. \opref{PUSHB} arbeitet mit dem Datentyp \glqq Byte\grqq, \opref{PUSHH}
-arbeitet mit dem Datentyp \glqq Half\grqq.
-
 
 
 \subsection{Der Stack}

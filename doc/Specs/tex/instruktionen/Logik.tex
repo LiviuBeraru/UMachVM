@@ -152,6 +152,8 @@ Verschiebt die Bits aus dem Register $Y$ $Z$ Stellen nach links und speichert
 das Ergebnis in das Register $X$.
 Auf der rechten Seite wird $X$ mit Nullen aufgefüllt.
 
+Die Stellenangabe in $Z$ muss positiv sein.
+
 Andere Schreibweise:
 \[
     X \gets Y << Z
@@ -170,6 +172,8 @@ Verschiebt die Bits im Register $Y$ $N$ Stellen nach links und speichert das
 Ergebnis in das Register $X$.
 $N$ ist eine positive Zahl im Bereich $[0, 255]$.
 Anstelle der nach links verschobenen Bits werden Nullen aufgefüllt.
+
+$N$ muss positiv sein.
 
 
 

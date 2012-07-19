@@ -114,13 +114,4 @@ gleich $0$ ist.
 \glqq Jump\grqq.
 Überspringt $N$ Instruktionen.
 
-\opdef{JMPR}{$X \in \Reg$}{0xD9}{R00}
-\glqq Jump Register\grqq.
-Überspringt $X$ Instruktionen. $X$ ist ein Register.
-
-
-\opdef{GO}{$N \in \mathds{N}$}{0xDF}{NNN}
-Setzt $PC$ auf die angegebene absolute Adresse. Hierbei ist zu beachten,  dass
-nicht in die Mitte eines Befehles gesprungen wird. Dies zu gewährleisten liegt
-in der Verantwortung des Programmierers.
 

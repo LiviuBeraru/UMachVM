@@ -9,7 +9,7 @@ berechnet:
 werden zwei Werte $x$ und $y$ vergliechen, so wird das Register \texttt{CMP}
 wie folgt gesetzt:
 \[
-    CMP \gets
+    CMPR \gets
     \begin{cases}
         -1 & \text{ falls } x < y  \\
      \pm 0 & \text{ falls } x = y  \\
@@ -35,11 +35,4 @@ Vergleicht $X$ mit angegebenen festen Wert $N$.
 Dabei nimmt $N$ Werte aus dem Intervall
 $[-2^{15}, 2^{15}-1]$, entsprechend dem Datentyp \glqq Half\grqq.
 
-
-\opdef{CMPIU}{$X \in \Reg$, $N \in \mathds{N}$}{0xB3}{RNN}
-\glqq Compare Immediate Unsigned\grqq.
-Vergleicht, wie \opref{CMPI} auch, $X$ mit angegebenen Wert $N$ und setzt
-entsprechend das Register \texttt{CMP}.
-Der Unterschied ist, dass $X$ und $N$ als vorzeichenlos betrachtet werden.
-$N$ hat den Datentyp \glqq Half\grqq.
 
