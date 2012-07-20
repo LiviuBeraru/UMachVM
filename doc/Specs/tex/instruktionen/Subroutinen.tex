@@ -1,14 +1,14 @@
 \section{Unterprogramminstruktionen}
 
-\opdef{GO}{$X \in \Reg$}{0xE0}{R00}
+\opdef{GO}{$X \in \Reg$}{0x90}{R00}
 Setzt $PC$ auf die angegebene absolute Adresse. Hierbei ist zu beachten,  dass
 nicht in die Mitte eines Befehles gesprungen wird. Dies zu gewährleisten liegt
 in der Verantwortung des Programmierers.
 
 
-\opdef{CALL}{$N \in \mathds{N}$}{0xE1}{NNN}
+\opdef{CALL}{$N \in \mathds{N}$}{0x91}{NNN}
 
 
-\opdef{RET}{keine}{0xE2}{000}
+\opdef{RET}{keine}{0x92}{000}
 
 

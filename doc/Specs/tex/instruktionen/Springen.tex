@@ -28,7 +28,7 @@ Spezialregister \texttt{CMP} und verzweigen die Programmausführung anhand seine
 Wertes.
 
 
-\opdef{BE}{$N \in \mathds{Z}$}{0xD0}{NNN}
+\opdef{BE}{$N \in \mathds{Z}$}{0x80}{NNN}
 \glqq Branch Equal\grqq.
 Wenn das Register \texttt{CMP} den Wert $0$ hat, wird über $N$ Instruktionen
 vorwärts oder rückwärts gesprungen. Ein negatives $N$ bedeutet einen Sprung
@@ -81,36 +81,36 @@ finish:
 
 
 
-\opdef{BNE}{$N \in \mathds{Z}$}{0xD1}{NNN}
+\opdef{BNE}{$N \in \mathds{Z}$}{0x81}{NNN}
 \glqq Branch Not Equal \grqq.
 Entspricht dem Verhalten von \opref{BE} mit dem Unterschied, dass der angegebene
 Übersprung ausgeführt wird, wenn \texttt{CMP} nicht $0$ ist.
 
 
-\opdef{BL}{$N \in \mathds{Z}$}{0xD2}{NNN}
+\opdef{BL}{$N \in \mathds{Z}$}{0x82}{NNN}
 \glqq Branch Less\grqq. 
 Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} kleiner $0$ ist.
 
 
-\opdef{BLE}{$N \in \mathds{Z}$}{0xD3}{NNN}
+\opdef{BLE}{$N \in \mathds{Z}$}{0x83}{NNN}
 \glqq Branch Less Equal\grqq.
 Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} kleiner oder
 gleich $0$ ist.
 
 
-\opdef{BG}{$N \in \mathds{Z}$}{0xD4}{NNN}
+\opdef{BG}{$N \in \mathds{Z}$}{0x84}{NNN}
 \glqq Branch Greater\grqq.
 Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} größer als
 $0$ ist.
 
 
-\opdef{BGE}{$N \in \mathds{Z}$}{0xD5}{NNN}
+\opdef{BGE}{$N \in \mathds{Z}$}{0x85}{NNN}
 \glqq Branch Greater Equal\grqq. 
 Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} größer oder
 gleich $0$ ist.
 
 
-\opdef{JMP}{$N \in \mathds{N}$}{0xD8}{NNN}
+\opdef{JMP}{$N \in \mathds{N}$}{0x88}{NNN}
 \glqq Jump\grqq.
 Überspringt $N$ Instruktionen.
 
