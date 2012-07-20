@@ -1,23 +1,31 @@
 \section{Aufbau}
 \index{UMach!Aufbau}
 \label{sec:Aufbau}
-Die virtuelle Maschine besteht aus einem Kern und einer IO Einheit.
 
-Der Kern der Maschine besteht aus den folgenden Komponenten:
-
+Die virtuelle UMach Maschine hat eine einfache Konstruktion, die im
+wesentlichen aus den folgenden Komponenten besteht:
 \begin{enumerate}
-  \item Befehlsabruf Einheit (Instruction Fetch Unit)
-  \item Decodierungseinheit
-  \item Recheneinheit
-  \item Register
+ \item Kern (Abschnitt \ref{sec:Kern})
+ \item Speicher (\ref{sec:Speicher})
+ \item IO Einheit (Abschnitt \ref{sec:IO-Einheit})
 \end{enumerate}
 
-Die Decodierungseinheit ist dafür zuständig, eine abgerufene Instruktion zu
-decodieren, bzw. in ihren Komponenten zu zerteilen.
+Siehe auch die Abbildung \ref{fig:umach-aufbau} auf der Seite
+\pageref{fig:umach-aufbau}, die die UMach Maschine darstellt.
 
-Die Recheneinheit ist für die tatsächliche Ausführung der Instruktionen
-zuständig. 
+\begin{figure}[htp]
+ \centering
+ \includegraphics{./img/UMach-Aufbau.pdf}
+ \caption{Aufbau der UMach Maschine}
+ \label{fig:umach-aufbau}
+\end{figure}
 
-Die Register sind die Speichereinheiten, die sich in der Maschine befinden.
+Wenn die Maschine startet, sucht sie nach einem Program im Speicher, holt jede
+Instruktion nach einander in den Kern und führt sie aus. Danach bleibt sie im
+Wartezustand bis sie ausdrücklich ausgeschaltet wird. Alle Eingabe- und
+Ausgabeoperationen werden an die IO-Einheit weitergeleitet (siehe auch die
+Abschnitte \ref{sec:IO-Einheit} und \ref{sec:IO-Instruktionen}).
 
 
+\input{organisation/Betriebsmodi}
+\input{organisation/Neumann-Zyklus}
