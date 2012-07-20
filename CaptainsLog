@@ -264,6 +264,8 @@ Malk.
 Noch zu tun:
 - Beschreibung der Speicherstruktur (Interrupt table etc): Abschnitt
   Speicher in organization/Speicher.
+- Speicher: Abschnitt über den Speicher muss überarbeitet werden, weil
+  es kein Bus mehr gibt und dort wird immer der Bus erwähnt.
 - Beschreibung der IO-Instruktionen im Instruktionen Abschnitt und
   auch eine Beschreibung, wie IO funktioniert (Abschnitt IO im Kapitel
   Organisation).
