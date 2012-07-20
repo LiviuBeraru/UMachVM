@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="UMach-IO.svg">
+   sodipodi:docname="UMach-Aufbau.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -22,9 +22,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="203.86689"
-     inkscape:cy="207.33498"
+     inkscape:zoom="1.2973621"
+     inkscape:cx="231.5"
+     inkscape:cy="207.72921"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -487,7 +487,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -498,7 +498,7 @@
      transform="translate(-115.5,-561.86214)">
     <g
        id="g4161"
-       transform="translate(13.750473,4.6077348)">
+       transform="translate(9.750473,4.6077348)">
       <rect
          ry="0"
          y="571.88245"
@@ -524,260 +524,77 @@
        id="rect3124"
        width="236.634"
        height="228.92606"
-       x="232.15155"
+       x="228.15155"
        y="702.315"
        ry="13.059702" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-       id="rect5271"
-       width="47.480202"
-       height="131.59518"
-       x="428.08203"
-       y="747.59094"
-       ry="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-       d="m 411.35635,702.315 0,-70.32759"
+       d="m 407.35635,702.315 0,-70.32759"
        id="path4189"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-       d="m 173.55801,70.125268 0,70.327592"
+       d="m 285.05801,631.98741 0,70.32759"
        id="path4191"
-       inkscape:connector-curvature="0"
-       transform="translate(115.5,561.86214)" />
+       inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="415.27347"
+       x="411.27347"
        y="669.82349"
        id="text4685"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4687"
-         x="415.27347"
+         x="411.27347"
          y="669.82349">store</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="254.87018"
+       x="250.87018"
        y="669.82349"
        id="text4689"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4691"
-         x="254.87018"
+         x="250.87018"
          y="669.82349">load</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="290.50275"
+       x="286.50275"
        y="738.76624"
        id="text4693"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4695"
-         x="290.50275"
+         x="286.50275"
          y="738.76624">UMach Kern</tspan></text>
-    <g
-       id="g5224"
-       transform="translate(-8,0)">
-      <g
-         transform="translate(-37.507402,84.663594)"
-         id="g4116">
-        <rect
-           ry="0"
-           y="-567.57117"
-           x="676.32513"
-           height="84.01664"
-           width="12.332717"
-           id="rect4098"
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-           transform="matrix(0,1,-1,0,0,0)" />
-        <text
-           xml:space="preserve"
-           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-           x="489.74741"
-           y="685.53839"
-           id="text4104"
-           sodipodi:linespacing="125%"><tspan
-             sodipodi:role="line"
-             id="tspan4106"
-             x="489.74741"
-             y="685.53839">out port 0</tspan></text>
-      </g>
-      <path
-         transform="translate(115.5,561.86214)"
-         inkscape:connector-curvature="0"
-         id="path4947"
-         d="m 414.56377,205.29295 35.46965,0"
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
-    </g>
-    <g
-       id="g5231"
-       transform="translate(-8,0)">
-      <g
-         transform="translate(-37.507402,131.6636)"
-         id="g4145">
-        <rect
-           ry="0"
-           y="-567.57117"
-           x="676.32513"
-           height="84.01664"
-           width="12.332717"
-           id="rect4147"
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-           transform="matrix(0,1,-1,0,0,0)" />
-        <text
-           xml:space="preserve"
-           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-           x="489.74741"
-           y="685.53839"
-           id="text4149"
-           sodipodi:linespacing="125%"><tspan
-             sodipodi:role="line"
-             id="tspan4151"
-             x="489.74741"
-             y="685.53839">out port 1</tspan></text>
-      </g>
-      <path
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-         d="m 530.06377,814.15509 35.46965,0"
-         id="path5195"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       id="g5238"
-       transform="translate(-8,0)">
-      <g
-         id="g4137"
-         transform="translate(-37.507402,178.66359)">
-        <rect
-           transform="matrix(0,1,-1,0,0,0)"
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-           id="rect4139"
-           width="12.332717"
-           height="84.01664"
-           x="676.32513"
-           y="-567.57117"
-           ry="0" />
-        <text
-           sodipodi:linespacing="125%"
-           id="text4141"
-           y="685.53839"
-           x="489.74741"
-           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-           xml:space="preserve"><tspan
-             y="685.53839"
-             x="489.74741"
-             id="tspan4143"
-             sodipodi:role="line">out port 2</tspan></text>
-      </g>
-      <path
-         inkscape:connector-curvature="0"
-         id="path5197"
-         d="m 530.06377,861.15508 35.46965,0"
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
-    </g>
-    <rect
-       ry="0"
-       y="747.59094"
-       x="225.08203"
-       height="131.59518"
-       width="47.480202"
-       id="rect5391"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0" />
-    <g
-       id="g5245"
-       transform="translate(10,0)">
-      <g
-         transform="translate(-312.68116,-17.475988)"
-         id="g4132">
-        <rect
-           transform="matrix(0,1,-1,0,0,0)"
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-           id="rect4123"
-           width="12.332717"
-           height="84.01664"
-           x="801.96472"
-           y="-560.63403"
-           ry="0" />
-        <text
-           sodipodi:linespacing="125%"
-           id="text4125"
-           y="811.17798"
-           x="486.24387"
-           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-           xml:space="preserve"><tspan
-             y="811.17798"
-             x="486.24387"
-             sodipodi:role="line"
-             id="tspan5263">port 0 in</tspan></text>
-      </g>
-      <path
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-         d="m 128.46658,790.65509 35.46965,0"
-         id="path5199"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       id="g5252"
-       transform="translate(10,0)">
-      <g
-         id="g4153"
-         transform="translate(-312.68116,29.524012)">
-        <rect
-           ry="0"
-           y="-560.63403"
-           x="801.96472"
-           height="84.01664"
-           width="12.332717"
-           id="rect4155"
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-           transform="matrix(0,1,-1,0,0,0)" />
-        <text
-           xml:space="preserve"
-           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-           x="486.24387"
-           y="811.17798"
-           id="text4157"
-           sodipodi:linespacing="125%"><tspan
-             sodipodi:role="line"
-             id="tspan4159"
-             x="486.24387"
-             y="811.17798">port 1 in</tspan></text>
-      </g>
-      <path
-         inkscape:connector-curvature="0"
-         id="path5201"
-         d="m 128.46658,837.65509 35.46965,0"
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
-    </g>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="231.62584"
-       y="817.49011"
+       x="252.08514"
+       y="820.87958"
        id="text5275"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="231.62584"
-         y="817.49011"
-         id="tspan5279">IO in</tspan></text>
+         x="252.08514"
+         y="820.87958"
+         id="tspan5279">I/O in</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="430.19226"
-       y="799.49011"
+       x="390.69479"
+       y="820.87958"
        id="text5281"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="430.19226"
-         y="799.49011"
-         id="tspan5285">IO out</tspan></text>
+         x="390.69479"
+         y="820.87958"
+         id="tspan5285">I/O out</tspan></text>
     <g
        id="g5461"
-       transform="translate(-42.315491,-91.940063)">
+       transform="translate(-46.315491,-91.940063)">
       <rect
          y="991.63684"
          x="291.99622"
@@ -944,13 +761,278 @@
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="321.69611"
+       x="317.69611"
        y="891.7699"
        id="text5393"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5395"
-         x="321.69611"
+         x="317.69611"
          y="891.7699">Register</tspan></text>
+    <g
+       id="g4157"
+       transform="translate(16.703522,3.3894958)">
+      <rect
+         ry="0"
+         y="747.59094"
+         x="428.08203"
+         height="131.59518"
+         width="47.480202"
+         id="rect5271"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0" />
+      <g
+         transform="translate(0,-8)"
+         id="g3143">
+        <rect
+           ry="0"
+           y="-522.18878"
+           x="758.73871"
+           height="84.39164"
+           width="17.207716"
+           id="rect4098"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           transform="matrix(0,1,-1,0,0,0)" />
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           x="443.72049"
+           y="770.38947"
+           id="text4104"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4106"
+             x="443.72049"
+             y="770.38947">out port 0</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+           d="m 522.06377,767.34257 35.46965,0"
+           id="path4947"
+           inkscape:connector-curvature="0" />
+      </g>
+      <g
+         transform="translate(0,99.429783)"
+         id="g3149">
+        <rect
+           transform="matrix(0,1,-1,0,0,0)"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3151"
+           width="17.207716"
+           height="84.39164"
+           x="758.73871"
+           y="-522.18878"
+           ry="0" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text3153"
+           y="770.38947"
+           x="443.72049"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           xml:space="preserve"><tspan
+             y="770.38947"
+             x="443.72049"
+             id="tspan3155"
+             sodipodi:role="line">out port 7</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path3157"
+           d="m 522.06377,767.34257 35.46965,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+      </g>
+      <g
+         transform="translate(0,19.809933)"
+         id="g3159">
+        <rect
+           transform="matrix(0,1,-1,0,0,0)"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3161"
+           width="17.207716"
+           height="84.39164"
+           x="758.73871"
+           y="-522.18878"
+           ry="0" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text3163"
+           y="770.38947"
+           x="443.72049"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           xml:space="preserve"><tspan
+             y="770.38947"
+             x="443.72049"
+             id="tspan3165"
+             sodipodi:role="line">out port 1</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path3167"
+           d="m 522.06377,767.34257 35.46965,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+      </g>
+      <g
+         id="g3169"
+         transform="translate(0,47.61985)">
+        <rect
+           ry="0"
+           y="-522.18878"
+           x="758.73871"
+           height="84.39164"
+           width="17.207716"
+           id="rect3171"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           transform="matrix(0,1,-1,0,0,0)" />
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           x="443.72049"
+           y="770.38947"
+           id="text3173"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3175"
+             x="443.72049"
+             y="770.38947">out port 2</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+           d="m 522.06377,767.34257 35.46965,0"
+           id="path3177"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 3;stroke-dashoffset:0"
+       d="m 473.41773,829.7614 0,26"
+       id="path3179"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g4286"
+       transform="translate(-4,3.0517578e-5)">
+      <rect
+         transform="scale(-1,1)"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect4182"
+         width="47.480202"
+         height="131.59518"
+         x="-252.15155"
+         y="750.98041"
+         ry="0" />
+      <g
+         id="g4250">
+        <rect
+           transform="matrix(0,1,1,0,0,0)"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect4186"
+           width="17.207716"
+           height="84.39164"
+           x="754.12817"
+           y="158.0448"
+           ry="0" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text4188"
+           y="765.77893"
+           x="167.85878"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           xml:space="preserve"><tspan
+             y="765.77893"
+             x="167.85878"
+             id="tspan4190"
+             sodipodi:role="line">port 0 in</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path4192"
+           d="m 121.95016,762.73203 35.46965,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+      </g>
+      <g
+         id="g4280">
+        <rect
+           ry="0"
+           y="158.0448"
+           x="861.55798"
+           height="84.39164"
+           width="17.207716"
+           id="rect4196"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           transform="matrix(0,1,1,0,0,0)" />
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           x="167.85878"
+           y="873.20874"
+           id="text4198"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4200"
+             x="167.85878"
+             y="873.20874">port 7 in</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+           d="m 121.95016,870.16184 35.46965,0"
+           id="path4203"
+           inkscape:connector-curvature="0" />
+      </g>
+      <g
+         id="g4260">
+        <rect
+           ry="0"
+           y="158.0448"
+           x="781.93811"
+           height="84.39164"
+           width="17.207716"
+           id="rect4207"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           transform="matrix(0,1,1,0,0,0)" />
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           x="167.85878"
+           y="793.58887"
+           id="text4209"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4211"
+             x="167.85878"
+             y="793.58887">port 1 in</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+           d="m 121.95016,790.54197 35.46965,0"
+           id="path4213"
+           inkscape:connector-curvature="0" />
+      </g>
+      <g
+         id="g4270">
+        <rect
+           transform="matrix(0,1,1,0,0,0)"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect4217"
+           width="17.207716"
+           height="84.39164"
+           x="809.74805"
+           y="158.0448"
+           ry="0" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text4219"
+           y="821.3988"
+           x="167.85878"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
+           xml:space="preserve"><tspan
+             y="821.3988"
+             x="167.85878"
+             id="tspan4221"
+             sodipodi:role="line">port 2 in</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path4223"
+           d="m 121.95016,818.3519 35.46965,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+      </g>
+    </g>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path4309"
+       d="m 219.82623,830.53219 0,26"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 3;stroke-dashoffset:0" />
   </g>
 </svg>
