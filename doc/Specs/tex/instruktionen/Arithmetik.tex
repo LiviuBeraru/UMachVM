@@ -1,6 +1,6 @@
 \section{Arithmetische Instruktionen} 
 
-\opdef{ADD}{$X,Y,Z \in \Reg$}{0x50}{RRR}
+\opdef{ADD}{$X,Y,Z \in \Reg$}{0x30}{RRR}
 Vorzeichen behaftete Addition der Registerinhalte $Y$ und $Z$.
 Das Ergebnis der Addition wird in das Register $X$ gespeichert.
 Entspricht dem algebraischen Ausdruck
@@ -20,7 +20,7 @@ Beispiel:
 Vorzeichenlose Addition wird durch den Befehl \texttt{ADDU} ausgeführt.
 
 
-\opdef{ADDU}{$X,Y,Z \in \Reg$}{0x51}{RRR}
+\opdef{ADDU}{$X,Y,Z \in \Reg$}{0x31}{RRR}
 \glqq Add Unsigned\grqq.
 Vorzeichenlose Addition der Register $Y$ und $Z$. Das Ergebnis wird in das
 Register $X$ gespeichert. Enthält $Y$ oder $Z$ ein Vorzeichen (höchstwertiges
@@ -35,7 +35,7 @@ Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
 
 
 
-\opdef{ADDI}{$X,Y\in\Reg$, $N\in\mathds{Z}$}{0x52}{RRN}
+\opdef{ADDI}{$X,Y\in\Reg$, $N\in\mathds{Z}$}{0x32}{RRN}
 \glqq Add Immediate\grqq.
 Hinzuaddieren eines festen vorzeichenbehafteten ganzzahligen Wert $N$ zum Inhalt
 des Registers $Y$ und speichern des Ergebnisses in das Register $X$.
@@ -57,7 +57,7 @@ Beispiel:
 
 
 
-\opdef{SUB}{$X, Y, Z \in \Reg$}{0x58}{RRR}
+\opdef{SUB}{$X, Y, Z \in \Reg$}{0x33}{RRR}
 Subtrahiert die Registerinhalte von $Y$ und $Z$ und speichert das Ergebnis in
 das Register $X$. Entspricht dem Ausdruck
 \[
@@ -67,13 +67,14 @@ Wobei $X$, $Y$ und $Z$ Register sind.
 
 
 
-\opdef{SUBU}{$X, Y, Z \in \Reg$}{0x59}{RRR}
+\opdef{SUBU}{$X, Y, Z \in \Reg$}{0x34}{RRR}
 \glqq Subtract Unsigned\grqq.
 Analog zur Instruktion \opref{SUB} mit dem Unterschied, dass alle Werte und
 Operationen vorzeichenlos sind.
 
 
-\opdef{SUBI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x5A}{RRN}
+
+\opdef{SUBI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x35}{RRN}
 \glqq Subtract Immediate\grqq.
 Funktioniert wie \opref{SUB} aber $N$ ist eine direkt angegebene Zahl
 (kein Register).
@@ -89,7 +90,7 @@ zugleich einen Fehler.
 
 
 
-\opdef{MUL}{$X, Y \in \Reg$}{0x60}{RR0}
+\opdef{MUL}{$X, Y \in \Reg$}{0x38}{RR0}
 \glqq Multiply\grqq. 
 Multipliziert die Inhalte der Register $X$ und $Y$ und speichert das Ergebnis in
 die Spezialregister \texttt{HI} und \texttt{LO}. Diese zwei Spezialregister
@@ -127,14 +128,14 @@ Falls das Ergebnis der Multiplikation gänzlich in den 32 Bit des Registers
 
 
 
-\opdef{MULU}{$X, Y\in \Reg$}{0x61}{RR0}
+\opdef{MULU}{$X, Y\in \Reg$}{0x39}{RR0}
 \glqq Multiply Unsigned\grqq.
 Funktioniert wie die Instruktion \opref{MUL} mit dem Unterschied, dass die
 Multiplikationoperanden $X$ und $Y$ vorzeichenlos behandelt werden. 
 
 
 
-\opdef{MULI}{$X \in \Reg$, $N\in\mathds{Z}$}{0x62}{RNN}
+\opdef{MULI}{$X \in \Reg$, $N\in\mathds{Z}$}{0x3A}{RNN}
 \glqq Multiply Immediate\grqq.
 Multipliziert den Inhalt des Registers $X$ mit der ganzen Zahl $N$ und speichert
 das $64$-Bit Ergebnis in die Register \texttt{HI} und \texttt{LO}, die als ein
@@ -145,7 +146,7 @@ Siehe auch die Instruktion \opref{MUL}.
 
 
 
-\opdef{DIV}{$X, Y \in \Reg$}{0x68}{RR0}
+\opdef{DIV}{$X, Y \in \Reg$}{0x3B}{RR0}
 \glqq Divide\grqq, ganzzahlige Division.
 Dividiert den Inhalt des Registers $X$ durch den Inhalt des Registers $Y$ und
 speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
@@ -163,7 +164,6 @@ $\lfloor x \rfloor$ bedeutet in diesem Kontext, dass $x$ auf die betragsmässig
 nächstkleinste ganze Zahl gerundet wird, oder die Nachkommastellen von $x$
 werden abgeschnitten.
 
-
 \paragraph{Beispiel}
 Der folgende Code demonstriert die Verwendung von \texttt{DIV}.
 \begin{lstlisting}
@@ -174,7 +174,9 @@ Der folgende Code demonstriert die Verwendung von \texttt{DIV}.
 \end{lstlisting}
 
 
-\opdef{DIVU}{$X, Y \in \Reg$}{0x69}{RR0}
+
+
+\opdef{DIVU}{$X, Y \in \Reg$}{0x3C}{RR0}
 \glqq Divide Unsigned\grqq.
 Funktioniert wie \opref{DIV} mit dem Unterschied, dass ganzzahlige
 vorzeichenlose Division durchgeführt werden. Die Ergebnis-Register \texttt{HI}
@@ -182,7 +184,8 @@ und \texttt{LO} enthalten entsprechend vorzeichenlose Werte.
 
 
 
-\opdef{DIVI}{$X \in \Reg$, $N\in\mathds{Z}_{\setminus 0}$}{0x6A}{RNN}
+
+\opdef{DIVI}{$X \in \Reg$, $N\in\mathds{Z}_{\setminus 0}$}{0x3D}{RNN}
 \glqq Divide Immediate\grqq.
 Dividiert den Inhalt des Registers $X$ durch die feste ganze Zahl $N$ und
 speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
@@ -203,8 +206,53 @@ Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
 
 
 
+\opdef{ABS}{$X, Y \in \Reg$}{0x40}{RR0}
+\glqq Absolute\grqq.
+Speichert den absoluten Wert des Registers $Y$ in das Register $X$.
+Algebraisch ausgedrückt:
+\[
+    X \gets
+    \begin{cases}
+      Y            & \text{ falls } Y \geq 0 \\
+      (-1) \cdot Y & \text{ falls } Y < 0
+    \end{cases}
+\]
 
-\opdef{MOD}{$X, Y, Z \in \Reg$}{0x70}{RRR}
+
+
+\opdef{NEG}{$X, Y \in \Reg$}{0x41}{RR0}
+\glqq Negate\grqq.
+Wechselt das arithmetische Vorzeichen des Registers $Y$ und speichert das
+Ergebnis in das Register $X$. Entspricht der Zweierkomplement Bildung.
+Algebraische Schreibweise:
+\[
+    X \gets \big( (-1) \cdot Y \big)
+\]
+Um eine bitweise Inversion zu erreichen (Einerkomplement), siehe die
+Instruktion \opref{NOT}.
+
+
+
+\opdef{INC}{$X \in \Reg$}{0x42}{R00}
+\glqq Increment\grqq.
+Inkrementiert den Inhalt des Registers $X$.
+\[
+    X \gets ( X + 1 )
+\]
+
+
+
+\opdef{DEC}{$X \in \Reg$}{0x43}{R00}
+\glqq Decrement\grqq.
+Dekrementiert den Inhalt des Registers $X$.
+\[
+    X \gets ( X - 1 )
+\]
+
+
+
+
+\opdef{MOD}{$X, Y, Z \in \Reg$}{0x48}{RRR}
 Modulo Operation.
 Berechnet den Rest der Division $Y/Z$ und speichert den Rest in das Register
 $X$. Dabei ist das Ergebnis immer positiv.
@@ -226,7 +274,7 @@ oder
 \]
 
 
-\opdef{MODI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x72}{RRN}
+\opdef{MODI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x49}{RRN}
 \glqq Modulo Immediate\grqq. Analog zur Instruktion \opref{MOD}, berechnet
 \texttt{MODI} den Rest der ganzzahligen Division $Y / N$ und speichert ihn in
 das Register $X$. Der Unterschied liegt darin, dass $N$ eine fest angegebene
@@ -234,50 +282,4 @@ natürliche Zahl ist.
 \[
     X \gets Y \bmod N
 \]
-
-
-\opdef{ABS}{$X, Y \in \Reg$}{0x78}{RR0}
-\glqq Absolute\grqq.
-Speichert den absoluten Wert des Registers $Y$ in das Register $X$.
-Algebraisch ausgedrückt:
-\[
-    X \gets
-    \begin{cases}
-      Y            & \text{ falls } Y \geq 0 \\
-      (-1) \cdot Y & \text{ falls } Y < 0
-    \end{cases}
-\]
-
-
-
-\opdef{NEG}{$X, Y \in \Reg$}{0x80}{RR0}
-\glqq Negate\grqq.
-Wechselt das arithmetische Vorzeichen des Registers $Y$ und speichert das
-Ergebnis in das Register $X$. Entspricht der Zweierkomplement Bildung.
-Algebraische Schreibweise:
-\[
-    X \gets \big( (-1) \cdot Y \big)
-\]
-Um eine bitweise Inversion zu erreichen (Einerkomplement), siehe die
-Instruktion \opref{NOT}.
-
-
-
-\opdef{INC}{$X \in \Reg$}{0x81}{R00}
-\glqq Increment\grqq.
-Inkrementiert den Inhalt des Registers $X$.
-\[
-    X \gets ( X + 1 )
-\]
-
-
-
-\opdef{DEC}{$X \in \Reg$}{0x82}{R00}
-\glqq Decrement\grqq.
-Dekrementiert den Inhalt des Registers $X$.
-\[
-    X \gets ( X - 1 )
-\]
-
-
 

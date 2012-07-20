@@ -1,6 +1,6 @@
 \section{Logische Instruktionen}
 
-\opdef{AND}{$X, Y, Z \in \Reg$}{0x90}{RRR}
+\opdef{AND}{$X, Y, Z \in \Reg$}{0x50}{RRR}
 Berechnet bitweise $Y \land Z$ (und-Verknüpfung) und speichert das Ergebnis in
 das Register $X$.
 \[
@@ -8,7 +8,7 @@ das Register $X$.
 \]
 
 
-\opdef{ANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x91}{RRN}
+\opdef{ANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x51}{RRN}
 \glqq And Immediate\grqq.
 Berechnet bitweise $Y \land N$ (und-Verknüpfung) und speichert das Ergebnis in
 das Register $X$. $N$ ist dabei eine feste Zahl aus dem Bereich $[0, 255]$.
@@ -33,7 +33,7 @@ für die Verwendung von \texttt{ANDI}:
 
 
 
-\opdef{OR}{$X, Y, Z \in \Reg$}{0x92}{RRR}
+\opdef{OR}{$X, Y, Z \in \Reg$}{0x52}{RRR}
 Berechnet bitweise $Y \lor Z$ (oder-Verknüpfung) und speichert das Ergebnis
 in das Register $X$.
 \[
@@ -41,7 +41,7 @@ in das Register $X$.
 \]
 
 
-\opdef{ORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x93}{RRN}
+\opdef{ORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x53}{RRN}
 \glqq Or Immediate\grqq.
 Berechnet wie \opref{OR} ein bitweises \glqq oder\grqq zwischen $Y$ und $N$ und
 speichert das Ergebnis in das Register $X$. Dabei wird die natürliche Zahl 
@@ -54,7 +54,7 @@ berechnet.
 \]
 
 
-\opdef{XOR}{$X, Y, Z \in \Reg$}{0x94}{RRR}
+\opdef{XOR}{$X, Y, Z \in \Reg$}{0x54}{RRR}
 Berechnet bitweise $Y \oplus Z$ (xor-Verknüpfung) und speichert das Ergebnis in
 das Register $X$.
 \[
@@ -62,7 +62,7 @@ das Register $X$.
 \]
 
 
-\opdef{XORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x95}{RRN}
+\opdef{XORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x55}{RRN}
 \glqq Xor Immediate\grqq.
 Analog zur Instruktion \opref{XOR} mit dem Unterschied, dass $N$ eine direkt
 angegebene Zahl aus dem Intervall $[0, 255]$ ist.
@@ -71,7 +71,7 @@ angegebene Zahl aus dem Intervall $[0, 255]$ ist.
 \]
 
 
-\opdef{NOT}{$X, Y \in \Reg$}{0x96}{RR0}
+\opdef{NOT}{$X, Y \in \Reg$}{0x56}{RR0}
 Invertiert alle Bits aus dem Register $Y$ und speichert das Ergebnis in das
 Register $X$. Entspricht der Einerkomplement-Bildung.
 \[
@@ -87,7 +87,7 @@ Ergebnis in das Register $R1$.
 
 
 
-\opdef{NOTI}{$X\in \Reg$, $N \in \mathds{N}$}{0x97}{RNN}
+\opdef{NOTI}{$X\in \Reg$, $N \in \mathds{N}$}{0x57}{RNN}
 \glqq Not Immediate\grqq.
 Wie die Instruktion \opref{NOT} aber $N$ ist eine natürliche Zahl aus dem
 Intervall $[0, 2^{15}-1]$. Diese konstante Zahl nach links auf die Länge von 32
@@ -101,7 +101,7 @@ in das Register $R1$.
 \end{lstlisting}
 
 
-\opdef{NAND}{$X, Y, Z \in \Reg$}{0x98}{RRR}
+\opdef{NAND}{$X, Y, Z \in \Reg$}{0x58}{RRR}
 Berechnet $Y \overline{\land} Z$ (nand-Verknüpfung) und speichert das Ergebnis
 in das Register $X$. Gemäß dem Format \nameref{RRR} sind $X$, $Y$ und $Z$
 Register.
@@ -115,7 +115,7 @@ oder
 \]
 
 
-\opdef{NANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x99}{RRN}
+\opdef{NANDI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x59}{RRN}
 \glqq Nand Immediate\grqq.
 Berechnet eine nand-Verknüpfung zwischen dem Inhalt des Registers $Y$ und der
 konstanten Zahl $N$ und speichert das Ergebnis in das Register $X$.
@@ -125,7 +125,7 @@ $N \in [0, 255]$.
 \]
 
 
-\opdef{NOR}{$X, Y, Z \in \Reg$}{0x9A}{RRR}
+\opdef{NOR}{$X, Y, Z \in \Reg$}{0x5A}{RRR}
 Verknüpft bitweise die Inhalte der Register $Y$ und $Z$ mit der nor-Operation
 und speichert das Ergebnis in das Register $X$.
 \glqq nor\grqq\ ist die Negation von \glqq or\grqq.
@@ -138,7 +138,7 @@ und speichert das Ergebnis in das Register $X$.
 \end{lstlisting}
 
 
-\opdef{NORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x9B}{RRN}
+\opdef{NORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x5B}{RRN}
 \glqq Nor Immediate\grqq.
 Analog zur Instruktion \opref{NOR} mit dem Unterschied, dass $N$ eine konstante
 Zahl aus dem Bereich $[0, 255]$ ist. Diese Zahl wird modulo $256$ berechnet und
@@ -146,7 +146,7 @@ auf der linken Seite auf die Länge von 32 Bit mit Nullen aufgefüllt.
 
 
 
-\opdef{SHL}{$X, Y, Z \in \Reg$}{0xA0}{RRR}
+\opdef{SHL}{$X, Y, Z \in \Reg$}{0x60}{RRR}
 \glqq Shift Left\grqq.
 Verschiebt die Bits aus dem Register $Y$ $Z$ Stellen nach links und speichert
 das Ergebnis in das Register $X$.
@@ -166,7 +166,7 @@ oder
 
 
 
-\opdef{SHLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA1}{RRN}
+\opdef{SHLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x61}{RRN}
 \glqq Shift Left Immediate\grqq.
 Verschiebt die Bits im Register $Y$ $N$ Stellen nach links und speichert das
 Ergebnis in das Register $X$.
@@ -177,7 +177,7 @@ $N$ muss positiv sein.
 
 
 
-\opdef{SHR}{$X, Y, Z \in \Reg$}{0xA2}{RRR}
+\opdef{SHR}{$X, Y, Z \in \Reg$}{0x62}{RRR}
 \glqq Shift Right\grqq.
 Verschiebt die Bits aus dem Register $Y$ $Z$ Stellen nach rechts und speichert
 das Ergebnis in das Register $X$. 
@@ -202,7 +202,7 @@ Es wird praktisch $R3 \gets (5 \div 2)$ berechnet.
 \end{lstlisting}
 
 
-\opdef{SHRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA3}{RRN}
+\opdef{SHRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x63}{RRN}
 \glqq Shift Right Immediate\grqq.
 Das Bitmuster im Register $Y$ wird $N$ Stellen nach rechts verschoben und das
 Ergebnis in das Register $X$ gespeichert.
@@ -212,7 +212,7 @@ Siehe auch \nameref{opcode:SHRAI}.
 
 
 
-\opdef{SHRA}{$X, Y, Z \in \Reg$}{0xA4}{RRR}
+\opdef{SHRA}{$X, Y, Z \in \Reg$}{0x64}{RRR}
 \glqq Shift Right Arithmetical\grqq.
 Funktioniert wie die Instruktion \opref{SHR} mit dem Unterschied, dass auf der
 linken Seite nicht mit Nullen, sondern mit dem ersten (höchstwertigen) Bit
@@ -220,14 +220,14 @@ aufgefüllt wird. Dies führt dazu, dass das Vorzeichenbit in $Y$ erhalten
 bleibt.
 
 
-\opdef{SHRAI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA5}{RRN}
+\opdef{SHRAI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x65}{RRN}
 \glqq Shift Right Arithmetical Immediate\grqq.
 Wie \opref{SHRA}, $N$ ist aber eine natürliche Zahl aus dem Intervall
 $[0, 255]$.
 
 
 
-\opdef{ROTL}{$X, Y, Z \in \Reg$}{0xA8}{RRR}
+\opdef{ROTL}{$X, Y, Z \in \Reg$}{0x68}{RRR}
 \glqq Rotate Left\grqq.
 Die Bits aus dem Register $Y$ werden so viele Stellen nach links \glqq
 rotiert\grqq\ wie der Inhalt des Registers $Z$ und das Ergebnis in das Register
@@ -255,7 +255,7 @@ Der folgende Code zeigt ein Beispiel für die Verwendung dieser Instruktion.
 \end{lstlisting}
 
 
-\opdef{ROTLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xA9}{RRN}
+\opdef{ROTLI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x69}{RRN}
 \glqq Rotate Left Immediate\grqq.
 Wie \opref{ROTL} aber $N$ ist eine konstante Zahl aus dem Intervall $[0, 255]$.
 
@@ -268,7 +268,7 @@ Verwendung:
 
 
 
-\opdef{ROTR}{$X, Y, Z \in \Reg$}{0xAA}{RRR}
+\opdef{ROTR}{$X, Y, Z \in \Reg$}{0x6A}{RRR}
 \glqq Rotate Right\grqq.
 Funktioniert genauso wie die Instruktion \opref{ROTL} mit dem Unterschied, dass
 die Rotationen (Verschiebungen) nach rechts geführt werden.
@@ -277,7 +277,7 @@ die Rotationen (Verschiebungen) nach rechts geführt werden.
 \]
 
 
-\opdef{ROTRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0xAB}{RRN}
+\opdef{ROTRI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x6B}{RRN}
 \glqq Rotate Right Immediate\grqq.
 Funktioniert genauso wie \opref{ROTLI}, nur die Rotationen sind nach rechts
 geführt.

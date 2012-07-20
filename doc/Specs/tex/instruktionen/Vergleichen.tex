@@ -17,19 +17,19 @@ wie folgt gesetzt:
     \end{cases}
 \]
 
-\opdef{CMP}{$X, Y \in \Reg$}{0xB0}{RR0}
+\opdef{CMP}{$X, Y \in \Reg$}{0x70}{RR0}
 \glqq Compare\grqq.
 Vergleicht die Inhalte der Register $X$ und $Y$.
 
 
-\opdef{CMPU}{$X, Y \in \Reg$}{0xB1}{RR0}
+\opdef{CMPU}{$X, Y \in \Reg$}{0x71}{RR0}
 \glqq Compare Unsigned\grqq.
 Vergleicht analog zu \opref{CMP} -- aber vorzeichenlos -- $X$ mit $Y$
 (die Inhalte der Register $X$ und $Y$ werden als vorzeichenlose Werte
 ausgewertet).
 
 
-\opdef{CMPI}{$X \in \Reg$, $N \in \mathds{Z}$}{0xB2}{RNN}
+\opdef{CMPI}{$X \in \Reg$, $N \in \mathds{Z}$}{0x72}{RNN}
 \glqq Compare Immediate\grqq. 
 Vergleicht $X$ mit angegebenen festen Wert $N$.
 Dabei nimmt $N$ Werte aus dem Intervall

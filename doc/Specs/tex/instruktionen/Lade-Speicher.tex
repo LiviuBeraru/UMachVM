@@ -19,7 +19,7 @@ label:
 \end{lstlisting}
 
 
-\opdef{CP}{$X, Y \in \Reg$}{0x18}{RR0}
+\opdef{CP}{$X, Y \in \Reg$}{0x11}{RR0}
 Kopiert den Inhalt des Registers $Y$ in das Register $X$. Register $Y$ wird
 dabei nicht geändert. Entspricht
 \[
@@ -34,7 +34,7 @@ Beispiel:
 
 
 
-\opdef{LB}{$X, Y \in \Reg$}{0x20}{RR0}
+\opdef{LB}{$X, Y \in \Reg$}{0x12}{RR0}
 Lade ein Byte aus dem Speicher mit Adresse $Y$ in das niedrigstwertige
 Byte des Registers $X$. Die anderen Bytes von $X$ werden von diesem Befehl nicht
 betroffen. Insbesondere, werden sie nicht auf Null gesetzt.
@@ -61,7 +61,7 @@ die zwei niedrigstwertigen Bytes von $R3$ abgelegt.
 
 
 
-\opdef{LW}{$X, Y \in \Reg$}{0x24}{RR0}
+\opdef{LW}{$X, Y \in \Reg$}{0x13}{RR0}
 \glqq Load Word\grqq.
 Lade ein Wort (4 Byte) aus dem Speicher mit Adresse $Y$ in das Register $X$.
 Alle Bytes von $X$ werden dabei überschrieben.
@@ -82,7 +82,7 @@ belegt und bilden somit den Wert $66051$.
 
 
 
-\opdef{SB}{$X, Y \in \Reg$}{0x30}{RR0}
+\opdef{SB}{$X, Y \in \Reg$}{0x14}{RR0}
 \glqq Store Byte\grqq.
 Speichert den Inhalt des niedrigstwertigen Byte von $X$ an der Speicherstelle
 $Y$. $X$ und $Y$ sind dabei Register.
@@ -104,7 +104,7 @@ $mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
 
 
 
-\opdef{SW}{$X, Y\in \Reg$}{0x34}{RR0}
+\opdef{SW}{$X, Y\in \Reg$}{0x15}{RR0}
 \glqq Store Word\grqq.
 Speichert den Inhalt aller Bytes in $X$ an die Speicheradressen $Y$ bis 
 $X + 3$.
@@ -130,7 +130,7 @@ Byte (\texttt{0x04}) an die Adresse $131$.
 
 
 
-\opdef{PUSH}{$X \in \Reg$}{0x42}{R00}
+\opdef{PUSH}{$X \in \Reg$}{0x18}{R00}
 \glqq Push Word\grqq.
 Erniedrigt das Register \texttt{SP} um 4 und kopiert das ganze Register $X$ auf
 den Stack, wobei der \glqq Stack\grqq\ ist der Speicherbereich mit
@@ -179,7 +179,7 @@ Die Stack-Struktur wird in Kommentaren gezeigt.
 
 
 
-\opdef{POP}{$X \in \Reg$}{0x4A}{R00}
+\opdef{POP}{$X \in \Reg$}{0x19}{R00}
 \glqq Pop Word\grqq.
 Speichert 4 Bytes ab der Adresse \texttt{SP} in das Register $X$ und erhöht
 \texttt{SP} um 4.

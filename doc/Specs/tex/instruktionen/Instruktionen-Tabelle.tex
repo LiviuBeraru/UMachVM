@@ -12,51 +12,34 @@
           &   0   &   1   &   2   &   3    &   4    &   5    &    6    &    7    \\\hline\hline
 \nhex{0}  &  NOP  &       &       &        &  EOP   &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
-\marginnote{set copy}
-\nhex{1}  & SET   &       &       &        &        &        &         &         \\\cline{2-9}
-          & CP    &       &       &        &        &        &         &         \\\cline{1-9}
-\marginnote{load}
-\nhex{2}  &  LB   &       &       &        &  LW    &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\marginnote{store}
-\nhex{3}  &  SB   &       &       &        &  SW    &        &         &         \\\cline{2-9}
-          &       &       &       &        &        &        &         &         \\\cline{1-9}
-\marginnote{push/pop}
-\nhex{4}  &       &       & PUSH  &        &        &        &         &         \\\cline{2-9}
-          &       &       &  POP  &        &        &        &         &         \\\hline\hline
-\marginnote{add}
-\nhex{5}  &  ADD  & ADDU  & ADDI  &        &        &        &         &         \\\cline{2-9}
-\marginnote{sub}
-          &  SUB  & SUBU  & SUBI  &        &        &        &         &         \\\cline{1-9}
-\marginnote{mult}
-\nhex{6}  &  MUL  & MULU  & MULI  &        &        &        &         &         \\\cline{2-9}
-\marginnote{div}
-          &  DIV  & DIVU  & DIVI  &        &        &        &         &         \\\cline{1-9}
-\marginnote{mod}
-\nhex{7}  &  MOD  &       & MODI  &        &        &        &         &         \\\cline{2-9}
-\marginnote{unary}
-          &  ABS  &       &       &        &        &        &         &         \\\cline{1-9}
-\nhex{8}  &  NEG  &  INC  &  DEC  &        &        &        &         &         \\\cline{2-9}
+\nhex{1}  & SET   &  CP   &  LB   &  LW    & SB     & SW     &         &         \\\cline{2-9}
+          & PUSH  &  POP  &       &        &        &        &         &         \\\cline{1-9}
+\nhex{2}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
-\marginnote{and or\dots}
-\nhex{9}  &  AND  & ANDI  &  OR   &  ORI   &  XOR   &  XORI  &  NOT    & NOTI    \\\cline{2-9}
+\nhex{3}  &  ADD  & ADDU  & ADDI  &  SUB   & SUBU   & SUBI   &         &         \\\cline{2-9}
+          &  MUL  & MULU  & MULI  &  DIV   & DIVU   & DIVI   &         &         \\\cline{1-9}
+\nhex{4}  &  ABS  & NEG   & INC   &  DEC   &        &        &         &         \\\cline{2-9}
+          &  MOD  & MODI  &       &        &        &        &         &         \\\hline\hline
+\nhex{5}  &  AND  & ANDI  &  OR   &  ORI   &  XOR   &  XORI  &  NOT    & NOTI    \\\cline{2-9}
           & NAND  & NANDI &  NOR  &  NORI  &        &        &         &         \\\cline{1-9}
-\marginnote{shift}
-\nhex{A}  &  SHL  & SHLI  &  SHR  &  SHRI  &  SHRA  & SHRAI  &         &         \\\cline{2-9}
-\marginnote{rotate}
+\nhex{6}  &  SHL  & SHLI  &  SHR  &  SHRI  &  SHRA  & SHRAI  &         &         \\\cline{2-9}
           &  ROTL & ROTLI &  ROTR &  ROTRI &        &        &         &         \\\hline\hline
-\marginnote{compare}
-\nhex{B}  &  CMP  & CMPU  & CMPI  &        &        &        &         &         \\\cline{2-9}
+\nhex{7}  &  CMP  & CMPU  & CMPI  &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{8}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
+\nhex{9}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\cline{1-9}
+\nhex{A}  &       &       &       &        &        &        &         &         \\\cline{2-9}
+          &       &       &       &        &        &        &         &         \\\hline\hline
+\nhex{B}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\cline{1-9}
 \nhex{C}  &       &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
-\marginnote{branch}
 \nhex{D}  &  BE   &  BNE  &  BL   &  BLE   &  BG    &  BGE   &         &         \\\cline{2-9}
-          &  JMP  &       &       &        &        &        &         &  GO     \\\hline\hline
-\marginnote{call}
-\nhex{E}  &  CALL &  RET  &       &        &        &        &         &         \\\cline{2-9}
+          &  JMP  &       &       &        &        &        &         &         \\\hline\hline
+\nhex{E}  &  GO   &  CALL &  RET  &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
-\marginnote{syscall}
 \nhex{F}  &  INT  &       &       &        &        &        &         &         \\\cline{2-9}
           &       &       &       &        &        &        &         &         \\\hline\hline
           &   8   &   9   &   A   &   B    &   C    &   D    &    E    &    F    \\\hline
