@@ -257,3 +257,17 @@ Register. So gewinnt man mehr Bits für den Branch-Off-Set.
 Syntax: CMP R1 R2
 (obwohl Knuth hat CMP $X $Y $Z und /me weint jammerlich)
 Nachteil: nicht sofort ersichtlich, wo das Ergebnis hingeht.
+
+
+=== 20.07.2012 ===
+Malk.
+Noch zu tun:
+- Beschreibung der Speicherstruktur (Interrupt table etc): Abschnitt
+  Speicher in organization/Speicher.
+- Beschreibung der IO-Instruktionen im Instruktionen Abschnitt und
+  auch eine Beschreibung, wie IO funktioniert (Abschnitt IO im Kapitel
+  Organisation).
+- Beschreibung des Kerns: hat Register drauf, etc.
+- Beispiele für die Instruktionen korrigieren, weil sie jetzt Befehle
+  verwenden, die es nicht mehr gibt.
+- Durchlesen, Fehler korrigieren.
