@@ -273,3 +273,10 @@ Noch zu tun:
 - Beispiele für die Instruktionen korrigieren, weil sie jetzt Befehle
   verwenden, die es nicht mehr gibt.
 - Durchlesen, Fehler korrigieren.
+
+
+=== 21.07.2012 ===
+Malk.
+TODO: Fehlerbits in ERR überlegen! Es wird Zeit, dass wir zu allen
+Befehlen die Fehlerbehandlung spezifizieren. Diese fehlt nämlich
+total.
