@@ -4,6 +4,8 @@
 
 Die I/O-Architektur der UMach Maschine ist am sogenannten \glqq Port-Mapped
 I/O\grqq\ angelehnt\footnote{Als Gegenstück von \glqq Memory Mapped I/O\grqq.}.
+Obwolhl diese Architektur deutliche Einschränkungen hat, wird sie wegen ihrer
+Einfachheit benutzt.
 
 
 Die I/O-Einheit der UMach Maschine besteht aus einer Reihe von Eingangs- und
@@ -12,14 +14,17 @@ diesen Ports können verschiedene physikalische Geräte angeschlossen werden, di
 die entsprechenden Daten generieren bzw. verarbeiten können. Siehe dazu auch die
 Abbildung \ref{fig:umach-aufbau} auf der Seite \pageref{fig:umach-aufbau}.
 
+
 Die I/O Ports sind in zwei Kategorien unterteilt: Eingabeports und
 Ausgabeports. Von der Bauart und Struktur her, gibt es innerhalb der jeweiligen
 Kategorie keine Unterschiede zwischen Ports. Sie werden lediglich anhand deren
 Nummern identifiziert.
 
+
 Die Eingabe- und Ausgabefunktionen können durch bestimmten Instruktionen
 gesteuert werden (siehe auch den Abschnitt \ref{sec:IO-Instruktionen}, auf der
 Seite \pageref{sec:IO-Instruktionen}).
+
 
 
 \subsection{Eingabeports}
@@ -33,18 +38,19 @@ Diese Ports sind derzeit noch nicht spezifiziert.
 \begin{figure}[htp]
  \centering
  \includegraphics{./img/UMach-IOPort.pdf}
- \caption{I/O Ausgangsport}
+ \caption{I/O Ausgabeport}
  \label{fig:IOPort}
 \end{figure}
 
 
+Ein Ausgabeport bestehen aus zwei Teilen, bzw. zwei Ausgängen, die jeweils 32
+Bit-Signale an das angeschlossene Gerät weitergeben:
+\begin{enumerate}
+ \item Kennung
+ \item Daten
+\end{enumerate}
 
-
-
-
-
-
-
-
+Die Interpretation und Verwendung der Kennung und der Daten liegt in der
+Verantwortlichkeit des Programmierers, der sie verwendet.
 
 
