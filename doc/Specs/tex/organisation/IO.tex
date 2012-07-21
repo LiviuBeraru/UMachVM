@@ -13,6 +13,8 @@ Ausgangschnittstellen, auch Ports\index{Port}\index{UMach!Port} genannt. An
 diesen Ports können verschiedene physikalische Geräte angeschlossen werden, die
 die entsprechenden Daten generieren bzw. verarbeiten können. Siehe dazu auch die
 Abbildung \ref{fig:umach-aufbau} auf der Seite \pageref{fig:umach-aufbau}.
+Die Eingabe und Ausgabe erfolgt dadurch, dass die Maschine die Port-Signale
+(Inhalte) in Register kopiert oder umgekehrt.
 
 
 Die I/O Ports sind in zwei Kategorien unterteilt: Eingabeports und
@@ -34,6 +36,10 @@ Diese Ports sind derzeit noch nicht spezifiziert.
 
 
 \subsection{Ausgabeports}
+\label{subsec:Ausgabeports}
+
+Die Ausgabe eines Registerinhaltes erfolgt dadurch, dass die UMach Maschine
+diesen Inhalt an einen ihrer Ausgabeports schickt.
 
 \begin{figure}[htp]
  \centering
@@ -42,15 +48,17 @@ Diese Ports sind derzeit noch nicht spezifiziert.
  \label{fig:IOPort}
 \end{figure}
 
+Ein Ausgabeport besteht aus zwei Teilen, bzw. zwei Ausgängen, die jeweils 32
+Bit-Signale an das angeschlossene Gerät weitergeben (siehe auch die Abbildung
+\ref{fig:IOPort}):
 
-Ein Ausgabeport bestehen aus zwei Teilen, bzw. zwei Ausgängen, die jeweils 32
-Bit-Signale an das angeschlossene Gerät weitergeben:
 \begin{enumerate}
- \item Kennung
- \item Daten
+ \item Kennung, die das Verwendungszweck der Daten gekennzeichnet.
+ \item Daten, die den eigentlichen ausgegebenen Inhalt darstellen.
 \end{enumerate}
 
 Die Interpretation und Verwendung der Kennung und der Daten liegt in der
-Verantwortlichkeit des Programmierers, der sie verwendet.
-
-
+Verantwortlichkeit des Programmierers, der sie verwendet, bzw. des Gerätes, das
+sie empfängt. Es werden seitens dieser Spezifikation keine Einschränkungen oder
+Richtlinien bzgl. dieser Verwendung gegeben. Insbesondere, könnte ein Gerät die
+Kennung ignorieren.

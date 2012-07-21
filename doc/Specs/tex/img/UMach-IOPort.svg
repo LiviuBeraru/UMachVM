@@ -23,8 +23,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="207.24932"
-     inkscape:cy="163.31937"
+     inkscape:cx="185.43477"
+     inkscape:cy="197.93911"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -47,7 +47,9 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:snap-nodes="true"
-     inkscape:snap-intersection-paths="true" />
+     inkscape:snap-intersection-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true" />
   <defs
      id="defs4">
     <marker
@@ -488,7 +490,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -500,38 +502,32 @@
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect4372"
-       width="123.32717"
-       height="326.0462"
-       x="263.97134"
-       y="601.92432" />
+       width="186.46054"
+       height="233.7536"
+       x="226.83783"
+       y="651.21722" />
     <rect
        style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect4370"
-       width="51.643253"
-       height="147.9926"
-       x="335.65527"
-       y="601.92432" />
-    <rect
-       y="779.97791"
-       x="335.65527"
-       height="147.9926"
-       width="51.643253"
-       id="rect4374"
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0" />
+       width="57.603424"
+       height="110.5231"
+       x="355.69495"
+       y="651.21722" />
     <g
-       id="g4642"
-       transform="translate(-8,-19)">
+       id="g3084"
+       transform="translate(26,-43)">
       <g
-         id="g4628">
+         transform="translate(1.0000004,5.0244141e-6)"
+         id="g3080">
         <path
            style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
-           d="m 279.79853,133.05848 139.51385,0"
+           d="m 387.29837,749.47877 115.51385,0"
            id="path4376"
            inkscape:connector-curvature="0"
-           transform="translate(115.5,561.86214)" />
+           sodipodi:nodetypes="cc" />
         <path
            style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           d="m 468.7269,684.81862 -7.34289,20.204"
+           d="m 448.72674,739.37677 -7.34289,20.204"
            id="path4626"
            inkscape:connector-curvature="0"
            sodipodi:nodetypes="cc" />
@@ -539,79 +535,87 @@
       <text
          sodipodi:linespacing="125%"
          id="text4638"
-         y="670.23499"
-         x="444.00565"
+         y="730.79315"
+         x="424.00549"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
          xml:space="preserve"><tspan
-           y="670.23499"
-           x="444.00565"
+           y="730.79315"
+           x="424.00549"
            id="tspan4640"
            sodipodi:role="line">32 Bit</tspan></text>
     </g>
     <text
        xml:space="preserve"
        style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="296.45914"
-       y="770.41614"
+       x="247.517"
+       y="773.56287"
        id="text4661"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4663"
-         x="296.45914"
-         y="770.41614">Port 0</tspan></text>
+         x="247.517"
+         y="773.56287">Port 0 out</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="-705.39032"
-       y="364.94614"
+       x="-735.94849"
+       y="387.96588"
        id="text4665"
        sodipodi:linespacing="125%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
          id="tspan4667"
-         x="-705.39032"
-         y="364.94614">Kennung</tspan></text>
+         x="-735.94849"
+         y="387.96588">Kennung</tspan></text>
+    <rect
+       y="774.44739"
+       x="355.6951"
+       height="110.5231"
+       width="57.603424"
+       id="rect3071"
+       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0" />
     <text
        xml:space="preserve"
        style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-       x="-874.96393"
-       y="366.26205"
+       x="-850.69867"
+       y="389.28198"
        id="text4669"
        sodipodi:linespacing="125%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
          id="tspan4671"
-         x="-874.96393"
-         y="366.26205">Daten</tspan></text>
+         x="-850.69867"
+         y="389.28198">Daten</tspan></text>
     <g
-       transform="translate(-8.0000032,159.05359)"
-       id="g4692">
+       id="g3091"
+       transform="translate(25.000153,80.23016)">
       <g
-         id="g4694">
+         id="g3093"
+         transform="translate(1.0000004,5.0244141e-6)">
         <path
-           transform="translate(115.5,561.86214)"
+           sodipodi:nodetypes="cc"
            inkscape:connector-curvature="0"
-           id="path4696"
-           d="m 279.79853,133.05848 139.51385,0"
+           id="path3095"
+           d="m 387.29837,749.47877 115.51385,0"
            style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
         <path
            sodipodi:nodetypes="cc"
            inkscape:connector-curvature="0"
-           id="path4698"
-           d="m 468.7269,684.81862 -7.34289,20.204"
+           id="path3097"
+           d="m 448.72674,739.37677 -7.34289,20.204"
            style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       </g>
       <text
          xml:space="preserve"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
-         x="444.00565"
-         y="670.23499"
-         id="text4700"
+         x="424.00549"
+         y="730.79315"
+         id="text3099"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
-           id="tspan4702"
-           x="444.00565"
-           y="670.23499">32 Bit</tspan></text>
+           id="tspan3101"
+           x="424.00549"
+           y="730.79315">32 Bit</tspan></text>
     </g>
   </g>
 </svg>
