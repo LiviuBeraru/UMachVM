@@ -14,71 +14,92 @@ auf den Speicher erfolgen sollte, bzw. wie die angesprochene Speicheradresse
 angegeben wird. Anders ausgedrückt, beantwortet die Adressierungsart die Frage
 \glqq wie kann eine Instruktion der Maschine eine Adresse angeben?\grqq. 
 
-Die UMach Maschine kennt eine einzige Adressierungsart: die indirekte
-Adressierung, die unten beschrieben wird. Die direkte Adressierung, die aus
-einer direkten Angabe eines Speicheradresse besteht, wird von der indirekten
-Adressierung überdeckt.
-
-\subsubsection{Indirekte Adressierung}
-\index{Adressierung!Indirekte}
-
-Die indirekte Adressierung verwendet zwei Register $B$ und $I$, die
-von der Maschine verwendet werden, um die endgültige Adresse zu berechnen:
-Eine Instruktion, die diese Adressierung verwendet, hat also das Format RRR
-(siehe auch \ref{RRR}).
-\begin{center}
-  \begin{tabular}{|*{4}{c|}|c|} \hline
-    erstes Byte    & zweites Byte  & drittes Byte  & viertes Byte & Algebraisch
-\\\hline\hline
-    Ladebefehl     & $R$  & $B$  & $I$  & $R \gets mem(B + I)$ \\\hline
-    Speicherbefehl & $R$  & $B$  & $I$  & $R \to   mem(B + I)$ \\\hline
-  \end{tabular}
-\end{center}
-Die fünfte Spalte gibt jeweils den äquivalenten algebraischen Ausdruck wieder.
-$mem(x)$ steht dabei für den Inhalt der Adresse $x$.
+Die UMach Maschine kennt eine einzige Adressierungsart: die (register-)
+indirekte Adressierung. Dabei werden alle Speicheradressen nicht direkt
+angegeben, sondern es wird ein Register angegeben, der die Adresse beinhaltet.
+Zum Beispiel, die Instruktion 
+\begin{lstlisting}
+ 0x13 0x01 0x02 0x00
+\end{lstlisting}
+bedeutet nicht \glqq lade das Wort an der Adresse \texttt{0x02} in das Register
+mit Nummer \texttt{0x01}\grqq, sondern \glqq lade das Wort, das an der Adresse
+liegt, die in Register mit Nummer \texttt{0x02} angegeben ist, in das Register
+mit Nummer \texttt{0x01}\grqq. Das entpricht der Instruktion
+\begin{lstlisting}
+ LW R1 R2
+\end{lstlisting}
+Analog gilt für Schreibbefehle.
 
 
-Die zweite Zeile (Ladebefehl) bedeutet, dass die UMach Maschine die Inhalte der
-Register $B$ und $I$ aufaddieren soll, diese Summe als Adresse im
-Speicher zu verwenden und den Inhalt an dieser Adresse in den Register $R$ zu
-kopieren.
+\subsection{Speicherstruktur}
+\index{Speicherstruktur}
 
-Die dritte Zeile (Speicherbefehl) bedeutet: die Maschine soll den Inhalt des
-Registers $R$ an die Adresse $B + I$ schreiben.
-
-Üblicherweise enthält $B$ eine Startadresse und $I$ einen Versatz oder Index zur
-Adresse in $B$.
-
-Vorteil der indirekten Adressierung ist, dass sie $2^{33} - 1$ mögliche Adressen
-ansprechen kann. Nachteil ist, dass zwei oder mehrere Instruktionen gebraucht
-werden, um diese Adressierung zu verwenden, denn die Register $B$ und $I$ erst
-entsprechend geladen werden müssen.
-
-Die Register $R$, $B$ und $I$ stehen für beliebige Register aus der Menge
-$\Reg$.
+Der Speicher der UMach Maschine hat zur Laufzeit eine bestimmte Struktur, bzw.
+wird in bestimmten Bereichen unterteilt. Diese Bereiche sind
+\begin{enumerate}
+ \item Interrupt Tabelle
+ \item Programm und Daten
+ \item Stack
+\end{enumerate}
 
 
+\subsubsection{Interrupt Tabelle}
 
-\subsection{Der Stack}
-\label{subsec:Stack}
+Die Interrupt-Table besteht aus einer Reihe von Sprungadressen zum ausführbaren
+Code, bzw. zu sogenannten \glqq interrupt handlers\grqq, die in Ausnahmefälle
+ausgeführt werden sollen. Jedes mal, wenn eine Ausnahmesituation (meistens eine
+Fehlersituation) auftritt, wird intern ein Interrupt-Signal erzeugt, das mit
+einer Kennnummer versehen ist. Die Interrupt-Nummer ist ein Index in dieser
+Tabelle.
+
+Hier ist die Rede von Interrupts, die direkt mit der Ausführung von
+Instruktionen verbunden sind (Hardware Interrupts) und die von der Maschine
+selbst erzeugt werden, wie z.B. im Falle einer Division durch Null, oder im
+Falle, dass eine unerlaubte Speicheradresse verwendet wird. Software-Interrupts
+sind in dieser Tabelle nicht vorhanden. Siehe auch den Abschnitt
+\ref{sec:Ausnahmen}, ab der Seite \pageref{sec:Ausnahmen}.
+
+
+Die Tabelle wird von der Maschine nicht gefüllt, sondern es ist Sache der
+Software, die entsprechenden Stellen im Speicher zu füllen und entsprechende
+Funktionalität zur Verfügung zu stellen. Wird eine solche Adresse nicht gesetzt,
+d.h. ist der entsprechende Tabelleneintrag auf Null gesetzt, so reagiert die
+Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die Maschine
+hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
+Abschnitt \ref{sec:Ausnahmen}, ab der Seite \pageref{sec:Ausnahmen}
+
+Die Interrupt Tabelle enthält 64 Einträge, wobei nicht alle Einträge belegt
+sind. Sie werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
+\ref{tab:Hardware-Interrupts} angegeben sind. Der Index in der Tabelle
+entspricht einer Interrupt-Nummer (Hardware Interrupt).
+
+\begin{longtable}{>{\ttfamily}ll}
+\caption{Hardware Interrupts}
+\label{tab:Hardware-Interrupts}
+\\\toprule
+ 0 & Division durch Null \\
+ 1 & Überlauf
+\\\bottomrule
+\end{longtable}
+
+
+
+\subsubsection{Der Stack}
+\label{subsubsec:Stack}
 \index{Stack}
 
-Der Stack ist ein spezieller Bereich im Speicher. Mit \glqq Speicher\grqq\ wird
-hiermit der Speicher-Adressraum, der am Speicher-Port auf dem Bussystem
-angeschlossen ist gemeint (nicht also der gesamte Speicherraum innerhalb des Busses).
+Der Stack ist ein spezieller Bereich im Speicher. Dieser Bereich fängt am Ende
+des Speichers mit der größten Adresse an und erstreckt sich bis zur derjenigen
+Adresse, die im Register \texttt{SP} gespeichert ist. Die Stack-Größe ist damit
+dynamisch, denn das Register \texttt{SP} wird sowohl durch die Instruktionen
+\opref{PUSH} und \opref{POP}, als auch direkt vom Programmierer geändert.
 
-Dieser Bereich fängt am Ende des Speichers mit der größten Adresse an und
-erstreckt sich bis zur derjenige Adresse, die im Register \texttt{SP}
-gespeichert ist. Die Stack-Größe ist damit dynamisch, denn das Register
-\texttt{SP} wird sowohl durch die Instruktionen \opref{PUSH} und  \opref{POP}, als
-auch direkt vom Programmierer geändert.
-Das Wachsen\index{Stack!Wachsen}
-des Stacks bedeutet, dass das Register \texttt{SP} immer kleinere Werte annimmt.
-Das Schrumpfen\index{Stack!Schrumpfen}
-des Stacks bedeutet, dass \texttt{SP} immer größere Werte annimmt. 
-Wird versucht, den Inhalt von \texttt{SP} kleiner Null oder größer als die
-maximale Speicheradresse zu setzen, so wird dies von der Maschine verweigert und
-als Fehler im Register \texttt{ERR} signalisiert.
+Das Wachsen\index{Stack!Wachsen} des Stacks bedeutet, dass das Register
+\texttt{SP} immer kleinere Werte annimmt. Das Schrumpfen\index{Stack!Schrumpfen}
+des Stacks bedeutet, dass \texttt{SP} immer größere Werte annimmt. Wird
+versucht, den Inhalt von \texttt{SP} kleiner Null oder größer als die maximale
+Speicheradresse zu setzen, so wird dies von der Maschine verweigert und als
+Fehler im Register \texttt{ERR} signalisiert.
 
 Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
 maximal-erreichbare Speicheradresse gesetzt (Stack-Größe ist ein Byte).
