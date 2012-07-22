@@ -42,6 +42,17 @@ wird in bestimmten Bereichen unterteilt. Diese Bereiche sind
  \item Stack
 \end{enumerate}
 
+Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
+\pageref{fig:Speicherstruktur}.
+
+\begin{figure}[htp]
+ \centering
+ \includegraphics{./img/UMach-Speicherstruktur}
+ \caption{Speicherstruktur}
+ \label{fig:Speicherstruktur}
+\end{figure}
+
+
 
 \subsubsection{Interrupt Tabelle}
 
@@ -69,16 +80,19 @@ hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
 Abschnitt \ref{sec:Ausnahmen}, ab der Seite \pageref{sec:Ausnahmen}
 
 Die Interrupt Tabelle enthält 64 Einträge, wobei nicht alle Einträge belegt
-sind. Sie werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
-\ref{tab:Hardware-Interrupts} angegeben sind. Der Index in der Tabelle
-entspricht einer Interrupt-Nummer (Hardware Interrupt).
+sind. Jeder Eintrag beträgt 32 Bit (gleich lang wie ein Register). Jeder Index
+in der Tabelle entspricht einer Interrupt-Nummer (Hardware Interrupt). Die
+Einträge werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
+\ref{tab:Hardware-Interrupts} angegeben sind. 
+
 
 \begin{longtable}{>{\ttfamily}ll}
 \caption{Hardware Interrupts}
 \label{tab:Hardware-Interrupts}
 \\\toprule
  0 & Division durch Null \\
- 1 & Überlauf
+ 1 & Überlauf \\
+ 99 & Noch nicht fertig
 \\\bottomrule
 \end{longtable}
 
