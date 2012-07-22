@@ -517,17 +517,21 @@
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"
        x="172.1353"
-       y="644.8587"
+       y="636.8587"
        id="text4041"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan4043"
          x="172.1353"
-         y="644.8587">Interrupt</tspan><tspan
+         y="636.8587"
+         id="tspan4045">Unter-</tspan><tspan
          sodipodi:role="line"
          x="172.1353"
-         y="659.8587"
-         id="tspan4045">Tabelle</tspan></text>
+         y="651.8587"
+         id="tspan3072">brechungs-</tspan><tspan
+         sodipodi:role="line"
+         x="172.1353"
+         y="666.8587"
+         id="tspan3070">tabelle</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:'Anka/Coder';-inkscape-font-specification:'Anka/Coder'"

@@ -37,7 +37,7 @@ Analog gilt für Schreibbefehle.
 Der Speicher der UMach Maschine hat zur Laufzeit eine bestimmte Struktur, bzw.
 wird in bestimmten Bereichen unterteilt. Diese Bereiche sind
 \begin{enumerate}
- \item Interrupt Tabelle
+ \item Unterbrechungstabelle
  \item Programm und Daten
  \item Stack
 \end{enumerate}
@@ -48,47 +48,51 @@ Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
 \begin{figure}[htp]
  \centering
  \includegraphics{./img/UMach-Speicherstruktur}
- \caption{Speicherstruktur}
+ \caption[Speicherstruktur]{Speicherstruktur zur Laufzeit}
  \label{fig:Speicherstruktur}
 \end{figure}
 
 
 
-\subsubsection{Interrupt Tabelle}
+\subsubsection{Unterbrechungstabelle}
+\index{Unterbrechungstabelle}
+\label{subsubsec:Unterbrechungstabelle}
 
-Die Interrupt-Table besteht aus einer Reihe von Sprungadressen zum ausführbaren
-Code, bzw. zu sogenannten \glqq interrupt handlers\grqq, die in Ausnahmefälle
-ausgeführt werden sollen. Jedes mal, wenn eine Ausnahmesituation (meistens eine
-Fehlersituation) auftritt, wird intern ein Interrupt-Signal erzeugt, das mit
-einer Kennnummer versehen ist. Die Interrupt-Nummer ist ein Index in dieser
-Tabelle.
+Die Unterbrechungstabelle besteht aus einer Reihe von Sprungadressen zum
+ausführbaren Code, bzw. zu sogenannten Unterbrechungsroutinen, oder \glqq
+interrupt handlers\grqq, die in Ausnahmefällen ausgeführt werden sollen. Jedes
+mal, wenn eine Ausnahmesituation auftritt (meistens eine Fehlersituation), wird
+intern ein Unterbrechungssignal erzeugt, das mit einer Kennnummer
+(Unterbrechungsnummer) versehen ist. Die Unterbrechungsnummer wird als Index in
+dieser Tabelle verwendet.
 
-Hier ist die Rede von Interrupts, die direkt mit der Ausführung von
-Instruktionen verbunden sind (Hardware Interrupts) und die von der Maschine
-selbst erzeugt werden, wie z.B. im Falle einer Division durch Null, oder im
-Falle, dass eine unerlaubte Speicheradresse verwendet wird. Software-Interrupts
-sind in dieser Tabelle nicht vorhanden. Siehe auch den Abschnitt
-\ref{sec:Ausnahmen}, ab der Seite \pageref{sec:Ausnahmen}.
+Hier ist die Rede von Unterbrechungen, die direkt mit der Ausführung von
+Instruktionen verbunden sind (Hardware Interrupts). Sie können entweder von der
+Maschine selbst erzeugt werden, wie z.B. im Falle einer Division durch Null,
+oder im Falle, dass eine unerlaubte Speicheradresse verwendet wird, oder sie
+können unter Programmkontrolle erzeugt werden. Siehe auch den Abschnitt
+\ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
 
 
-Die Tabelle wird von der Maschine nicht gefüllt, sondern es ist Sache der
-Software, die entsprechenden Stellen im Speicher zu füllen und entsprechende
-Funktionalität zur Verfügung zu stellen. Wird eine solche Adresse nicht gesetzt,
-d.h. ist der entsprechende Tabelleneintrag auf Null gesetzt, so reagiert die
-Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die Maschine
-hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
-Abschnitt \ref{sec:Ausnahmen}, ab der Seite \pageref{sec:Ausnahmen}
+Die Unterbrechungstabelle wird von der Maschine nicht gefüllt, sondern es ist
+Sache der Software, die entsprechenden Stellen im Speicher zu füllen und
+entsprechende Funktionalität zur Verfügung zu stellen. Wird eine solche Adresse
+nicht gesetzt, d.h. ist der entsprechende Tabelleneintrag auf Null gesetzt, so
+reagiert die Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die
+Maschine hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
+Abschnitt \ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
 
-Die Interrupt Tabelle enthält 64 Einträge, wobei nicht alle Einträge belegt
-sind. Jeder Eintrag beträgt 32 Bit (gleich lang wie ein Register). Jeder Index
-in der Tabelle entspricht einer Interrupt-Nummer (Hardware Interrupt). Die
-Einträge werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
-\ref{tab:Hardware-Interrupts} angegeben sind. 
+
+Die Unterbrechungstabelle enthält 64 Einträge, wobei nicht alle Einträge belegt
+sein müssen. Jeder Eintrag beträgt 32 Bit (gleich lang wie ein Register). Jeder
+Index in der Tabelle entspricht einer Unterbrechungsnummer (Hardware Interrupt).
+Die Einträge werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
+\ref{tab:Unterbrechungstabelle} angegeben sind.
 
 
 \begin{longtable}{>{\ttfamily}ll}
-\caption{Hardware Interrupts}
-\label{tab:Hardware-Interrupts}
+\caption{Unterbrechungsnummer}
+\label{tab:Unterbrechungstabelle}
 \\\toprule
  0 & Division durch Null \\
  1 & Überlauf \\
