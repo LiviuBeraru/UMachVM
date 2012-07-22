@@ -120,6 +120,6 @@ Speicheradresse zu setzen, so wird dies von der Maschine verweigert und als
 Fehler im Register \texttt{ERR} signalisiert.
 
 Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
-maximal-erreichbare Speicheradresse gesetzt (Stack-Größe ist ein Byte).
-
+maximal-erreichbare Speicheradresse plus Eins gesetzt. Damit können keine Werte
+gelesen werden, bevor Werte geschrieben wurden.
 

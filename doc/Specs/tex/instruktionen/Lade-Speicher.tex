@@ -37,7 +37,7 @@ Beispiel:
 \opdef{LB}{$X, Y \in \Reg$}{0x12}{RR0}
 Lade ein Byte aus dem Speicher mit Adresse $Y$ in das niedrigstwertige
 Byte des Registers $X$. Die anderen Bytes von $X$ werden von diesem Befehl nicht
-betroffen. Insbesondere, werden sie nicht auf Null gesetzt.
+geändert. Insbesondere, werden sie nicht auf Null gesetzt.
 
 Äquivalenter C Code:
 \begin{lstlisting}
@@ -45,19 +45,19 @@ betroffen. Insbesondere, werden sie nicht auf Null gesetzt.
 \end{lstlisting}
 
 \paragraph{Beispiel}
-Angenommen, der Speicher an den Adressen $100$ und $101$ hat den Wert $5$,
-bzw. $6$.
+Angenommen, der Speicher an den Adressen $100$ und $101$ hat den Wert $5$, bzw.
+$6$. Dann können diese zwei nacheinander folgenden Bytes auf die
+folgende Weise in $R2$ gelesen werden. $R1$ wird dabei als Zeiger im Speicher
+verwendet.
 \begin{lstlisting}
-  SET  R1   100   # Basisadresse R1 = 100
-  SET  R2     0   # Index R2 = 0
-  SET  R3     0
-  LB   R3 R1 R2   # R3 = 5 ($mem(100+0)$)
-  SHLI R3 R3  8   # shift left 8 Bit, R3 = 1280
-  INC  R2         # R2++, R2 = 1
-  LB   R3 R1 R2   # R3 = 1286 (R3 + $mem(100+1)$)
+  SET  R1     100   # Speicheradresse R1 = 100
+  SET  R2       0
+  LB   R2  R1       # R2 = 5 ($mem(100)$)
+  SHLI R2  R2   8   # shift left 8 Bit, R2 = 1280
+  INC  R1           # R1++, R1 = 101
+  LB   R2  R1       # R2 = 1286 (R2 + $mem(101)$)
 \end{lstlisting}
-Hier werden zwei nacheinander folgenden Bytes aus dem Speicher gelesen und in
-die zwei niedrigstwertigen Bytes von $R3$ abgelegt.
+
 
 
 
@@ -74,9 +74,7 @@ Abgenommen, die Adressen von 100 bis 103 sind mit den Werten 0, 1, 2 und 3
 belegt und bilden somit den Wert $66051$.
 \begin{lstlisting}
   SET R1   100
-  SET R2     0
-  LW  R3 R1 R2  # $R3 \gets mem_{4}(R1 + R2) = 66051$
-  LW  R3 R1  8  # Fehler! 8 ist kein Register nutze LWI dafuer
+  LW  R2 R1     # $R2 \gets mem_{4}(R1) = 66051$
 \end{lstlisting}
 
 
@@ -97,9 +95,8 @@ $mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
 \begin{lstlisting}
   SET R1 128     # R1 = Speicheradresse 128
   SET R2 513     # R2 = 0x0201
-  SB  R2 R1 ZERO # Speicher mit Adresse 128 wird auf 1 gesetzt
+  SB  R2 R1      # Speicher mit Adresse 128 wird auf 1 gesetzt
 \end{lstlisting}
-\texttt{ZERO} ist dabei ein Spezialregister mit konstantem Wert $0$.
 
 
 
@@ -107,7 +104,7 @@ $mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
 \opdef{SW}{$X, Y\in \Reg$}{0x15}{RR0}
 \glqq Store Word\grqq.
 Speichert den Inhalt aller Bytes in $X$ an die Speicheradressen $Y$ bis 
-$X + 3$.
+$Y + 3$.
 \[
     X \to mem_{4}(Y)
 \]
@@ -121,7 +118,7 @@ Byte (\texttt{0x04}) an die Adresse $131$.
 \begin{lstlisting}
   SET R1 128         # R1 = Speicheradresse 128
   SET R2 0x01020304  # Wert zum Speichern
-  SH  R2 R1 ZERO     # mem[128] = 0x01
+  SH  R2 R1          # mem[128] = 0x01
                      # mem[129] = 0x02
                      # mem[130] = 0x03
                      # mem[131] = 0x04
@@ -212,16 +209,10 @@ Diese Instruktion kann algebraisch so ausgedrückt werden:
   X  & \gets mem_{4}(SP) \\
   SP & \gets SP + 4
 \end{align*}
-Die Instruktion \texttt{POP} ist äquivalent zu den folgenden Instruktionen:
-\begin{lstlisting}
-  LWI   X SP 0
-  ADDI SP SP 4
-\end{lstlisting}
-
 
 \paragraph{Beispiel}
-Angenommen, die ersten 4 Bytes vom Stack-Bereiche sind
-\texttt{0xAA 0xBB 0xCC 0xDD}.
+Angenommen, die ersten 4 Bytes auf dem Stack (d.h. ab der Adresse, die im
+Register \texttt{SP} angegeben ist) sind \texttt{0xAA 0xBB 0xCC 0xDD}.
 \begin{lstlisting}
   POPH R1      # R1 = 0xAABBCCDD
 \end{lstlisting}

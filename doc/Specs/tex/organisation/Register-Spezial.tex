@@ -44,7 +44,11 @@ PC   & 33 & \glqq Instruction Pointer\grqq, oder \glqq Program Counter\grqq.
 SP   & 34 & \glqq Stack Pointer\grqq.
             Enthält die Speicheradresse des höchsten Eintrag auf dem Stack.
             Wird beim Hochfahren der Maschine auf die maximal erreichbare
-            Adresse im Speicher gesetzt.
+            Speicheradresse plus 1 gesetzt. Die 1, die zur maximalen Adresse
+            addiert wird, setzt
+            den stack pointer auf eine ungültige Adresse und sorgt dafür, dass
+            keine Werte mittels \opref{POP} gelesen werden, bevor Werte
+            auf den Stack gepusht wurden.
             Siehe auch \ref{subsubsec:Stack}, Seite \pageref{subsubsec:Stack}.
             \index{SP@\texttt{SP}}
 \\
@@ -121,6 +125,12 @@ Stelligkeit $2^{31}$ hat die Position $31$.
 \caption[ERR Register]{Bedeutung der einzelnen Bits im ERR Register}
 \label{tab:ERR-register}
 \\\toprule
- 0  & Division durch Null
-\\\bottomrule
+ 0  & Division durch Null \\
+    & Ungültige Registernummer  \\
+    & Stack Fehler \\
+    & Ungültige Speicheradresse \\
+    & Ungültige Befehlsargumenten \\
+    & Ungültiger Befehl \\
+    & I/O Port existiert nicht \\
+\bottomrule
 \end{longtable}
