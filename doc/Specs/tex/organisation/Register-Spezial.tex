@@ -28,7 +28,7 @@ schreibgeschützt.
   >{\ttfamily}p{1cm}
   p{\textwidth-2cm-6\tabcolsep}
 }
-\caption{Liste der Spezialregister}
+\caption[Spezialregister]{Liste der Spezialregister}
 \label{tab:Spezialregister}
 \\\toprule
 PC   & 33 & \glqq Instruction Pointer\grqq, oder \glqq Program Counter\grqq.
@@ -66,9 +66,13 @@ STAT & 37 & Enthält Status-Informationen. Diese Informationen sind in den
             \index{STAT@\texttt{STAT}}
 \\
 ERR  & 38 & \glqq Error\grqq.
-            Fehlerregister. Die einzelnen Bits geben Auskunft über Fehler, die
-            mit der Ausführung des Programms verbunden sind. Liegt kein Fehler
-            vor, so ist der Inhalt dieses Registers gleich Null.
+            Fehlerregister. Die einzelnen Bits dises Registers geben Auskunft
+            über Fehler, die mit der Ausführung des Programms verbunden sind.
+            Liegt kein Fehler vor, so ist der Inhalt dieses Registers gleich
+            Null. Ist ein bestimmtes Bit gesetzt, so wird dadurch der
+            entsprechende Fehler signalisiert. Für eine Liste der verwendeten
+            Bits un deren Bedeutung, siehe Tabelle \ref{tab:ERR-register} auf
+            der Seite \pageref{tab:ERR-register}.            
             \index{ERR@\texttt{ERR}}
 \\
 HI   & 39 & \glqq High\grqq.
@@ -104,3 +108,19 @@ ZERO & 00 & Enthält die Zahl Null.
 \\\bottomrule
 \end{longtable}
 
+
+\subsubsection{Das ERR Register}
+
+Die Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
+\texttt{ERR} Register signalisiert werden können. Zu jedem Fehler gehört ein Bit
+im Register. Die Bitstellen werden dabei entsprechend deren Stelligkeiten
+durchnummeriert: Bit mit Stelligkeit $2^{0}$ hat Position $0$, Bit mit
+Stelligkeit $2^{31}$ hat die Position $31$.
+
+\begin{longtable}{>{\ttfamily}ll}
+\caption[ERR Register]{Bedeutung der einzelnen Bits im ERR Register}
+\label{tab:ERR-register}
+\\\toprule
+ 0  & Division durch Null
+\\\bottomrule
+\end{longtable}
