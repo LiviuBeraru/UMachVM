@@ -31,12 +31,12 @@ Seite \pageref{sec:IO-Instruktionen}).
 
 \subsection{Eingabeports}
 
-Die acht möglichen Eingabeports sind mit den Nummern 1 bis 8 gekennzeichnet.
-Dem Lesen von einem Eingabeport geht immer ein Hardware-Unterbrechung vorraus.
-Dabei wird die Portnummer, von welcher die Unterbrechung ausgeht, in das
-Spezialregister HIR abgelegt. Nun kann vom Port wiederholt mit dem Befehl IN immer
-32 Bit oder ein Wort von 4 Byte in ein angegebenes Register gelesen werden.
-Sind alle Daten gelesen, wird das Register HIR auf Null gesetzt.
+Die acht möglichen Eingabeports sind mit den Nummern 1 bis 8 gekennzeichnet. Dem
+Lesen von einem Eingabeport geht immer ein Hardware-Unterbrechung vorraus. Dabei
+wird die Portnummer, von welcher die Unterbrechung ausgeht, in das
+Spezialregister HIR abgelegt. Nun kann vom Port wiederholt mit dem Befehl IN
+immer 32 Bit oder ein Wort von 4 Byte in ein angegebenes Register gelesen
+werden. Sind alle Daten gelesen, wird das Register HIR auf Null gesetzt.
 
 \subsection{Ausgabeports}
 \label{subsec:Ausgabeports}

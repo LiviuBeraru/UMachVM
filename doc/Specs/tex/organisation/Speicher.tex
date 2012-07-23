@@ -82,9 +82,12 @@ reagiert die Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die
 Maschine hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
 Abschnitt \ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
 
+Zu der Unterbrechungstabelle gehören 64 Einträge, wobei der Eintrag
+mit der Nummer Null reserviert ist. Die folgenden acht (Eintrag 1 bis 8) dienen
+für die Hardware-Unterbrechungen.
+Nicht alle Einträge müssen belegt sein. 
 
-Die Unterbrechungstabelle enthält 64 Einträge, wobei nicht alle Einträge belegt
-sein müssen. Jeder Eintrag beträgt 32 Bit (gleich lang wie ein Register). Jeder
+Jeder Eintrag beträgt 32 Bit (gleich lang wie ein Register). Jeder
 Index in der Tabelle entspricht einer Unterbrechungsnummer (Hardware Interrupt).
 Die Einträge werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
 \ref{tab:Unterbrechungstabelle} angegeben sind.
@@ -94,9 +97,9 @@ Die Einträge werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
 \caption{Unterbrechungsnummer}
 \label{tab:Unterbrechungstabelle}
 \\\toprule
- 0 & Reserviert \\
+ 0   & Reserviert \\
  1-8 & Hardware Interrupts \\
- 99 & Noch nicht fertig
+ 99  & Noch nicht fertig
 \\\bottomrule
 \end{longtable}
 

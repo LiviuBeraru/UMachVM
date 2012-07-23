@@ -6,7 +6,7 @@ Ruft das Betriebssystem auf, eine Aktion zu unternehmen.
 Die Aktion wird als numerischer Code angegeben und ist systemspezifisch.
 Vergleichbar mit einem \glqq syscall\grqq.\index{syscall}
 
-\opdef{IRET}{$N \in \mathds{N}$}{0xA0}{NNN}
+\opdef{IRET}{$N \in \mathds{N}$}{0xA1}{NNN}
 \glqq Interrupt Return\grqq.
 Rücksprung aus einer Hardware-Unterbrechung. Setzt HIR zusätzlich auf Null
 und Setzt den Status so, dass Hardware-Unterbrechungen wieder erlaubt sind.
