@@ -2,6 +2,47 @@
 \label{sec:Unterbrechungen}
 \index{Unterbrechungen}
 
+Es gibt drei Verschiedene Unterbrechungsursachen. Dazu zählen Hardware-Unterbrechungen die von
+den Input-Ports verursacht werden können, geziehlte Software-Unterbrechungen die vom der 
+Software angefordert werden können, und Unterbrechungen die aufgrund von Fehlern geschehen und
+eine rudimentäre Fehlerbehandlung bei schwerwiegenden Fehlern wie der Nulldivision ermöglichen sollen.
+
+Zu der Unterbrechungstabelle gehören maximal 64 Einträge, wobei der Eintrag mit der Nummer Null
+reserviert ist. Die folgenden acht dienen für die Hardware-Unterbrechungen.
+
+Bei jeder Unterbrechung wird der PC auf den Stack gepuscht und bei Rückkehr automatisch gepopt.
+Daher sind bei einer Unterbrechung zwei Dinge zu beachten:
+
+Der Stackpointer muss auf der Ausgangsposition stehen.
+Verwendete Register müssen gesichert und vor der Rückkeht wieder hergestellt werden.
+
+\subsection{Hardware-Unterbrechungen}
+
+Wird eine Hardware-Unterbrechung ausgelöst, so wird ohne Zutun des Programmierers
+der aktuelle Programmablauf unterbrochen und der PC auf den Stack gepuscht.
+Weiterhin wird die Nummer des für die Hardware-Unterbrechung verantwortlichen Ports
+im Spezialregister HIR hinterlegt. Dies dient dazu um den passenden Eintrag in der
+Unterbrechungstabelle aufzufinden. Dieser wird in den PC geladen und der dort Adressierte
+Programmcode zur Behandlung der Unterbrechung wird ausgeführt. 
+
+Ein Hardwareinterrupt entspricht somit einem INT Portnummer, wobei die CPU 
+zusätzlich in einen Modus versetzt welcher jede weitere Hardwareunterbrechung
+ignoriert. Dieser Modus wird automatisch mit dem IRET Befehl zurückgesetzt,
+welcher dazu Dient aus der Unterbrechungsbehandlung zurückzukehren.
+
+Das Ende einer Hardwareunterbrechung kann entweder vom Verursacher als für beendet erklärt werden,
+indem er das HIR nach dem Ausführen einer IN Instuktion auf Null setzt.
+Oder aber durch die Unterbrechungsbehandlung selbst, indem einfach IRET aufgerufen wird.
+Dieser Befehl setzt das HIR auch auf Null zurück, falls dies noch nicht der Fall sein sollte.
+Auserdem wird dem Unterbrecher das Ende der Unterbrechungsbehandlung signalisiert.
+
+Dies ist besonderst von Bedeutung, wenn noch Daten am Port anstehen sollten. Diese werden
+im Falle eines vorzeitigigen Beendens der Unterbrechungsbehandlung verworfen.
+
+\subsection{Software-Unterbrechungen}
+
+\subsection{Fehlerbedingte Unterbrechungen}
+
 Im Normalfall wird eine Instruktion ohne Weiteres ausgeführt. In Ausnahmefällen
 -- wenn die Instruktion nicht ausgeführt werden kann, meistens wegen ungültigen
 Parametern -- wird eine Ausnahmesituation\index{Ausnahmesituation} signalisiert
