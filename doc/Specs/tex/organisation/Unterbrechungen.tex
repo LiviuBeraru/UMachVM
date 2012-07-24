@@ -2,14 +2,15 @@
 \label{sec:Unterbrechungen}
 \index{Unterbrechungen}
 
-Es gibt drei Verschiedene Unterbrechungsursachen:
+
+Es gibt drei verschiedene Unterbrechungsursachen:
 \begin{enumerate}
- \item Hardware-Unterbrechungen die von den Input-Ports verursacht werden
+ \item Hardware-Unterbrechungen, die von den Input-Ports verursacht werden
        können,
  \item geziehlte Software-Unterbrechungen die vom der Software angefordert
        werden können, und
  \item Unterbrechungen, die aufgrund von Fehlern geschehen und eine rudimentäre
-       Fehlerbehandlung bei schwerwiegenden Fehlern wie der Nulldivision
+       Fehlerbehandlung bei schwerwiegenden Fehlern wie die Nulldivision
        ermöglichen sollen.
 \end{enumerate}
 
@@ -37,7 +38,7 @@ ignoriert. Dieser Modus wird automatisch mit dem IRET Befehl zurückgesetzt,
 welcher dazu Dient aus der Unterbrechungsbehandlung zurückzukehren.
 
 Das Ende einer Hardwareunterbrechung kann entweder vom Verursacher als für
-beendet erklärt werden, indem er das HIR nach dem Ausführen einer IN Instuktion
+beendet erklärt werden, indem er das HIR nach dem Ausführen einer IN Instruktion
 auf Null setzt. Oder aber durch die Unterbrechungsbehandlung selbst, indem
 einfach IRET aufgerufen wird. Dieser Befehl setzt das HIR auch auf Null zurück,
 falls dies noch nicht der Fall sein sollte. Auserdem wird dem Unterbrecher das
@@ -71,10 +72,13 @@ Programmausführung unterbrochen und die Maschine hält an.
 
 
 \paragraph{Beispiel}
-Zum Beispiel, die \opref{DIV} Instruktion erzeugt die Unterbrechung mit Nummer
-0, falls ihr zweites Argument gleich Null ist. Wenn die Unterbrechung erzeugt
-wird, schaut die Maschine in der Unterbrechungstabelle an der Position 0. Ist
+Zum Beispiel, die \opref{DIV} Instruktion (Division) erzeugt die Unterbrechung
+mit Nummer 16, falls ihr zweites Argument gleich Null ist (siehe auch die
+Tabelle \ref{tab:Unterbrechungstabelle} auf der Seite
+\pageref{tab:Unterbrechungstabelle}). Wenn die Unterbrechung erzeugt wird,
+schaut die Maschine in der Unterbrechungstabelle an der Position 16 nach. Ist
 der Eintrag ungleich Null, so wird der Eintrag als Adresse einer Routine
-behandelt und dorthin gesprungen: das Register \texttt{PC} wird
-zuerst auf den Stack gespeichert und dann gleich dem Tabelleneintrag gesetzt.
+behandelt und dorthin gesprungen: das Register \texttt{PC} wird zuerst auf den
+Stack gespeichert und dann gleich dem Tabelleneintrag gesetzt. Ist der Eintrag
+dagegen Null, so hält die Maschine an.
 

@@ -82,26 +82,43 @@ reagiert die Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die
 Maschine hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
 Abschnitt \ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
 
-Zu der Unterbrechungstabelle gehören 64 Einträge, wobei der Eintrag
-mit der Nummer Null reserviert ist. Die folgenden acht (Eintrag 1 bis 8) dienen
-für die Hardware-Unterbrechungen.
-Nicht alle Einträge müssen belegt sein. 
+Die Unterbrechungstabelle besteht aus 64 Einträgen, wobei der Eintrag mit der
+Nummer Null reserviert ist. Die folgenden acht (Eintrag 1 bis 8) dienen für die
+Hardware-Unterbrechungen, die von den Eingabeports erzeugt werden. Nicht alle
+Einträge müssen belegt sein. 
 
-Jeder Eintrag beträgt 32 Bit (gleich lang wie ein Register). Jeder
-Index in der Tabelle entspricht einer Unterbrechungsnummer (Hardware Interrupt).
-Die Einträge werden für bestimmte Ausnahmefälle verwendet, die in der Tabelle
-\ref{tab:Unterbrechungstabelle} angegeben sind.
+
+Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es 64
+Einträge gibt, ist die Unterbrechungstabelle $64 \cdot 4 = 256$ Bytes groß.
+Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
+\pageref{fig:Speicherstruktur}.
+
+Die Tabelle \ref{tab:Unterbrechungstabelle} gibt alle Unterbrechungsnummer an
+und deren Bedeutung. Undefinierte Unterbrechungsnummer werden nicht
+explizit angegeben.
 
 
 \begin{longtable}{>{\ttfamily}ll}
 \caption{Unterbrechungsnummer}
 \label{tab:Unterbrechungstabelle}
 \\\toprule
- 0   & Reserviert \\
- 1-8 & Hardware Interrupts \\
- 99  & Noch nicht fertig
+ 0    & Reserviert          \\
+ 1-8  & Hardware Interrupts \\
+ 16   & Division durch Null \\
+ 99   & Noch nicht fertig
 \\\bottomrule
 \end{longtable}
+
+
+\subsubsection{Programm und Daten}
+\index{Programm}
+
+Nach der Unterbrechungstabelle, die $256$ Bytes groß ist ($64$ mal $4$ ),
+folgt das eigentliche Program, das von der Maschine ausgeführt werden soll.
+Dieses Programm wird also ab der Adresse $256$ gelesen und ausgeführt.
+
+Insbesondere ist dieses Program dafür zuständig, die Unterbrechungstabelle zu
+füllen, falls (bestimmte) Unterbrechungen behandelt werden sollten.
 
 
 
