@@ -6,8 +6,8 @@ Die virtuelle UMach Maschine hat eine einfache Konstruktion, die im
 wesentlichen aus den folgenden Komponenten besteht:
 \begin{enumerate}
  \item Kern (Abschnitt \ref{sec:Kern})
- \item Speicher (\ref{sec:Speicher})
- \item IO Einheit (Abschnitt \ref{sec:IO-Einheit})
+ \item Speicher (Abschnitt \ref{sec:Speicher})
+ \item I/O Einheit (Abschnitt \ref{sec:IO-Einheit})
 \end{enumerate}
 
 Siehe auch die Abbildung \ref{fig:umach-aufbau} auf der Seite
@@ -23,7 +23,7 @@ Siehe auch die Abbildung \ref{fig:umach-aufbau} auf der Seite
 Wenn die Maschine startet, sucht sie nach einem Program im Speicher, holt jede
 Instruktion nach einander in den Kern und führt sie aus. Danach bleibt sie im
 Wartezustand bis sie ausdrücklich ausgeschaltet wird. Alle Eingabe- und
-Ausgabeoperationen werden an die IO-Einheit weitergeleitet (siehe auch die
+Ausgabeoperationen werden an die I/O-Einheit weitergeleitet (siehe auch die
 Abschnitte \ref{sec:IO-Einheit} und \ref{sec:IO-Instruktionen}).
 
 

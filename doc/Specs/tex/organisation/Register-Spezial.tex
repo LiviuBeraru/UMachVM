@@ -122,6 +122,7 @@ ZERO & 00 & Enthält die Zahl Null.
 
 
 \subsubsection{Das ERR Register}
+\index{ERR@\texttt{ERR}}
 
 Die Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
 \texttt{ERR} Register signalisiert werden können. Zu jedem Fehler gehört ein Bit
@@ -134,11 +135,12 @@ Stelligkeit $2^{31}$ hat die Position $31$.
 \label{tab:ERR-register}
 \\\toprule
  0  & Division durch Null \\
+    & Ungültiger Befehl \\
     & Ungültige Registernummer  \\
-    & Stack Fehler \\
     & Ungültige Speicheradresse \\
     & Ungültige Befehlsargumenten \\
-    & Ungültiger Befehl \\
+    & Stack Fehler \\
+    & Speicher nicht vorhanden \\
     & I/O Port existiert nicht \\
 \bottomrule
 \end{longtable}

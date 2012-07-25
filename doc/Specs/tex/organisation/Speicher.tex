@@ -105,8 +105,15 @@ explizit angegeben.
  0    & Reserviert          \\
  1-8  & Hardware Interrupts \\
  16   & Division durch Null \\
- 99   & Noch nicht fertig
-\\\bottomrule
+      & Ungültiger Befehl \\
+      & Ungültige Registernummer  \\
+      & Ungültige Speicheradresse \\
+      & Ungültige Befehlsargumenten \\
+      & Stack Fehler \\
+      & Speicher nicht vorhanden \\
+      & I/O Port existiert nicht \\
+ 99   & Noch nicht fertig \\
+\bottomrule
 \end{longtable}
 
 
@@ -117,7 +124,7 @@ Nach der Unterbrechungstabelle, die $256$ Bytes groß ist ($64$ mal $4$ ),
 folgt das eigentliche Program, das von der Maschine ausgeführt werden soll.
 Dieses Programm wird also ab der Adresse $256$ gelesen und ausgeführt.
 
-Insbesondere ist dieses Program dafür zuständig, die Unterbrechungstabelle zu
+Insbesondere ist dieses Programm dafür zuständig, die Unterbrechungstabelle zu
 füllen, falls (bestimmte) Unterbrechungen behandelt werden sollten.
 
 

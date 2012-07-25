@@ -16,26 +16,4 @@ wurden.
 
 \opdef{OUT}{$R, P, K \in \Reg$}{0xB8}{RRR}
 
-Sendet den Inhalt des Registers $R$ zum Ausgangsport mit Nummer $P$. Dabei wird
-die Kennung der Daten aus $R$ auf den Inhalt des Registers $K$ gesetzt.
-Siehe auch den Abschnitt \ref{subsec:Ausgabeports}, auf der Seite
-\pageref{subsec:Ausgabeports}.
-\[
-    R \to P
-\]
-$R$, $P$ und $K$ sind alle Register.
-
-\paragraph{Beispiel}
-Im folgenden Beispiel wird den Inhalt des Registers $R1$ an verschiedenen Ports
-ausgegeben. Die Register \texttt{R2} und \texttt{ZERO} werden dabei für die
-Kennung und Portnummer verwendet.
-
-\begin{lstlisting}
-  OUT R1 ZERO ZERO # R1 auf Port 0 mit Kennung 0 ausgeben
-  SET R2 5         # port 5
-
-  SET R1 10        # Inhalt in R1 ist newline
-  OUT R1 R2   ZERO # newline zum Port 5, Kennung 0
-  OUT R1 R2   R2   # nochmal, mit Kennung 5 auf Port 5
-\end{lstlisting}
 
