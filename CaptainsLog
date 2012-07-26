@@ -280,3 +280,18 @@ Malk.
 TODO: Fehlerbits in ERR überlegen! Es wird Zeit, dass wir zu allen
 Befehlen die Fehlerbehandlung spezifizieren. Diese fehlt nämlich
 total.
+
+
+=== 26.07.2012 ===
+Malk.
+TODO: 
+- den ganzen Abschnitt Organisation lesen und Inkonsistenzen
+  beseitigen
+- Endlich die Interruptnummer und Bits im ERR Register definieren,
+  damit wir Bezug darauf nehmen können.
+- Für alle Befehle, die Fehler/Unterbrechungen erzeugen spezifizieren,
+  welche Unterbrechungsnummer/Bits in ERR gesetzt werden.
+
+Wichtig:
+- ++ Debugging Konzept ++
+- ++ Assembler Spezifikation ++
