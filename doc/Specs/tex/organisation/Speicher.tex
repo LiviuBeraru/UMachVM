@@ -2,6 +2,9 @@
 \index{Speichermodell}
 \label{sec:Speicher}
 
+Der Speicher wird in seiner Gesamtheit beim Hochfahren der Maschine mit dem
+Wert Null initialisiert.
+
 \subsection{Adressierungsarten}
 \label{subsec:Adressierungsarten}
 \index{Adressierungsarten}
@@ -58,20 +61,19 @@ Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
 \index{Unterbrechungstabelle}
 \label{subsubsec:Unterbrechungstabelle}
 
-Die Unterbrechungstabelle besteht aus einer Reihe von Sprungadressen zum
-ausführbaren Code, bzw. zu sogenannten Unterbrechungsroutinen, oder \glqq
-interrupt handlers\grqq, die in Ausnahmefällen ausgeführt werden sollen. Jedes
-mal, wenn eine Ausnahmesituation auftritt (meistens eine Fehlersituation), wird
-intern ein Unterbrechungssignal erzeugt, das mit einer Kennnummer
-(Unterbrechungsnummer) versehen ist. Die Unterbrechungsnummer wird als Index in
-dieser Tabelle verwendet.
+Die Unterbrechungstabelle besteht aus einer Reihe von 32-Bit langen
+Sprungadressen zum ausführbaren Code, bzw. zu sogenannten
+Unterbrechungsroutinen, oder \glqq interrupt handlers\grqq, die in
+Ausnahmefällen ausgeführt werden sollen. Jedes mal, wenn eine Ausnahmesituation
+auftritt (meistens eine Fehlersituation), wird intern ein Unterbrechungssignal
+erzeugt, das mit einer Kennnummer (Unterbrechungsnummer) versehen ist. Die
+Unterbrechungsnummer wird als Index in dieser Tabelle verwendet.
 
 Hier ist die Rede von Unterbrechungen, die direkt mit der Ausführung von
-Instruktionen verbunden sind (Hardware Interrupts). Sie können entweder von der
-Maschine selbst erzeugt werden, wie z.B. im Falle einer Division durch Null,
-oder im Falle, dass eine unerlaubte Speicheradresse verwendet wird, oder sie
-können unter Programmkontrolle erzeugt werden. Siehe auch den Abschnitt
-\ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
+Instruktionen verbunden sind. Sie können entweder von der Maschine selbst
+erzeugt werden, wie z.B. im Falle einer Division durch Null, oder im Falle, dass
+eine unerlaubte Speicheradresse verwendet wird, oder sie können unter
+Programmkontrolle erzeugt werden. 
 
 
 Die Unterbrechungstabelle wird von der Maschine nicht gefüllt, sondern es ist
@@ -82,29 +84,24 @@ reagiert die Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die
 Maschine hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
 Abschnitt \ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
 
-Die Unterbrechungstabelle besteht aus 64 Einträgen, wobei der Eintrag mit der
-Nummer Null reserviert ist. Die folgenden acht (Eintrag 1 bis 8) dienen für die
-Hardware-Unterbrechungen, die von den Eingabeports erzeugt werden. Nicht alle
-Einträge müssen belegt sein. 
+Die Unterbrechungstabelle besteht aus 64 Einträgen. Jeder Eintrag beträgt wie
+ein Register 32 Bit, oder 4 Byte. Da es 64 Einträge gibt, ist die
+Unterbrechungstabelle $64 \cdot 4 = 256$ Bytes groß. Die Unterbrechungstabelle
+fängt der Adresse Null an. Siehe auch die Abbildung \ref{fig:Speicherstruktur}
+auf der Seite \pageref{fig:Speicherstruktur}.
 
-
-Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es 64
-Einträge gibt, ist die Unterbrechungstabelle $64 \cdot 4 = 256$ Bytes groß.
-Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
-\pageref{fig:Speicherstruktur}.
-
-Die Tabelle \ref{tab:Unterbrechungstabelle} gibt alle Unterbrechungsnummer an
-und deren Bedeutung. Undefinierte Unterbrechungsnummer werden nicht
-explizit angegeben.
+Die Tabelle \ref{tab:Unterbrechungstabelle} gibt alle definierten
+Unterbrechungsnummer und deren Bedeutung wieder. Undefinierte
+Unterbrechungsnummer werden nicht explizit angegeben.
 
 
 \begin{longtable}{>{\ttfamily}ll}
 \caption{Unterbrechungsnummer}
 \label{tab:Unterbrechungstabelle}
 \\\toprule
- 0    & Reserviert          \\
- 1-8  & Hardware Interrupts \\
- 16   & Division durch Null \\
+%  0    & Reserviert          \\
+%  1-8  & Hardware Interrupts \\
+      & Division durch Null \\
       & Ungültiger Befehl \\
       & Ungültige Registernummer  \\
       & Ungültige Speicheradresse \\

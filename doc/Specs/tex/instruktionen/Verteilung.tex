@@ -72,6 +72,12 @@ die Register $R1$ und $R2$ die Maschinencodes \texttt{0x01} und \texttt{0x02}
 und sind sie mit den Werten $4$ bzw. $5$ belegt, so bedeutet $R1 + R2$ das
 gleiche wie $4 + 5 = 9$ und nicht \texttt{0x01 + 0x02 = 0x03}.
 
+Genau so bezieht sich in einem Registerkontext eine Aussage wie \glqq $N$ Bytes
+von der Adresse $A$\grqq\ nicht auf die Registernummer von $A$ und $N$, sondern
+auf die Inhalte der Register $A$ und $N$. Wir haben diese vereinfachte
+Schreibweise gewählt, da sie einigermassen leserlicher scheint als z.B. $*A$ und
+$*N$ oder $\sim A$ und $\sim N$ oder ähnliche Schreibweisen.
+
 Andere verwendeten Schreibweisen:
 \begin{center}
 \begin{tabular}{l|l}\toprule

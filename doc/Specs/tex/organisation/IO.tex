@@ -17,11 +17,11 @@ hat, wird sie wegen ihrer konzeptionellen Einfachheit benutzt.
 Alle I/O Operationen finden zwischen dem Speicher und den Peripherie-Geräten
 statt. Dabei wird der gesamte Datentransfer von der I/O-Einheit vermittelt und
 gesteuert (siehe Abbildung \ref{fig:UMach-IO-Prozess} auf Seite
-\pageref{fig:UMach-IO-Prozess}). Dazu besitzt die I/O-Einheit direkten Zugriff
-auf den Speicher und kann dort unabhängig vom Kern lesen und schreiben (Direct
-Memory Access, \gls{DMA}\index{DMA}). Es ist zu bemerken, dass der direkte
-Speicherzugriff von der I/O-Einheit unternommen wird und nicht von den
-peripherischen Geräten selbst.
+\pageref{fig:UMach-IO-Prozess}). Die I/O-Einheit besitzt zu diesem Zweck einen
+direkten Zugriff auf den Speicher und kann dort unabhängig vom Kern lesen und
+schreiben (Direct Memory Access, \gls{DMA}\index{DMA}). Es ist zu bemerken, dass
+der direkte Speicherzugriff von der I/O-Einheit unternommen wird und nicht von
+den peripherischen Geräten selbst.
 
 Alle I/O Operationen werden vom Kern unter Programmkontrolle angestoßen (siehe
 auch den Abschnitt \ref{sec:IO-Instruktionen} auf Seite
@@ -33,7 +33,8 @@ Unterbrechungsanfoderungen (interrupts) initialisiert.
 Wenn ein I/O-Befehl ausgeführt wird, delegiert der Kern die Ausführung an die
 I/O-Einheit und wartet, bis diese fertig ist. Erst wenn die I/O-Einheit fertig
 mit dem Transfer zwischen Speicher und Peripherie ist, fährt der Kern die
-Ausführung fort.
+Ausführung fort. Es werden parallel keine Instruktionen aus dem
+Speicher geholt oder ausgeführt.
 
 
 Die I/O-Einheit der UMach Maschine besteht aus einer Reihe von jeweils 8
@@ -53,5 +54,16 @@ einschließlich Port 7 fortgeführt.
 
 Die Eingabe- und Ausgabefunktionen der I/O-Einheit werden durch
 I/O-Instruktionen angefordert. Diese Instruktionen werden im Abschnitt
-\ref{sec:IO-Instruktionen}, auf der Seite \pageref{sec:IO-Instruktionen}
+\ref{sec:IO-Instruktionen}, ab der Seite \pageref{sec:IO-Instruktionen}
 beschrieben.
+
+
+\paragraph{Bemerkung}
+Zu diesem Entwicklungspunkt sind für die peripherischen Geräte, bzw. für die
+entsprechenden Ports keine Kontrolle- oder Statusregister vorgesehen. Es gibt
+auch keine entsprechende Befehle für die Kontrolle und Statusabfrage der
+peripherischen Geräte. Es wird lediglich in den Speicher eingelesen und aus dem
+Speicher ausgegeben. Eine zukünftige Version dieser Maschine könnte die
+Kontrolle der peripherischen Geräte hinzufügen (wie z.B. ein- und ausschalten
+der Geräte).
+

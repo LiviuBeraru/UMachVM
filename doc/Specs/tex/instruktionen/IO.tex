@@ -3,17 +3,63 @@
 
 
 
-\opdef{IN}{$R, P\in \Reg$}{0xB0}{RR0}
+\opdef{IN}{$A, N, P \in \Reg$}{0xB0}{RRR}
 
-Liest den Inhalt des Eingabeports mit Nummer $P$ in das Register $R$.
-Diese Operation blockiert solange die Programausführung, bis Daten eingelesen
-wurden.
+Veranlasst die I/O-Einheit, $N$ Bytes Daten aus dem Gerät am Port $P$, zum
+Speicher ab der Adresse $A$ zu übertragen. $A$, $N$ und $P$ sind Register und es
+ist hier deren Inhalt gemeint.
+
+\[
+  P \to mem_{N}(A)
+\]
+
+Dieser Befehl blockiert den Kern solange, bis entweder $N$ Bytes gelesen wurden,
+oder bis das Gerät das Ende der Übertragung signalisiert. Die tatsächliche
+Anzahl der übetragenen Bytes kann kleiner als $N$ sein und wird in das Register
+$N$ gespeichert.
 
 
 
+\opdef{OUT}{$A, N, P \in \Reg$}{0xB8}{RRR}
+Schreibt $N$ Bytes Daten aus dem Speicher mit Adresse $A$ an den Port mit
+Nummer $P$. Die Anzahl der tatsächlich geschriebenen Bytes wird zurück in das
+Register $N$ geschrieben und beträgt $0$ bis $N$.
+
+Dieser Befehl blockiert den Kern solange, bis die I/O-Einheit fertig mit dem
+Schreiben ist.
 
 
+\paragraph{Beispiel}
+Der folgende Code demonstriert die Benutzung der \texttt{IN} und \texttt{OUT}
+Befehle in einem \glqq Hello User\grqq\ Programm. Der Benutzer wird nach seinem
+Namen gefragt und dann wird er namentlich begrüßt.
 
-\opdef{OUT}{$R, P, K \in \Reg$}{0xB8}{RRR}
+\begin{lstlisting}
+SET R1 prompt   # Adresse der ersten Ausgabe
+SET R2 10       # Länge der Ausgabe
+SET R3 0        # Portnummer 0
+OUT R1 R2 R3    # Ausgeben "Your name: "
 
+SET R1 name     # Speicheradresse
+SET R2 16       # wieviel input maximal
+SET R3 0        # Port 0 (Tastatur)
+IN  R1 R2 R3    # oder auch IN R1 R2 ZERO
+### blockiert bis input fertig ###
+### in R2 steht wieviel tatsächlich gelesen ###
+
+SET R4 hello
+SET R5 7        # strlen(hello)
+OUT R4 R5 R3    # output R5 bytes auf Port 0
+OUT R1 R2 ZERO  # "Hello, User"
+
+SET R4 nl
+SET R5 1
+OUT R4 R5 ZERO  # '\n'
+
+.data
+array 16 name
+string promtp "Your name: "
+string hello  "Hello, "
+string nl     "0x10"
+\end{lstlisting}
 
