@@ -1,5 +1,5 @@
-\section{Instruktionsformate}
-\label{sec:Instruktionsformate}
+\subsection{Instruktionsformate}
+\label{subsec:Instruktionsformate}
 \index{Instruktionsformat}
 
 Eine Instruktion besteht aus einer Folge von 4 Bytes.
@@ -39,10 +39,10 @@ für Operanden oder Daten benutzt. Beispiel einer Instruktionszerlegung:
     Instruktion (32 Bit) &
     \texttt{00000001} & \texttt{00000010} & \texttt{00000011} & \texttt{00000100}
     \\\hline
-    Hexa  &
+    Hexa          &
     \texttt{01}   & \texttt{02}   & \texttt{03}   & \texttt{04}
     \\\hline
-    Byte Order &
+    Byte Order    &
     erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline
     Interpretation &
@@ -61,7 +61,7 @@ Die nächste Zeile gibt die spezielle Belegung der einzelnen Bytes an.
 
 
 
-\subsection{000}
+\subsubsection{000}
 \label{000}
 \index{Instruktionsformat!000}
 \index{000}
@@ -81,7 +81,7 @@ Nullen zu füllen.
 
 
 
-\subsection{NNN}
+\subsubsection{NNN}
 \label{NNN}
 \index{Instruktionsformat!NNN}
 \index{NNN}
@@ -99,7 +99,7 @@ einer numerischen Angabe  $N$ (einer Zahl), die die letzten 3 Bytes belegt.
 Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen.
 
 
-\subsection{R00}
+\subsubsection{R00}
 \label{R00}
 \index{Instruktionsformat!R00}
 \index{R00}
@@ -114,7 +114,7 @@ Die Instruktion im Format R00 besteht aus einem Befehl im ersten Byte gefolgt
 von der Angabe eines Registers im zweiten Byte. Die letzten zwei Bytes werden
 nicht verwendet, bzw. werden ignoriert.
 
-\subsection{RNN}
+\subsubsection{RNN}
 \label{RNN}
 \index{Instruktionsformat!RNN}
 \index{RNN}
@@ -144,7 +144,7 @@ Angabe \texttt{0x0203}.
 
 
 
-\subsection{RR0}
+\subsubsection{RR0}
 \label{RR0}
 \index{Instruktionsformat!RR0}
 \index{RR0}
@@ -160,7 +160,7 @@ von der Angabe zweier Register in den folgenden 2 Bytes.
 Das dritte Byte wird nicht verwendet, bzw. wird ignoriert.
 
 
-\subsection{RRN}
+\subsubsection{RRN}
 \label{RRN}
 \index{Instruktionsformat!RRN}
 \index{RRN}
@@ -188,7 +188,7 @@ Nummer \texttt{0x02} und die Zahl \texttt{0x03}.
 
 
 
-\subsection{RRR}
+\subsubsection{RRR}
 \label{RRR}
 \index{Instruktionsformat!RRR}
 \index{RRR}
@@ -207,7 +207,7 @@ Die Register werden als Zahlen angegeben und deren Bedeutung hängt vom
 jeweiligen Befehl ab.
 
 
-\subsection{Zusammenfassung}
+\subsubsection{Zusammenfassung}
 \label{subsec:Instr-Formate-Zusammenfassung}
 Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
 

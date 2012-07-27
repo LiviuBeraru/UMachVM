@@ -1,0 +1,47 @@
+\subsection{Notationen}
+\index{Notation}
+
+
+Mit \Reg\index{\Reg} wird die Menge aller Register
+gekennzeichnet\footnote{Nicht verwechseln mit den Symbolen $\mathds{R}$ und
+$\mathbb{R}$, die die Menge aller reellen Zahlen bedeuten.}.
+Die Notation $X \in \Reg$ bedeutet, dass $X$ ein Element aus dieser Menge ist,
+mit anderen Worten, dass $X$ ein Register ist. Analog bedeutet die
+Schreibweise $X,Y \in \Reg$, dass $X$ und $Y$ beide Register sind.
+
+
+Wenn $X$ ein Register bezeichnet, dann bezeichnet $\$X$ den Inhalt des
+Registers $X$. Diese Notation wird verwendet, um in Aussagen wie 
+\glqq $\$X + \$Y$\grqq\ klar zu machen, dass es sich um die Registerinhalte von
+$X$ und $Y$ handelt, nicht um die Register selbst.
+
+Die Tabelle \ref{tab:Notationen} auf der Seite \pageref{tab:Notationen}
+wiedergibt alle Notationen, die in diesem Kapitel verwendet werden.
+
+\begin{longtable}{ll}
+ \caption{Verwendete Notationen}
+ \label{tab:Notationen}
+ \\\toprule
+ Notation & Bedeutung \\\midrule
+ \endfirsthead
+ \\\toprule
+ Notation & Bedeutung \\\midrule
+ \endhead
+ $\mathds{N}$ & Menge aller natürlichen Zahlen: $0,1,2,\ldots$         \\
+ $\mathds{N}_{\setminus 0}$ 
+              & $\mathds{N}$ ohne die Null: $1,2,\ldots$               \\
+ $\mathds{Z}$ & Menge aller ganzen Zahlen: $\ldots,-2,-1,0,1,2,\ldots$ \\
+ $\mathds{Z}_{\setminus 0}$ 
+              & $\mathds{Z}$ ohne die Null: $\ldots,-2,-1,1,2,\ldots$  \\
+ $N \in \mathds{N}$
+              & $N$ ist Element von $\mathds{N}$, oder liegt im Bereich von
+              $\mathds{N}$                                             \\
+ $X \gets Y$  & $X$ wird auf $Y$ gesetzt                               \\
+ $mem(X)$     & Speicherinhalt an der Adresse $X$ (1 Byte)             \\
+ $mem_{n}(X)$ & $n$-Bytes-Block im Speicher ab Adresse $X$             \\
+ \texttt{mem[n]}
+              & äquivalent zu $mem(n)$                                 \\
+ \bottomrule
+ 
+\end{longtable}
+

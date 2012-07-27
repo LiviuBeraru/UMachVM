@@ -1,4 +1,4 @@
-\section{Verteilung des Befehlsraums}
+\subsection{Verteilung des Befehlsraums}
 \index{Befehlsraum}
 Zur besseren Übersicht der verschiedenen UMach-\glspl{Instruktion}, unterteilen
 wir den \gls{Instruktionssatz} der UMach virtuellen Maschine in den folgenden
@@ -34,8 +34,27 @@ Die Verteilung der Kategorien auf die verschiedenen Maschinencode-Intervallen
 wird in der Tabelle \ref{tab:Befehlraumverteilung} auf Seite
 \pageref{tab:Befehlraumverteilung} angegeben.
 
-\input{instruktionen/Verteilung-Tabelle}
-\input{instruktionen/Instruktionen-Tabelle}
+\begin{table}
+\index{Befehlsraum!Verteilungstabelle}
+  \centering
+  \begin{tabular}{|c|l|}                        \hline
+    Maschinencodes   & Kategorie              \\\hline\hline
+    \texttt{00 - 0F} & Kontrollbefehle        \\
+    \texttt{10 - 2F} & Lade-/Speicherbefehle  \\
+    \texttt{30 - 4F} & Arithmetische Befehle  \\
+    \texttt{50 - 6F} & Logische Befehle       \\
+    \texttt{70 - 7F} & Vergleichsbefehle      \\
+    \texttt{80 - 8F} & Sprungbefehle          \\
+    \texttt{90 - 9F} & Unterprogrambefehle    \\
+    \texttt{A0 - AF} & Systembefehle          \\
+    \texttt{B0 - BF} & IO Befehle             \\\hline
+  \end{tabular}
+  \caption[Verteilung des Befehlsraums]
+          {Verteilung des Befehlsraums nach Befehlskategorien.
+          Die Zahlen sind im Hexadezimalsystem angegeben.}
+  \label{tab:Befehlraumverteilung}
+\end{table}
+
 
 Die Tabelle \ref{tab:Befehlentabelle} auf der Seite 
 \pageref{tab:Befehlentabelle} enthält eine Übersicht aller Befehle und
@@ -53,48 +72,6 @@ Im den folgenden Abschnitten werden die einzelnen Instruktionen beschrieben. Zu
 jeder Instruktion wird der \gls{Assemblername}, die Parameter, der Maschinencode
 und das Instruktionsformat, das die Typen der Parameter definiert, formal
 angegeben. Zudem werden Anwendungsbeispiele angegeben. Die Instruktionsformate
-können im Abschnitt \ref{sec:Instruktionsformate} ab der Seite
-\pageref{sec:Instruktionsformate} nachgeschlagen werden.
+können im Abschnitt \ref{subsec:Instruktionsformate} ab der Seite
+\pageref{subsec:Instruktionsformate} nachgeschlagen werden.
 
-\paragraph{Zur Notation}
-\index{Notation}
-Mit \Reg\index{\Reg} wird die Menge aller Register
-gekennzeichnet\footnote{Nicht verwechseln mit den Symbolen $\mathds{R}$ und
-$\mathbb{R}$, die die Menge aller reellen Zahlen bedeuten.}.
-Die Notation $X \in \Reg$ bedeutet, dass $X$ ein Element aus dieser Menge ist,
-mit anderen Worten, dass $X$ ein Register ist. Analog bedeutet die
-Schreibweise $X,Y \in \Reg$, dass $X$ und $Y$ beide Register sind.
-
-Gilt $X, Y\in \Reg$ und ist $\sim$ eine durch einen Befehl definierte Relation
-zwischen $X$ und $Y$, so bezieht sich die Schreibweise $X \sim Y$ nicht auf die
-Maschinennamen von $X$ und $Y$, sondern auf deren Inhalte. Zum Beispiel, haben
-die Register $R1$ und $R2$ die Maschinencodes \texttt{0x01} und \texttt{0x02}
-und sind sie mit den Werten $4$ bzw. $5$ belegt, so bedeutet $R1 + R2$ das
-gleiche wie $4 + 5 = 9$ und nicht \texttt{0x01 + 0x02 = 0x03}.
-
-Genau so bezieht sich in einem Registerkontext eine Aussage wie \glqq $N$ Bytes
-von der Adresse $A$\grqq\ nicht auf die Registernummer von $A$ und $N$, sondern
-auf die Inhalte der Register $A$ und $N$. Wir haben diese vereinfachte
-Schreibweise gewählt, da sie einigermassen leserlicher scheint als z.B. $*A$ und
-$*N$ oder $\sim A$ und $\sim N$ oder ähnliche Schreibweisen.
-
-Andere verwendeten Schreibweisen:
-\begin{center}
-\begin{tabular}{l|l}\toprule
- $\mathds{N}$ & Menge aller natürlichen Zahlen: $0,1,2,\ldots$         \\
- $\mathds{N}_{\setminus 0}$ 
-              & $\mathds{N}$ ohne die Null: $1,2,\ldots$               \\
- $\mathds{Z}$ & Menge aller ganzen Zahlen: $\ldots,-2,-1,0,1,2,\ldots$ \\
- $\mathds{Z}_{\setminus 0}$ 
-              & $\mathds{Z}$ ohne die Null: $\ldots,-2,-1,1,2,\ldots$  \\
- $N \in \mathds{N}$
-              & $N$ ist Element von $\mathds{N}$, oder liegt im Bereich von
-              $\mathds{N}$                                             \\
- $X \gets Y$  & $X$ wird auf $Y$ gesetzt                               \\
- $mem(X)$     & Speicherinhalt an der Adresse $X$ (1 Byte)             \\
- $mem_{n}(X)$ & $n$-Bytes-Block im Speicher ab Adresse $X$             \\
- \texttt{mem[n]}
-              & äquivalent zu $mem(n)$                                 \\
-\bottomrule
-\end{tabular}
-\end{center} 
