@@ -117,26 +117,41 @@ ZERO & 00 & Enthält die Zahl Null.
 \subsubsection{Das ERR Register}
 \index{ERR@\texttt{ERR}}
 
+Zu jedem Fehler gehört ein Bit im Register. Die Bitstellen werden dabei
+entsprechend deren Stelligkeiten durchnummeriert: Bit mit Stelligkeit $2^{0}$
+hat Position $0$, Bit mit Stelligkeit $2^{31}$ hat die Position $31$.
+
+Die Bits im \texttt{ERR} Register werden in den folgenden 4 Gruppen eingeteilt:
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}ll}
+\toprule
+ 0  -  7 & Kern Fehler  \\
+ 8  - 15 & Speicherfehler                         \\
+ 16 - 23 & I/O Fehler                             \\
+ 24 - 31 & Systemfehler                           \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 Die Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
-\texttt{ERR} Register signalisiert werden können. Zu jedem Fehler gehört ein Bit
-im Register. Die Bitstellen werden dabei entsprechend deren Stelligkeiten
-durchnummeriert: Bit mit Stelligkeit $2^{0}$ hat Position $0$, Bit mit
-Stelligkeit $2^{31}$ hat die Position $31$.
+\texttt{ERR} Register signalisiert werden können.
+
 
 \begin{longtable}{>{\ttfamily}ll}
 \caption[ERR Register]{Bedeutung der einzelnen Bits im ERR Register}
 \label{tab:ERR-register}
 \\\toprule
- 0  & Division durch Null \\
-    & Arithmetischer Überlauf \\
-    & Ungültiger Befehl \\
-    & Ungültige Registernummer  \\
-    & Ungültige Speicheradresse \\
-    & Ungültige Befehlsargumenten \\
-    & Stack Fehler \\
-    & Stack Überlauf \\
-    & Speicher unzureichend \\
-    & I/O Port existiert nicht \\
+ 0  & Division durch Null       \\
+ 2  & Ungültiger Befehl         \\
+ 3  & Ungültige Registernummer  \\
+\midrule
+ 8  & Ungültige Speicheradresse \\
+ 9  & Stack Fehler              \\
+10  & Stack Überlauf            \\
+11  & Speicher unzureichend     \\
+\midrule
+16  & I/O Port existiert nicht \\
 \bottomrule
 \end{longtable}
 
@@ -145,8 +160,9 @@ Einige der genannten Fehler dürften näher erläutert werden.
 \paragraph{Stack Fehler}
 \index{Stack!Fehler}
 Ein Stack Fehler liegt vor, wenn eine ungültige Stack-Operation durchgeführt
-werden sollte. Zum Beispiel, wenn ein \opref{POP}-Befehl gegeben wird, ohne
-vorher entsprechende Daten mittels \opref{PUSH} gepusht zu haben. 
+werden sollte. Zum Beispiel, wenn ein \opref{POP}-Befehl angegeben wird, ohne
+vorher entsprechende Daten mittels \opref{PUSH} auf den Stack gepusht zu haben.
+
 
 \paragraph{Stack Überlauf}
 \index{Stack!Überlauf}
