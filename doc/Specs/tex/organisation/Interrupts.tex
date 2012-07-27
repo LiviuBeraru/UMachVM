@@ -1,0 +1,73 @@
+\section{Interrupts}
+\label{sec:Interrupts}
+\index{Interrupts}
+
+Ein Interrupt ist eine Unterbrechung der Programmausführung unter bestimmten
+Umständen. Die UMach Maschine verwendet die folgenden Arten von Interrupts:
+
+\begin{enumerate}
+ \item Automatische Interrupts, oder Hardware-Interrupts, die aufgrund von
+       Fehlern geschehen und eine rudimentäre Fehlerbehandlung bei
+       schwerwiegenden Fehlern, wie die Nulldivision, ermöglichen sollen.
+ \item Software-Interrupts, die vom der Software angefordert
+       werden können.
+\end{enumerate}
+
+Jeder Interrupt hat eine bestimmte Nummer, die ganzzahlige Werte von 0 bis 64
+annimmt. Die Interruptnummer wird als Index in der Interrupttabelle
+verwendet, um die Speicheradresse einer Interruptroutine zu finden (siehe den
+Abschnitt \ref{subsubsec:Interrupttabelle}, besonders die Tabelle
+\ref{tab:Interrupttabelle} auf der Seite \pageref{tab:Interrupttabelle}). Ist
+diese Adresse ungleich Null, so wird das \texttt{PC} Register auf diese Adresse
+gesetzt und die Interruptroutine wird ausgeführt. Wird keine solche Routine
+gefunden, so wird die gesamte Programmausführung unterbrochen und die Maschine
+hält an.
+
+Die Interruptroutinen müssen vom Hauptprogramm als Sprungadressen in der
+Interrupttabelle gesetzt werden. Jede solche Interruptroutine sollte folgendes
+beachten:
+\begin{itemize}
+ \item Bevor die Routine aufgerufen wird, sichert die Maschine auf den Stack
+       nur das Register \texttt{PC}. Andere Register wie \texttt{SP} müssen
+       von der Routine selbst gesichert und wiederhergestellt werden.
+\end{itemize}
+
+
+\subsection{Automatische Interrupts}
+
+Im Normalfall wird eine Instruktion ohne Weiteres ausgeführt. In Ausnahmefällen
+-- wenn die Instruktion nicht ausgeführt werden kann, meistens wegen ungültigen
+Parametern -- wird eine Ausnahmesituation\index{Ausnahmesituation} durch eine
+Interruptnummer signalisiert und der Programmfluss unterbrochen.
+
+
+
+
+\paragraph{Beispiel}
+Zum Beispiel, die \opref{DIV} Instruktion (Division) erzeugt den Interrupt mit
+Nummer 1, falls ihr zweites Argument gleich Null ist (siehe auch die Tabelle
+\ref{tab:Interrupttabelle} auf der Seite \pageref{tab:Interrupttabelle}). Wenn
+der Interrupt bearbeitet wird, schaut die Maschine in der Interrupttabelle an
+der Position 1 nach. Ist der Eintrag ungleich Null, so wird der Eintrag als
+Adresse einer Routine behandelt und dorthin gesprungen: das Register \texttt{PC}
+wird zuerst auf den Stack gesichert und dannach gleich dem Tabelleneintrag
+gesetzt. Ist der Eintrag dagegen Null, so hält die Maschine an.
+
+
+
+\subsection{Software-Interrupts}
+
+Eine Unterbrechung der Programmausführung kann auch absichtlich erzeugt werden.
+Dafür verwendet man den Befehl \opref{INT}. Wenn ein Software-Interrupt
+generiert wird, verhält sich die Maschine wie im Falle eines automatischen
+Interrupts.
+
+
+
+
+
+
+
+
+
+

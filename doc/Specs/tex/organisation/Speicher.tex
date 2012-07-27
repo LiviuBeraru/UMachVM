@@ -3,35 +3,8 @@
 \label{sec:Speicher}
 
 Der Speicher wird in seiner Gesamtheit beim Hochfahren der Maschine mit dem
-Wert Null initialisiert.
+Wert Null initialisiert. Seine Größe ist nicht festgelegt.
 
-\subsection{Adressierungsarten}
-\label{subsec:Adressierungsarten}
-\index{Adressierungsarten}
-
-Als RISC-orientierte Maschine, greift die UMach lediglich in zwei Situationen
-auf den Speicher zu: zum Schreiben von Registerinhalten in den Speicher
-(Schreibzugriff) und zum Lesen von Speicherinhalten in einen Register
-(Lesezugriff).  Die \gls{Adressierungsart} beschreibt dabei, wie der Zugriff
-auf den Speicher erfolgen sollte, bzw. wie die angesprochene Speicheradresse
-angegeben wird. Anders ausgedrückt, beantwortet die Adressierungsart die Frage
-\glqq wie kann eine Instruktion der Maschine eine Adresse angeben?\grqq. 
-
-Die UMach Maschine kennt eine einzige Adressierungsart: die (register-)
-indirekte Adressierung. Dabei werden alle Speicheradressen nicht direkt
-angegeben, sondern es wird ein Register angegeben, der die Adresse beinhaltet.
-Zum Beispiel, die Instruktion 
-\begin{lstlisting}
- 0x13 0x01 0x02 0x00
-\end{lstlisting}
-bedeutet nicht \glqq lade das Wort an der Adresse \texttt{0x02} in das Register
-mit Nummer \texttt{0x01}\grqq, sondern \glqq lade das Wort, das an der Adresse
-liegt, die in Register mit Nummer \texttt{0x02} angegeben ist, in das Register
-mit Nummer \texttt{0x01}\grqq. Das entpricht der Instruktion
-\begin{lstlisting}
- LW R1 R2
-\end{lstlisting}
-Analog gilt für Schreibbefehle.
 
 
 \subsection{Speicherstruktur}
@@ -40,7 +13,7 @@ Analog gilt für Schreibbefehle.
 Der Speicher der UMach Maschine hat zur Laufzeit eine bestimmte Struktur, bzw.
 wird in bestimmten Bereichen unterteilt. Diese Bereiche sind
 \begin{enumerate}
- \item Unterbrechungstabelle
+ \item Interrupttabelle
  \item Programm und Daten
  \item Stack
 \end{enumerate}
@@ -57,51 +30,47 @@ Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
 
 
 
-\subsubsection{Unterbrechungstabelle}
-\index{Unterbrechungstabelle}
-\label{subsubsec:Unterbrechungstabelle}
+\subsubsection{Interrupttabelle}
+\index{Interrupttabelle}
+\label{subsubsec:Interrupttabelle}
 
-Die Unterbrechungstabelle besteht aus einer Reihe von 32-Bit langen
-Sprungadressen zum ausführbaren Code, bzw. zu sogenannten
-Unterbrechungsroutinen, oder \glqq interrupt handlers\grqq, die in
-Ausnahmefällen ausgeführt werden sollen. Jedes mal, wenn eine Ausnahmesituation
-auftritt (meistens eine Fehlersituation), wird intern ein Unterbrechungssignal
-erzeugt, das mit einer Kennnummer (Unterbrechungsnummer) versehen ist. Die
-Unterbrechungsnummer wird als Index in dieser Tabelle verwendet.
-
-Hier ist die Rede von Unterbrechungen, die direkt mit der Ausführung von
-Instruktionen verbunden sind. Sie können entweder von der Maschine selbst
-erzeugt werden, wie z.B. im Falle einer Division durch Null, oder im Falle, dass
-eine unerlaubte Speicheradresse verwendet wird, oder sie können unter
-Programmkontrolle erzeugt werden. 
+Die Interrupttabelle besteht aus einer Reihe von 32-Bit langen Sprungadressen
+zum ausführbaren Code, bzw. zu sogenannten Interruptroutinen, oder \glqq
+interrupt handlers\grqq, die in Ausnahmefällen ausgeführt werden sollen. Jedes
+mal, wenn eine Ausnahmesituation auftritt (meistens eine Fehlersituation), wird
+intern ein Interruptsignal erzeugt, das mit einer Kennnummer (Interruptnummer)
+versehen ist. Die Interruptnummer wird als Index in dieser Tabelle verwendet.
 
 
-Die Unterbrechungstabelle wird von der Maschine nicht gefüllt, sondern es ist
+Die Interrupttabelle wird von der Maschine nicht gefüllt, sondern es ist
 Sache der Software, die entsprechenden Stellen im Speicher zu füllen und
 entsprechende Funktionalität zur Verfügung zu stellen. Wird eine solche Adresse
 nicht gesetzt, d.h. ist der entsprechende Tabelleneintrag auf Null gesetzt, so
 reagiert die Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die
 Maschine hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
-Abschnitt \ref{sec:Unterbrechungen}, ab der Seite \pageref{sec:Unterbrechungen}.
+Abschnitt \ref{sec:Interrupts}, ab der Seite \pageref{sec:Interrupts}.
 
-Die Unterbrechungstabelle besteht aus 64 Einträgen. Jeder Eintrag beträgt wie
-ein Register 32 Bit, oder 4 Byte. Da es 64 Einträge gibt, ist die
-Unterbrechungstabelle $64 \cdot 4 = 256$ Bytes groß. Die Unterbrechungstabelle
-fängt der Adresse Null an. Siehe auch die Abbildung \ref{fig:Speicherstruktur}
-auf der Seite \pageref{fig:Speicherstruktur}.
+Die Interrupttabelle besteht aus 64 Einträgen, die 64 mögliche Interrupts
+entsprechen. Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es
+64 Einträge gibt, ist die Interrupttabelle $64 \cdot 4 = 256$ Bytes groß. Die
+Interrupttabelle fängt an der Adresse Null an. Siehe auch die Abbildung
+\ref{fig:Speicherstruktur} auf der Seite \pageref{fig:Speicherstruktur}.
 
-Die Tabelle \ref{tab:Unterbrechungstabelle} gibt alle definierten
-Unterbrechungsnummer und deren Bedeutung wieder. Undefinierte
-Unterbrechungsnummer werden nicht explizit angegeben.
+
+Die Tabelle \ref{tab:Interrupttabelle} gibt alle definierten Interruptnummer und
+deren Bedeutung wieder. Undefinierte Interruptnummer werden nicht explizit
+angegeben.
 
 
 \begin{longtable}{>{\ttfamily}ll}
-\caption{Unterbrechungsnummer}
-\label{tab:Unterbrechungstabelle}
+\caption{Interruptnummer}
+\label{tab:Interrupttabelle}
 \\\toprule
-%  0    & Reserviert          \\
-%  1-8  & Hardware Interrupts \\
-      & Division durch Null \\
+{\rmfamily Nummer} & Beschreibung \\
+\midrule
+\endhead
+ 0    & Standardinterrupt: Maschine ausschalten   \\
+ 1    & Division durch Null \\
       & Ungültiger Befehl \\
       & Ungültige Registernummer  \\
       & Ungültige Speicheradresse \\
@@ -117,12 +86,12 @@ Unterbrechungsnummer werden nicht explizit angegeben.
 \subsubsection{Programm und Daten}
 \index{Programm}
 
-Nach der Unterbrechungstabelle, die $256$ Bytes groß ist ($64$ mal $4$ ),
+Nach der Interrupttabelle, die $256$ Bytes groß ist ($64$ mal $4$ ),
 folgt das eigentliche Program, das von der Maschine ausgeführt werden soll.
 Dieses Programm wird also ab der Adresse $256$ gelesen und ausgeführt.
 
-Insbesondere ist dieses Programm dafür zuständig, die Unterbrechungstabelle zu
-füllen, falls (bestimmte) Unterbrechungen behandelt werden sollten.
+Insbesondere ist dieses Programm dafür zuständig, die Interrupttabelle zu
+füllen, falls (bestimmte) Interrupts behandelt werden sollten.
 
 
 

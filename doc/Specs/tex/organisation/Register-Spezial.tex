@@ -106,13 +106,6 @@ CMPR & 41 & \glqq Comparison Result\grqq.
             \index{CMPR (Reg)@\texttt{CMPR} (Reg)}
             
 \\
-HIR & 42 & \glqq Hardware Interrupt\grqq.
-            Enthält die Nummer des auslösenden Ports einer Unterbrechung.
-            Siehe auch Abschnitt \ref{subsec:Hardware-Unterbrechungen}, Seite
-            \pageref{subsec:Hardware-Unterbrechungen}.
-            \index{HIR (Reg)@\texttt{HIR} (Reg)}
-            
-\\
 ZERO & 00 & Enthält die Zahl Null.
 
             Schreibgeschützt.
@@ -135,12 +128,34 @@ Stelligkeit $2^{31}$ hat die Position $31$.
 \label{tab:ERR-register}
 \\\toprule
  0  & Division durch Null \\
+    & Arithmetischer Überlauf \\
     & Ungültiger Befehl \\
     & Ungültige Registernummer  \\
     & Ungültige Speicheradresse \\
     & Ungültige Befehlsargumenten \\
     & Stack Fehler \\
-    & Speicher nicht vorhanden \\
+    & Stack Überlauf \\
+    & Speicher unzureichend \\
     & I/O Port existiert nicht \\
 \bottomrule
 \end{longtable}
+
+Einige der genannten Fehler dürften näher erläutert werden.
+
+\paragraph{Stack Fehler}
+\index{Stack!Fehler}
+Ein Stack Fehler liegt vor, wenn eine ungültige Stack-Operation durchgeführt
+werden sollte. Zum Beispiel, wenn ein \opref{POP}-Befehl gegeben wird, ohne
+vorher entsprechende Daten mittels \opref{PUSH} gepusht zu haben. 
+
+\paragraph{Stack Überlauf}
+\index{Stack!Überlauf}
+Ein Stack Überlauf liegt vor, wenn der Stack Pointer (Register \texttt{SP}) auf
+einen Speicherbereich gesetzt wird, der nicht mehr zum Stack-Bereicht des
+Speichers gehört. Das passiert, wenn der Stack Pointer im Program-Bereich oder
+auf noch kleinere Adressen gesetzt wird.
+
+Die UMach Maschine sollte solche kleine Werte nicht zulassen.
+
+
+
