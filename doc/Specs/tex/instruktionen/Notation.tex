@@ -36,12 +36,17 @@ wiedergibt alle Notationen, die in diesem Kapitel verwendet werden.
  $N \in \mathds{N}$
               & $N$ ist Element von $\mathds{N}$, oder liegt im Bereich von
               $\mathds{N}$                                             \\
- $X \gets Y$  & $X$ wird auf $Y$ gesetzt                               \\
+ $\Reg$       & Menge aller Register                                   \\
+ $X \in \Reg$ & $X$ ist ein Register                                   \\
+ $\$X$        & Inhalt des Registers $X$                               \\
+ $a \gets b$  & $a$ wird auf $b$ gesetzt                               \\
+ $X \gets \$Y$& $X$ wird auf den Inhalt des Registers $Y$ gesetzt      \\
  $mem(X)$     & Speicherinhalt an der Adresse $X$ (1 Byte)             \\
  $mem_{n}(X)$ & $n$-Bytes-Block im Speicher ab Adresse $X$             \\
  \texttt{mem[n]}
               & äquivalent zu $mem(n)$                                 \\
+ $lsb_{n}(X)$ \index{las@$lsb$}
+              & \glqq least significant $n$ bits\grqq\ von $X$        \\
  \bottomrule
- 
 \end{longtable}
 

@@ -17,13 +17,11 @@ Instruktion übergeben werden, müssen in diesen 32 Bit untergebracht werden.
 
 \paragraph{Byte Order}
 \index{Byte Order}
-Die Byte Order (Endianness) der gelesenen \glspl{Byte} ist big-endian.
-Die zuerst gelesenen 8 Bits sind die 8 höchstwertigen (Wertigkeiten $2^{31}$ bis
-$2^{24}$) und die zuletzt gelesenen Bits sind die niedrigstwertigen
-(Wertigkeiten $2^{7}$ bis $2^{0}$).
-Bits werden in Stücken von $n$ Bits gelesen, wobei $n = k \cdot 8$ mit
-$k \in \{1, 4\}$ (byteweise oder wortweise).
-
+Die Byte Order (Endianness)\index{Endianness} der gelesenen \glspl{Byte} ist
+big-endian. Die zuerst gelesenen 8 Bits sind die 8 höchstwertigen (Wertigkeiten
+$2^{31}$ bis $2^{24}$) und die zuletzt gelesenen Bits sind die niedrigstwertigen
+(Wertigkeiten $2^{7}$ bis $2^{0}$). Bits werden in Stücken von $n$ Bits gelesen,
+wobei $n = k \cdot 8$ mit $k \in \{1, 4\}$ (byteweise oder wortweise).
 
 \paragraph{Allgemeines Format}
 Jede \gls{Instruktion} besteht aus zwei Teilen: der erste Teil ist

@@ -1,12 +1,18 @@
 \section{Arithmetische Instruktionen} 
 
 \opdef{ADD}{$X,Y,Z \in \Reg$}{0x30}{RRR}
-Vorzeichen behaftete Addition der Registerinhalte $Y$ und $Z$.
+Vorzeichen behaftete Addition der Registerinhalte $\$Y$ und $\$Z$.
 Das Ergebnis der Addition wird in das Register $X$ gespeichert.
 Entspricht dem algebraischen Ausdruck
 \[
-    X \gets Y + Z
+    X \gets \$Y + \$Z
 \]
+
+\paragraph{Fehler}
+Falls das Ergebnis der Addition sich nicht mit 32 Bit darstellen lässt wird der
+Interrupt mit Nummer 2 generiert (arithmetischer Überlauf) und das Bit mit
+Nummer 1 im Register \texttt{ERR} gesetzt.
+
 Beispiel:
 \begin{lstlisting}
   SET   R1 1     # $R1 \gets 1$
@@ -22,16 +28,19 @@ Vorzeichenlose Addition wird durch den Befehl \texttt{ADDU} ausgeführt.
 
 \opdef{ADDU}{$X,Y,Z \in \Reg$}{0x31}{RRR}
 \glqq Add Unsigned\grqq.
-Vorzeichenlose Addition der Register $Y$ und $Z$. Das Ergebnis wird in das
-Register $X$ gespeichert. Enthält $Y$ oder $Z$ ein Vorzeichen (höchstwertiges
-Bit auf 1 gesetzt), so wird es nicht als solches interpretiert, sondern als
-Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
+Vorzeichenlose Addition der Registerinhalte $\$Y$ und $\$Z$. Das Ergebnis wird
+in das Register $X$ gespeichert. Enthält $\$Y$ oder $\$Z$ ein Vorzeichen
+(höchstwertiges Bit auf 1 gesetzt), so wird es nicht als solches interpretiert,
+sondern als Wertigkeit, die zum Betrag des Wertes hinzuaddiert wird ($+2^{31}$).
 
 \begin{lstlisting}
   SET   R1 1     # $R1 \gets 1$
   SET   R2 -2    # $R2 \gets -2$
   ADDU  R3 R1 R2 # $R3 \gets (1 + 2 + 2^{31}) = 2147483651$
 \end{lstlisting}
+
+\paragraph{Fehler}
+Wie bei \opref{ADD}.
 
 
 
@@ -41,7 +50,7 @@ Hinzuaddieren eines festen vorzeichenbehafteten ganzzahligen Wert $N$ zum Inhalt
 des Registers $Y$ und speichern des Ergebnisses in das Register $X$.
 Entspricht dem algebraischen Ausdruck
 \[
-  X \gets Y + N
+  X \gets \$Y + N
 \]
 $N$ wird als vorzeichenbehaftete 8-Bit Zahl in Zweierkomplement-Darstellung
 interpretiert und kann entsprechend Werte von $-128$ bis $127$ aufnehmen.
@@ -55,13 +64,15 @@ Beispiel:
   ADDI  R2 R3 R4 # Fehler! R4 kein $n \in \mathds{Z}$
 \end{lstlisting}
 
+\paragraph{Fehler}
+Wie bei \opref{ADD}.
 
 
 \opdef{SUB}{$X, Y, Z \in \Reg$}{0x33}{RRR}
-Subtrahiert die Registerinhalte von $Y$ und $Z$ und speichert das Ergebnis in
-das Register $X$. Entspricht dem Ausdruck
+Subtrahiert die Registerinhalte von $\$Y$ und $\$Z$ und speichert das Ergebnis
+in das Register $X$. Entspricht dem Ausdruck
 \[
-    X \gets (Y - Z)
+    X \gets (\$Y - \$Z)
 \]
 Wobei $X$, $Y$ und $Z$ Register sind.
 

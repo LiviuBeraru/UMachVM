@@ -57,32 +57,9 @@ Interrupttabelle fängt an der Adresse Null an. Siehe auch die Abbildung
 \ref{fig:Speicherstruktur} auf der Seite \pageref{fig:Speicherstruktur}.
 
 
-Die Tabelle \ref{tab:Interrupttabelle} gibt alle definierten
-Interruptnummer\index{Interruptnummer} und deren Bedeutung wieder. Undefinierte
-Interruptnummer werden nicht explizit angegeben.
-
-
-\begin{longtable}{>{\ttfamily}ll}
-\caption{Interruptnummer}
-\label{tab:Interrupttabelle}
-\\\toprule
-{\rmfamily Nummer} & Beschreibung \\
-\midrule
-\endhead
- 0   & Standardinterrupt: Maschine ausschalten   \\
- 1   & Division durch Null       \\
- 2   & Arithmetischer Überlauf   \\
- 8   & Ungültiger Befehl         \\
- 9   & Ungültige Registernummer  \\
-\midrule
- 16  & Ungültige Speicheradresse  \\
- 24  & Stack Fehler               \\
- 26  & Stack Überlauf             \\
- 31  & Speicher unzureichend      \\
-\midrule
- 32  & I/O Port existiert nicht   \\
-\bottomrule
-\end{longtable}
+Die Tabelle \ref{tab:Interrupttabelle} auf der Seite
+\pageref{tab:Interrupttabelle} gibt alle definierten
+Interruptnummer\index{Interruptnummer} und deren Bedeutung wieder.
 
 
 \subsubsection{Programm und Daten}

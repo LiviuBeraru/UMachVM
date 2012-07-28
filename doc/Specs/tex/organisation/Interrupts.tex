@@ -63,8 +63,44 @@ generiert wird, verhält sich die Maschine wie im Falle eines automatischen
 Interrupts.
 
 
+\subsection{Interruptnummer}
 
 
+\begin{longtable}{>{\ttfamily}ll}
+\caption{Interruptnummer}
+\label{tab:Interrupttabelle}
+\\\toprule
+{\rmfamily Nummer} & Beschreibung \\
+\midrule
+\endhead
+ 0   & Standardinterrupt: Maschine ausschalten   \\
+ 1   & Division durch Null       \\
+ 2   & Arithmetischer Überlauf   \\
+ 8   & Ungültiger Befehl         \\
+ 9   & Ungültige Registernummer  \\
+\midrule
+ 16  & Ungültige Speicheradresse  \\
+ 24  & Stack Fehler               \\
+ 26  & Stack Überlauf             \\
+ 31  & Speicher unzureichend      \\
+\midrule
+ 32  & I/O Port existiert nicht   \\
+\bottomrule
+\end{longtable}
+
+
+
+Einige Interruptnummer dürften eine Erklärung brauchen:
+
+\paragraph{Stack Fehler}
+Ein Stack Fehler liegt vor, wenn Daten aus dem Stack angefordert werden, die
+nicht zuvor auf den Stack gepusht wurden.
+
+
+\paragraph{Stack Überlauf}
+Ein Stack Überlauf liegt vor, wenn der Stack-Pointer \texttt{SP} in einem
+Speicherbereich zeigt, der nicht mehr zum Stackbereich gehört. Das sind
+Adressen, die dem Programm-Bereich gehören, oder sogar niedrigere Adressen.
 
 
 
