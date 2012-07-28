@@ -295,3 +295,12 @@ TODO:
 Wichtig:
 - ++ Debugging Konzept ++
 - ++ Assembler Spezifikation ++
+
+
+=== 26.07.2012 ===
+Malk.
+TODO: 
+- Für alle Befehle angeben, welche Interrupts generiert werden und
+  welche ERR Bits gesetzt werden.
+- Umstellen der Notation: wenn es um den Inhalt eines Registers X
+  geht, dann X mit $X ersetzen.
