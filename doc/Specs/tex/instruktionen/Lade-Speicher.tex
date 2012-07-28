@@ -52,6 +52,12 @@ Entspricht
 (siehe Tabelle \ref{tab:Notationen} auf Seite \pageref{tab:Notationen} für die
 Notationen).
 
+\paragraph{Fehler}
+Falls der Inhalt des Registers $Y$ eine ungültige Speicheradresse ist, wird der
+Interrupt mit Nummer 16 (ungültige Speicheradresse) generiert und das Bit mit
+Nummer 8 im Register \texttt{ERR} gesetzt.
+
+
 \paragraph{Beispiel}
 Angenommen, der Speicher an den Adressen $100$ und $101$ hat den Wert $5$, bzw.
 $6$. Dann können diese zwei nacheinander folgenden Bytes auf die
@@ -83,9 +89,7 @@ Entspricht
 \]
 
 \paragraph{Fehler}
-Falls der Inhalt des Registers $Y$ eine ungültige Speicheradresse ist,
-wird der Interrupt mit Nummer 16 generiert und das Bit mit Nummer 8 im Register
-\texttt{ERR} gesetzt.
+Wie bei der Instruktion \opref{LB}.
 
 
 \paragraph{Bemerkung}
@@ -115,9 +119,9 @@ Entspricht
 $mem_{1}(x)$ bedeutet dabei 1 Byte an der Adresse $x$.
 
 \paragraph{Fehler}
-Falls der Inhalt des Registers $Y$ eine ungültige Speicheradresse ist,
-wird der Interrupt mit Nummer 16 generiert und das Bit mit Nummer 8 im Register
-\texttt{ERR} gesetzt.
+Falls der Inhalt des Registers $Y$ eine ungültige Speicheradresse ist, wird der
+Interrupt mit Nummer 16 (ungültige Speicheradresse) generiert und das Bit mit
+Nummer 8 im Register \texttt{ERR} gesetzt.
 
 \paragraph{Beispiel}
 \begin{lstlisting}
@@ -138,9 +142,9 @@ $\$Y + 3$.
 \]
 
 \paragraph{Fehler}
-Falls der Inhalt des Registers $Y$ eine ungültige Speicheradresse ist,
-wird der Interrupt mit Nummer 16 generiert und das Bit mit Nummer 8 im Register
-\texttt{ERR} gesetzt.
+Falls der Inhalt des Registers $Y$ eine ungültige Speicheradresse ist, wird der
+Interrupt mit Nummer 16 (ungültige Speicheradresse) generiert und das Bit mit
+Nummer 8 im Register \texttt{ERR} gesetzt.
 
 
 \paragraph{Beispiel}
@@ -202,7 +206,7 @@ Entspricht
 Falls die Verringerung $\$SP - 4$ eine Speicheradresse außerhalb des
 Stackbereichs ergibt, wird der Interrupt mit Nummer 26 (Stack Überlauf)
 \index{Stack!Überlauf}
-generiert und das Bit mit Nummer 10 im Register \texttt{ERR} gesetzt.
+generiert und das Bit mit Nummer 11 im Register \texttt{ERR} gesetzt.
 
 
 
@@ -257,7 +261,7 @@ Entspricht
 \paragraph{Fehler}
 Falls das Register \texttt{SP} zu einer Adresse außerhalb des Stackbereichs
 zeigt, wird der Interrupt mit Nummer 24 (Stack Fehler)\index{Stack!Fehler}
-generiert und das Bit mit Nummer 9 im Register \texttt{ERR} gesetzt.
+generiert und das Bit mit Nummer 10 im Register \texttt{ERR} gesetzt.
 
 
 \paragraph{Beispiel}

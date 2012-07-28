@@ -3,12 +3,45 @@
 \opdef{GO}{$X \in \Reg$}{0x90}{R00}
 Setzt $PC$ auf die angegebene absolute Adresse. Hierbei ist zu beachten,  dass
 nicht in die Mitte eines Befehles gesprungen wird. Dies zu gewährleisten liegt
-in der Verantwortung des Programmierers.
+in der Verantwortung des Programmierers (die Maschine prüft nicht, ob die
+angegebene Adresse $\$X$ ein Vielfaches von 4 ist).
+\[
+    PC \gets \$X
+\]
+
+\paragraph{Fehler}
+Falls das Sprungziel $\$X$ eine Speicheradresse ist, die außerhalb des
+Speicherbereichs liegt, wir der Interrupt mit Nummer 16 generiert (ungültige
+Speicheradresse) und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt
+(siehe auch Tabelle \ref{tab:ERR-register} auf Seite
+\pageref{tab:ERR-register}).
 
 
 \opdef{CALL}{$N \in \mathds{N}$}{0x91}{NNN}
+Funktionert wie der Befehl \opref{GO} mit dem Unterschied, dass bevor
+\texttt{PC} neugesetzt wird, wird es auf den Stack gepusht. Enspricht
+\begin{align*}
+ \text{\opref{PUSH} } PC\\
+ PC \gets N
+\end{align*}
+Dieser Befehl dient der Implementierug und Verwendung von Funktionen (function
+call).
+
+\paragraph{Fehler}
+Wie bei dem Befehl \opref{GO}.
 
 
 \opdef{RET}{keine}{0x92}{000}
+\opref{POP}t eine Adresse vom Stack in das Register \texttt{PC}. Dieser Befehl
+entspricht einem Rückkehr aus einer Subroutine, analog der Anweisung
+\texttt{return}\index{return} aus den höheren Programmiersprachen.
+
+\[
+  \text{\opref{POP} } PC
+\]
+
+\paragraph{Fehler}
+Wie bei der \opref{POP} Operation.
+
 
 

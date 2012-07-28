@@ -114,7 +114,7 @@ ZERO & 00 & Enthält die Zahl Null.
 \end{longtable}
 
 
-\subsubsection{Das ERR Register}
+\subsection{Das ERR Register}
 \index{ERR@\texttt{ERR}}
 
 Zu jedem Fehler gehört ein Bit im Register. Die Bitstellen werden dabei
@@ -148,9 +148,10 @@ Die Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
  6  & Ungültige Registernummer  \\
 \midrule
  8  & Ungültige Speicheradresse \\
- 9  & Stack Fehler              \\
-10  & Stack Überlauf            \\
-11  & Speicher unzureichend     \\
+ 9  & Unerlaubte Speicheradresse \\
+10  & Stack Fehler              \\
+11  & Stack Überlauf            \\
+12  & Speicher unzureichend     \\
 \midrule
 16  & I/O Port existiert nicht \\
 \bottomrule

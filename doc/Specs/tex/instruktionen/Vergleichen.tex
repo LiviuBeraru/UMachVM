@@ -3,11 +3,11 @@
 
 Die Vergleichsinstruktionen vergleichen den Inhalt eines Registers mit dem
 Inhalt eines anderen Registers oder mit einer angegebenen ganzen Zahl. Das
-Ergebnis der Vergleichsinstruktion wird in das Register \texttt{CMP}
-gespeichert. Dieses Ergebnis ist $-1$, $0$ oder $+1$ und wird folgenderweise
-berechnet:
-werden zwei Werte $x$ und $y$ vergliechen, so wird das Register \texttt{CMP}
-wie folgt gesetzt:
+Ergebnis der Vergleichsinstruktion wird in das Register \texttt{CMPR}
+gespeichert (siehe auch Tabelle \ref{tab:Spezialregister} auf der Seite
+\pageref{tab:Spezialregister}). Dieses Ergebnis ist $-1$, $0$ oder $+1$ und wird
+folgenderweise berechnet: werden zwei Werte $x$ und $y$ vergliechen, so wird das
+Register \texttt{CMP} wie folgt gesetzt:
 \[
     CMPR \gets
     \begin{cases}
@@ -24,15 +24,14 @@ Vergleicht die Inhalte der Register $X$ und $Y$.
 
 \opdef{CMPU}{$X, Y \in \Reg$}{0x71}{RR0}
 \glqq Compare Unsigned\grqq.
-Vergleicht analog zu \opref{CMP} -- aber vorzeichenlos -- $X$ mit $Y$
+Vergleicht analog zu \opref{CMP} -- aber vorzeichenlos -- $\$X$ mit $\$Y$
 (die Inhalte der Register $X$ und $Y$ werden als vorzeichenlose Werte
-ausgewertet).
+ausgewertet, $\$X, \$Y \in \mathds{N}$).
 
 
 \opdef{CMPI}{$X \in \Reg$, $N \in \mathds{Z}$}{0x72}{RNN}
 \glqq Compare Immediate\grqq. 
-Vergleicht $X$ mit angegebenen festen Wert $N$.
-Dabei nimmt $N$ Werte aus dem Intervall
-$[-2^{15}, 2^{15}-1]$, entsprechend dem Datentyp \glqq Half\grqq.
+Vergleicht $\$X$ mit angegebenen festen Wert $N$. Dabei nimmt $N$ Werte aus dem
+Intervall $[-2^{15}, 2^{15}-1]$.
 
 

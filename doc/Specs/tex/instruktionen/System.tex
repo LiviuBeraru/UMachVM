@@ -2,12 +2,10 @@
 
 \opdef{INT}{$N \in \mathds{N}$}{0xA0}{NNN}
 \glqq Interrupt\grqq.
-Ruft das Betriebssystem auf, eine Aktion zu unternehmen. 
-Die Aktion wird als numerischer Code angegeben und ist systemspezifisch.
-Vergleichbar mit einem \glqq syscall\grqq.\index{syscall}
+Generiert ein Interrupt\index{Interrupt} in der Programmausführung.
+Falls die Interruptnummer $N$ keine von der Maschine erkannte Interruptnummer
+ist, wird der Interrupt mit Nummer 0 ausgeführt (Maschine ausschalten).
+Für mehr Informationen betreffend das Interrupt-System der UMach Maschine siehe
+den Abschnitt \ref{sec:Interrupts} auf der Seite \pageref{sec:Interrupts}.
 
-\opdef{IRET}{$N \in \mathds{N}$}{0xA1}{NNN}
-\glqq Interrupt Return\grqq.
-Rücksprung aus einer Hardware-Unterbrechung. Setzt HIR zusätzlich auf Null
-und Setzt den Status so, dass Hardware-Unterbrechungen wieder erlaubt sind.
 

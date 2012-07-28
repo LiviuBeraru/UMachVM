@@ -10,22 +10,27 @@ müssen bis zur Zielinstruktion übersprungen werden. Z.B. die Instruktion
   JMP 2
 \end{lstlisting}
 bedeutet
-\glqq Überspringe 2 Instruktionen und fahre mit der 3. fort\grqq.
+\glqq Überspringe die nächsten 2 Instruktionen und fahre mit der 3. fort\grqq.
 Die Instruktion
 \begin{lstlisting}
   BE 5
 \end{lstlisting}
-bedeutet
-\glqq Falls das Register \texttt{CMP} den Wert $0$ hat, überspringe $5$
-Instruktionen und fahre mit der 6. fort\grqq.
+bedeutet \glqq Falls das Register \texttt{CMPR} den Wert $0$ hat, überspringe
+$5$ Instruktionen und fahre mit der 6. fort\grqq. Es wird also nicht die
+wievielte Instruktion angegeben, sondern es wird die Anzahl an Instruktionen
+angegeben, die übersprungen werden sollten (daher auch \glqq
+Übersprungbefehl\grqq, statt \glqq Sprungbefehl\grqq).
 
-Der Versatz wird nicht in Bytes angegeben, sondern in
-Instruktionen -- wobei eine Instruktion der UMach Maschine 4 Bytes beträgt.
+Der Übersprungversatz wird stets nicht in Bytes angegeben, sondern in
+Instruktionen -- wobei eine Instruktion der UMach Maschine 4 Bytes beträgt. Die
+Maschine multipliziert diese Anzahl mit 4 um die richtige Programmadresse zu
+berechnen.
 
-Die Übersprungbefehle bauen auf die Vergleichsbefehle auf: jeder
-Übersprungbefehl (außer \opref{JMP} und \opref{GO}) untersuchen das
-Spezialregister \texttt{CMP} und verzweigen die Programmausführung anhand seines
-Wertes.
+Die Übersprungbefehle bauen auf die Vergleichsbefehle auf (Abschnitt
+\ref{sec:Vergleichsinstruktionen}): jeder Übersprungbefehl (außer \opref{JMP}
+und \opref{GO}) untersuchen das Spezialregister \texttt{CMPR} und verzweigen die
+Programmausführung anhand seines Wertes.
+
 
 
 \opdef{BE}{$N \in \mathds{Z}$}{0x80}{NNN}
@@ -36,7 +41,7 @@ rückwärts, ein positives $N$ bewirkt einen Sprung vorwärts. Der Sprung wird
 dadurch erreicht, dass das Register \texttt{PC} gemäß der folgenden Formel
 modifiziert wird:
 \[
-    PC \gets PC + 4 \cdot N
+    PC \gets \$PC + 4 \cdot N
 \]
 Die Multiplikation mit $4$ wird deshalbt ausgeführt, weil ein Befehl immer aus 4
 Bytes besteht, sodass der Adressoffset zwischen zwei Befehlen immer 4 ist. Somit
@@ -51,32 +56,41 @@ der Ausführung jeder Instruktion
 Die Modifizierung des \texttt{PC}-Registers durch den \opref{BE} Befehl wirkt
 sich nicht störend auf die automatische Inkrementierung des Programmcounters.
 
+\paragraph{Fehler}
+Falls das Sprungziel eine Speicheradresse ist, die außerhalb des
+Speicherbereichs liegt, wir der Interrupt mit Nummer 16 generiert (ungültige
+Speicheradresse) und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt
+(siehe auch Tabelle \ref{tab:ERR-register} auf Seite
+\pageref{tab:ERR-register}).
+
 
 \paragraph{Beispiel}
 Der folgende Code lädt zwei Bytes in die Register $R2$ und $R3$ und addiert
 diese arithmetisch, falls sie ungleiche Werte haben. Sind die Werte gleich,
-wird stattdessen der Inhalt von $R2$ mit 2 multipliziert. Ein mögliches
-Überlaufen wird nicht berücksichtigt.
+wird stattdessen der Inhalt von $R2$ mit 2 multipliziert. Ein möglicher
+arithmetischer Überlauf wird nicht berücksichtigt.
 \begin{lstlisting}
-  SET   R1 100    # $R1 \gets 100$
-  LBUI  R2 R1  0  # Lade Byte von Adresse 100 nach R2
-  LBUI  R3 R1  1  # Lade Byte von Adresse 100+1 nach R3
-  CMPU  R2 R3     # Vergleiche Inhalt von R2 und R3
-                  # Ergebnis geht ins CMP
+  SET   R1 100    # R1 = 100
+  LB    R2 R1     # Lade Byte von Adresse 100 nach R2
+  INC   R1        # R1++, R1 = 101
+  LB    R3 R1     # Lade Byte von Adresse 101 nach R3
+  CMP   R2 R3     # Vergleiche Inhalt von R2 und R3
+                  # Ergebnis geht ins CMPR
   #BE    equal    # Asm Schreibweise
-  BE    3         # Wenn CMP gleich 0 ist, überspringe 
+  BE    3         # Wenn CMPR gleich 0 ist, überspringe 
                   # die folgenden 3 Instruktionen
                   # (gehe zum label equal)
-                  # N ist in diesem Fall 3
-  ADDU  R2 R2 R3  # Addiere Inhalt von R2 und R3
-  SBUI  R2 R1 0   # Speichere R2 nach Adresse 100
+  ADD   R2 R2 R3  # Addiere Inhalt von R2 und R3
+  DEC   R1        # R1--, R1 = 100
+  SB    R2 R1     # Speichere R2 nach Adresse 100
   #JMP   finish   # Asm Schreibweise
-  JMP   2         # Überspringe die folgenden 2 Befehle, 
-                  # N von JMP ist 2.
+  JMP   2         # Überspringe die folgenden 2 Befehle
+                  # (gehe zu finish)
 equal:
-  MULIU R2 2      # Multipliziere Inhalt von R2 mit 2
-  SBUI  LO R1 0   # Speichere Inhalt von LO nach Adresse in R1
+  MULI  R2 2      # Multipliziere Inhalt von R2 mit 2
+  SB    LO R1     # Speichere Inhalt von LO nach Adresse in R1
 finish:
+  EOP
 \end{lstlisting}
 
 
@@ -84,34 +98,56 @@ finish:
 \opdef{BNE}{$N \in \mathds{Z}$}{0x81}{NNN}
 \glqq Branch Not Equal \grqq.
 Entspricht dem Verhalten von \opref{BE} mit dem Unterschied, dass der angegebene
-Übersprung ausgeführt wird, wenn \texttt{CMP} nicht $0$ ist.
+Übersprung ausgeführt wird, wenn \texttt{CMPR} nicht $0$ ist.
+
+\paragraph{Fehler}
+Wie bei der Instruktion \opref{BE}.
+
 
 
 \opdef{BL}{$N \in \mathds{Z}$}{0x82}{NNN}
-\glqq Branch Less\grqq. 
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} kleiner $0$ ist.
+\glqq Branch Less\grqq. Überspringt $N$ Instruktionen, wenn der Inhalt von
+\texttt{CMPR} kleiner $0$ ist.
+
+\paragraph{Fehler}
+Wie bei der Instruktion \opref{BE}.
+
 
 
 \opdef{BLE}{$N \in \mathds{Z}$}{0x83}{NNN}
 \glqq Branch Less Equal\grqq.
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} kleiner oder
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMPR} kleiner oder
 gleich $0$ ist.
+
+\paragraph{Fehler}
+Wie bei der Instruktion \opref{BE}.
 
 
 \opdef{BG}{$N \in \mathds{Z}$}{0x84}{NNN}
 \glqq Branch Greater\grqq.
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} größer als
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMPR} größer als
 $0$ ist.
+
+\paragraph{Fehler}
+Wie bei der Instruktion \opref{BE}.
+
 
 
 \opdef{BGE}{$N \in \mathds{Z}$}{0x85}{NNN}
 \glqq Branch Greater Equal\grqq. 
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMP} größer oder
+Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMPR} größer oder
 gleich $0$ ist.
+
+\paragraph{Fehler}
+Wie bei der Instruktion \opref{BE}.
+
 
 
 \opdef{JMP}{$N \in \mathds{N}$}{0x88}{NNN}
 \glqq Jump\grqq.
 Überspringt $N$ Instruktionen.
+
+\paragraph{Fehler}
+Wie bei der Instruktion \opref{BE}.
 
 

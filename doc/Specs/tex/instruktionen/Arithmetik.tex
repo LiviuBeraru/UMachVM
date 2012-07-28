@@ -108,9 +108,9 @@ die Spezialregister \texttt{HI} und \texttt{LO}. Diese zwei Spezialregister
 werden als eine 64-Bit Einheit betrachtet, wobei jedes eine Hälfte des
 64-Bit Ergebnisses enthält.
 Dabei werden die höchstwertigen 32 Bit des Ergebnisses in das Register
-\texttt{HI}\index{HI@\texttt{HI}}
+\texttt{HI}\index{HI@\texttt{HI}} (high)
 und die 32 niedrigstwertigen Bits des Ergebnisses in das Register
-\texttt{LO}\index{LO@\texttt{LO}} gespeichert.
+\texttt{LO}\index{LO@\texttt{LO}} (low) gespeichert.
 Siehe auch die Tabelle \ref{tab:Spezialregister} auf der Seite
 \pageref{tab:Spezialregister}.
 
@@ -119,7 +119,7 @@ Falls das Ergebnis der Multiplikation gänzlich in den 32 Bit des Registers
 
 Äquivalenter algebraischer Ausdruck:
 \[
-    (HI, LO) \gets X \cdot Y
+    (HI, LO) \gets \$X \cdot \$Y
 \]
 
 \paragraph{Beispiel} Der folgende Code demonstriert die Verwendung der
@@ -142,7 +142,7 @@ Falls das Ergebnis der Multiplikation gänzlich in den 32 Bit des Registers
 \opdef{MULU}{$X, Y\in \Reg$}{0x39}{RR0}
 \glqq Multiply Unsigned\grqq.
 Funktioniert wie die Instruktion \opref{MUL} mit dem Unterschied, dass die
-Multiplikationoperanden $X$ und $Y$ vorzeichenlos behandelt werden. 
+Multiplikationoperanden $\$X$ und $\$Y$ vorzeichenlos behandelt werden. 
 
 
 
@@ -155,6 +155,13 @@ Bits (die höchstwertigen) und \texttt{LO} die letzten 32 Bits (die
 niedrigstwertigen).
 Siehe auch die Instruktion \opref{MUL}.
 
+\[
+   (HI, LO) \gets \$X \cdot N
+\]
+
+Das $N$ mit 16 Bit (2 Byte gemäß Format \nameref{RNN}) dargestellt wird, kann
+es nur Werte zwischen $-2^{15}$ und $2^{15} - 1$ annehmen (Zweierkomplement).
+
 
 
 \opdef{DIV}{$X, Y \in \Reg$}{0x3B}{RR0}
@@ -164,16 +171,22 @@ speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
 \texttt{LO}.
 Nach der Ausführung gilt
 \[
-    X = Y \cdot HI + LO
+    \$X = \$Y \cdot \$HI + \$LO
 \]
 Algebraisch ausgedrückt:
 \begin{align*}
-  HI & \gets \left\lfloor X/Y \right\rfloor \\
-  LO & \gets X \bmod Y
+  HI & \gets \left\lfloor \$X/\$Y \right\rfloor \\
+  LO & \gets \$X \bmod \$Y
 \end{align*}
 $\lfloor x \rfloor$ bedeutet in diesem Kontext, dass $x$ auf die betragsmässig
 nächstkleinste ganze Zahl gerundet wird, oder die Nachkommastellen von $x$
-werden abgeschnitten.
+werden abgeschnitten (integer division).
+
+
+\paragraph{Fehler}
+Falls der Wert im Register $Y$ gleich Null ist, wird der Interrupt mit Nummer 1
+erzeugt (Division durch Null) und das Bit mit Nummer 0 im Register \texttt{ERR}
+gesetzt.
 
 \paragraph{Beispiel}
 Der folgende Code demonstriert die Verwendung von \texttt{DIV}.
@@ -191,7 +204,11 @@ Der folgende Code demonstriert die Verwendung von \texttt{DIV}.
 \glqq Divide Unsigned\grqq.
 Funktioniert wie \opref{DIV} mit dem Unterschied, dass ganzzahlige
 vorzeichenlose Division durchgeführt werden. Die Ergebnis-Register \texttt{HI}
-und \texttt{LO} enthalten entsprechend vorzeichenlose Werte.
+und \texttt{LO} enthalten entsprechend vorzeichenlose Werte. Mit anderen Worten:
+\[
+  \$X, \$Y, \$LO, \$HI \in \mathds{N} \mod 2^{32}
+\]
+
 
 
 
@@ -204,7 +221,7 @@ speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
 $N$ nimmt Werte aus dem Intervall $[-2^{15}, 2^{15}-1] \setminus 0$.
 Nach der Durchführung der Division gilt:
 \[
-    X = HI \cdot N + LO 
+    \$X = \$HI \cdot N + \$LO 
 \]
 \paragraph{Beispiel}
 Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
@@ -215,6 +232,8 @@ Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
 \end{lstlisting}
 
 
+\paragraph{Fehler}
+Wie \opref{DIV}.
 
 
 \opdef{ABS}{$X, Y \in \Reg$}{0x40}{RR0}
@@ -224,11 +243,14 @@ Algebraisch ausgedrückt:
 \[
     X \gets
     \begin{cases}
-      Y            & \text{ falls } Y \geq 0 \\
-      (-1) \cdot Y & \text{ falls } Y < 0
+      Y            & \text{ falls } \$Y \geq 0 \\
+      (-1) \cdot Y & \text{ falls } \$Y < 0
     \end{cases}
 \]
-
+oder
+\[
+    X \gets \left( \lvert \$Y \rvert \bmod 2^{31} \right) 
+\]
 
 
 \opdef{NEG}{$X, Y \in \Reg$}{0x41}{RR0}
@@ -237,7 +259,7 @@ Wechselt das arithmetische Vorzeichen des Registers $Y$ und speichert das
 Ergebnis in das Register $X$. Entspricht der Zweierkomplement Bildung.
 Algebraische Schreibweise:
 \[
-    X \gets \big( (-1) \cdot Y \big)
+    X \gets \big( (-1) \cdot \$Y \big)
 \]
 Um eine bitweise Inversion zu erreichen (Einerkomplement), siehe die
 Instruktion \opref{NOT}.
@@ -248,7 +270,7 @@ Instruktion \opref{NOT}.
 \glqq Increment\grqq.
 Inkrementiert den Inhalt des Registers $X$.
 \[
-    X \gets ( X + 1 )
+    X \gets ( \$X + 1 )
 \]
 
 
@@ -257,7 +279,7 @@ Inkrementiert den Inhalt des Registers $X$.
 \glqq Decrement\grqq.
 Dekrementiert den Inhalt des Registers $X$.
 \[
-    X \gets ( X - 1 )
+    X \gets ( \$X - 1 )
 \]
 
 
@@ -265,32 +287,21 @@ Dekrementiert den Inhalt des Registers $X$.
 
 \opdef{MOD}{$X, Y, Z \in \Reg$}{0x48}{RRR}
 Modulo Operation.
-Berechnet den Rest der Division $Y/Z$ und speichert den Rest in das Register
+Berechnet den Rest der Division $\$Y/\$Z$ und speichert den Rest in das Register
 $X$. Dabei ist das Ergebnis immer positiv.
-Äquivalent zu den Instruktionen:
-\begin{lstlisting}
-  DIVU Y Z
-  COPY X LO
-\end{lstlisting}
 
 Algebraische Schreibweise:
 \[
-    X \gets Y \bmod Z
-\]
-oder
-\[
-    X \gets \left(
-      Y - \left\lfloor \frac{Y}{Z}  \right\rfloor \cdot Z
-      \right)
+    X \gets \$Y \bmod \$Z
 \]
 
 
 \opdef{MODI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x49}{RRN}
 \glqq Modulo Immediate\grqq. Analog zur Instruktion \opref{MOD}, berechnet
-\texttt{MODI} den Rest der ganzzahligen Division $Y / N$ und speichert ihn in
+\texttt{MODI} den Rest der ganzzahligen Division $\$Y/N$ und speichert ihn in
 das Register $X$. Der Unterschied liegt darin, dass $N$ eine fest angegebene
 natürliche Zahl ist.
 \[
-    X \gets Y \bmod N
+    X \gets \$Y \bmod N
 \]
 

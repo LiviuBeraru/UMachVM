@@ -5,28 +5,36 @@
 
 \opdef{IN}{$A, N, P \in \Reg$}{0xB0}{RRR}
 
-Veranlasst die I/O-Einheit, $N$ Bytes Daten aus dem Gerät am Port $P$, zum
-Speicher ab der Adresse $A$ zu übertragen. $A$, $N$ und $P$ sind Register und es
-ist hier deren Inhalt gemeint.
+Veranlasst die I/O-Einheit, $\$N$ Bytes Daten aus dem Gerät am Port $\$P$, zum
+Speicher ab der Adresse $\$A$ zu übertragen. $A$, $N$ und $P$ sind Register.
 
 \[
-  P \to mem_{N}(A)
+  read(\$P) \to mem_{\$N}(\$A)
 \]
 
-Dieser Befehl blockiert den Kern solange, bis entweder $N$ Bytes gelesen wurden,
-oder bis das Gerät das Ende der Übertragung signalisiert. Die tatsächliche
-Anzahl der übetragenen Bytes kann kleiner als $N$ sein und wird in das Register
-$N$ gespeichert.
+Dieser Befehl blockiert den Kern solange, bis entweder $\$N$ Bytes gelesen
+wurden, oder bis das Gerät das Ende der Übertragung signalisiert. Die
+tatsächliche Anzahl der übetragenen Bytes kann kleiner als $\$N$ sein und wird
+in das Register $N$ gespeichert.
 
+
+\paragraph{Fehler}
+Falls $\$P$ keine gültige Portnummer ist, wird der Interrupt mit Nummer 32
+generiert und das Bit mit Nummer 16 im Register \texttt{ERR} gesetzt.
+Falls $\$A$ keine gültige Speicheradresse ist, wird der Interrupt mit Nummer 16
+generiert und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt.
 
 
 \opdef{OUT}{$A, N, P \in \Reg$}{0xB8}{RRR}
-Schreibt $N$ Bytes Daten aus dem Speicher mit Adresse $A$ an den Port mit
-Nummer $P$. Die Anzahl der tatsächlich geschriebenen Bytes wird zurück in das
-Register $N$ geschrieben und beträgt $0$ bis $N$.
+Schreibt $\$N$ Bytes Daten aus dem Speicher mit Adresse $\$A$ an den Port mit
+Nummer $\$P$. Die Anzahl der tatsächlich geschriebenen Bytes wird zurück in das
+Register $N$ geschrieben und beträgt $0$ bis $\$N$.
 
 Dieser Befehl blockiert den Kern solange, bis die I/O-Einheit fertig mit dem
 Schreiben ist.
+
+\paragraph{Fehler}
+Wie bei dem Befehl \opref{IN}.
 
 
 \paragraph{Beispiel}
