@@ -1,6 +1,32 @@
 \chapter{Debugging}
+\label{chap:Debugging}
 
-Die UMach Maschine stellt eine Debugging-Schnittstelle zur Verfügung. Um diese
-Schnittstelle zu aktivieren, muss man die Maschine im Einzelschrittmodus
+Die virtuelle UMach Maschine stellt eine Debugging-Schnittstelle zur Verfügung.
+Um diese Schnittstelle zu aktivieren, muss man die Maschine im Debugmodus
 starten.
+
+Die Schnittstelle besteht aus einer Reihe von Funktionen und aus einer Sammlung
+von Informationen betreffend den inneren Zustand der Maschine zum Zeitpunkt der
+Abfrage.
+
+Folgende Funktionen dienen zur Steuerung der Maschine wärend sie die Ausführung
+des Programms durchführt:
+
+\begin{enumerate}
+ \item \texttt{step}\\
+       Führt die aktuelle Instruktion aus, lädt die nächste Instruktion aus
+       dem Speicher und dann wartet.
+\end{enumerate}
+
+
+Die Informationen, die während einer Debug-Session zur Verfügung gestellt
+werden sind die folgenden:
+\begin{enumerate}
+ \item PC, der aktuelle Program-Counter.
+ \item Aktuelle Instruktion. Diese Instruktion wurde noch nicht ausgeführt.
+ \item Werte aller Register.
+ \item Informationen über den Speicher: Größe etc.
+ \item Ausschnitte aus dem Speicherinhalt.
+ \item Informationen über die I/O Einheit.
+\end{enumerate}
 

@@ -7,19 +7,20 @@ läuft. Die UMach VM kann in einem der folgenden Betriebsmodi laufen:
 
 \begin{enumerate}
   \item Normalmodus
-  \item Einzelschrittmodus
+  \item Debugmodus
 \end{enumerate}
 
-Der standard-Modus ist der Normalmodus.
-Der Modus wird vor dem Hochfahren der Maschine festgelegt.
+Voreingestellt ist der Normalmodus. Der Modus kann vor dem Hochfahren der
+Maschine festgelegt werden und kann während der Lauzeit der Maschine nicht mehr
+geändert werden.
 
 \paragraph{Normalmodus} Die virtuelle Maschine führt ohne Unterbrechung ein
 Programm aus. Nach der Ausführung befindet sich die Maschine in einem
 Wartezustand, falls sie nicht ausdrücklich ausgeschaltet wird.
 
-\paragraph{Einzelschrittmodus} Die virtuelle Maschine führt immer eine einzige
+\paragraph{Debugmodus} Die virtuelle Maschine führt immer eine einzige
 Instruktion aus und nach der Ausführung wartet sie auf einen externen Signal um
 mit der nächsten Instruktion fortzufahren. Dieser Modus soll dem Entwickler
 erlauben, ein Programm schrittweise zu debuggen.
-
+Siehe dazu Kapitel \ref{chap:Debugging}, Seite \pageref{chap:Debugging}.
 
