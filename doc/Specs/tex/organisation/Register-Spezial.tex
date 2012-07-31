@@ -32,9 +32,11 @@ schreibgeschützt.
 \label{tab:Spezialregister}
 \\\toprule
 PC   & 33 & \glqq Instruction Pointer\grqq, oder \glqq Program Counter\grqq.
-            Enthält zu jeder Zeit die Adresse
-            der nächsten Instruktion. Wird auf Null gesetzt, wenn die Maschine
-            hochfährt.
+            Enthält zu jeder Zeit die Adresse der nächsten Instruktion. Wird auf
+            256 gesetzt, wenn die Maschine hochfährt. Diese Adresse ist die
+            Startadresse des Programms im Speicher (siehe auch Abschnitt
+            \ref{subsec:Speicherstruktur}, Seite
+            \pageref{subsec:Speicherstruktur}).
             Wird nach dem Abfangen einer Instruktion in das Register
             \texttt{IR} automatisch inkrementiert.
 
@@ -104,7 +106,6 @@ CMPR & 41 & \glqq Comparison Result\grqq.
             Siehe auch Abschnitt \ref{sec:Vergleichsinstruktionen}, Seite
             \pageref{sec:Vergleichsinstruktionen}.
             \index{CMPR (Reg)@\texttt{CMPR} (Reg)}
-            
 \\
 ZERO & 00 & Enthält die Zahl Null.
 
