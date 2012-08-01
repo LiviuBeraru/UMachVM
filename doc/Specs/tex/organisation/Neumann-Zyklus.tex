@@ -9,26 +9,25 @@ werden kann. Somit besteht der Zyklus aus einem beginnenden \textsc{Fetch}. Bei
 diesem wird der an der im Programmcounter \texttt{PC} liegende Adresse
 gespeicherte Befehl in das Instruktionsregister \texttt{IR} geladen. Danach
 wird der im ersten Byte liegende Befehl mit Hilfe des Befehlsdecoders decodiert
-und an der ALU entsprechend eingestellt. 
+und an der \textsc{ALU} entsprechend eingestellt. 
 
 In einem dritten Schritt \textsc{Execute} wird die Instruktion ausgeführt. Der
-theoretisch 4. Schritt, das Inkrementieren des Programmcounters PC, wird
-parallel zu den \textsc{Fetch} und \textsc{Decode} Vorgängen ausgeführt. Diese
-Tatsache ist bei Instruktionen, welche den Inhalt des PC manipulieren, zu
-berücksichtigen. Siehe auch Abbildung \ref{fig:Neumann-Zyklus} auf der Seite
-\pageref{fig:Neumann-Zyklus}.
+theoretisch 4. Schritt, das Inkrementieren des Programmcounters \texttt{PC},
+wird parallel zu den \textsc{Fetch} und \textsc{Decode} Vorgängen ausgeführt.
+Diese Tatsache ist bei Instruktionen, welche den Inhalt des \texttt{PC}
+manipulieren, zu berücksichtigen. Siehe auch Abbildung \ref{fig:Neumann-Zyklus}
+auf Seite \pageref{fig:Neumann-Zyklus}.
 
 Auflistung der Schritte:
 
 \begin{enumerate}
  \item \textsc{Fetch} --
-       Holen der Instruktion aus dem Speicher von der Adresse, welche im PC
-       vorliegt.
+       Holen der Instruktion aus dem Speicher an der im \texttt{PC} vorliegenden Adresse.
  \item \textsc{Decode} --
-       Decodieren des Befehles und Einstellen der ALU.
+       Decodieren des Befehles und Einstellen der \textsc{ALU}.
  \item \textsc{Execute} --
-       Auführen des Befehles in der ALU.
- \item Update \texttt{PC} --
+       Auführen des Befehles in der \textsc{ALU}.
+ \item \textsc{Update} \texttt{PC} --
        Inkrementieren des \texttt{PC}. Findet parallel zu \textsc{Fetch} und
        \textsc{Decode} statt.
 \end{enumerate}

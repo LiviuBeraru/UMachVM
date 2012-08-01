@@ -2,18 +2,17 @@
 \index{Register!Allzweckregister}
 \index{Allzweckregister}
 
-Es gibt 32 Allzweckregister, die dem Programmierer für allgemeine Zwecke zur
-Verfügung stehen. Diese 32 Register werden beim Hochfahren der Maschine mit dem
-Wert Null (\texttt{0x00}) initialisiert. Außer dieser Initialisierung, verändert
-die Maschine den Inhalt der Allzweckregister nur auf explizite Anfrage, bzw.
-infolge einer Instruktion. 
+Es gibt 32 Allzweckregister, welche dem Programmierer für generelle Zwecke zur
+Verfügung stehen. Alle Allzweckregister werden beim Hochfahren der Maschine mit
+dem Wert Null (\texttt{0x00}) initialisiert. Außer dieser Initialisierung
+verändert die Maschine den Inhalt der Allzweckregister nur in Folge einer
+expliziten Instruktion. 
 
-Die 32 Register werden auf Maschinencode-Ebene von 1 bis 32 nummeriert
-(\texttt{0x01} bis einschliesslich \texttt{0x20} im Hexadezimalsystem). Diese
-Nummer ist die \gls{Registernummer} des Registers. Auf Assembler-Ebene, werden
-sie mit den Namen $R1, R2\dots$ bis $R32$ angesprochen (Assemblername). Die Zahl
-nach dem Buchstaben $R$ ist im Dezimalsystem angegeben und ist fester
-Bestandteil des Registernamens.
+Die Allzweckregister werden auf Maschinencode-Ebene fortlaufend mit den 
+Registernummern 1 bis 32 gekennzeichnet (\texttt{0x01} bis einschliesslich
+\texttt{0x20} im Hexadezimalsystem). Die Assemblernamen sind entsprechend
+$R1, R2\dots$ bis $R32$. Die Zahl nach dem Buchstaben $R$ ist im Dezimalsystem
+angegeben und ist fester Bestandteil des Registernamens.
 
 \begin{center}
   \newcolumntype{T}{>{\ttfamily}c}
@@ -23,10 +22,10 @@ Bestandteil des Registernamens.
   \end{tabular}
 \end{center}
 
-Das Register mit Nummer Null, oder das
+Das Register mit der Registernummer Null, oder auch
 Null-Register\index{Null-Register}\index{Register!Null-Register}, ist ein
-Spezialregister, dass immer den Wert Null hat und nicht beschreibbar ist . Es
-wird mit dem Namen \texttt{ZERO} angesprochen (siehe auch den Abschnitt
+Spezialregister, welches immer den Wert Null hat und nicht beschreibbar ist.
+Der Assemblername ist \texttt{ZERO}. (siehe auch Abschnitt
 \ref{subsec:Spezialregister} auf Seite \pageref{subsec:Spezialregister}).
 
 Beispiel für die Verwendung von Registernamen:

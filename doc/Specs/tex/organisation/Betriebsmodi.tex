@@ -2,25 +2,27 @@
 \label{subsec:Betriebsmodi}
 \index{Betriebsmodus}
 
-Ein \gls{Betriebsmodus} bezieht sich auf die Art, wie die UMach VM grundsätzlich
-läuft. Die UMach VM kann in einem der folgenden Betriebsmodi laufen:
+Die Umach VM kann in zwei verschiedenen Betriebsmodi oder auch
+Betriebsarten betrieben werden:
 
 \begin{enumerate}
   \item Normalmodus
   \item Debugmodus
 \end{enumerate}
 
-Voreingestellt ist der Normalmodus. Der Modus kann vor dem Hochfahren der
-Maschine festgelegt werden und kann während der Lauzeit der Maschine nicht mehr
-geändert werden.
-
-\paragraph{Normalmodus} Die virtuelle Maschine führt ohne Unterbrechung ein
-Programm aus. Nach der Ausführung befindet sich die Maschine in einem
+\paragraph{Normalmodus} Die virtuelle Maschine führt alle Instruktionen
+ohne Unterbrechung aus. Nach der Ausführung befindet sich die Maschine in einem
 Wartezustand, falls sie nicht ausdrücklich ausgeschaltet wird.
 
-\paragraph{Debugmodus} Die virtuelle Maschine führt immer eine einzige
-Instruktion aus und nach der Ausführung wartet sie auf einen externen Signal um
-mit der nächsten Instruktion fortzufahren. Dieser Modus soll dem Entwickler
-erlauben, ein Programm schrittweise zu debuggen.
+\paragraph{Debugmodus} Die virtuelle Maschine führt immer nur eine
+einzige Instruktion aus und bleibt dannach stehen. Um mit der folgenden
+Instruktion fortzufahren wird immer ein externen Signal benötigt.
+Dieser Modus soll dem Entwickler erlauben, ein Programm schrittweise zu debuggen.
 Siehe dazu Kapitel \ref{chap:Debugging}, Seite \pageref{chap:Debugging}.
+
+Der Modus kann vor dem Hochfahren der Maschine festgelegt, jedoch im
+Betrieb nicht mehr geändert werden. Wird kein Modus angegeben, startet die
+Maschine im Normalmodus.
+
+
 

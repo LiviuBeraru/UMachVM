@@ -2,8 +2,9 @@
 \index{Speichermodell}
 \label{sec:Speicher}
 
-Der Speicher wird in seiner Gesamtheit beim Hochfahren der Maschine mit dem
-Wert Null initialisiert. Seine Größe ist nicht festgelegt.
+Beim Hochfahren der Maschine wir der komplette Speicher mit dem
+Wert Null initialisiert und anschließend das angegebene Maschinenprogramm in den
+Speicher geladen. Die Größe des Speichers ist nicht festgelegt.
 
 
 
@@ -36,42 +37,42 @@ Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
 \label{subsubsec:Interrupttabelle}
 
 Die Interrupttabelle besteht aus einer Reihe von 32-Bit langen Sprungadressen
-zum ausführbaren Code, bzw. zu sogenannten Interruptroutinen, oder \glqq
-interrupt handlers\grqq, die in Ausnahmefällen ausgeführt werden sollen. Jedes
+zum ausführbaren Code, bzw. zu sogenannten Interruptroutinen, oder auch \glqq
+Interrupt Handlers\grqq, die in Ausnahmefällen ausgeführt werden sollen. Jedes
 mal, wenn eine Ausnahmesituation auftritt (meistens eine Fehlersituation), wird
 intern ein Interruptsignal erzeugt, das mit einer Kennnummer (Interruptnummer)
 versehen ist. Die Interruptnummer wird als Index in dieser Tabelle verwendet.
 
 
-Die Interrupttabelle wird von der Maschine nicht gefüllt, sondern es ist
-Sache der Software, die entsprechenden Stellen im Speicher zu füllen und
-entsprechende Funktionalität zur Verfügung zu stellen. Wird eine solche Adresse
-nicht gesetzt, d.h. ist der entsprechende Tabelleneintrag auf Null gesetzt, so
-reagiert die Maschine auf die Ausnahmesituation mit seiner Standardfunktion: die
-Maschine hält an. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
+Die Interrupttabelle wird nicht von der Maschine nicht gefüllt, sondern es ist
+Aufgabe des Maschinenprogramms bei bedarf entsprechende Einträge der
+Interrupttabelle zu füllen und die zugehörige Funktionalität bereit zu stellen.
+Ist eine Interrupadresse nicht gesetzt, d.h. ist der entsprechende
+Tabelleneintrag Null, so reagiert die Maschine auf die Ausnahmesituation
+in dem sie hält. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
 Abschnitt \ref{sec:Interrupts}, ab der Seite \pageref{sec:Interrupts}.
 
-Die Interrupttabelle besteht aus 64 Einträgen, die 64 mögliche Interrupts
-entsprechen. Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es
+Die Interrupttabelle besteht aus 64 Einträgen, was 64 möglichen Interrupts
+entspricht. Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es
 64 Einträge gibt, ist die Interrupttabelle $64 \cdot 4 = 256$ Bytes groß. Die
-Interrupttabelle fängt an der Adresse Null an. Siehe auch die Abbildung
-\ref{fig:Speicherstruktur} auf der Seite \pageref{fig:Speicherstruktur}.
+Interrupttabelle fängt an der Adresse Null an. Siehe auch Abbildung
+\ref{fig:Speicherstruktur} auf Seite \pageref{fig:Speicherstruktur}.
 
 
-Die Tabelle \ref{tab:Interrupttabelle} auf der Seite
-\pageref{tab:Interrupttabelle} gibt alle definierten
-Interruptnummer\index{Interruptnummer} und deren Bedeutung wieder.
+Tabelle \ref{tab:Interrupttabelle} auf Seite
+\pageref{tab:Interrupttabelle} listet alle definierten
+Interruptnummer\index{Interruptnummer} und deren Bedeutung auf.
 
 
 \subsubsection{Programm und Daten}
 \index{Programm}
 
-Nach der Interrupttabelle, die $256$ Bytes groß ist ($64$ mal $4$ ),
-folgt das eigentliche Program, das von der Maschine ausgeführt werden soll.
-Dieses Programm wird also ab der Adresse $256$ gelesen und ausgeführt.
+Nach der $256$ Bytes ($64$ mal $4$) großen Interrupttabelle
+folgt das eigentliche Programm, das von der Maschine ausgeführt werden soll.
+Dieses erste auzuführende Programms beginnt somit ab der Speicheradresse $256$.
 
 Insbesondere ist dieses Programm dafür zuständig, die Interrupttabelle zu
-füllen, falls (bestimmte) Interrupts behandelt werden sollten.
+füllen, falls (bestimmte) Interrupts behandelt werden sollen.
 
 
 
@@ -93,6 +94,6 @@ Speicheradresse zu setzen, so wird dies von der Maschine verweigert und als
 Fehler im Register \texttt{ERR} signalisiert.
 
 Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
-maximal-erreichbare Speicheradresse plus Eins gesetzt. Damit können keine Werte
+maximal erreichbare Speicheradresse plus Eins gesetzt. Damit können keine Werte
 gelesen werden, bevor Werte geschrieben wurden.
 

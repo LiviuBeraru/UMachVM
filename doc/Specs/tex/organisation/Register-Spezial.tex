@@ -2,7 +2,7 @@
 \label{subsec:Spezialregister}
 \index{Register!Spezialregister}
 \index{Spezialregister}
-Die Spezialregister werden von der UMach Maschine für spezielle Zwecke
+Die Spezialregister werden von der UMach Maschine für gesonderte Zwecke
 verwendet, sind aber dem Programmierer sichtbar. Der Inhalt der Spezialregister
 kann von der Maschine während der Ausführung eines Programms ohne Einfluss
 seitens Programmierers verändert werden.
@@ -10,14 +10,14 @@ seitens Programmierers verändert werden.
 Nicht alle Spezialregister können durch Instruktionen überschrieben werden
 (sind schreibgeschützt).
 
-Die \glspl{Registernummer} der Spezialregister setzen die Nummerierung der
-Allzweckregister zwar fort, die Assemblernamen aber nicht: es gibt kein Register
-$R33$.
+Die \glspl{Registernummer} der Spezialregister setzen die Registernummerierung
+der Allzweckregister zwar bei 33 fort, die Assemblernamen sind aber
+zweckspezifisch: es gibt kein Spezialregister $R33$.
 Die Tabelle \ref{tab:Spezialregister} auf Seite \pageref{tab:Spezialregister}
 enthält die Liste aller Spezialregister. In der ersten
 Spalte steht der Assemblername, so wie er vom Programmierer verwendet wird. In
-der zweiten Spalte steht der Maschinenname im Dezimalsystem, so wie er im
-Maschinencode steht.
+der zweiten Spalte ist der Maschinenname bzw. die Registernummer im
+Dezimalsystem angegeben.
 Die dritte Spalte enthält eine kurze Beschreibung und Bemerkungen.
 Falls die Beschreibung nicht anders spezifiziert, ist das Register nicht
 schreibgeschützt.
@@ -118,11 +118,12 @@ ZERO & 00 & Enthält die Zahl Null.
 \subsection{Das ERR Register}
 \index{ERR@\texttt{ERR}}
 
-Zu jedem Fehler gehört ein Bit im Register. Die Bitstellen werden dabei
-entsprechend deren Stelligkeiten durchnummeriert: Bit mit Stelligkeit $2^{0}$
-hat Position $0$, Bit mit Stelligkeit $2^{31}$ hat die Position $31$.
+Jedes Bit im Register signalisiert das auftreten eines spezifischen Fehlers.
+Die Bitstellen werden dabei entsprechend deren Stelligkeiten durchnummeriert:
+Bit mit Stelligkeit $2^{0}$ hat Position $0$, Bit mit Stelligkeit $2^{31}$ hat
+die Position $31$.
 
-Die Bits im \texttt{ERR} Register werden in den folgenden 4 Gruppen eingeteilt:
+Die Bits im \texttt{ERR} Register werden in die folgenden 4 Gruppen unterteilt:
 
 \begin{center}
 \begin{tabular}{>{\ttfamily}ll}
@@ -135,7 +136,7 @@ Die Bits im \texttt{ERR} Register werden in den folgenden 4 Gruppen eingeteilt:
 \end{tabular}
 \end{center}
 
-Die Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
+Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
 \texttt{ERR} Register signalisiert werden können.
 
 

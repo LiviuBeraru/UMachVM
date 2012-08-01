@@ -5,14 +5,17 @@
 Der Kern der Maschine besteht aus den folgenden Komponenten:
 
 \begin{enumerate}
-  \item Befehlsabruf Einheit (Instruction Fetch Unit), die die
-   Programminstruktionen der Reihe nach aus dem Speicher holt und der
-   Decodierungseinheit übergibt.
-  \item Decodierungseinheit, die dafür zuständig ist, eine Instruktion zu
-    decodieren, bzw. in ihren Komponenten zu zerteilen.
-  \item Recheneinheit, die für die tatsächliche Ausführung der Instruktionen
-   zuständig ist. 
-  \item Register, kleine Speichereinheiten, die sich im Kern befinden.
+  \item Steuerwerk --
+   Das Steuerwerk besteht aus einer "Instruction Fetch Unit" und einer
+   Decodierungseinheit. Aufgabe der Instruction Fetch Unit ist es, die
+   Programminstruktionen entsprechend dem \texttt{PC} aus dem Speicher zu holen
+   und der Decodierungseinheit zu übergeben. Diese decodiert die Instruktion und
+   stellt die Recheneinheit entsrpechend ein.
+  \item Recheneinheit --
+   Zuständig für die tatsächliche Ausführung der Instruktionen. 
+  \item Register --
+   Kleine Speichereinheiten, die entweder jene Daten halten auf der die Recheneinheit
+   operiert, oder Ergebnisse einer Instruktion aufnehmen.
 \end{enumerate}
 
-Der Kern besitzt kein Pipeline.
+Der Kern besitzt keine Pipeline.

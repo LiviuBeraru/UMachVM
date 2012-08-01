@@ -3,31 +3,26 @@
 \index{Register}
 \index{UMach!Register}
 
-Die \glspl{Register} sind die Speichereinheiten im Prozessor.
-Die meisten Anweisungen an die UMach Maschine operieren auf einer Art mit den
+Die \glspl{Register} sind Speichereinheiten im Prozessorkern.
+Die meisten Instruktionen operieren auf diesen
 Registern.
 
 Für alle Register gilt:
 \begin{enumerate}
-  \item Jedes Register ist ein Element aus der Menge \Reg, die alle Register
-    beinhaltet.\index{\Reg}
-    Die Notation $x \in \Reg$ bedeutet, dass $x$ ein Register ist.
+  \item Das Register ist ein Element aus der Menge \Reg aller Register
+	\index{\Reg}
+    Die Notation $x \in \Reg$ bedeutet somit, dass $x$ ein Register ist.
   \item Die Speicherkapazität beträgt 32 Bit.
-  \item Es gibt eine eindeutige natürliche Nummer, die innerhalb der
-    Maschine das Register identifiziert. Diese Nummer heißt
-    \gls{Registernummer}\index{Registernummer}\index{Register!Registernummer}
-    und wird von einer Instruktion auf Maschinencode-Ebene verwendet, wenn sie
-    das Register anspricht -- mit anderen Worten, auf Maschinecode-Ebene wird 
-    das Register durch seine Nummer angegeben.
-  \item Die UMach Maschine erwartet die Angabe eines Registers als numerischer
-    Wert (Maschinenname). Jedoch verwendet der Programmierer der Maschine auf
-    Assembler Ebene einen eindeutigen Namen dieses Registers.
-    Dieser Name heißt
+  \item Es gibt eine eindeutige natürliche Nummer, die \gls{Registernummer}
+    \index{Registernummer}\index{Register!Registernummer}. Diese dient zur
+    Identifikation des Registers in der Maschine und auf Maschinencode-Ebene.
+  \item Auf Assembler Ebene git es einen zusätzlichen eindeutigen Namen für das
+    Register. Dieser Name heißt
     \gls{Assemblername}.\index{Assemblername}\index{Register!Assemblername}
 \end{enumerate}
 
-Die UMach Maschine hat zwei Gruppen von Registern: die Allzweckregister und
-die Spezialregister.
+Die UMach Maschine besitzt zwei Arten von Registern: die Allzweck- und
+Spezialregister.
 
 
 \input{organisation/Register-Allzweck}

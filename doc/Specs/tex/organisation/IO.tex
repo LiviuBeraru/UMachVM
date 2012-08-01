@@ -24,25 +24,24 @@ der direkte Speicherzugriff von der I/O-Einheit unternommen wird und nicht von
 den peripherischen Geräten selbst.
 
 Alle I/O Operationen werden vom Kern unter Programmkontrolle angestoßen (siehe
-auch den Abschnitt \ref{sec:IO-Instruktionen} auf Seite
+auch Abschnitt \ref{sec:IO-Instruktionen} auf Seite
 \pageref{sec:IO-Instruktionen}). Es werden also keine I/O Operationen
 ausgeführt, die nicht explizit durch Maschinenbefehle angefordert werden.
 Insbesondere werden keine I/O-Operationen aufgrund von
 Unterbrechungsanfoderungen (interrupts) initialisiert.
 
 Wenn ein I/O-Befehl ausgeführt wird, delegiert der Kern die Ausführung an die
-I/O-Einheit und wartet, bis diese fertig ist. Erst wenn die I/O-Einheit fertig
-mit dem Transfer zwischen Speicher und Peripherie ist, fährt der Kern die
-Ausführung fort. Es werden parallel keine Instruktionen aus dem
+I/O-Einheit und wartet, bis diese fertig ist. Erst wenn die I/O-Einheit
+mit dem Transfer zwischen Speicher und Peripherie fertig ist, fährt der Kern mit
+dem Programmablauf fort. Es werden parallel keine Instruktionen aus dem
 Speicher geholt oder ausgeführt.
 
 
 Die I/O-Einheit der UMach Maschine besteht aus einer Reihe von jeweils 8
 Eingangs- und Ausgangschnittstellen, auch Ports\index{Port}\index{UMach!Port}
 genannt. An diesen Ports können verschiedene physikalische Geräte angeschlossen
-werden, die die entsprechenden Daten generieren bzw. verarbeiten können. Siehe
-dazu auch die Abbildung \ref{fig:umach-aufbau} auf der Seite
-\pageref{fig:umach-aufbau}.
+werden, welche die entsprechenden Daten generieren bzw. verarbeiten können.
+(Siehe Abbildung \ref{fig:umach-aufbau} auf Seite \pageref{fig:umach-aufbau}.)
 
 
 Die I/O Ports sind in zwei Kategorien unterteilt: 8 Eingabeports und 8

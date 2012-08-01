@@ -2,7 +2,7 @@
 \index{UMach!Aufbau}
 \label{sec:Aufbau}
 
-Die virtuelle UMach Maschine hat eine einfache Konstruktion, die im
+Die virtuelle UMach Maschine hat einen einfachen Aufbau, der im
 wesentlichen aus den folgenden Komponenten besteht:
 \begin{enumerate}
  \item Kern (Abschnitt \ref{sec:Kern})
@@ -10,8 +10,8 @@ wesentlichen aus den folgenden Komponenten besteht:
  \item I/O Einheit (Abschnitt \ref{sec:IO-Einheit})
 \end{enumerate}
 
-Siehe auch die Abbildung \ref{fig:umach-aufbau} auf der Seite
-\pageref{fig:umach-aufbau}, die die UMach Maschine darstellt.
+Siehe dazu Abbildung \ref{fig:umach-aufbau} auf Seite
+\pageref{fig:umach-aufbau}.
 
 \begin{figure}[htp]
  \centering
@@ -20,11 +20,13 @@ Siehe auch die Abbildung \ref{fig:umach-aufbau} auf der Seite
  \label{fig:umach-aufbau}
 \end{figure}
 
-Wenn die Maschine startet, sucht sie nach einem Program im Speicher, holt jede
-Instruktion nach einander in den Kern und führt sie aus. Danach bleibt sie im
-Wartezustand bis sie ausdrücklich ausgeschaltet wird. Alle Eingabe- und
-Ausgabeoperationen werden an die I/O-Einheit weitergeleitet (siehe auch die
-Abschnitte \ref{sec:IO-Einheit} und \ref{sec:IO-Instruktionen}).
+Beim Start der Maschine sucht diese nach einem ausführbaren Program im Speicher.
+Bei Erfolg wird das gefundene Programm instruktionswise in den Kern geholt und
+ausgeführt. Nach abarbeiten aller vorhandener Instruktionen verharrt die
+Maschine in einem Wartezustand bis sie ausdrücklich ausgeschaltet wird.
+Alle Eingabe- und Ausgabeoperationen werden an die I/O-Einheit weitergeleitet
+und von dieser ausgeführt (siehe auch die Abschnitte \ref{sec:IO-Einheit} und
+\ref{sec:IO-Instruktionen}).
 
 
 \input{organisation/Betriebsmodi}

@@ -1,34 +1,36 @@
 \chapter{Einführung}
 
-UMach ist eine einfache programmierbare virtuelle Maschine (VM), die einen
-definierten Instruktionssatz und eine definierte Architektur hat. UMach
-orientiert sich dabei an Prinzipien von RISC Architekturen: feste
-Instruktionslänge, kleine Anzahl von einfachen Befehlen, Speicherzugriff durch
-Load- und Store-Befehlen, usw. Die UMach Maschine ist Register-basiert. Der
-genaue Aufbau dieser Rechenmaschine ist im Abschnitt \ref{sec:Aufbau} ab der
-Seite \pageref{sec:Aufbau} beschrieben.
+UMach ist eine möglichst einfach konzipierte und programmierbare virtuelle
+Maschine (VM). Um diese Anforderung zu erfüllen wurde auf komplexere
+Funktionalitäten bewusst verzichtet. Sie besitzt einen fest definierten 
+Instruktionssatz und Architektur. UMach orientiert sich dabei an Prinzipien von
+RISC Architekturen: feste Instruktionslänge, kleine Anzahl von einfachen
+Befehlen, Speicherzugriff durch Load- und Store-Befehlen, usw. Die UMach
+Maschine ist Register-basiert. Der genaue Aufbau dieser Rechenmaschine ist im
+Abschnitt \ref{sec:Aufbau} ab der Seite \pageref{sec:Aufbau} beschrieben.
 
 
-Für den Anwender der virtuellen Maschine wird zuerst eine Assembler-Sprache zur
-Verfügung gestellt. In dieser Sprache werden Programme geschrieben und
-anschließend kompiliert. Die kompilierte Datei (Maschinen-Code) wird
-von der virtuellen Maschine ausgeführt.
+Für die Verwendung der virtuellen Maschine wird zuerst eine Assembler-Sprache
+zur Verfügung gestellt. In dieser Sprache werden Programme geschrieben und
+anschließend kompiliert. Die kompilierte Datei (Maschinen-Code) kann dann
+von der virtuellen Maschine ausgeführt werden.
 
 Obwohl in diesem Dokument Namen von Assembler-Befehlen angegeben werden (siehe 
 Kapitel \ref{chap:Instruktionssatz}, \nameref{chap:Instruktionssatz})
 spezifiziert dieses Dokument die UMach Maschine auf Maschinencode Ebene
 (Register, Bussystem, Instruktionen).
-Die Implementierung eines Assemblers ist frei, zusätzliche Befehle,
+Bei der Implementierung eines Assemblers steht es frei, zusätzliche Befehle,
 Instruktionsformate, Aliase und sprachliche Konstrukte auf der Assembler-Ebene
-zu definieren. Z.B. auf Maschinencode-Ebene, sind die Befehle
+einzuführen. So sind z.B. die folgenden Befehle
 \begin{lstlisting}
   ADD R1 R2 5
   SUB R2 4
 \end{lstlisting}
-fehlerhaft, denn das Format der \opref{ADD} und \opref{SUB} Befehle verlangt die
-Angabe von drei Registern. Der Assembler ist frei, diese zusätzliche Formate zu
-definieren und zu erkennen, solange er gültigen UMach Maschinencode produziert.
-Gültiger Maschinencode für die obigen Befehle wäre
+auf Maschinencode-Ebene ungültig, denn hier verlangt die Formatdefinition der
+\opref{ADD} und \opref{SUB} Befehle die Angabe von drei Registern. Ein Assembler
+kann jedoch diese zusätzliche Formate definieren, solange er daraus
+gültigen UMach Maschinencode erzeugt.
+Gültiger Maschinencode für die genannten Beispiele wäre
 \begin{lstlisting}
   ADDI R1 R2 5 # Maschinencode 0x32 0x01 0x02 0x05
   SUBI R2 R2 4 # Maschinencode 0x35 0x02 0x02 0x04
