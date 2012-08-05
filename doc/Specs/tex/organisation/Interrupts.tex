@@ -65,6 +65,10 @@ Interrupts.
 
 \subsection{Interruptnummer}
 
+% 0  - 15 kern (8 arithmetisch, 8 Befehl bezogen)
+% 16 - 31 speicher (8 Argumente, 8 zugriff)
+% 32 - 47 io (8 argumente 8 ?)
+% 48 - 63 system (8 ? und 8 intern (Maschine/Implementierung kaputt))
 
 \begin{longtable}{>{\ttfamily}ll}
 \caption{Interruptnummer}
@@ -87,6 +91,7 @@ Interrupts.
 \midrule
  32  & I/O Port existiert nicht   \\
 \midrule
+ 56  & Interner Fehler            \\
  63  & Syscall, Aufruf an das Betriebssystem \\
 \bottomrule
 \end{longtable}
