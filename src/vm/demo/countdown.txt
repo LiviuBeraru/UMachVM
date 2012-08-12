@@ -1,0 +1,18 @@
+set r1 1
+set r2 1
+set r3 0
+
+#loop:
+dec  r1
+addi r3 r1 0x30
+sb   r3 zero
+out  zero r2 zero
+cmp  r1 zero
+bne  -4
+# bne loop
+
+set  r1 10
+sb   r1 zero
+out  zero r2 zero
+
+eop
