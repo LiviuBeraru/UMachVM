@@ -5,66 +5,68 @@
 #include "disassemble.h"
 #include "umach.h" // options
 
-/*
- *
- * TODO: the functions print to stdout. Change that so that the user
- * has the control over printing and can use this functions in 
- * whatever scenario he likes.
- * 
- */
-
-static
-void disassemble(uint8_t inst[4])
+void disassemble(const uint8_t instruction[4], char *destination, int printhex)
 {
-    struct command *cmd = command_by_opcode(inst[0]);
+    const uint8_t *ins = instruction; // shorter name
+    char buffer[128] = {'\0'}; // char buffer we use to sprintf stuff
+    
+    if (printhex) {
+        sprintf(destination,
+            "%02X %02X %02X %02X\t", ins[0], ins[1], ins[2], ins[3]);
+    }    
 
+    struct command *cmd = command_by_opcode(ins[0]);
+    
     if (cmd == NULL) {
-        printf("Unknown\n");
+        sprintf(buffer, "Unknown command: 0x%02X", ins[0]);
+        strcat(destination, buffer);
         return;
     }
+    
+    sprintf(buffer, "%-5s ", cmd->opname);
+    strcat(destination, buffer);
 
-    printf("%-5s ", cmd->opname);
     int n = 0;
 
     switch(cmd->format) {
         case NUL:
             break;
         case NNN:
-            n = (inst[1] << 16) | (inst[2] << 8) | (inst[3]);
+            n = (ins[1] << 16) | (ins[2] << 8) | (ins[3]);
 
-            if (n & 0x800000) {
+            if (n & 0x800000) {// extend the sign bit
                 n = n | 0xFF000000;
             }
 
-            printf("%d", n);
+            sprintf(buffer, "%d", n);
             break;
         case R00:
-            printf("R%d", inst[1]);
+            sprintf(buffer, "R%d", ins[1]);
             break;
         case RNN:
-            printf("R%d ", inst[1]);
-            n =  (inst[2] << 8) | (inst[3]);
+            sprintf(buffer, "R%d ", ins[1]);
+            n =  (ins[2] << 8) | (ins[3]);
 
-            if (n & 0x8000) {
+            if (n & 0x8000) {// sign bit
                 n = n | 0xFF0000;
             }
 
-            printf("%d", n);
+            sprintf(buffer, "%d", n);
             break;
         case RR0:
-            printf("R%d R%d", inst[1], inst[2]);
+            sprintf(buffer, "R%d R%d", ins[1], ins[2]);
             break;
         case RRN:
-            printf("R%d R%d %d", inst[1], inst[2], inst[3]);
+            sprintf(buffer, "R%d R%d %d", ins[1], ins[2], ins[3]);
             break;
         case RRR:
-            printf("R%d R%d R%d", inst[1], inst[2], inst[3]);
+            sprintf(buffer, "R%d R%d R%d", ins[1], ins[2], ins[3]);
             break;
         default:
-            printf("Unknown format");
+            sprintf(buffer, "Unknown format");
     }
 
-    printf("\n");
+    strcat(destination, buffer);
 }
 
 int disassemble_file(FILE* file)
@@ -81,18 +83,15 @@ int disassemble_file(FILE* file)
         return -1;
     }
 
-    uint8_t instruction[4];
-    memset(instruction, 0, sizeof(instruction));
+    uint8_t instruction[4] = {0};
+    char line[128] = {'\0'};
 
     while (fread(instruction, sizeof(*instruction), 4, file) > 0) {
-
-        printf("%02X %02X %02X %02X\t",
-               instruction[0],
-               instruction[1],
-               instruction[2],
-               instruction[3]);
-        disassemble(instruction);
+        disassemble(instruction, line, 1);
+        printf("%s\n", line);
+        // clear buffers
         memset(instruction, 0, sizeof(instruction));
+        memset(line, 0, sizeof(line));
     }
 
     return 0;

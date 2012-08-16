@@ -49,7 +49,7 @@ ihre Funktionalität in den I/O Befehlen implementiert wird.
 
 * core.c, core.h
     Allgemeine Funktionen, die sich auf den Kern beziehen. Hier werden auch die
-    Register definiert - bzw. Speicher dafür allokiiert.
+    Register definiert - bzw. Speicher dafür allokiert.
 
 * memory.c, memory.h
     Implementiert den Speicher (read/write Funktionen)
