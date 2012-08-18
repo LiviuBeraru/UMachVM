@@ -1,0 +1,7 @@
+SET r1 hello
+set r2 len
+out r1 r2 zero
+
+
+@string hello "Hello world!\n"
+@strlen len hello

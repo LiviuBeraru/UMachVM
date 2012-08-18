@@ -50,7 +50,7 @@ void disassemble(const uint8_t instruction[4], char *destination, int printhex)
             if (n & 0x8000) {// sign bit
                 n = n | 0xFF0000;
             }
-
+            strcat(destination, buffer);
             sprintf(buffer, "%d", n);
             break;
         case RR0:

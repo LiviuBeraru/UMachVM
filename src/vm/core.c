@@ -9,7 +9,7 @@
 #include "command.h"
 
 static Register  registers[NOREGS];
-static State     state = {1, registers};
+static State     state = {1, registers, {0x0}};
 
 static void init_registers(void);
 
@@ -84,8 +84,8 @@ void core_dump_regs(void)
 {
     int i = 1;
     for (i = 1; i <= 32; i++) {
-        printf("| R%-2d = %3d ", i, registers[i].value);
-        if (i % 8 == 0) {
+        printf("| R%-2d = %5d ", i, registers[i].value);
+        if (i % 4 == 0) {
             printf("|\n");
         }
     }
