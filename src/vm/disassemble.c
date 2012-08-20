@@ -1,72 +1,61 @@
-#include <stdint.h> // uint8_t
 #include <string.h>
-
-#include "command.h"
 #include "disassemble.h"
+#include "command.h"
 #include "umach.h" // options
+#include "registers.h"
+
+/* These functions implement the different instruction formats */
+static void formatNNN(const uint8_t ins[4], char *dest);
+static void formatR00(const uint8_t ins[4], char *dest);
+static void formatRNN(const uint8_t ins[4], char *dest);
+static void formatRR0(const uint8_t ins[4], char *dest);
+static void formatRRN(const uint8_t ins[4], char *dest);
+static void formatRRR(const uint8_t ins[4], char *dest);
 
 void disassemble(const uint8_t instruction[4], char *destination, int printhex)
 {
-    const uint8_t *ins = instruction; // shorter name
-    char buffer[128] = {'\0'}; // char buffer we use to sprintf stuff
-    
     if (printhex) {
         sprintf(destination,
-            "%02X %02X %02X %02X\t", ins[0], ins[1], ins[2], ins[3]);
-    }    
-
-    struct command *cmd = command_by_opcode(ins[0]);
+                "%02X %02X %02X %02X\t",
+                instruction[0], instruction[1],
+                instruction[2], instruction[3]);
+    }
     
+    char buffer[64];
+    struct command *cmd = command_by_opcode(instruction[0]);
     if (cmd == NULL) {
-        sprintf(buffer, "Unknown command: 0x%02X", ins[0]);
-        strcat(destination, buffer);
+        strcat(destination, "???");
         return;
     }
+
     
     sprintf(buffer, "%-5s ", cmd->opname);
     strcat(destination, buffer);
-
-    int n = 0;
 
     switch(cmd->format) {
         case NUL:
             break;
         case NNN:
-            n = (ins[1] << 16) | (ins[2] << 8) | (ins[3]);
-
-            if (n & 0x800000) {// extend the sign bit
-                n = n | 0xFF000000;
-            }
-
-            sprintf(buffer, "%d", n);
+            formatNNN(instruction, destination);
             break;
         case R00:
-            sprintf(buffer, "R%d", ins[1]);
+            formatR00(instruction, destination);
             break;
         case RNN:
-            sprintf(buffer, "R%d ", ins[1]);
-            n =  (ins[2] << 8) | (ins[3]);
-
-            if (n & 0x8000) {// sign bit
-                n = n | 0xFF0000;
-            }
-            strcat(destination, buffer);
-            sprintf(buffer, "%d", n);
+            formatRNN(instruction, destination);
             break;
         case RR0:
-            sprintf(buffer, "R%d R%d", ins[1], ins[2]);
+            formatRR0(instruction, destination);
             break;
         case RRN:
-            sprintf(buffer, "R%d R%d %d", ins[1], ins[2], ins[3]);
+            formatRRN(instruction, destination);
             break;
         case RRR:
-            sprintf(buffer, "R%d R%d R%d", ins[1], ins[2], ins[3]);
+            formatRRR(instruction, destination);
             break;
         default:
             sprintf(buffer, "Unknown format");
     }
-
-    strcat(destination, buffer);
 }
 
 int disassemble_file(FILE* file)
@@ -95,4 +84,91 @@ int disassemble_file(FILE* file)
     }
 
     return 0;
+}
+
+void formatNNN(const uint8_t ins[4], char* dest)
+{
+    int8_t n8 = ins[1];
+    int32_t n = n8;
+    n = (n << 16) | (ins[2] << 8) | (ins[3]);
+
+    /* we could have set the sign bit also this way:
+    if (n & 0x800000) {// leftmost bit is set
+        n = n | 0xFF000000;
+    }
+    but converting int8 to int32 will automatically 
+    preserve the sign bit
+    */
+    char buffer[16];
+    sprintf(buffer, "%d", n);
+    strcat(dest, buffer);
+}
+
+void formatR00(const uint8_t ins[4], char* dest)
+{
+    Register *r = get_register(ins[1]);
+    if (r) {
+        strcat(dest, r->name);
+    } else {
+        strcat(dest, "???");
+    }
+}
+
+void formatRNN(const uint8_t ins[4], char* dest)
+{
+    Register *r = get_register(ins[1]);
+    char buffer[16];
+    
+    if (r) {
+        sprintf(buffer, "%-5s ", r->name);
+    } else {
+        sprintf(buffer, "%-5s ", "???");
+    }
+    strcat(dest, buffer);
+
+    
+    int16_t n =  (ins[2] << 8) | (ins[3]);
+    sprintf(buffer, "%d", n);
+    strcat(dest, buffer);
+}
+
+void formatRR0(const uint8_t ins[4], char* dest)
+{
+    Register *a = get_register(ins[1]);
+    Register *b = get_register(ins[2]);
+    
+    char buffer[8];
+    
+    if (a) {
+        sprintf(buffer, "%-5s ", a->name);
+    } else {
+        sprintf(buffer, "%-5s ", "???");
+    }
+    strcat(dest, buffer);
+    
+    if (b) {
+        sprintf(buffer, "%-5s ", b->name);
+    } else {
+        sprintf(buffer, "%-5s ", "???");
+    }
+    strcat(dest, buffer);
+}
+
+void formatRRN(const uint8_t ins[4], char* dest)
+{
+    formatRR0(ins, dest);
+    char buffer[16];
+    sprintf(buffer, "%d", ins[3]);
+    strcat(dest, buffer);
+}
+
+void formatRRR(const uint8_t ins[4], char* dest)
+{
+    formatRR0(ins, dest);
+    Register *a = get_register(ins[3]);
+    if (a) {
+        strcat(dest, a->name);
+    } else {
+        strcat(dest, "???");
+    }
 }

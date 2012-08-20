@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "core.h"
-#include "regcheck.h"
+#include "registers.h"
 #include "memory.h"
 
 int core_in  (void)
@@ -13,30 +13,23 @@ int core_in  (void)
 
 int core_out (void)
 {
-    State *state = core_getstate();
+    int32_t address = 0;
+    int32_t nbytes = 0;
+    int32_t port = 0;
     
-    int a = state->instruction[1];
-    int n = state->instruction[2];
-//     int p = state->instruction[3];
+    /* read values from registers */
+    if (read_register(instruction[1], &address)) { return -1; }
+    if (read_register(instruction[2], &nbytes))  { return -1; }
+    if (read_register(instruction[3], &port))    { return -1; }
     
-    CHECK_READ(a);
-    CHECK_READ(n);
-//     CHECK_READ(p);
-    CHECK_WRITE(n);
-    
-    int address = state->registers[a].value;
-    int length  = state->registers[n].value;
-//     int port    = state->registers[p].value;
-    
-    uint8_t *mem = calloc(length+1, 1);
-    if (mem_read(mem, address, length) == -1) {
+    uint8_t *mem = calloc(nbytes + 1, 1); // +1 for '\0'
+    if (mem_read(mem, address, nbytes) == -1) {
         return -1;
     }
     
     /* don't care about the port now, 
        we send everything to stdout */
     printf("%s", mem);
-    
     free(mem);
     
     return 0;

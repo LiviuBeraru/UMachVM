@@ -24,8 +24,7 @@ int main(int argc, char *argv[])
         perror(options.filename);
         abort();
     }
-    
-    core_init();
+
     if (options.disassemble) {
         disassemble_file(file);
         fclose(file);
@@ -38,6 +37,8 @@ int main(int argc, char *argv[])
         options.memory);
         exit(1);
     }
+    
+    core_init();
 
     int progsize = mem_load_program_file(file);
     fclose(file);

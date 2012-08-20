@@ -1,61 +1,64 @@
 #include "core.h"
-#include "regcheck.h"
 #include "memory.h"
+#include "registers.h"
 
 #include <stdio.h>
 
 int core_set(void)
 {
-    State *state = core_getstate();
-    int reg = state->instruction[1];
-    CHECK_WRITE(reg);
+    // extract the 16 bit argument
+    int16_t n = (instruction[2] << 8) | instruction[3];
 
-    int val = state->instruction[2];
-    val = (val << 8) | state->instruction[3];
-
-    state->registers[reg].value = val;
-
-    return 0;
+    if (write_register(instruction[1], n)) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 int core_cp(void)
 {
-    State *state = core_getstate();
-    int dest = state->instruction[1];
-    int src = state->instruction[2];
-
-    CHECK_READ(src);
-    CHECK_WRITE(dest);
-    state->registers[dest].value = state->registers[src].value;
+    int32_t value = 0;
+    if (read_register(instruction[2], &value)) {
+        return -1;
+    }
+    if (write_register(instruction[1], value)) {
+        return -1;
+    }
 
     return 0;
 }
 
 int core_lb(void)
 {
-    State *state = core_getstate();;
-    int dest = state->instruction[1];
-    int src = state->instruction[2];
-    
-    CHECK_WRITE(dest);
-    CHECK_READ(src);
-    
-    /* Register numbers are ok. 
-      Now call mem_read from the memory module.
-      This call will trigger the appropriate interrupts 
-      if reading fails. */
-    
-    int adress = state->registers[src].value;
-    int32_t oldvalue = state->registers[dest].value;
-    oldvalue = oldvalue & 0xFFFFFF00; // unset last byte
-    
-    uint8_t byte = 0;
-    if (mem_read(&byte, adress, 1) != -1) {
-        state->registers[dest].value = oldvalue | byte;
-        return 0;
-    } else {
+    int32_t address = 0;
+    int32_t value = 0;
+    uint8_t mbyte = 0;
+
+    // read the memory address from register
+    if (read_register(instruction[2], &address)) {
         return -1;
     }
+
+    // read the byte from memory
+    if (mem_read(&mbyte, address, 1)) {
+        return -1;
+    }
+
+    // read the old value
+    if (read_register(instruction[1], &value)) {
+        return -1;
+    }
+
+    // set last byte of the new value
+    value = value & 0xFFFFFF00; // unset last byte
+    value = value | mbyte;      // set last byte
+
+    // write new value
+    if (write_register(instruction[1], value)) {
+        return -1;
+    }
+    return 0;
 }
 
 int core_lw(void)
@@ -66,21 +69,27 @@ int core_lw(void)
 
 int core_sb(void)
 {
-    State *state = core_getstate();;
-    int src  = state->instruction[1];
-    int dest = state->instruction[2];
+    int32_t address = 0;
+    int32_t rvalue = 0;
+    uint8_t  byte = 0;
     
-    CHECK_READ(src);
-    CHECK_READ(dest);
-    
-    int address = state->registers[dest].value;
-    uint8_t value = state->registers[src].value & 0xFF;
-    
-    if (mem_write(&value, address, 1) == -1) {
+    // read the value to store from register
+    if (read_register(instruction[1], &rvalue)) {
         return -1;
-    } else {
-        return 0;
     }
+
+    // read the memory address from register
+    if (read_register(instruction[2], &address)) {
+        return -1;
+    }
+
+    // take the last byte
+    byte = (uint8_t) rvalue;
+
+    if (mem_write(&byte, address, 1)) {
+        return -1;
+    }
+    return 0;
 }
 
 int core_sw(void)

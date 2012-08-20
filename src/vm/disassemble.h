@@ -6,6 +6,7 @@
 #define DISASSEMBLE_H
 
 #include <stdio.h>
+#include <stdint.h>
 
 /**
  * @brief Disassemble 4 byte instruction into string representation

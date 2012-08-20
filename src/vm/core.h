@@ -1,15 +1,17 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <stddef.h>     // NULL
-#include "core_state.h" // State
+#include <stdint.h> // uint8_t
+
+/* Global data of the core */
+extern int       running;
+extern uint8_t   instruction[4];
 
 void core_init(void);
 void core_run_program(void);
 void core_fetch(void);
 void core_execute(void);
-void core_dump_regs(void); // this function does not belong here
-State* core_getstate(void);
 
+void core_dump_regs(void); //TODO: move this function to the debugger
 
 #endif

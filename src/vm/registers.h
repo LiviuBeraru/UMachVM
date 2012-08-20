@@ -1,10 +1,12 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
 
-#define REG_READABLE 1
-#define REG_WRITABLE 2
-#define REG_RW       3
-#define NOREGS       64
+#include <stdint.h> // for int32_t
+
+#define REG_READ  1
+#define REG_WRITE 2
+#define REG_RW    3
+#define NOREGS    64
 
 #define PC   33
 #define SP   34
@@ -17,5 +19,20 @@
 #define CMPR 41
 #define ZERO 0
 
+typedef
+struct core_register {
+    int32_t value;
+    int32_t mode;
+    const char * const name;
+}
+Register;
 
+extern Register registers[NOREGS];
+
+Register* get_register(int regno);
+
+int read_register   (int regno, int32_t* dest);
+int read_registeru  (int regno, uint32_t* dest);
+int write_register  (int regno, int32_t value);
+int write_registeru (int regno, uint32_t value);
 #endif

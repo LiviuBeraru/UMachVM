@@ -1,12 +1,10 @@
-#include <stdio.h>
 #include "core.h"
 #include "branch.h"
 #include "registers.h"
 
 int core_be(void)
 {
-    State *state = core_getstate();
-    if (state->registers[CMPR].value == 0) {
+    if (registers[CMPR].value == 0) {
         return core_jmp();
     }
     return 0;
@@ -14,8 +12,7 @@ int core_be(void)
 
 int core_bne(void)
 {
-    State *state = core_getstate();
-    if (state->registers[CMPR].value != 0) {
+    if (registers[CMPR].value != 0) {
         return core_jmp();
     }
     return 0;
@@ -23,8 +20,7 @@ int core_bne(void)
 
 int core_bl(void)
 {
-    State *state = core_getstate();
-    if (state->registers[CMPR].value < 0) {
+    if (registers[CMPR].value < 0) {
         return core_jmp();
     }
     return 0;
@@ -32,8 +28,7 @@ int core_bl(void)
 
 int core_ble (void)
 {
-    State *state = core_getstate();
-    if (state->registers[CMPR].value <= 0) {
+    if (registers[CMPR].value <= 0) {
         return core_jmp();
     }
     return 0;
@@ -41,8 +36,7 @@ int core_ble (void)
 
 int core_bg  (void)
 {
-    State *state = core_getstate();
-    if (state->registers[CMPR].value > 0) {
+    if (registers[CMPR].value > 0) {
         return core_jmp();
     }
     return 0;
@@ -50,8 +44,7 @@ int core_bg  (void)
 
 int core_bge (void)
 {
-    State *state = core_getstate();
-    if (state->registers[CMPR].value >= 0) {
+    if (registers[CMPR].value >= 0) {
         return core_jmp();
     }
     return 0;
@@ -59,33 +52,26 @@ int core_bge (void)
 
 int core_jmp (void)
 {
-    State *state = core_getstate();
-    
-    /* extract the 3 bytes branch offset */
-    int32_t offset = state->instruction[1];
-    offset = offset << 8;
-    offset = offset | state->instruction[2];
-    offset = offset << 8;
-    offset = offset | state->instruction[3];
-    /* could also do some pointer magic instead of shifting */
-    
-    /* if the offset if negative, then the first bit 
-       of the second byte should be one. if this is true, we set
-       the whole first byte to one, in order to preserve the 
-       sign bit */
-    
-    if (offset & 0x800000) {
-        offset = offset | 0xFF000000;
-    }
-    
-    /* the offset is the number of instructions to jump over
+    /* to preserve the sign bit of the 3 bytes offset, 
+     * we could check if the leftmost bit is one, and if it is, 
+     * then OR the highest byte of the offset with 0xFF.
+     * but it is easier if we just use ints for that:
+     * converting from int8 to int32 will preserve the sign bit.
+     */
+    int8_t b8 = instruction[1];
+    int32_t offset = b8;
+    offset = (offset << 16) | (instruction[2] << 8) | instruction[3];
+
+
+    /* the offset is the number of instructions to jump over.
        because an instruction is 4 bytes long, we multiply the
        offset with 4 */
-    offset = offset * 4;    
-    state->registers[PC].value += offset;
-    
+    offset = offset * 4;
+    registers[PC].value += offset;
+
     if (offset < 0) {
-        state->registers[PC].value -= 8;
+        /* jumping back needs an adjustment */
+        registers[PC].value -= 8;
     }
     return 0;
 }

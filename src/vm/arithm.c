@@ -1,175 +1,146 @@
-#include "core.h"      // State 
-#include "regcheck.h"  // CHECK_READ, CHECK_WRITE
+#include "core.h"      // instruction[]
 #include "registers.h"
 
 #include <stdio.h>
 
 int core_add(void) 
 {
-    State *state = core_getstate();
-    int d = state -> instruction[1];
-    int a = state -> instruction[2];
-    int b = state -> instruction[3];
+    int32_t a = 0;
+    int32_t b = 0;
     
-    CHECK_WRITE(d);
-    CHECK_READ(a);
-    CHECK_READ(b);
-
-    a = state->registers[a].value;
-    b = state->registers[b].value;
-
-    state->registers[d].value = a + b;
-
+    // try to read registers
+    if (read_register(instruction[2], &a))     { return -1; }
+    if (read_register(instruction[3], &b))     { return -1; }
+    
+    if (write_register(instruction[1], a + b)) { return -1; }
+        
     return 0;
 }
 
-int core_addu(void) 
-{
-    State *state = core_getstate();
-    uint32_t d = state->instruction[1];
-    uint32_t a = state->instruction[2];
-    uint32_t b = state->instruction[3];
+int core_addu(void)
+{    
+    uint32_t a = 0;
+    uint32_t b = 0;
     
-    CHECK_WRITE(d);
-    CHECK_READ(a);
-    CHECK_READ(b);
+    // try to read registers
+    if (read_registeru(instruction[2], &a))     { return -1; }
+    if (read_registeru(instruction[3], &b))     { return -1; }
     
-    a = state->registers[a].value;
-    b = state->registers[b].value;
-    
-    state->registers[d].value = a + b;
-    
+    if (write_registeru(instruction[1], a + b)) { return -1; }
+        
     return 0;
 }
 
 int core_addi(void) 
 {
-    /* $d <- $r + v */
-    State *state = core_getstate();
-    int d = state->instruction[1];
-    int r = state->instruction[2];
-    int v = state->instruction[3];
+    int32_t a = 0;
+    if (read_register(instruction[2], &a))     { return -1; }
+    int8_t b = instruction[3];
     
-    CHECK_WRITE(d);
-    CHECK_READ(r);
-    
-    state->registers[d].value = state->registers[r].value + v;
-    
+    if (write_register(instruction[1], a + b)) { return -1; }
+        
     return 0;
 }
 
 int core_sub(void) 
-{
-    State *state = core_getstate();
-    int d = state -> instruction[1];
-    int a = state -> instruction[2];
-    int b = state -> instruction[3];
+{// copy paste from core_add
+    int32_t a = 0;
+    int32_t b = 0;
     
-    CHECK_WRITE(d);
-    CHECK_READ(a);
-    CHECK_READ(b);
-
-    a = state->registers[a].value;
-    b = state->registers[b].value;
-
-    state->registers[d].value = a - b;
-
+    // try to read registers
+    if (read_register(instruction[2], &a))     { return -1; }
+    if (read_register(instruction[3], &b))     { return -1; }
+    
+    // write result
+    if (write_register(instruction[1], a - b)) { return -1; }
+        
     return 0;
 }
 
 int core_subu(void) 
-{
-    State *state = core_getstate();
-    uint32_t d = state->instruction[1];
-    uint32_t a = state->instruction[2];
-    uint32_t b = state->instruction[3];
+{// copy paste from addu, just the operation changed :)
+    uint32_t a = 0;
+    uint32_t b = 0;
     
-    CHECK_WRITE(d);
-    CHECK_READ(a);
-    CHECK_READ(b);
+    // try to read registers
+    if (read_registeru(instruction[2], &a))     { return -1; }
+    if (read_registeru(instruction[3], &b))     { return -1; }
     
-    a = state->registers[a].value;
-    b = state->registers[b].value;
-    
-    state->registers[d].value = a - b;
-    
+    if (write_registeru(instruction[1], a - b)) { return -1; }
+        
     return 0;
 }
 
-int core_subi(void) 
+int core_subi(void)
 {
-    State *state = core_getstate();
-    int d = state->instruction[1];
-    int r = state->instruction[2];
-    int v = state->instruction[3];
+    int32_t a = 0;
+    if (read_register(instruction[2], &a))     { return -1; }
+    int8_t b = instruction[3];
     
-    CHECK_WRITE(d);
-    CHECK_READ(r);
-    
-    state->registers[d].value = state->registers[r].value - v;
-    
+    if (write_register(instruction[1], a - b)) { return -1; }
+        
     return 0;
 }
 
 int core_mul(void)
 {
+    int32_t a32 = 0;
+    int32_t b32 = 0;
     
-    State *state = core_getstate();
-    /* we do 64 bit arithmetic here so we declare a and b 64 bit long */
-    int64_t a = state->instruction[1];
-    int64_t b = state->instruction[2];
+    // try to read registers
+    if (read_register(instruction[1], &a32)) { return -1; }
+    if (read_register(instruction[2], &b32)) { return -1; }
     
-    CHECK_READ(a);
-    CHECK_READ(b);
-    
-    a = state->registers[a].value;
-    b = state->registers[b].value;
-    
+    // promomote to 64 bit arithmetic
+    int64_t a = a32;
+    int64_t b = b32;
     int64_t d = a * b;
-    state->registers[LO].value = d;
-    state->registers[HI].value = (d >> 32);
     
+    write_register(LO, (int32_t) d);
+    write_register(HI, (int32_t) (d >> 32));
     
     return 0;
 }
 
-int core_mulu(void) 
+int core_mulu(void)
 {
-    State *state = core_getstate();
-    uint64_t a = state->instruction[1];
-    uint64_t b = state->instruction[2];
+    // the machine works with 32 bit values
+    uint32_t a32 = 0;
+    uint32_t b32 = 0;
     
-    CHECK_READ(a);
-    CHECK_READ(b);
+    // try to read registers
+    if (read_registeru(instruction[1], &a32)) { return -1; }
+    if (read_registeru(instruction[2], &b32)) { return -1; }
     
-    a = state->registers[a].value;
-    b = state->registers[b].value;
-    
+    // promomote to 64 bit arithmetic so we can get 64 bit results
+    uint64_t a = a32;
+    uint64_t b = b32;
     uint64_t d = a * b;
-    state->registers[LO].value = d;
-    state->registers[HI].value = (d >> 32);
+    
+    write_registeru(LO, (uint32_t) d);
+    write_registeru(HI, (uint32_t) (d >> 32));
+    
     return 0;
 }
 
 int core_muli(void) 
 {
-    State *state = core_getstate();
+    int32_t a32 = 0;
+    int16_t b16 = 0; // the immediate factor is 16 bit
     
-    /* (hi, lo) <- $r * instruc[2,3] */
-    int64_t r = state->instruction[1];
-    // can we read register r? 
-    CHECK_READ(r);
-    r = state->registers[r].value;
-
-    /* build the imediate factor n of muli from the
-       the last two bytes of the instruction */
-    int64_t n = state->instruction[2];
-    n = (n << 8) | (state->instruction[3]);
+    // try to read the register
+    if (read_register(instruction[1], &a32)) { return -1; }
     
-    int64_t d = r * n;
-    state->registers[LO].value = d;
-    state->registers[HI].value = (d >> 32);
+    // extract the 16 bit factor from the instruction
+    b16 = (instruction[2] << 8) | instruction[3];
     
+    // promomote to 64 bit arithmetic for 64 bit results
+    int64_t a = a32;
+    int64_t b = b16;
+    int64_t d = a * b;
+    
+    write_register(LO, (int32_t) d);
+    write_register(HI, (int32_t) (d >> 32));
     return 0;
 }
 
@@ -203,33 +174,25 @@ int core_neg  (void)
     return 0;
 }
 
-int core_inc  (void)
+int core_inc(void)
 {
-    State *state = core_getstate();
-    int r = state->instruction[1];
-    
-    CHECK_READ(r);
-    CHECK_WRITE(r);
-    
-    state->registers[r].value++;
+    int32_t r = 0;
+    if (read_register(instruction[1], &r))     { return -1; }
+    if (write_register(instruction[1], r + 1)) { return -1; }
     
     return 0;
 }
 
-int core_dec  (void)
+int core_dec(void)
 {
-    State *state = core_getstate();
-    int r = state->instruction[1];
-    
-    CHECK_READ(r);
-    CHECK_WRITE(r);
-    
-    state->registers[r].value--;
+    int32_t r = 0;
+    if (read_register(instruction[1], &r))     { return -1; }
+    if (write_register(instruction[1], r - 1)) { return -1; }
     
     return 0;
 }
 
-int core_mod  (void)
+int core_mod(void)
 {
     printf("%s\n", __func__);
     return 0;

@@ -86,7 +86,7 @@ int mem_read(uint8_t *destination, int index, int nbytes) {
 
 /** Writes nbytes bytes from source into memory beginning 
     from the specified index.
-    This function will call generate interrups.
+    This function will generate interrups.
     */
 int mem_write(uint8_t* source, int index, int nbytes) {
     if (memory == NULL) {

@@ -1,49 +1,27 @@
-#include <stdio.h>
+#include <stdio.h> // TODO: remove this
 
 #include "registers.h"
 #include "core.h"
 #include "memory.h"
-#include "system.h"
-#include "interrupts.h"
+#include "system.h"     // interrupt()
+#include "interrupts.h" // interrupt numbers
 #include "logmsg.h"
 #include "command.h"
 
-static Register  registers[NOREGS];
-static State     state = {1, registers, {0x0}};
+/* Global data */
+int     running        = 0;
+uint8_t instruction[4] = {0x00, 0x00, 0x00, 0x00};
 
-static void init_registers(void);
-
-void core_init(void)
+void core_init(void )
 {
-    init_registers();
-}
-
-void init_registers(void)
-{
-    int i;
-    for (i = 1; i <= 32; i++) {
-        registers[i].mode = (REG_RW);
-    }
-    registers[PC].value = 256;
-    registers[PC].mode = REG_READABLE;
-    
     registers[SP].value = mem_getsize();
-    registers[SP].mode = REG_RW;
-    
     registers[FP].value = mem_getsize();
-    registers[FP].mode  = REG_RW;
-    registers[IR].mode  = REG_RW;
-    registers[STAT].mode = REG_RW;
-    registers[ERR].mode = REG_RW;
-    registers[HI].mode = REG_READABLE;
-    registers[LO].mode = REG_READABLE;    
-    registers[CMPR].mode = REG_READABLE;
-    registers[ZERO].mode = REG_READABLE;
+    running = 1;
 }
 
 void core_run_program(void)
 {
-    while (state.running) {
+    while (running) {
         core_fetch();
         core_execute();
     }
@@ -51,15 +29,14 @@ void core_run_program(void)
 
 void core_fetch(void)
 {
-    mem_read(state.instruction, state.registers[PC].value, 4);
+    mem_read(instruction, registers[PC].value, 4);
 }
 
 void core_execute(void)
 {
     /* the opcode is the first byte of the instruction */
-    int opcode = state.instruction[0];
-    struct command *cmd;
-    cmd = command_by_opcode(opcode);
+    int opcode = instruction[0];
+    struct command *cmd = command_by_opcode(opcode);
     if (cmd != NULL) {
         cmd->opfunc();
     } else {
@@ -67,19 +44,15 @@ void core_execute(void)
         interrupt(INT_INVALID_CMD);
     }
 
-    state.registers[PC].value += 4;
-    if (state.registers[PC].value >= mem_getsize()) {
-        state.running = 0;
+    registers[PC].value += 4;
+    if (registers[PC].value >= mem_getsize()) {
+        running = 0;
         logmsg(LOG_WARN, 
         "Core: Program Counter greater than memory size. Terminating.");
     }
 }
 
-State* core_getstate(void)
-{
-    return &state;
-}
-
+//TODO: move this to the debugger and delete #include <stdio.h>
 void core_dump_regs(void)
 {
     int i = 1;
