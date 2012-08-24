@@ -2,6 +2,9 @@
 #include <stdlib.h> // free
 #include <string.h> // memset, strcmp
 
+#include "core.h"
+#include "disassemble.h"
+
 /** Maximum numbers of items of a debugger command */
 #define MAX_ARGS 10
 
@@ -26,6 +29,7 @@ static cmd_fcn find_cmd(const char *name);
 static void    db_step(int argc, char *argv[]);
 static void    db_quit(int argc, char *argv[]);
 static void    db_help(int argc, char *argv[]);
+static void    db_show(int argc, char *argv[]);
 
 
 static
@@ -37,7 +41,8 @@ struct db_command db_cmd_map[] = {
     {"help", db_help, "Show help"},
     {"h",    db_help, "Same as help"},
     {"?",    db_help, "Same as help"},
-    {NULL, NULL, NULL}
+    {"show", db_show, "Show"},
+    {NULL,   NULL,    NULL}
 };
 
 
@@ -48,6 +53,8 @@ void debugger_run(void)
     char   *argv[MAX_ARGS] = { NULL };
     int     argc = 0;
     cmd_fcn cmd = NULL;
+    
+    core_fetch();
     
     db_run = 1;
     while (db_run) {
@@ -102,7 +109,17 @@ cmd_fcn find_cmd(const char *name)
 
 void db_step(int argc, char *argv[])
 {
-    printf("Stepping through...\n");
+    if (! running) {
+        /* the machine stoped running */
+        printf("The maschine is not running.\n");
+        return;
+    }
+    core_execute();
+    if (running) {
+        /* execution might have stoped the machine */
+        core_fetch();
+    }
+    
 }
 
 void db_quit(int argc, char *argv[])
@@ -117,4 +134,11 @@ void db_help(int argc, char *argv[])
         printf("\t%6s\t%s\n", cmd->name, cmd->help);
         cmd++;
     }
+}
+
+void db_show(int argc, char* argv[])
+{
+    char instr_buffer[128];
+    disassemble(instruction, instr_buffer, 0);
+    printf("\t%s\n", instr_buffer);
 }

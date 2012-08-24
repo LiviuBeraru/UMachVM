@@ -34,11 +34,19 @@ void core_run_program(void)
 
 void core_fetch(void)
 {
+    if (! running) {
+        logmsg(LOG_WARN, "Core: maschine is not running. Cannot fetch.");
+        return;
+    }
     mem_read(instruction, registers[PC].value, 4);
 }
 
 void core_execute(void)
 {
+    if (! running) {
+        logmsg(LOG_ERR, "Core: maschine is not running. Cannot execute.");
+        return;
+    }
     /* the opcode is the first byte of the instruction */
     int opcode = instruction[0];
     struct command *cmd = command_by_opcode(opcode);
