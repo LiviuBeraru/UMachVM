@@ -8,7 +8,8 @@
 static int8_t *memory = NULL;
 static size_t memsize = 0;
 
-int mem_init(size_t bytes) {
+int mem_init(size_t bytes)
+{
     if (bytes < (ITABLE_SIZE + 4)) {
         logmsg(LOG_ERR, "Memory must be at least %d+4 bytes big.", ITABLE_SIZE);
         return -1;
@@ -29,13 +30,15 @@ int mem_init(size_t bytes) {
     return bytes;
 }
 
-void mem_free(void) {
+void mem_free(void)
+{
     free(memory);
     memory = NULL;
     memsize = 0;
 }
 
-int mem_load_program_file(FILE *file) {
+int mem_load_program_file(FILE *file)
+{
     if (memory == NULL) {
         logmsg(LOG_ERR, "Cannot load program: memory not initialized.");
         return -1;
@@ -61,7 +64,8 @@ int mem_load_program_file(FILE *file) {
     return fsize;
 }
 
-int mem_read(uint8_t *destination, int index, int nbytes) {
+int mem_read(uint8_t *destination, int index, int nbytes)
+{
     if (memory == NULL) {
         logmsg(LOG_ERR, "Cannot read from NULL memory");
         interrupt(INT_INTERNAL_ERR);
@@ -84,11 +88,12 @@ int mem_read(uint8_t *destination, int index, int nbytes) {
     return 0;
 }
 
-/** Writes nbytes bytes from source into memory beginning 
+/** Writes nbytes bytes from source into memory beginning
     from the specified index.
     This function will generate interrups.
     */
-int mem_write(uint8_t* source, int index, int nbytes) {
+int mem_write(uint8_t* source, int index, int nbytes)
+{
     if (memory == NULL) {
         logmsg(LOG_ERR, "Cannot write to NULL memory");
         interrupt(INT_INTERNAL_ERR);
@@ -112,6 +117,7 @@ int mem_write(uint8_t* source, int index, int nbytes) {
 }
 
 
-size_t mem_getsize(void) {
+size_t mem_getsize(void)
+{
     return memsize;
 }

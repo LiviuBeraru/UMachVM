@@ -14,6 +14,11 @@ uint8_t instruction[4] = {0x00, 0x00, 0x00, 0x00};
 
 void core_init(void )
 {
+    if (mem_getsize() == 0) {
+        logmsg(LOG_ERR, "Core: memory not initialized.");
+        interrupt(INT_INTERNAL_ERR);
+        return;
+    }
     registers[SP].value = mem_getsize();
     registers[FP].value = mem_getsize();
     running = 1;

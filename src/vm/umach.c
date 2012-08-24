@@ -8,10 +8,10 @@
 #include "logmsg.h"
 #include "command.h"
 #include "disassemble.h"
+#include "debugger.h"
 
 static void parse_opts(int argc, char *argv[]);
 static void run_through(void);
-static void run_debug(void);
 
 struct umach_options options;
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
     logmsg(LOG_INFO, "Loaded %d bytes program", progsize);
     if (options.debug) {
-        run_debug();
+        debugger_run();
     } else {
         run_through();
     }   
@@ -113,9 +113,4 @@ void run_through(void)
     if (options.verbose) {
         core_dump_regs();
     }
-}
-
-void run_debug(void)
-{
-    printf("Debugging.... not yet\n");
 }

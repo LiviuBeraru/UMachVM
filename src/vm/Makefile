@@ -3,7 +3,7 @@ PROG = umach
 OBJ = umach.o core.o memory.o registers.o\
       controll.o loadstore.o arithm.o logic.c compare.o branch.o subroutine.o\
       system.o io.o\
-      logmsg.o command.o disassemble.o
+      logmsg.o command.o disassemble.o debugger.o
 
 CFLAGS = -Wall -gdwarf-2 -g3
 
