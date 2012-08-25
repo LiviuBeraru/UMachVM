@@ -78,9 +78,16 @@ int disassemble_file(FILE* file)
     while (fread(instruction, sizeof(*instruction), 4, file) > 0) {
         disassemble(instruction, line, 1);
         printf("%s\n", line);
-        // clear buffers
-        memset(instruction, 0, sizeof(instruction));
-        memset(line, 0, sizeof(line));
+        
+        if (instruction[0] == 0x04) {
+            /* don't disassemble beyond the EOP instruction,
+             * which has the opcode 0x04 */
+            break;
+        } else {
+            // clear buffers
+            memset(instruction, 0, sizeof(instruction));
+            memset(line, 0, sizeof(line));
+        }
     }
 
     return 0;

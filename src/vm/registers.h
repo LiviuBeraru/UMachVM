@@ -30,6 +30,7 @@ Register;
 extern Register registers[NOREGS];
 
 Register* get_register(int regno);
+Register* get_register_byname(const char *name);
 
 int read_register   (int regno, int32_t* dest);
 int read_registeru  (int regno, uint32_t* dest);

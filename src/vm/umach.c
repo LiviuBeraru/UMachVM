@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     if (options.debug) {
         debugger_run();
     } else {
-        run_through();
+        core_run_program();
     }   
 
     mem_free();
@@ -104,13 +104,5 @@ void parse_opts(int argc, char *argv[])
         abort();
     } else {
         options.filename = argv[optind];
-    }
-}
-
-void run_through(void)
-{
-    core_run_program();
-    if (options.verbose) {
-        core_dump_regs();
     }
 }

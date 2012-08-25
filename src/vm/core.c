@@ -1,5 +1,3 @@
-#include <stdio.h> // TODO: remove this
-
 #include "registers.h"
 #include "core.h"
 #include "memory.h"
@@ -62,17 +60,5 @@ void core_execute(void)
         running = 0;
         logmsg(LOG_WARN, 
         "Core: Program Counter greater than memory size. Terminating.");
-    }
-}
-
-//TODO: move this to the debugger and delete #include <stdio.h>
-void core_dump_regs(void)
-{
-    int i = 1;
-    for (i = 1; i <= 32; i++) {
-        printf("| R%-2d = %5d ", i, registers[i].value);
-        if (i % 4 == 0) {
-            printf("|\n");
-        }
     }
 }

@@ -12,6 +12,5 @@ void core_run_program(void);
 void core_fetch(void);
 void core_execute(void);
 
-void core_dump_regs(void); //TODO: move this function to the debugger
 
 #endif

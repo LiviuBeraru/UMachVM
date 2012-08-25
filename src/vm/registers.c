@@ -10,6 +10,7 @@
  */
 
 #include <stddef.h>     // NULL
+#include <string.h>     // strcmp
 #include "registers.h"
 #include "logmsg.h"
 #include "system.h"     // interrupt
@@ -128,4 +129,19 @@ Register* get_register(int regno)
         interrupt(INT_INVALID_REG);
         return NULL;
     }
+}
+
+Register* get_register_byname(const char* name)
+{
+    Register *r = NULL;
+    int i = 0;
+    while (i < NOREGS) {
+        r = registers + i;
+        if (r->name && (strcasecmp(r->name, name) == 0)) {
+            return r;
+        }
+        i++;
+    }
+
+    return NULL;
 }
