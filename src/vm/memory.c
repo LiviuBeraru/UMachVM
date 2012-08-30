@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h> //memcpy
 #include "memory.h"
@@ -37,10 +38,16 @@ void mem_free(void)
     memsize = 0;
 }
 
-int mem_load_program_file(FILE *file)
+int mem_load_program_file(const char* filename)
 {
     if (memory == NULL) {
         logmsg(LOG_ERR, "Cannot load program: memory not initialized.");
+        return -1;
+    }
+    
+    FILE *file = fopen(filename, "r");
+    if(file == NULL) {
+        perror(filename);
         return -1;
     }
 

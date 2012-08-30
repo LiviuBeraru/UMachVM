@@ -5,7 +5,6 @@
 #ifndef DISASSEMBLE_H
 #define DISASSEMBLE_H
 
-#include <stdio.h>
 #include <stdint.h>
 
 /**
@@ -25,6 +24,6 @@
  */
 void disassemble(const uint8_t instruction[4], char* destination, int printhex);
 
-int disassemble_file(FILE *file);
+int disassemble_files(int argc, char **argv);
 
 #endif

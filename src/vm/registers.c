@@ -19,51 +19,51 @@
 
 Register registers[NOREGS] = {
 // general registers
-    [ 0]   = {0,   REG_READ, "ZERO"},
-    [ 1]   = {0,   REG_RW,   "R1"  },
-    [ 2]   = {0,   REG_RW,   "R2"  },
-    [ 3]   = {0,   REG_RW,   "R3"  },
-    [ 4]   = {0,   REG_RW,   "R4"  },
-    [ 5]   = {0,   REG_RW,   "R5"  },
-    [ 6]   = {0,   REG_RW,   "R6"  },
-    [ 7]   = {0,   REG_RW,   "R7"  },
-    [ 8]   = {0,   REG_RW,   "R8"  },
-    [ 9]   = {0,   REG_RW,   "R9"  },
-    [10]   = {0,   REG_RW,   "R10" },
-    [11]   = {0,   REG_RW,   "R11" },
-    [12]   = {0,   REG_RW,   "R12" },
-    [13]   = {0,   REG_RW,   "R13" },
-    [14]   = {0,   REG_RW,   "R14" },
-    [15]   = {0,   REG_RW,   "R15" },
-    [16]   = {0,   REG_RW,   "R16" },
-    [17]   = {0,   REG_RW,   "R17" },
-    [18]   = {0,   REG_RW,   "R18" },
-    [19]   = {0,   REG_RW,   "R19" },
-    [20]   = {0,   REG_RW,   "R20" },
-    [21]   = {0,   REG_RW,   "R21" },
-    [22]   = {0,   REG_RW,   "R22" },
-    [23]   = {0,   REG_RW,   "R23" },
-    [24]   = {0,   REG_RW,   "R24" },
-    [25]   = {0,   REG_RW,   "R25" },
-    [26]   = {0,   REG_RW,   "R26" },
-    [27]   = {0,   REG_RW,   "R27" },
-    [28]   = {0,   REG_RW,   "R28" },
-    [29]   = {0,   REG_RW,   "R29" },
-    [30]   = {0,   REG_RW,   "R30" },
-    [31]   = {0,   REG_RW,   "R31" },
-    [32]   = {0,   REG_RW,   "R32" },
+    [ 0]   = { 0, 0,   REG_READ, "ZERO"},
+    [ 1]   = { 1, 0,   REG_RW,   "R1"  },
+    [ 2]   = { 2, 0,   REG_RW,   "R2"  },
+    [ 3]   = { 3, 0,   REG_RW,   "R3"  },
+    [ 4]   = { 4, 0,   REG_RW,   "R4"  },
+    [ 5]   = { 5, 0,   REG_RW,   "R5"  },
+    [ 6]   = { 6, 0,   REG_RW,   "R6"  },
+    [ 7]   = { 7, 0,   REG_RW,   "R7"  },
+    [ 8]   = { 8, 0,   REG_RW,   "R8"  },
+    [ 9]   = { 9, 0,   REG_RW,   "R9"  },
+    [10]   = {10, 0,   REG_RW,   "R10" },
+    [11]   = {11, 0,   REG_RW,   "R11" },
+    [12]   = {12, 0,   REG_RW,   "R12" },
+    [13]   = {13, 0,   REG_RW,   "R13" },
+    [14]   = {14, 0,   REG_RW,   "R14" },
+    [15]   = {15, 0,   REG_RW,   "R15" },
+    [16]   = {16, 0,   REG_RW,   "R16" },
+    [17]   = {17, 0,   REG_RW,   "R17" },
+    [18]   = {18, 0,   REG_RW,   "R18" },
+    [19]   = {19, 0,   REG_RW,   "R19" },
+    [20]   = {20, 0,   REG_RW,   "R20" },
+    [21]   = {21, 0,   REG_RW,   "R21" },
+    [22]   = {22, 0,   REG_RW,   "R22" },
+    [23]   = {23, 0,   REG_RW,   "R23" },
+    [24]   = {24, 0,   REG_RW,   "R24" },
+    [25]   = {25, 0,   REG_RW,   "R25" },
+    [26]   = {26, 0,   REG_RW,   "R26" },
+    [27]   = {27, 0,   REG_RW,   "R27" },
+    [28]   = {28, 0,   REG_RW,   "R28" },
+    [29]   = {29, 0,   REG_RW,   "R29" },
+    [30]   = {30, 0,   REG_RW,   "R30" },
+    [31]   = {31, 0,   REG_RW,   "R31" },
+    [32]   = {32, 0,   REG_RW,   "R32" },
     
 // special registers
 
-    [PC  ] = {256, REG_READ, "PC"  },
-    [SP  ] = {0,   REG_RW,   "SP"  },
-    [FP  ] = {0,   REG_RW,   "FP"  },
-    [IR  ] = {0,   REG_READ, "IR"  },
-    [STAT] = {0,   REG_RW,   "STAT"},
-    [ERR ] = {0,   REG_RW,   "ERR" },
-    [HI  ] = {0,   REG_READ, "HI"  },
-    [LO  ] = {0,   REG_READ, "LO"  },
-    [CMPR] = {0,   REG_READ, "CMPR"}
+    [PC  ] = {PC,   256, REG_READ, "PC"  },
+    [SP  ] = {SP,   0,   REG_RW,   "SP"  },
+    [FP  ] = {FP,   0,   REG_RW,   "FP"  },
+    [IR  ] = {IR,   0,   REG_READ, "IR"  },
+    [STAT] = {STAT, 0,   REG_RW,   "STAT"},
+    [ERR ] = {ERR,  0,   REG_RW,   "ERR" },
+    [HI  ] = {HI,   0,   REG_READ, "HI"  },
+    [LO  ] = {LO,   0,   REG_READ, "LO"  },
+    [CMPR] = {CMPR, 0,   REG_READ, "CMPR"}
 };
 
 int read_register(int regno, int32_t* dest)
@@ -78,7 +78,8 @@ int read_register(int regno, int32_t* dest)
         *dest = registers[regno].value;
         return 0;
     } else {
-        logmsg(LOG_ERR, "Register %d is not readable", regno);
+        logmsg(LOG_ERR, "Register <%s> is not readable", 
+               registers[regno].name);
         interrupt(INT_INVALID_REG);
         return -1;
     }
@@ -102,7 +103,8 @@ int write_register(int regno, int32_t value)
         registers[regno].value = value;
         return 0;
     } else {
-        logmsg(LOG_ERR, "Register %d is not writable", regno);
+        logmsg(LOG_ERR, "Register <%s> is not writable", 
+               registers[regno].name);
         interrupt(INT_INVALID_REG);
         return -1;
     }

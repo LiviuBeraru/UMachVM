@@ -6,6 +6,7 @@
 #include "disassemble.h"
 #include "registers.h"
 #include "memory.h"
+#include "strings.h"
 
 /** Maximum numbers of items of a debugger command */
 #define MAX_ARGS 10
@@ -20,12 +21,9 @@ struct db_command {
 };
 
 static const char prompt[]  = "umdb > ";
-static const char byspace[] = " \t\n";
 static int        db_run    = 0;
 static int        pc = 0; // last PC
 
-static int     split(char *string, const char *pattern, 
-                     char *target[], size_t max);
 static cmd_fcn find_cmd(const char *name);
 static void    print_current_instr(void);
 
@@ -82,25 +80,6 @@ void debugger_run(void)
     }
     
     free(input);
-}
-
-/** Split string into maximum max items using the specified split pattern.
-    The items are stored into the array target, which is supposed to be
-    at least max long. */
-int split(char *string, const char *pattern, char *target[], size_t max)
-{
-    memset(target, 0, max * sizeof(*target));
-    int i = 0;
-    char *item = NULL;
-    
-    item = strtok(string, pattern);
-    while(i < max && item != NULL) {
-        target[i] = item;
-        i++;
-        item = strtok(NULL, pattern);
-    }
-    
-    return i;
 }
 
 cmd_fcn find_cmd(const char *name)

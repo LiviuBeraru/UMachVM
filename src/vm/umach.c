@@ -9,25 +9,31 @@
 #include "command.h"
 #include "disassemble.h"
 #include "debugger.h"
+#include "assemble.h"
 
 static void parse_opts(int argc, char *argv[]);
-static void run_through(void);
 
 struct umach_options options;
+
 
 int main(int argc, char *argv[])
 {
     parse_opts(argc, argv);
-
-    FILE *file = fopen(options.filename, "r");
-    if(file == NULL) {
-        perror(options.filename);
+    int    nargc = argc - optind;
+    char **nargv = argv + optind;
+    
+    if (nargc <= 0) {
+        logmsg(LOG_ERR, "No file names specified");
         abort();
+    }
+    
+    if (options.assemble) {
+        assemble_files(nargc, nargv);
+        return 0;
     }
 
     if (options.disassemble) {
-        disassemble_file(file);
-        fclose(file);
+        disassemble_files(nargc, nargv);
         return 0;
     }
     
@@ -40,11 +46,10 @@ int main(int argc, char *argv[])
     
     core_init();
 
-    int progsize = mem_load_program_file(file);
-    fclose(file);
+    int progsize = mem_load_program_file(nargv[0]);
 
     if (progsize <= 0) {
-        logmsg(LOG_ERR, "Cannot load program file %s.", options.filename);
+        logmsg(LOG_ERR, "Cannot load program file %s.", nargv[0]);
         abort();
     }
 
@@ -64,7 +69,6 @@ void parse_opts(int argc, char *argv[])
     options.verbose = 0;
     options.debug = 0;
     options.memory = 512;
-    options.filename = NULL;
     options.disassemble = 0;
 
     opterr = 0;
@@ -75,7 +79,7 @@ void parse_opts(int argc, char *argv[])
      * -s disassemble program file
      * -m <number> memory size
      */
-    const char opts[] = "vdsm:";
+    const char opts[] = "vdsam:";
     int c;
     while((c = getopt(argc, argv, opts)) != -1) {
         switch (c) {
@@ -86,7 +90,10 @@ void parse_opts(int argc, char *argv[])
                 options.debug++;
                 break;
             case 's':
-                options.disassemble = 1;
+                options.disassemble++;
+                break;
+            case 'a':
+                options.assemble++;
                 break;
             case 'm':
                 options.memory = atoi(optarg);
@@ -97,12 +104,5 @@ void parse_opts(int argc, char *argv[])
             default:
                 abort();
         }
-    }
-    
-    if (optind >= argc) {
-        logmsg(LOG_ERR, "No program file specified");
-        abort();
-    } else {
-        options.filename = argv[optind];
     }
 }

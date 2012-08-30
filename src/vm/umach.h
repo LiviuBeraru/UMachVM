@@ -2,11 +2,11 @@
 #define UMACH_H
 
 struct umach_options {
-    int    verbose;
+    int    assemble;
+    int    disassemble;
     int    debug;
     size_t memory;
-    char   *filename;
-    int    disassemble;
+    int    verbose;
 };
 
 extern struct umach_options options;

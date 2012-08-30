@@ -63,15 +63,20 @@ int core_jmp (void)
     offset = (offset << 16) | (instruction[2] << 8) | instruction[3];
 
 
-    /* the offset is the number of instructions to jump over.
+    /* the offset is the relative number of the instruction to jump to.
+        2 means jump to the second instruction after this one (skip one),
+       -1 means jump to the last instruction (offset -1)
        because an instruction is 4 bytes long, we multiply the
        offset with 4 */
+    
     offset = offset * 4;
     registers[PC].value += offset;
-
-    if (offset < 0) {
-        /* jumping back needs an adjustment */
-        registers[PC].value -= 8;
-    }
+    
+    /* the machine increments the PC by 4 after every instruction,
+       so we substract 4 in order to compensate the automatic increment */
+    registers[PC].value -= 4;
+    
+    /* after this the machine does registers[PC].value += 4 
+       and we hit the wanted offset */
     return 0;
 }

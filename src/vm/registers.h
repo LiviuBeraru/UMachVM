@@ -21,6 +21,7 @@
 
 typedef
 struct core_register {
+    uint8_t regno; // assembler needs the register number
     int32_t value;
     int32_t mode;
     const char * const name;

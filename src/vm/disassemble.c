@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "disassemble.h"
 #include "command.h"
@@ -11,6 +12,7 @@ static void formatRNN(const uint8_t ins[4], char *dest);
 static void formatRR0(const uint8_t ins[4], char *dest);
 static void formatRRN(const uint8_t ins[4], char *dest);
 static void formatRRR(const uint8_t ins[4], char *dest);
+static int  disassemble_file(FILE* file);
 
 void disassemble(const uint8_t instruction[4], char *destination, int printhex)
 {
@@ -58,10 +60,27 @@ void disassemble(const uint8_t instruction[4], char *destination, int printhex)
     }
 }
 
+int disassemble_files(int argc, char** argv)
+{
+    int i = 0;
+    FILE *file;
+    for ( ; i < argc; i++) {
+        file = fopen(argv[i], "r");
+        if (file == NULL) {
+            perror(argv[0]);
+            break;
+        }
+        
+        printf("\nDisassembly of file %s\n\n", argv[i]);
+        disassemble_file(file);
+        fclose(file);
+    }
+    return i;
+}
+
+
 int disassemble_file(FILE* file)
 {
-    printf("Disassembly of file %s\n\n", options.filename);
-
     if (ferror(file)) {
         fprintf(stderr, "File error!\n");
         return -1;
@@ -165,7 +184,8 @@ void formatRRN(const uint8_t ins[4], char* dest)
 {
     formatRR0(ins, dest);
     char buffer[16];
-    sprintf(buffer, "%d", ins[3]);
+    int8_t n = ins[3];
+    sprintf(buffer, "%d", n);
     strcat(dest, buffer);
 }
 
