@@ -1,4 +1,3 @@
-#include <stdio.h>//TODO: delete this when ready
 #include <stdlib.h>
 #include <string.h> // strncpy
 

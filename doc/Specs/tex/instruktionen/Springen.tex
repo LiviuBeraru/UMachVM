@@ -1,60 +1,71 @@
-\section{Übersprungsbefehle}
+\section{Sprungsbefehle}
+\index{Sprungbefehle}
 \label{sec:Sprungbefehle}
 
 Alle Sprungbefehle, außer dem \opref{GO} Befehl, veranlassen einen relativen
-Übersprung im Programmcode -- relativ im Sinne, dass die Parameter der
-Übersprungbefehle einen ganzzahligen Versatz zur aktuellen Programmadresse
-angeben. Dabei bedeutet der Versatz\index{Versatz}, wieviele Instruktionen
-müssen bis zur Zielinstruktion übersprungen werden. Z.B. die Instruktion
+Sprung im Programmcode -- relativ im Sinne, dass die Parameter der Sprungbefehle
+einen ganzzahligen (negativen oder positiven) Versatz zur aktuellen
+Programmadresse angeben. Dabei bedeutet der Versatz\index{Versatz}, oder
+Offset\index{Offset}, die wievielte Instruktionen muss als nächste ausgeführt
+werden. Zum Beispiel die Instruktion
 \begin{lstlisting}
   JMP 2
 \end{lstlisting}
 bedeutet
-\glqq Überspringe die nächsten 2 Instruktionen und fahre mit der 3. fort\grqq.
+\glqq Die zweite Instruktion nach dieser soll ausgeführt werden\grqq. Also es
+wird eine Instruktion übersprungen, und mit der zweiten fortgefahren.
 Die Instruktion
 \begin{lstlisting}
-  BE 5
+  BE -5
 \end{lstlisting}
 bedeutet \glqq Falls das Register \texttt{CMPR} den Wert $0$ hat, überspringe
-$5$ Instruktionen und fahre mit der 6. fort\grqq. Es wird also nicht die
-wievielte Instruktion angegeben, sondern es wird die Anzahl an Instruktionen
-angegeben, die übersprungen werden sollten (daher auch \glqq
-Übersprungbefehl\grqq, statt \glqq Sprungbefehl\grqq).
+$4$ Instruktionen zurück (da negativ) und fahre mit der 5. fort\grqq, also die
+5. Instruktion zurück. 
 
-Der Übersprungversatz wird stets nicht in Bytes angegeben, sondern in
+In dem Programm
+\begin{lstlisting}
+ SET R1 1
+ SET R2 2
+ JMP -2
+\end{lstlisting}
+bewirkt der \opref{JMP}-Befehl einen Sprung an die erste Instruktion zurück,
+also an die zweite zurück.
+
+Der Sprungversatz (Offset) wird stets nicht in Bytes angegeben, sondern in
 Instruktionen -- wobei eine Instruktion der UMach Maschine 4 Bytes beträgt. Die
-Maschine multipliziert diese Anzahl mit 4 um die richtige Programmadresse zu
+Maschine multipliziert diese Anzahl mit 4, um die richtige Programmadresse zu
 berechnen.
 
-Die Übersprungbefehle bauen auf die Vergleichsbefehle auf (Abschnitt
-\ref{sec:Vergleichsinstruktionen}): jeder Übersprungbefehl (außer \opref{JMP}
+Die Sprungbefehle bauen auf die Vergleichsbefehle auf (Abschnitt
+\ref{sec:Vergleichsinstruktionen}): jeder Sprungbefehl (außer \opref{JMP}
 und \opref{GO}) untersuchen das Spezialregister \texttt{CMPR} und verzweigen die
 Programmausführung anhand seines Wertes.
 
+\paragraph{Bemerkung}
+Es ist zu bemerken, dass die hier verwendeten nummerischen Versatzwerte sich
+auf die interne Funktionsweise der UMach Maschine beziehen. Ein Assembler
+könnte solche nummerische Angaben für ungültig erklären und statt dessen,
+textuelle Sprungmarken erwarten (Labels).
 
 
 \opdef{BE}{$N \in \mathds{Z}$}{0x80}{NNN}
 \glqq Branch Equal\grqq.
-Wenn das Register \texttt{CMP} den Wert $0$ hat, wird über $N$ Instruktionen
+Wenn das Register \texttt{CMP} den Wert $0$ hat, wird zur $N$-ten Instruktion
 vorwärts oder rückwärts gesprungen. Ein negatives $N$ bedeutet einen Sprung
 rückwärts, ein positives $N$ bewirkt einen Sprung vorwärts. Der Sprung wird
 dadurch erreicht, dass das Register \texttt{PC} gemäß der folgenden Formel
 modifiziert wird:
-\[
-    PC \gets \$PC + 4 \cdot N
-\]
-Die Multiplikation mit $4$ wird deshalbt ausgeführt, weil ein Befehl immer aus 4
-Bytes besteht, sodass der Adressoffset zwischen zwei Befehlen immer 4 ist. Somit
-ist $N$ die Anzahl der zu überspringenden Befehle bis zur nächsten Instruktion.
-Der dazu benötigte Offset $N$ wird vom Assembler automatisch berechnet. 
+\begin{align*}
+   & PC \gets \$PC + 4 \cdot N \\
+   & PC \gets \$PC - 4
+\end{align*}
 
-\paragraph{Bemerkung}
-Die UMach Maschine erhöht den Programmcounter (Register \texttt{PC}) nach
-der Ausführung jeder Instruktion
-(siehe \ref{subsec:Neumann-Zyklus}, Seite
-\pageref{subsec:Neumann-Zyklus}).
-Die Modifizierung des \texttt{PC}-Registers durch den \opref{BE} Befehl wirkt
-sich nicht störend auf die automatische Inkrementierung des Programmcounters.
+Die Multiplikation mit $4$ wird deshalbt ausgeführt, weil ein Befehl immer aus 4
+Bytes besteht, sodass der Adressoffset zwischen zwei Befehlen immer 4 ist.
+
+Die Subtraktion von $4$ wird deshalbt ausgeführt, weil die Maschine nach jeder
+Instruktion das Register $PC$ automatisch um $4$ inkrementiert, so dass eine
+Korrektur gebraucht wird.
 
 \paragraph{Fehler}
 Falls das Sprungziel eine Speicheradresse ist, die außerhalb des
@@ -77,15 +88,15 @@ arithmetischer Überlauf wird nicht berücksichtigt.
   CMP   R2 R3     # Vergleiche Inhalt von R2 und R3
                   # Ergebnis geht ins CMPR
   #BE    equal    # Asm Schreibweise
-  BE    3         # Wenn CMPR gleich 0 ist, überspringe 
-                  # die folgenden 3 Instruktionen
+  BE    5         # Wenn CMPR gleich 0 ist, springe
+                  # zur 5. Instruktion (MULI)
                   # (gehe zum label equal)
   ADD   R2 R2 R3  # Addiere Inhalt von R2 und R3
   DEC   R1        # R1--, R1 = 100
   SB    R2 R1     # Speichere R2 nach Adresse 100
   #JMP   finish   # Asm Schreibweise
-  JMP   2         # Überspringe die folgenden 2 Befehle
-                  # (gehe zu finish)
+  JMP   3         # Gehe zur 3. Instruktion (label finish)
+
 equal:
   MULI  R2 2      # Multipliziere Inhalt von R2 mit 2
   SB    LO R1     # Speichere Inhalt von LO nach Adresse in R1
@@ -98,7 +109,7 @@ finish:
 \opdef{BNE}{$N \in \mathds{Z}$}{0x81}{NNN}
 \glqq Branch Not Equal \grqq.
 Entspricht dem Verhalten von \opref{BE} mit dem Unterschied, dass der angegebene
-Übersprung ausgeführt wird, wenn \texttt{CMPR} nicht $0$ ist.
+Sprung ausgeführt wird, wenn \texttt{CMPR} nicht $0$ ist.
 
 \paragraph{Fehler}
 Wie bei der Instruktion \opref{BE}.
@@ -106,8 +117,9 @@ Wie bei der Instruktion \opref{BE}.
 
 
 \opdef{BL}{$N \in \mathds{Z}$}{0x82}{NNN}
-\glqq Branch Less\grqq. Überspringt $N$ Instruktionen, wenn der Inhalt von
-\texttt{CMPR} kleiner $0$ ist.
+\glqq Branch Less\grqq. 
+Springt zur $N$-ten Instruktion, wenn der Inhalt von \texttt{CMPR} kleiner $0$
+ist.
 
 \paragraph{Fehler}
 Wie bei der Instruktion \opref{BE}.
@@ -116,8 +128,8 @@ Wie bei der Instruktion \opref{BE}.
 
 \opdef{BLE}{$N \in \mathds{Z}$}{0x83}{NNN}
 \glqq Branch Less Equal\grqq.
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMPR} kleiner oder
-gleich $0$ ist.
+Springt zur $N$-ten Instruktion, wenn der Inhalt von \texttt{CMPR} kleiner
+oder gleich $0$ ist.
 
 \paragraph{Fehler}
 Wie bei der Instruktion \opref{BE}.
@@ -125,7 +137,7 @@ Wie bei der Instruktion \opref{BE}.
 
 \opdef{BG}{$N \in \mathds{Z}$}{0x84}{NNN}
 \glqq Branch Greater\grqq.
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMPR} größer als
+Springt zur $N$-ten Instruktion, wenn der Inhalt von \texttt{CMPR} größer als
 $0$ ist.
 
 \paragraph{Fehler}
@@ -135,7 +147,7 @@ Wie bei der Instruktion \opref{BE}.
 
 \opdef{BGE}{$N \in \mathds{Z}$}{0x85}{NNN}
 \glqq Branch Greater Equal\grqq. 
-Überspringt $N$ Instruktionen, wenn der Inhalt von \texttt{CMPR} größer oder
+Springt zur $N$-ten Instruktion, wenn der Inhalt von \texttt{CMPR} größer oder
 gleich $0$ ist.
 
 \paragraph{Fehler}
@@ -145,7 +157,7 @@ Wie bei der Instruktion \opref{BE}.
 
 \opdef{JMP}{$N \in \mathds{N}$}{0x88}{NNN}
 \glqq Jump\grqq.
-Überspringt $N$ Instruktionen.
+Springt zur $N$-ten Instruktion, unabhängig vom Wert des Registers $CMPR$.
 
 \paragraph{Fehler}
 Wie bei der Instruktion \opref{BE}.

@@ -34,7 +34,7 @@ void assemble_files(int argc, char** argv)
     FILE *output = fopen(outname, "w");
     if (output == NULL) {
         perror(outname);
-        exit(1);
+        return;
     }
 
     int i;
@@ -162,7 +162,7 @@ int assemble_file(FILE *output)
                 return -1;
             } else {
                 labeloffset = labeloffset - cmd_offset;
-                sprintf(items[1], "%d", labeloffset);
+                sprintf(items[1], "%d", labeloffset);//TODO: this is a bug
             }
         }
 
@@ -172,7 +172,7 @@ int assemble_file(FILE *output)
         switch(cmd->format) {
             case NUL:
                 func = assembleNUL;
-                break; // do nothing
+                break;
             case NNN:
                 func = assembleNNN;
                 break;
@@ -194,7 +194,7 @@ int assemble_file(FILE *output)
             default:
                 logmsg(LOG_ERR, "!%s:%d: Unknown Command Format",
                        __func__, __LINE__);
-                break;
+                return -1;
         }
 
         if (func(items, itemcount, instruction)) {

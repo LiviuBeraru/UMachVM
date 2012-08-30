@@ -69,7 +69,7 @@ Interruptnummer\index{Interruptnummer} und deren Bedeutung auf.
 
 Nach der $256$ Bytes ($64$ mal $4$) großen Interrupttabelle
 folgt das eigentliche Programm, das von der Maschine ausgeführt werden soll.
-Dieses erste auzuführende Programms beginnt somit ab der Speicheradresse $256$.
+Dieses erste auzuführende Programm beginnt somit ab der Speicheradresse $256$.
 
 Insbesondere ist dieses Programm dafür zuständig, die Interrupttabelle zu
 füllen, falls (bestimmte) Interrupts behandelt werden sollen.
@@ -96,4 +96,15 @@ Fehler im Register \texttt{ERR} signalisiert.
 Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
 maximal erreichbare Speicheradresse plus Eins gesetzt. Damit können keine Werte
 gelesen werden, bevor Werte geschrieben wurden.
+
+
+\subsection{Speicheradressierung}
+\index{Speicheradresse}
+
+Um die Komplexität der UMach Maschine gering zu halten, kennt die vorliegende
+Version lediglich absolute Adressen. Konzepte wie virtuelle Adressen,
+Prozesse\index{Prozess} und getrennte Addressräume für Prozesse werden nicht
+unterstützt. Wird versucht, den Inhalt einer Speicheradresse zu lesen oder zu
+schreiben, so wird die angegebene Adresse nicht übersetzt oder modifiziert,
+sondern direkt verwendet.
 

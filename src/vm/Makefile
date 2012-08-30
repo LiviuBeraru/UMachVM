@@ -1,6 +1,5 @@
 CC = gcc
 PROG = umach
-ASM  = uasm
 
 OBJ = umach.o core.o memory.o registers.o \
       controll.o loadstore.o arithm.o logic.c compare.o branch.o subroutine.o\
