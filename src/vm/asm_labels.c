@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h> // strncpy
 
+
 struct label {
     char name[65];
     int  offset;
@@ -41,8 +42,7 @@ void label_insert_offset(int offset)
     struct label_item *next = NULL;
 
     while (pending) {
-        next = pending->next;
-
+        next = pending->next;        
         pending -> label->offset = offset;
         pending -> next = labels;
         labels = pending;
