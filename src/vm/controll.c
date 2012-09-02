@@ -1,4 +1,3 @@
-#include <stddef.h> // NULL
 #include "core.h"
 
 int core_nop(void)

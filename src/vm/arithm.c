@@ -1,5 +1,8 @@
 #include "core.h"      // instruction[]
 #include "registers.h"
+#include "logmsg.h"
+#include "system.h"
+#include "interrupts.h"
 
 #include <stdio.h>
 
@@ -146,31 +149,120 @@ int core_muli(void)
 
 int core_div(void) 
 {
-    printf("%s\n", __func__);
+    // extract register numbers
+    int32_t rega_no = instruction[1];
+    int32_t regb_no = instruction[2];
+    
+    // the register values, which we read from machine
+    int32_t rega_value = 0;
+    int32_t regb_value = 0;
+    
+    // read register values
+    if (read_register(rega_no, &rega_value) == -1) { return -1; }
+    if (read_register(regb_no, &regb_value) == -1) { return -1; }
+    
+    if (regb_value == 0) {
+        // division by zero
+        logmsg(LOG_WARN, "Register %d is zero. Interrupting. PC = %d", 
+               regb_no, registers[PC].value);
+        interrupt(INT_DIVNULL);
+        return -1;
+    }
+    
+    registers[HI].value = rega_value / regb_value;
+    registers[LO].value = rega_value % regb_value;
+    
     return 0;
 }
 
 int core_divu(void) 
 {
-    printf("%s\n", __func__);
+    // extract register numbers
+    int32_t rega_no = instruction[1];
+    int32_t regb_no = instruction[2];
+    
+    // the register values
+    uint32_t rega_value = 0;
+    uint32_t regb_value = 0;
+    
+    // read register values
+    if (read_registeru(rega_no, &rega_value) == -1) { return -1; }
+    if (read_registeru(regb_no, &regb_value) == -1) { return -1; }
+    
+    if (regb_value == 0) {
+        // division by zero
+        logmsg(LOG_WARN, "Register %d is zero. Interrupting. PC = %d", 
+               regb_no, registers[PC].value);
+        interrupt(INT_DIVNULL);
+        return -1;
+    }
+    
+    registers[HI].value = rega_value / regb_value;
+    registers[LO].value = rega_value % regb_value;
+    
     return 0;
 }
 
 int core_divi(void) 
 {
-    printf("%s\n", __func__);
+    int32_t reg_no = instruction[1];
+    int16_t immediate = 0;
+    
+    int32_t reg_value = 0;
+    
+    if (read_register(reg_no, &reg_value) == -1) { return -1; }
+    immediate = (instruction[2] << 8) | instruction[3];
+    
+    if (immediate == 0) {
+        // division by zero
+        logmsg(LOG_WARN, "Immediate value is zero. Interrupting. PC = %d", 
+               registers[PC].value);
+        interrupt(INT_DIVNULL);
+        return -1;
+    }    
+    registers[HI].value = reg_value / immediate;
+    registers[LO].value = reg_value % immediate;
+    
     return 0;
 }
 
 int core_abs(void) 
 {
-    printf("%s\n", __func__);
+    int dest_no = instruction[1];
+    int src_no  = instruction[2];
+    
+    int32_t value = 0; // register value
+    if (read_register(src_no, &value) == -1) {
+        return -1;
+    }
+    
+    if (value < 0) {
+        value = -value;
+    }
+    
+    if (write_register(dest_no, value) == -1) {
+        return -1;
+    }
+    
     return 0;
 }
 
 int core_neg  (void)
 {
-    printf("%s\n", __func__);
+    int dest_no = instruction[1];
+    int src_no  = instruction[2];
+    
+    int32_t value = 0; // register value
+    if (read_register(src_no, &value) == -1) {
+        return -1;
+    }
+    
+    value = -value;
+    
+    if (write_register(dest_no, value) == -1) {
+        return -1;
+    }
+    
     return 0;
 }
 
