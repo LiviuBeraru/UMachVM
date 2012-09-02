@@ -44,7 +44,7 @@ int mem_load_program_file(const char* filename)
         logmsg(LOG_ERR, "Cannot load program: memory not initialized.");
         return -1;
     }
-    
+
     FILE *file = fopen(filename, "r");
     if(file == NULL) {
         perror(filename);
@@ -63,11 +63,13 @@ int mem_load_program_file(const char* filename)
         logmsg(LOG_ERR,
                "Cannot load %ld bytes of program into %d bytes of memory",
                fsize, memsize);
+        fclose(file);
         return -1;
     }
 
     fread(memory + ITABLE_SIZE, 1, fsize, file);
-    // man fread
+
+    fclose(file);
     return fsize;
 }
 

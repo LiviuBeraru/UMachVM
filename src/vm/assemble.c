@@ -113,17 +113,24 @@ int assemble_file(FILE *output)
     uint8_t instruction[4] = { 0 }; // 4 byte instruction, this is what we write to file
     /* which assembly function we call */
     int (*func)(char **items, int n, uint8_t instruction[4]);
+    char *c = NULL; // pointer to the comment character
 
     while (fgets(buffer, sizeof(buffer), input)) {
         lineno++;
+        c = strchr(buffer, comment);
+        if (c) {
+            *c = '\0'; // delete the comment
+        }
+        
         line = find_nonblank(buffer);
         if (line == NULL || line[0] == comment) {
             continue;
         }
         if (strncasecmp(data_mark, line, dmark_len) == 0) {
-            /* we hit the data section */
+            /* we hit the data section, stop assembling */
             goto clean;
         }
+        
         
         if (strchr(line, ':')) {
             // ignore label lines
@@ -137,7 +144,7 @@ int assemble_file(FILE *output)
 
         cmd = command_by_name(items[0]);
         if (! cmd) {
-            logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+            logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
             logmsg(LOG_ERR, "No such command: %s", items[0]);
             return -1;
         }
@@ -147,14 +154,14 @@ int assemble_file(FILE *output)
             int labeloffset = 0;
             if (itemcount < 2) {
                 /* no label, just the command alone */
-                logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+                logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
                 logmsg(LOG_ERR, "Command <%s> expects a label");
                 return -1;
             }
 
             if (label_get_offset(items[1], &labeloffset) == -1) {
                 /* label was not set */
-                logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+                logmsg(LOG_ERR, "%s, line %d: ", filename, lineno);
                 logmsg(LOG_ERR, "Unknown label <%s>", items[1]);
                 return -1;
             } else {
@@ -261,8 +268,7 @@ void collect_labels(FILE *file)
 int collect_data(FILE *file)
 {
     if (ferror(file) || feof(file)) {
-        logmsg(LOG_ERR, "%s: cannot read %s", __func__, filename);
-        return - 1;
+        return 0;
     }
 
     char buffer[256] = { '\0' };
@@ -384,7 +390,7 @@ int assembleNUL(char** items, int n, uint8_t instruction[4])
 int assembleNNN(char** items, int n, uint8_t instruction[4])
 {
     if (n != 2) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Command <%s> takes one argument", items[0]);
         return -1;
     }
@@ -392,7 +398,7 @@ int assembleNNN(char** items, int n, uint8_t instruction[4])
     long number = 0;
 
     if (str_to_int(items[1], &number) == -1) {
-        logmsg(LOG_ERR, "%s line %d, command <%s>:", filename, lineno, items[0]);
+        logmsg(LOG_ERR, "%s, line %d, command <%s>:", filename, lineno, items[0]);
         logmsg(LOG_ERR, "Not a number: <%s>", items[1]);
         return -1;
     }
@@ -406,7 +412,7 @@ int assembleNNN(char** items, int n, uint8_t instruction[4])
 int assembleR00(char** items, int n, uint8_t instruction[4])
 {
     if (n != 2) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Command <%s> takes one argument", items[0]);
         return -1;
     }
@@ -414,7 +420,7 @@ int assembleR00(char** items, int n, uint8_t instruction[4])
     Register *r = NULL;
     r = get_register_byname(items[1]);
     if (! r) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[1]);
         return -1;
     }
@@ -425,7 +431,7 @@ int assembleR00(char** items, int n, uint8_t instruction[4])
 int assembleRNN(char** items, int n, uint8_t instruction[4])
 {
     if ( n != 3) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Command <%s> takes 2 arguments", items[0]);
         return -1;
     }
@@ -435,7 +441,7 @@ int assembleRNN(char** items, int n, uint8_t instruction[4])
 
     Register *r = get_register_byname(R);
     if (! r) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", R);
         return -1;
     }
@@ -446,7 +452,7 @@ int assembleRNN(char** items, int n, uint8_t instruction[4])
            is it perhaps a label? */
         int offset = 0;
         if (label_get_offset(NN, &offset) == -1) {
-            logmsg(LOG_ERR, "%s line %d, command <%s>:", filename, lineno, items[0]);
+            logmsg(LOG_ERR, "%s, line %d, command <%s>:", filename, lineno, items[0]);
             logmsg(LOG_ERR, "Undefined label: <%s>", NN);
             return -1;
         } else {            
@@ -465,20 +471,20 @@ int assembleRNN(char** items, int n, uint8_t instruction[4])
 int assembleRR0(char **items, int n, uint8_t instruction[4])
 {
     if (n != 3) {
-        logmsg(LOG_ERR, "%s line %d, command <%s>:", filename, lineno, items[0]);
+        logmsg(LOG_ERR, "%s, line %d, command <%s>:", filename, lineno, items[0]);
         logmsg(LOG_ERR, "Command <%s> takes 2 arguments", items[0]);
         return -1;
     }
 
     Register *r1 = get_register_byname(items[1]);
     if (! r1) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[1]);
         return -1;
     }
     Register *r2 = get_register_byname(items[2]);
     if (! r2) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[2]);
         return -1;
     }
@@ -492,27 +498,27 @@ int assembleRR0(char **items, int n, uint8_t instruction[4])
 int assembleRRN(char **items, int n, uint8_t instruction[4])
 {
     if (n != 4) {
-        logmsg(LOG_ERR, "%s line %d, command <%s>:", filename, lineno, items[0]);
+        logmsg(LOG_ERR, "%s, line %d, command <%s>:", filename, lineno, items[0]);
         logmsg(LOG_ERR, "Command <%s> takes 3 arguments", items[0]);
         return -1;
     }
 
     Register *r1 = get_register_byname(items[1]);
     if (! r1) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[1]);
         return -1;
     }
     Register *r2 = get_register_byname(items[2]);
     if (! r2) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[2]);
         return -1;
     }
 
     long number = 0;
     if (str_to_int(items[3], &number) == -1) {
-        logmsg(LOG_ERR, "%s line %d, command <%s>:", filename, lineno, items[0]);
+        logmsg(LOG_ERR, "%s, line %d, command <%s>:", filename, lineno, items[0]);
         logmsg(LOG_ERR, "Not a number: <%s>", items[3]);
         return -1;
     }
@@ -529,27 +535,27 @@ int assembleRRN(char **items, int n, uint8_t instruction[4])
 int assembleRRR(char **items, int n, uint8_t instruction[4])
 {
     if (n != 4) {
-        logmsg(LOG_ERR, "%s line %d, command <%s>:", filename, lineno, items[0]);
+        logmsg(LOG_ERR, "%s, line %d, command <%s>:", filename, lineno, items[0]);
         logmsg(LOG_ERR, "Command <%s> takes 3 register names", items[0]);
         return -1;
     }
 
     Register *r1 = get_register_byname(items[1]);
     if (! r1) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[1]);
         return -1;
     }
 
     Register *r2 = get_register_byname(items[2]);
     if (! r2) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[2]);
         return -1;
     }
     Register *r3 = get_register_byname(items[3]);
     if (! r3) {
-        logmsg(LOG_ERR, "%s line %d:", filename, lineno);
+        logmsg(LOG_ERR, "%s, line %d:", filename, lineno);
         logmsg(LOG_ERR, "Not a register: %s", items[3]);
         return -1;
     }

@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 
     if (progsize <= 0) {
         logmsg(LOG_ERR, "Cannot load program file %s.", nargv[0]);
+        mem_free();
         abort();
     }
 

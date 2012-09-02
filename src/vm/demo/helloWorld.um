@@ -1,0 +1,33 @@
+    set  r1 hello
+    set  r2 0
+
+count:
+# compute the string lenght
+# r2 counts non zero characters
+# r3 holds the current character
+    lb   r3 r1     # load byte
+# do we have a null byte?
+    cmp  r3 zero 
+    be   counted
+    inc  r1        # next address
+    inc  r2        # increment counter
+    jmp  count
+
+counted:
+    inc r2         # one more for '\0'
+    set r1 hello   # set r1 to the string begin
+    out r1 r2 zero # output Hello!
+
+# print the new line
+    set r1 nl
+
+# nl points to a 4 byte numerical value, 
+# whereby only the last byte is relevant
+    addi r1 r1 3   # move to actual \n
+    set r2  1
+    out r1 r2 zero
+EOP
+
+.data
+.string hello "Hello!"
+.number nl  0x0A

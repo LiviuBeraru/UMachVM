@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h> // free
 #include <string.h> // memset, strcmp
+#include <ctype.h>  // isprint()
+#include <limits.h>
 
 #include "core.h"
 #include "disassemble.h"
@@ -148,7 +150,13 @@ void db_show(int argc, char* argv[])
         }
         Register *r = get_register_byname(argv[2]);
         if (r) {
-            printf("%s = 0x%X\n", r->name, r->value);
+            printf("%s = 0x%X = %d", r->name, r->value, r->value);
+            // print as char if it is a printable char
+            if (r->value > 0 && r->value < CHAR_MAX && isprint(r->value)) {
+                printf(" = '%c'\n", r->value);
+            } else {
+                printf("\n");
+            }
         } else {
             printf("%s is not a register\n", argv[2]);
         }

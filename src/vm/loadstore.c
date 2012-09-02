@@ -63,7 +63,40 @@ int core_lb(void)
 
 int core_lw(void)
 {
-    printf("%s\n", __func__);
+    int dest_reg = instruction[1];
+    int adr_reg  = instruction[2];
+    
+    int32_t address = 0;
+    int32_t mword   = 0;
+
+    // read the address from register
+    if (read_register(adr_reg, &address) == -1) {
+        return -1;
+    }
+    
+    uint8_t buffer[4] = { 0x0 };
+
+    // read memory
+    if (mem_read(buffer, address, 4) == -1) {
+        return -1;
+    }
+    
+    /* on little endian machines, like intel, 
+     * the byte order of an integer in memory is reversed,
+     * so when we read 4 bytes from memory as a 4-byte-integer, 
+     * we have to mirror the bytes in order to get the actual value
+     */
+    
+    mword |= (buffer[0] << 24);
+    mword |= (buffer[1] << 16);
+    mword |= (buffer[2] <<  8);
+    mword |= (buffer[3] <<  0);
+    
+    // write memory word back into the destination register
+    if (write_register(dest_reg, mword) == -1) {
+        return -1;
+    }
+    
     return 0;
 }
 
