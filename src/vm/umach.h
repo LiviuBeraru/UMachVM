@@ -6,6 +6,7 @@ struct umach_options {
     int    disassemble;
     int    debug;
     size_t memory;
+    int    hexa;
     int    verbose;
 };
 

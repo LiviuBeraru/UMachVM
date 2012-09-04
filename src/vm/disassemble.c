@@ -126,7 +126,11 @@ void formatNNN(const uint8_t ins[4], char* dest)
     preserve the sign bit
     */
     char buffer[16];
-    sprintf(buffer, "%d", n);
+    if (options.hexa) {
+        sprintf(buffer, "0x%X", n);
+    } else {
+        sprintf(buffer, "%d", n);
+    }
     strcat(dest, buffer);
 }
 
@@ -154,7 +158,11 @@ void formatRNN(const uint8_t ins[4], char* dest)
 
     
     int16_t n =  (ins[2] << 8) | (ins[3]);
-    sprintf(buffer, "%d", n);
+    if (options.hexa) {
+        sprintf(buffer, "0x%X", n);
+    } else {
+        sprintf(buffer, "%d", n);
+    }
     strcat(dest, buffer);
 }
 
@@ -185,7 +193,11 @@ void formatRRN(const uint8_t ins[4], char* dest)
     formatRR0(ins, dest);
     char buffer[16];
     int8_t n = ins[3];
-    sprintf(buffer, "%d", n);
+    if (options.hexa) {
+        sprintf(buffer, "0x%X", n);
+    } else {
+        sprintf(buffer, "%d", n);
+    }
     strcat(dest, buffer);
 }
 

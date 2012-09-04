@@ -67,37 +67,44 @@ int main(int argc, char *argv[])
 
 void parse_opts(int argc, char *argv[])
 {
-    options.verbose = 0;
+    options.assemble = 0;
+    options.disassemble = 0;
     options.debug = 0;
     options.memory = 512;
-    options.disassemble = 0;
+    options.hexa = 0;
+    options.verbose = 0;
 
     opterr = 0;
     /*
      * Program options:
-     * -v verbose mode 
+     * -a assemble files
+     * -s disassemble program files
      * -d debug mode
-     * -s disassemble program file
      * -m <number> memory size
+     * -x hexa output
+     * -v verbose mode 
      */
-    const char opts[] = "vdsam:";
+    const char opts[] = "asdm:xv";
     int c;
     while((c = getopt(argc, argv, opts)) != -1) {
         switch (c) {
-            case 'v':
-                options.verbose++;
-                break;
-            case 'd':
-                options.debug++;
+            case 'a':
+                options.assemble++;
                 break;
             case 's':
                 options.disassemble++;
                 break;
-            case 'a':
-                options.assemble++;
+            case 'd':
+                options.debug++;
                 break;
             case 'm':
                 options.memory = atoi(optarg);
+                break;
+            case 'x':
+                options.hexa++;
+                break;
+            case 'v':
+                options.verbose++;
                 break;
             case '?':
                 printf("Unknown option: -%c\n", optopt);

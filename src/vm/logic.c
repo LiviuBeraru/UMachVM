@@ -254,55 +254,205 @@ int core_shl(void)
 
 int core_shli(void)
 {
-    printf("%s\n", __func__);
+    int    dest_no = instruction[1];
+    int    reg_no  = instruction[2];
+    uint8_t imm8   = instruction[3];
+    
+    int32_t dest_value = 0;
+    int32_t reg1_value = 0;
+    int32_t immediate  = imm8;
+    
+    if (read_register(reg_no, &reg1_value) == -1) { return -1; }
+    
+    dest_value = reg1_value << immediate;
+    
+    if (write_register(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_shr(void)
-{
-    printf("%s\n", __func__);
+{// copy paste from shl
+   /* extract register numbers from the instruction */
+    uint8_t dest_no = instruction[1];
+    uint8_t reg1_no = instruction[2];
+    uint8_t reg2_no = instruction[3];
+    
+    /* register value to read and write */
+    /* unsigned because right shifting unsigned values discards the sign bit */
+    uint32_t dest_value = 0;
+    uint32_t reg1_value = 0;
+    uint32_t reg2_value = 0;
+    
+    /* read register values */
+    if (read_registeru(reg1_no, &reg1_value) == -1) { return -1; }
+    if (read_registeru(reg2_no, &reg2_value) == -1) { return -1; }
+    
+    dest_value = reg1_value >> reg2_value;
+    
+    /* write back the result */
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_shri(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg_no  = instruction[2];
+    uint8_t imm8    = instruction[3];
+    
+    /* work with unsigned values to discard the sign bit when shifting */
+    uint32_t dest_value = 0;
+    uint32_t reg1_value = 0;
+    uint32_t immediate  = imm8;
+    
+    if (read_registeru(reg_no, &reg1_value) == -1) { return -1; }
+    
+    dest_value = reg1_value >> immediate;
+    
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
-int core_shra  (void)
+int core_shra(void)
 {
-    printf("%s\n", __func__);
+    /* extract register numbers from the instruction */
+    uint8_t dest_no = instruction[1];
+    uint8_t reg1_no = instruction[2];
+    uint8_t reg2_no = instruction[3];
+    
+    /* register value to read and write */
+    /* signed because right shifting signed values preserves the sign bit */
+    int32_t dest_value = 0;
+    int32_t reg1_value = 0;
+    int32_t reg2_value = 0;
+    
+    /* read register values */
+    if (read_register(reg1_no, &reg1_value) == -1) { return -1; }
+    if (read_register(reg2_no, &reg2_value) == -1) { return -1; }
+    
+    dest_value = reg1_value >> reg2_value;
+    
+    /* write back the result */
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_shrai(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg_no  = instruction[2];
+    uint8_t imm8   = instruction[3];
+    
+    /* work with signed values to preserve the sign bit when shifting */
+    int32_t dest_value = 0;
+    int32_t reg1_value = 0;
+    int32_t immediate  = imm8;
+    
+    if (read_register(reg_no, &reg1_value) == -1) { return -1; }
+    
+    dest_value = reg1_value >> immediate;
+    
+    if (write_register(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_rotl(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg1_no = instruction[2];
+    uint8_t reg2_no = instruction[3];
+    
+    uint32_t reg1_value = 0;
+    uint32_t reg2_value = 0;
+    uint32_t dest_value = 0;
+    
+    /* read register values */
+    if (read_registeru(reg1_no, &reg1_value) == -1) { return -1; }
+    if (read_registeru(reg2_no, &reg2_value) == -1) { return -1; }
+    
+    reg2_value = reg2_value % 32;
+    
+    /* see Hacker's Delight, by Henry S. Warren, Jr., section 2-14 */
+    dest_value = (reg1_value << reg2_value) | (reg1_value >> (32 - reg2_value));
+        
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_rotli(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg_no = instruction[2];
+    uint8_t imm8    = instruction[3];
+    
+    uint32_t reg_value = 0;
+    uint32_t immediate  = imm8;
+    uint32_t dest_value = 0;
+    
+    /* read register values */
+    if (read_registeru(reg_no, &reg_value) == -1) { return -1; }
+    
+    immediate = immediate % 32;
+    
+    /* see Hacker's Delight, by Henry S. Warren, Jr., section 2-14 */
+    dest_value = (reg_value << immediate) | (reg_value >> (32 - immediate));
+        
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_rotr(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg1_no = instruction[2];
+    uint8_t reg2_no = instruction[3];
+    
+    uint32_t reg1_value = 0;
+    uint32_t reg2_value = 0;
+    uint32_t dest_value = 0;
+    
+    /* read register values */
+    if (read_registeru(reg1_no, &reg1_value) == -1) { return -1; }
+    if (read_registeru(reg2_no, &reg2_value) == -1) { return -1; }
+    
+    reg2_value = reg2_value % 32;
+    
+    /* see Hacker's Delight, by Henry S. Warren Jr., section 2-14
+     * (Rotate Shifts) */
+    dest_value = (reg1_value >> reg2_value) | (reg1_value << (32 - reg2_value));
+        
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_rotri(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg_no = instruction[2];
+    uint8_t imm8    = instruction[3];
+    
+    uint32_t reg_value = 0;
+    uint32_t immediate  = imm8;
+    uint32_t dest_value = 0;
+    
+    /* read register values */
+    if (read_registeru(reg_no, &reg_value) == -1) { return -1; }
+    
+    immediate = immediate % 32;
+    
+    /* see Hacker's Delight, by Henry S. Warren, Jr., section 2-14 */
+    dest_value = (reg_value >> immediate) | (reg_value << (32 - immediate));
+        
+    if (write_registeru(dest_no, dest_value) == -1) { return -1; }
+    
     return 0;
 }
 
