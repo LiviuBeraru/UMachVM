@@ -61,4 +61,8 @@ void core_execute(void)
         logmsg(LOG_WARN, 
         "Core: Program Counter greater than memory size. Terminating.");
     }
+    if (registers[PC].value < 0) {
+        running = 0;
+        logmsg(LOG_WARN, "Core: Program Counter is negative.Terminating.");
+    }
 }

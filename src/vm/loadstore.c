@@ -2,8 +2,6 @@
 #include "memory.h"
 #include "registers.h"
 #include "logmsg.h"
-#include "system.h"     // interrupt()
-#include "interrupts.h" // interupt numbers
 
 int core_set(void)
 {
@@ -159,29 +157,9 @@ int core_push(void)
 {
     uint8_t reg_no = instruction[1];
     int32_t reg_value = 0;
-    if (read_register(reg_no, &reg_value) == -1) { return -1; }
     
-    registers[SP].value -= 4;
-    if (registers[SP].value < 0) {
-        /* We generate a stack overflow interrupt if the 
-         * SP register has a value less than zero. Future versions
-         * should generate an interrupt if the SP register points
-         * to a memory region which is occupied by the programm itself.
-         * To do this one should store the program size in the memory.c module.
-         */
-        logmsg(LOG_WARN, "Stack Overflow: cannot PUSH");
-        registers[SP].value += 4; // reset SP
-        interrupt(INT_STACK_OVERFLOW);
-        return -1;
-    }
-    
-    uint8_t buffer[4] = { 0x0 };
-    buffer[0] = reg_value >> 24;
-    buffer[1] = reg_value >> 16;
-    buffer[2] = reg_value >>  8;
-    buffer[3] = reg_value;
-    
-    if (mem_write(buffer, registers[SP].value, 4) == -1) { return -1; }
+    if (read_register(reg_no, &reg_value) == -1) { return -1; }    
+    if (mem_push(reg_value) == -1) { return -1; }
     
     return 0;
 }
@@ -190,27 +168,12 @@ int core_pop(void)
 {
     // register number
     uint8_t reg_no = instruction[1];
-    // register value, which we read from memory
     int32_t reg_value = 0;
     
-    uint8_t buffer[4] = { 0x0 };
-    
-    if (mem_read(buffer, registers[SP].value, 4) == -1) {
-        logmsg(LOG_WARN, "Stack Error: cannot POP");
-        interrupt(INT_STACK_ERR);
-        return -1;
-    }
-    
-    /* disassemble the buffer into the register value */
-    reg_value = (buffer[0] << 24) | 
-                (buffer[1] << 16) | 
-                (buffer[2] <<  8) | 
-                 buffer[3];
-    
-    /* write the value into the actual register */
-    
+    if (mem_pop(&reg_value) == -1) { return -1; }
+
+    /* write the value into the actual register */    
     if (write_register(reg_no, reg_value) == -1) { return -1; }
-    registers[SP].value += 4;
     
     return 0;
 }

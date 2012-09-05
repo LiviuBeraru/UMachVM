@@ -14,6 +14,8 @@ int    mem_load_program_file(const char *filename);
 void   mem_free(void);
 int    mem_read(uint8_t *destination, int index, int nbytes);
 int    mem_write(uint8_t *source, int index, int nbytes);
+int    mem_push(int32_t word);
+int    mem_pop(int32_t *word);
 size_t mem_getsize(void);
 
 #endif
