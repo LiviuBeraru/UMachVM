@@ -296,6 +296,12 @@ int core_mod(void)
     if (read_register(reg1_no, &reg1_value) == -1) { return -1; }
     if (read_register(reg2_no, &reg2_value) == -1) { return -1; }
     
+    if (reg2_value == 0) {
+        logmsg(LOG_ERR, "Modulo NULL");
+        interrupt(INT_DIVNULL);
+        return -1;
+    }
+    
     /* mathematically, the modulo operation takes values in whole Z
      * so I don't force it to be positive. */
     result = reg1_value % reg2_value;
@@ -314,6 +320,12 @@ int core_modi (void)
     int32_t reg_value = 0;
     int32_t immediate = imm8;
     int32_t result    = 0;
+    
+    if (immediate == 0) {
+        logmsg(LOG_ERR, "Modulo NULL");
+        interrupt(INT_DIVNULL);
+        return -1;
+    }
     
     // read register value
     if (read_register(reg_no, &reg_value) == -1) { return -1; }

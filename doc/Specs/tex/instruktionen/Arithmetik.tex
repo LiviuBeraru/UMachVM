@@ -287,21 +287,36 @@ Dekrementiert den Inhalt des Registers $X$.
 
 \opdef{MOD}{$X, Y, Z \in \Reg$}{0x48}{RRR}
 Modulo Operation.
-Berechnet den Rest der Division $\$Y/\$Z$ und speichert den Rest in das Register
-$X$. Dabei ist das Ergebnis immer positiv.
+Dieser Befehl berechnet den Rest der Division $\$Y/\$Z$ und speichert den Rest
+in das Register
+$X$. Nach Definition der Modulo-Funktion
+\[
+  \bmod : \mathds{Z} \times (\mathds{Z}\setminus \{0\})
+  \to \mathds{Z}
+\]
+kann das Ergebnis der Modulo-Funktion positiv oder negativ sein (Ergebnis
+liegt im $\mathds{Z}$).
+
 
 Algebraische Schreibweise:
 \[
-    X \gets \$Y \bmod \$Z
+    X \gets \$Y \bmod \$Z, \qquad \$Z \neq 0
 \]
 
+\paragraph{Fehler}
+Falls der Inhalt des Registers $Z$ gleich Null ist, wird der Interrupt mit
+Nummer 1 (Division durch Null) erzeugt.
 
-\opdef{MODI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x49}{RRN}
+
+\opdef{MODI}{$X, Y \in \Reg$, $N \in \mathds{Z}_{\setminus 0}$}{0x49}{RRN}
 \glqq Modulo Immediate\grqq. Analog zur Instruktion \opref{MOD}, berechnet
 \texttt{MODI} den Rest der ganzzahligen Division $\$Y/N$ und speichert ihn in
 das Register $X$. Der Unterschied liegt darin, dass $N$ eine fest angegebene
-natürliche Zahl ist.
+natürliche Zahl ist, die Werte aus dem Intervall $[1, 255]$ nimmt.
+
 \[
-    X \gets \$Y \bmod N
+    X \gets \$Y \bmod N, \qquad N \in [1, 255]
 \]
 
+Wird $N = 0$ angegeben, so wird der Interrupt mit Nummer 1 (Division durch
+Null) erzeugt.
