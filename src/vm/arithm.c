@@ -4,8 +4,6 @@
 #include "system.h"
 #include "interrupts.h"
 
-#include <stdio.h>
-
 int core_add(void) 
 {
     int32_t a = 0;
@@ -286,12 +284,43 @@ int core_dec(void)
 
 int core_mod(void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg1_no = instruction[2];
+    uint8_t reg2_no = instruction[3];
+    
+    int32_t reg1_value = 0;
+    int32_t reg2_value = 0;
+    int32_t result = 0;
+    
+    // read register values
+    if (read_register(reg1_no, &reg1_value) == -1) { return -1; }
+    if (read_register(reg2_no, &reg2_value) == -1) { return -1; }
+    
+    /* mathematically, the modulo operation takes values in whole Z
+     * so I don't force it to be positive. */
+    result = reg1_value % reg2_value;
+    
+    if (write_register(dest_no, result) == -1) { return -1; }
+    
     return 0;
 }
 
 int core_modi (void)
 {
-    printf("%s\n", __func__);
+    uint8_t dest_no = instruction[1];
+    uint8_t reg_no  = instruction[2];
+    uint8_t imm8    = instruction[3];// immediate value
+    
+    int32_t reg_value = 0;
+    int32_t immediate = imm8;
+    int32_t result    = 0;
+    
+    // read register value
+    if (read_register(reg_no, &reg_value) == -1) { return -1; }
+
+    result = reg_value % immediate;
+    
+    if (write_register(dest_no, result) == -1) { return -1; }
+    
     return 0;
 }
