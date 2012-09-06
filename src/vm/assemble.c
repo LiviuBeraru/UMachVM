@@ -10,6 +10,7 @@
 #include "registers.h"
 #include "memory.h"
 #include "logmsg.h"
+#include "umach.h"
 
 
 static const char comment = '#';
@@ -22,7 +23,6 @@ static int smark_len = 0;
 static int nmark_len = 0;
 
 static int        cmd_offset = 0;
-static char      *outname = "a.ux";
 static char      *filename = NULL;
 static int        lineno = 0;
 
@@ -45,9 +45,9 @@ static int assembleRRR(char **items, int n, uint8_t instruction[4]);
 
 void assemble_files(int argc, char** argv)
 {
-    FILE *output = fopen(outname, "w");
+    FILE *output = fopen(options.output_file, "w");
     if (output == NULL) {
-        perror(outname);
+        perror(options.output_file);
         return;
     }
     dmark_len = strlen(data_mark);
@@ -55,6 +55,7 @@ void assemble_files(int argc, char** argv)
     nmark_len = strlen(number_mark);
 
     int i;
+    /* First, we collect the labels  */
     for (i = 0; i < argc; i++) {
         FILE *f = fopen(argv[i], "r");
         if (f == NULL) {
@@ -73,7 +74,8 @@ void assemble_files(int argc, char** argv)
         fclose(f);
     }
     
-    insert_data_labels(cmd_offset);
+    /* secondly, we translate the collected labels into offsets */
+    translate_labels(cmd_offset);
 
     cmd_offset = 0;
     for (i = 0; i < argc; i++) {
@@ -85,7 +87,8 @@ void assemble_files(int argc, char** argv)
         }
     }
     
-    write_data(output); // write programm data
+    /* thirdly, we write the data section to the file */
+    write_data(output); 
     
 clean:
     fclose(output);
@@ -282,6 +285,7 @@ int collect_data(FILE *file)
             line++;
         }
         if (*line == '\0' || *line == comment) {
+            /* nothing interesting in this line, skip over */
             continue;
         }
 

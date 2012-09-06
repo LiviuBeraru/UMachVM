@@ -8,6 +8,7 @@ struct umach_options {
     size_t memory;
     int    hexa;
     int    verbose;
+    char  *output_file;
 };
 
 extern struct umach_options options;

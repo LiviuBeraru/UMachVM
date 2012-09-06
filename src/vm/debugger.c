@@ -225,10 +225,15 @@ void dump_regs(void)
     }
 
     for (i = 1; i < max; i++) {
-        if (! registers[i].name)
+        if (! registers[i].name)// no such register
             continue;
 
-        printf("| %-4s = %5d ", registers[i].name, registers[i].value);
+        if (options.hexa) {
+            printf("| %-4s = %8X ", registers[i].name, registers[i].value);
+        } else {
+            printf("| %-4s = %8d ", registers[i].name, registers[i].value);
+        }
+        
         if (i % 4 == 0) {
             printf("|\n");
         }

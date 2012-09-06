@@ -4,6 +4,7 @@
 #include "command.h"
 #include "umach.h" // options
 #include "registers.h"
+#include "asm_data.h" // begin_data
 
 /* These functions implement the different instruction formats */
 static void formatNNN(const uint8_t ins[4], char *dest);
@@ -22,7 +23,7 @@ void disassemble(const uint8_t instruction[4], char *destination, int printhex)
                 instruction[0], instruction[1],
                 instruction[2], instruction[3]);
     }
-    
+
     char buffer[64];
     struct command *cmd = command_by_opcode(instruction[0]);
     if (cmd == NULL) {
@@ -30,7 +31,7 @@ void disassemble(const uint8_t instruction[4], char *destination, int printhex)
         return;
     }
 
-    
+
     sprintf(buffer, "%-5s ", cmd->opname);
     strcat(destination, buffer);
 
@@ -70,7 +71,7 @@ int disassemble_files(int argc, char** argv)
             perror(argv[0]);
             break;
         }
-        
+
         printf("\nDisassembly of file %s\n\n", argv[i]);
         disassemble_file(file);
         fclose(file);
@@ -95,18 +96,19 @@ int disassemble_file(FILE* file)
     char line[128] = {'\0'};
 
     while (fread(instruction, sizeof(*instruction), 4, file) > 0) {
+
+        if (memcmp(instruction, begin_data, 4) == 0) {
+            /* we have found the data mark, stop disassembling because
+               after the data mark there are no instructions any more */
+            break;
+        }
+        
         disassemble(instruction, line, 1);
         printf("%s\n", line);
-        
-        if (instruction[0] == 0x04) {
-            /* don't disassemble beyond the EOP instruction,
-             * which has the opcode 0x04 */
-            break;
-        } else {
-            // clear buffers
-            memset(instruction, 0, sizeof(instruction));
-            memset(line, 0, sizeof(line));
-        }
+        // clear buffers
+        memset(instruction, 0, sizeof(instruction));
+        memset(line, 0, sizeof(line));
+
     }
 
     return 0;
@@ -122,7 +124,7 @@ void formatNNN(const uint8_t ins[4], char* dest)
     if (n & 0x800000) {// leftmost bit is set
         n = n | 0xFF000000;
     }
-    but converting int8 to int32 will automatically 
+    but converting int8 to int32 will automatically
     preserve the sign bit
     */
     char buffer[16];
@@ -148,7 +150,7 @@ void formatRNN(const uint8_t ins[4], char* dest)
 {
     Register *r = get_register(ins[1]);
     char buffer[16];
-    
+
     if (r) {
         sprintf(buffer, "%-5s ", r->name);
     } else {
@@ -156,7 +158,7 @@ void formatRNN(const uint8_t ins[4], char* dest)
     }
     strcat(dest, buffer);
 
-    
+
     int16_t n =  (ins[2] << 8) | (ins[3]);
     if (options.hexa) {
         sprintf(buffer, "0x%X", n);
@@ -170,16 +172,16 @@ void formatRR0(const uint8_t ins[4], char* dest)
 {
     Register *a = get_register(ins[1]);
     Register *b = get_register(ins[2]);
-    
+
     char buffer[8];
-    
+
     if (a) {
         sprintf(buffer, "%-5s ", a->name);
     } else {
         sprintf(buffer, "%-5s ", "???");
     }
     strcat(dest, buffer);
-    
+
     if (b) {
         sprintf(buffer, "%-5s ", b->name);
     } else {

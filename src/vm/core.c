@@ -1,3 +1,5 @@
+#include <string.h>    // memcmp
+
 #include "registers.h"
 #include "core.h"
 #include "memory.h"
@@ -5,6 +7,7 @@
 #include "interrupts.h" // interrupt numbers
 #include "logmsg.h"
 #include "command.h"
+#include "asm_data.h"   // begin_data
 
 /* Global data */
 int     running        = 0;
@@ -45,6 +48,16 @@ void core_execute(void)
         logmsg(LOG_ERR, "Core: maschine is not running. Cannot execute.");
         return;
     }
+    
+    /* did we hit the data section? 
+     * if yes, then stop executing
+     */
+    if (memcmp(instruction, begin_data, 4) == 0) {
+        logmsg(LOG_INFO, "Core: hit data section. Terminating.");
+        running = 0;
+        return;
+    }
+    
     /* the opcode is the first byte of the instruction */
     int opcode = instruction[0];
     struct command *cmd = command_by_opcode(opcode);
@@ -57,12 +70,12 @@ void core_execute(void)
 
     registers[PC].value += 4;
     if (registers[PC].value >= mem_getsize()) {
-        running = 0;
         logmsg(LOG_WARN, 
         "Core: Program Counter greater than memory size. Terminating.");
+        interrupt(INT_INVALID_MEM);
     }
     if (registers[PC].value < 0) {
-        running = 0;
-        logmsg(LOG_WARN, "Core: Program Counter is negative.Terminating.");
+        logmsg(LOG_WARN, "Core: Program Counter is negative. Terminating.");
+        interrupt(INT_INVALID_MEM);
     }
 }

@@ -73,6 +73,7 @@ void parse_opts(int argc, char *argv[])
     options.memory = 512;
     options.hexa = 0;
     options.verbose = 0;
+    options.output_file = "a.ux";
 
     opterr = 0;
     /*
@@ -84,7 +85,7 @@ void parse_opts(int argc, char *argv[])
      * -x hexa output
      * -v verbose mode 
      */
-    const char opts[] = "asdm:xv";
+    const char opts[] = "asdm:xvo:";
     int c;
     while((c = getopt(argc, argv, opts)) != -1) {
         switch (c) {
@@ -105,6 +106,9 @@ void parse_opts(int argc, char *argv[])
                 break;
             case 'v':
                 options.verbose++;
+                break;
+            case 'o':
+                options.output_file = optarg;
                 break;
             case '?':
                 printf("Unknown option: -%c\n", optopt);
