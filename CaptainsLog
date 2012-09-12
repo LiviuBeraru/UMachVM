@@ -304,3 +304,32 @@ TODO:
   welche ERR Bits gesetzt werden.
 - Umstellen der Notation: wenn es um den Inhalt eines Registers X
   geht, dann X mit $X ersetzen.
+
+
+=== 11.09.2012 ===
+Malk.
+TODO:
+- Überlegen, ob die Abschnitte 'Betriebsmodi' und 'Neumann Zyklus' 
+  sinnvoll sind. Löschen?
+- Register DS einfügen. DS von 'Data Segment'. Soll die Adresse im 
+  Speicher angeben, wo die Daten anfangen. read only.
+- Zusätzliche Segment-Register. Die Einteilung des Speichers in
+  Segmenten wäre: Code-, Daten- und Freispeicher-Segment. Das letztere
+  besteht aus Heap und Stack.
+- Abschnitt über Stack Überlauf entsprechend ändern.
+- Neuer Interrupt für Segment-Fehler (segfault).
+- Im Abschnitt 'Programm und Daten' die Abgrenzung von Code, Daten und
+  Stack beschreiben. Mit Bezug auf die entsprechenden Segment-Register.
+- Das Fehlerbit und Interrupt 'Unzureichender Speicher' löschen, weil
+  das eine Sache der virtuellen Maschine ist, nicht ein interner
+  Fehler. Die Maschine startet gar nicht, wenn nicht genug Speicher da
+  ist.
+- Folgende Befehle müssen noch implementiert werden: subi2, divi2,
+  modi2
+- Assembler muss von der virtuellen Maschine getrennt werden.
+  Das bedeutet eine Menge an copy/paste, besonders von Register- und
+  Befehelentabellen.
+- Überlegen: jetzt sind die Komponenten Assembler, Disassembler,
+  Debugger und Maschine in einem einzigen Programm gebündelt. Wie kann
+  man die sinnvoller trennen oder kombinieren? Das heißt, welche
+  Programme werden überhaupt kompiliert?
