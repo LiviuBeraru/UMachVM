@@ -4,8 +4,7 @@
 
 Die I/O-Architektur der UMach Maschine ist am sogenannten \glqq Port-Mapped
 I/O\grqq, oder \glqq Port I/O\grqq\ angelehnt\footnote{Als Gegenstück von \glqq
-Memory Mapped I/O\grqq.}. Obwohl diese Architektur deutliche Einschränkungen
-hat, wird sie wegen ihrer konzeptionellen Einfachheit benutzt.
+Memory Mapped I/O\grqq.}.\marginnote{TODO: was ist port io?}
 
 \begin{figure}[htp]
  \centering
@@ -28,7 +27,7 @@ auch Abschnitt \ref{sec:IO-Instruktionen} auf Seite
 \pageref{sec:IO-Instruktionen}). Es werden also keine I/O Operationen
 ausgeführt, die nicht explizit durch Maschinenbefehle angefordert werden.
 Insbesondere werden keine I/O-Operationen aufgrund von
-Unterbrechungsanfoderungen (interrupts) initialisiert.
+Unterbrechungsanfoderungen (interrupts) initiiert.
 
 Wenn ein I/O-Befehl ausgeführt wird, delegiert der Kern die Ausführung an die
 I/O-Einheit und wartet, bis diese fertig ist. Erst wenn die I/O-Einheit
@@ -62,7 +61,5 @@ Zu diesem Entwicklungspunkt sind für die peripherischen Geräte, bzw. für die
 entsprechenden Ports keine Kontrolle- oder Statusregister vorgesehen. Es gibt
 auch keine entsprechende Befehle für die Kontrolle und Statusabfrage der
 peripherischen Geräte. Es wird lediglich in den Speicher eingelesen und aus dem
-Speicher ausgegeben. Eine zukünftige Version dieser Maschine könnte die
-Kontrolle der peripherischen Geräte hinzufügen (wie z.B. ein- und ausschalten
-der Geräte).
-
+Speicher ausgegeben. Kontrolle und Statusabfrage sind als Software-Protokoll
+gedacht und nicht als Hardware-Vorgang.

@@ -60,7 +60,7 @@ Beispiel:
   SET   R1 1     # $R1 \gets 1$
   ADDI  R2 R1 2  # $R2 \gets R1 + 2 = 1 + 2 = 3$
   #     X  Y  N
-  ADDI  R2 R2 -3 # $R2 \gets R2 + (-3) = 3 +(-2) = 1$
+  ADDI  R2 R2 -3 # $R2 \gets R2 + (-3) = 3 +(-3) = 0$
   ADDI  R2 R3 R4 # Fehler! R4 kein $n \in \mathds{Z}$
 \end{lstlisting}
 
@@ -76,6 +76,8 @@ in das Register $X$. Entspricht dem Ausdruck
 \]
 Wobei $X$, $Y$ und $Z$ Register sind.
 
+\paragraph{Fehler}
+Wie bei \opref{ADD}.
 
 
 \opdef{SUBU}{$X, Y, Z \in \Reg$}{0x34}{RRR}
@@ -83,21 +85,47 @@ Wobei $X$, $Y$ und $Z$ Register sind.
 Analog zur Instruktion \opref{SUB} mit dem Unterschied, dass alle Werte und
 Operationen vorzeichenlos sind.
 
+\paragraph{Fehler}
+Wie bei \opref{ADD}.
 
 
 \opdef{SUBI}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x35}{RRN}
 \glqq Subtract Immediate\grqq.
 Funktioniert wie \opref{SUB} aber $N$ ist eine direkt angegebene Zahl
-(kein Register).
+(kein Register). Entspricht
+\[
+    X \gets (\$Y - N)
+\]
 
 \paragraph{Beispiel}
 Folgendes Beispiel demonstriert die Verwendung von \opref{SUBI} und zeigt
 zugleich einen Fehler.
 \begin{lstlisting}
   SET  R1 50     # $R1 \gets 50$
-  SUBI R2 R1 30  # $R2 \gets (R1 - 30) = 20$
+  SUBI R2 R1 30  # $R2 \gets (\$R1 - 30) = 20$
   SUBI R2 R1 R1  # Fehler! da $R1 \not\in \mathds{Z}$
 \end{lstlisting}
+
+\paragraph{Fehler}
+Wie bei \opref{ADD}.
+
+
+\opdef{SUBI2}{$X, Y \in \Reg$, $N\in\mathds{Z}$}{0x36}{RRN}
+\glqq Subtract Immediate\grqq.
+Funktioniert wie \opref{SUBI} mit dem Unterschied, dass bei der Subtraktion die
+Reihenfolge der Operanden $\$Y$ und $N$ umgekehrt ist. Entspricht also
+\[
+    X \gets (N - \$Y)
+\]
+\paragraph{Beispiel}
+Folgendes Beispiel demonstriert die Verwendung von \opref{SUBI2}.
+\begin{lstlisting}
+  SET   R1 50     # $R1 \gets 50$
+  SUBI2 R2 R1 30  # $R2 \gets (30 - \$R1) = -20$
+\end{lstlisting}
+
+\paragraph{Fehler}
+Wie bei \opref{ADD}.
 
 
 
@@ -134,9 +162,11 @@ Falls das Ergebnis der Multiplikation gänzlich in den 32 Bit des Registers
   MUL  R1 R1  # $R1^{2}$
               # HI = 0x71C71C70
               # LO = 0xE38E38E4 
-  COPY R2 LO  # $R1^{2} \bmod 2^{32}$ 
+  CP   R2 LO  # $R2 \gets \$R1^{2} \bmod 2^{32}$ 
 \end{lstlisting}
 
+Der Befehl \opref{CP} kopiert den Inhalt des Registers $LO$ in das Register
+$R2$.
 
 
 \opdef{MULU}{$X, Y\in \Reg$}{0x39}{RR0}
@@ -209,6 +239,8 @@ und \texttt{LO} enthalten entsprechend vorzeichenlose Werte. Mit anderen Worten:
   \$X, \$Y, \$LO, \$HI \in \mathds{N} \mod 2^{32}
 \]
 
+\paragraph{Fehler}
+Wie bei \opref{DIV}.
 
 
 
@@ -218,11 +250,22 @@ und \texttt{LO} enthalten entsprechend vorzeichenlose Werte. Mit anderen Worten:
 Dividiert den Inhalt des Registers $X$ durch die feste ganze Zahl $N$ und
 speichert den Quotient in das Register \texttt{HI} und den Rest in das Register
 \texttt{LO}.
-$N$ nimmt Werte aus dem Intervall $[-2^{15}, 2^{15}-1] \setminus 0$.
+$N$ nimmt Werte aus dem Intervall $[-2^{15}, 2^{15}-1] \setminus \{0\}$.
+Entspricht
+\[
+    (HI, LO) \gets \left( \frac{\$X}{N} \right)
+\]
 Nach der Durchführung der Division gilt:
 \[
     \$X = \$HI \cdot N + \$LO 
 \]
+beziehungsweise
+\[
+  HI \gets \left\lfloor \frac{\$X}{N} \right\rfloor, \qquad
+  LO \gets \$X \bmod N
+\]
+
+
 \paragraph{Beispiel}
 Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
 \begin{lstlisting}
@@ -234,6 +277,22 @@ Der folgende Code demonstriert die Verwendung von \texttt{DIVI}.
 
 \paragraph{Fehler}
 Wie \opref{DIV}.
+
+
+\opdef{DIVI2}{$X \in \Reg$, $N\in\mathds{Z}_{\setminus 0}$}{0x3E}{RNN}
+\glqq Divide Immediate\grqq.
+Funktioniert wie \opref{DIVI} mit dem Unterschied, dass bei der Division werden
+die Operanden $\$X$ und $N$ vertauscht. Entspricht also
+\[
+    (HI, LO) \gets \left( \frac{N}{\$X} \right)
+\]
+beziehungsweise
+\[
+  HI \gets \left\lfloor \frac{N}{\$X} \right\rfloor, \qquad
+  LO \gets N \bmod \$X 
+\]
+
+
 
 
 \opdef{ABS}{$X, Y \in \Reg$}{0x40}{RR0}
@@ -273,6 +332,8 @@ Inkrementiert den Inhalt des Registers $X$.
     X \gets ( \$X + 1 )
 \]
 
+\paragraph{Fehler} Wie bei \opref{ADD}, als würde man mit Eins addieren.
+
 
 
 \opdef{DEC}{$X \in \Reg$}{0x43}{R00}
@@ -282,6 +343,7 @@ Dekrementiert den Inhalt des Registers $X$.
     X \gets ( \$X - 1 )
 \]
 
+\paragraph{Fehler} Wie bei \opref{SUB}, als würde man Eins subtrahieren.
 
 
 
@@ -320,3 +382,18 @@ natürliche Zahl ist, die Werte aus dem Intervall $[1, 255]$ nimmt.
 
 Wird $N = 0$ angegeben, so wird der Interrupt mit Nummer 1 (Division durch
 Null) erzeugt.
+
+
+\opdef{MODI2}{$X, Y \in \Reg$, $N \in \mathds{Z}_{\setminus 0}$}{0x4A}{RRN}
+\glqq Modulo Immediate\grqq.
+Funktioniert und hat die selbe Syntax wie der Befehl \opref{MODI} mit dem
+Unterschied, dass bei der Modulo-Bildung (Division) werden die Operanden $\$Y$
+und $N$ vertauscht.
+\[
+    X \gets N \bmod \$Y, \qquad N \in [1, 255]
+\]
+
+\paragraph{Fehler}
+Wie bei \opref{MODI}.
+
+

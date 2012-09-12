@@ -7,7 +7,6 @@ Wert Null initialisiert und anschließend das angegebene Maschinenprogramm in de
 Speicher geladen. Die Größe des Speichers ist nicht festgelegt.
 
 
-
 \subsection{Speicherstruktur}
 \label{subsec:Speicherstruktur}
 \index{Speicherstruktur}
@@ -32,7 +31,7 @@ Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
 
 
 
-\subsubsection{Interrupttabelle}
+\subsection{Interrupttabelle}
 \index{Interrupttabelle}
 \label{subsubsec:Interrupttabelle}
 
@@ -64,7 +63,8 @@ Tabelle \ref{tab:Interrupttabelle} auf Seite
 Interruptnummer\index{Interruptnummer} und deren Bedeutung auf.
 
 
-\subsubsection{Programm und Daten}
+\subsection{Programm und Daten}
+\label{subsec:Prog-Daten}
 \index{Programm}
 
 Nach der $256$ Bytes ($64$ mal $4$) großen Interrupttabelle
@@ -76,8 +76,8 @@ füllen, falls (bestimmte) Interrupts behandelt werden sollen.
 
 
 
-\subsubsection{Der Stack}
-\label{subsubsec:Stack}
+\subsection{Der Stack}
+\label{subsec:Stack}
 \index{Stack}
 
 Der Stack ist ein spezieller Bereich im Speicher. Dieser Bereich fängt am Ende
@@ -89,13 +89,42 @@ dynamisch, denn das Register \texttt{SP} wird sowohl durch die Instruktionen
 Das Wachsen\index{Stack!Wachsen} des Stacks bedeutet, dass das Register
 \texttt{SP} immer kleinere Werte annimmt. Das Schrumpfen\index{Stack!Schrumpfen}
 des Stacks bedeutet, dass \texttt{SP} immer größere Werte annimmt. Wird
-versucht, den Inhalt von \texttt{SP} kleiner Null oder größer als die maximale
+versucht, den Inhalt von \texttt{SP} kleiner als 
+einer bestimmten Adresse,\marginnote{TODO: ab welcher? Segmentierung}
+oder größer als die maximale
 Speicheradresse zu setzen, so wird dies von der Maschine verweigert und als
 Fehler im Register \texttt{ERR} signalisiert.
 
 Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
 maximal erreichbare Speicheradresse plus Eins gesetzt. Damit können keine Werte
 gelesen werden, bevor Werte geschrieben wurden.
+
+\subsection{Speicher Fehler}
+\label{subsec:Speicherfehler}
+
+Bei der Speicheraddressierung können während der Programmausführung
+verschiedene Fehler auftreten.
+
+\paragraph{Stack Fehler}
+\index{Stack!Fehler}
+Ein Stack Fehler liegt vor, wenn eine ungültige Stack-Operation durchgeführt
+werden sollte. Zum Beispiel, wenn ein \opref{POP}-Befehl angegeben wird, ohne
+vorher entsprechende Daten mittels \opref{PUSH} auf den Stack gepusht zu haben,
+wenn also der Stack leer ist.
+
+
+\paragraph{Stack Überlauf}
+\index{Stack!Überlauf}
+Ein Stack Überlauf liegt vor, wenn der Stack Pointer (Register \texttt{SP}) auf
+einen Speicherbereich gesetzt wird, der nicht mehr zum Stack-Bereich des
+Speichers gehört. Das passiert, wenn der Stack Pointer im Program-Bereich oder
+auf noch kleinere Adressen gesetzt wird.
+
+Die UMach Maschine sollte solche kleine Werte nicht zulassen.
+
+\paragraph{Segfault}
+
+Bezug auf die Segmentierung des Speichers.
 
 
 \subsection{Speicheradressierung}

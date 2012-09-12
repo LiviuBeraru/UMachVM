@@ -207,7 +207,7 @@ Falls die Verringerung $\$SP - 4$ eine Speicheradresse außerhalb des
 Stackbereichs ergibt, wird der Interrupt mit Nummer 26 (Stack Überlauf)
 \index{Stack!Überlauf}
 generiert und das Bit mit Nummer 11 im Register \texttt{ERR} gesetzt.
-
+Siehe auch den Abschnitt \ref{subsec:Stack}, Seite \pageref{subsec:Stack}.
 
 
 \paragraph{Beispiel}
@@ -219,6 +219,7 @@ Die Stack-Struktur wird in Kommentaren gezeigt.
                      # mem[SP + 1] = 0x02
                      # mem[SP + 2] = 0x03
                      # mem[SP + 3] = 0x04
+                     # $\$SP \gets \$SP - 4$
 \end{lstlisting}
 
 
@@ -269,4 +270,5 @@ Angenommen, die ersten 4 Bytes auf dem Stack (d.h. ab der Adresse, die im
 Register \texttt{SP} angegeben ist) sind \texttt{0xAA 0xBB 0xCC 0xDD}.
 \begin{lstlisting}
   POPH R1      # R1 = 0xAABBCCDD
+               # $\$SP \gets \$SP + 4$
 \end{lstlisting}

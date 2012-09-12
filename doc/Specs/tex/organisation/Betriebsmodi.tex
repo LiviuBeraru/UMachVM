@@ -11,14 +11,13 @@ Betriebsarten betrieben werden:
 \end{enumerate}
 
 \paragraph{Normalmodus} Die virtuelle Maschine führt alle Instruktionen
-ohne Unterbrechung aus. Nach der Ausführung befindet sich die Maschine in einem
-Wartezustand, falls sie nicht ausdrücklich ausgeschaltet wird.
+ohne Unterbrechung aus. Nach der Ausführung schaltet sich die Maschine aus.
 
 \paragraph{Debugmodus} Die virtuelle Maschine führt immer nur eine
 einzige Instruktion aus und bleibt dannach stehen. Um mit der folgenden
 Instruktion fortzufahren wird immer ein externen Signal benötigt.
-Dieser Modus soll dem Entwickler erlauben, ein Programm schrittweise zu debuggen.
-Siehe dazu Kapitel \ref{chap:Debugging}, Seite \pageref{chap:Debugging}.
+Dieser Modus soll dem Entwickler erlauben, ein Programm schrittweise zu
+debuggen.
 
 Der Modus kann vor dem Hochfahren der Maschine festgelegt, jedoch im
 Betrieb nicht mehr geändert werden. Wird kein Modus angegeben, startet die

@@ -16,14 +16,25 @@ Siehe dazu Abbildung \ref{fig:umach-aufbau} auf Seite
 \begin{figure}[htp]
  \centering
  \includegraphics{./img/UMach-Aufbau.pdf}
- \caption{Aufbau der UMach Maschine}
+ \caption[Aufbau der UMach Maschine]
+         {Aufbau der UMach Maschine. Die I/O Einheit wird durch den Kern bei
+          der Ausführung der I/O-Befehle angestoßen. Sie schreibt in die
+          Kern-Register die Anzahl der tatsächlich gelesenen oder ausgegebenen
+          Bytes zurück.}
  \label{fig:umach-aufbau}
 \end{figure}
 
-Beim Start der Maschine sucht diese nach einem ausführbaren Program im Speicher.
-Bei Erfolg wird das gefundene Programm instruktionswise in den Kern geholt und
-ausgeführt. Nach abarbeiten aller vorhandener Instruktionen verharrt die
-Maschine in einem Wartezustand bis sie ausdrücklich ausgeschaltet wird.
+
+Nach dem Start der Maschine, setzt diese das Register \texttt{PC} (\glqq
+Programm Counter\grqq) auf die Adresse 256. Danach fängt sie an, alle
+Instruktionen ab dieser Adresse der Reihe nach in den Kern zu holen und
+auszuführen. Nach Abarbeiten aller vorhandenen Instruktionen, schaltet sich die
+Maschine aus. Das Ende eines Programms wird entweder vom Programm selbst
+(Befehl \opref{EOP}), oder durch erreichen des Datensegments signalisiert.
+Siehe auch den Abschnitt \ref{subsec:Prog-Daten} \nameref{subsec:Prog-Daten},
+auf der Seite \pageref{subsec:Prog-Daten}. 
+
+
 Alle Eingabe- und Ausgabeoperationen werden an die I/O-Einheit weitergeleitet
 und von dieser ausgeführt (siehe auch die Abschnitte \ref{sec:IO-Einheit} und
 \ref{sec:IO-Instruktionen}).

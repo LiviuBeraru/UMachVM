@@ -51,7 +51,7 @@ SP   & 34 & \glqq Stack Pointer\grqq.
             den stack pointer auf eine ungültige Adresse und sorgt dafür, dass
             keine Werte mittels \opref{POP} gelesen werden, bevor Werte
             auf den Stack gepusht wurden.
-            Siehe auch \ref{subsubsec:Stack}, Seite \pageref{subsubsec:Stack}.
+            Siehe auch \ref{subsec:Stack}, Seite \pageref{subsec:Stack}.
             \index{SP@\texttt{SP}}
 \\
 FP   & 35 & \glqq Frame Pointer\grqq.
@@ -73,9 +73,8 @@ STAT & 37 & Enthält Status-Informationen. Diese Informationen sind in den
 \\
 ERR  & 38 & \glqq Error\grqq.
             Fehlerregister. Die einzelnen Bits dises Registers geben Auskunft
-            über Fehler, die mit der Ausführung des Programms verbunden sind.
-            Liegt kein Fehler vor, so ist der Inhalt dieses Registers gleich
-            Null. Ist ein bestimmtes Bit gesetzt, so wird dadurch der
+            über Fehler, die mit der Ausführung eines Befehls verbunden sind.
+            Ist ein bestimmtes Bit gesetzt, so wird dadurch der
             entsprechende Fehler signalisiert. Für eine Liste der verwendeten
             Bits un deren Bedeutung, siehe Tabelle \ref{tab:ERR-register} auf
             der Seite \pageref{tab:ERR-register}.            
@@ -106,6 +105,14 @@ CMPR & 41 & \glqq Comparison Result\grqq.
             Siehe auch Abschnitt \ref{sec:Vergleichsinstruktionen}, Seite
             \pageref{sec:Vergleichsinstruktionen}.
             \index{CMPR (Reg)@\texttt{CMPR} (Reg)}
+\\
+DS   & 42 & \glqq Data Segment\grqq.
+            Enthält diejenige Adresse im Speicher, wo das Datensegment anfängt.
+            Die interne Logik der UMach-Maschie geht davon aus, dass ab
+            dieser Adresse keine Instruktionen mehr vorhanden sind.
+            
+            Schreibgeschützt.
+            \index{DS@\texttt{DS}}
 \\
 ZERO & 00 & Enthält die Zahl Null.
 
@@ -153,29 +160,13 @@ Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
  9  & Unerlaubte Speicheradresse \\
 10  & Stack Fehler              \\
 11  & Stack Überlauf            \\
-12  & Speicher unzureichend     \\
 \midrule
 16  & I/O Port existiert nicht \\
 \bottomrule
 \end{longtable}
 
-Einige der genannten Fehler dürften näher erläutert werden.
-
-\paragraph{Stack Fehler}
-\index{Stack!Fehler}
-Ein Stack Fehler liegt vor, wenn eine ungültige Stack-Operation durchgeführt
-werden sollte. Zum Beispiel, wenn ein \opref{POP}-Befehl angegeben wird, ohne
-vorher entsprechende Daten mittels \opref{PUSH} auf den Stack gepusht zu haben.
-
-
-\paragraph{Stack Überlauf}
-\index{Stack!Überlauf}
-Ein Stack Überlauf liegt vor, wenn der Stack Pointer (Register \texttt{SP}) auf
-einen Speicherbereich gesetzt wird, der nicht mehr zum Stack-Bereicht des
-Speichers gehört. Das passiert, wenn der Stack Pointer im Program-Bereich oder
-auf noch kleinere Adressen gesetzt wird.
-
-Die UMach Maschine sollte solche kleine Werte nicht zulassen.
+Siehe auch den Abschnitt \ref{subsec:Speicherfehler}
+\nameref{subsec:Speicherfehler}, Seite \pageref{subsec:Speicherfehler}.
 
 
 

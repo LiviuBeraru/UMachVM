@@ -18,11 +18,11 @@ Speicheradresse) und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt
 
 
 \opdef{CALL}{$N \in \mathds{N}$}{0x91}{NNN}
-Funktionert wie der Befehl \opref{GO} mit dem Unterschied, dass bevor
+Funktionert wie der Befehl \opref{JMP} mit dem Unterschied, dass bevor
 \texttt{PC} neugesetzt wird, wird es auf den Stack gepusht. Enspricht
 \begin{align*}
- \text{\opref{PUSH} } PC\\
- PC \gets N
+ & \text{\opref{PUSH} \texttt{PC}} \\
+ & \text{\opref{JMP}  \texttt{N}} 
 \end{align*}
 Dieser Befehl dient der Implementierug und Verwendung von Funktionen (function
 call).
@@ -37,11 +37,11 @@ entspricht einem Rückkehr aus einer Subroutine, analog der Anweisung
 \texttt{return}\index{return} aus den höheren Programmiersprachen.
 
 \[
-  \text{\opref{POP} } PC
+  \text{\opref{POP} \texttt{PC}} 
 \]
 
 \paragraph{Fehler}
-Wie bei der \opref{POP} Operation.
+Wie bei der \opref{POP} und \opref{GO} Operation.
 
 
 

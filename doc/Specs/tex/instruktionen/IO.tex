@@ -21,14 +21,18 @@ in das Register $N$ gespeichert.
 \paragraph{Fehler}
 Falls $\$P$ keine gültige Portnummer ist, wird der Interrupt mit Nummer 32
 generiert und das Bit mit Nummer 16 im Register \texttt{ERR} gesetzt.
-Falls $\$A$ keine gültige Speicheradresse ist, wird der Interrupt mit Nummer 16
+Falls die Speicheradressen $\$A$ bis $\$A + \$N$ keine gültigen Speicheradressen
+sind, wird der Interrupt mit Nummer 16
 generiert und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt.
 
 
 \opdef{OUT}{$A, N, P \in \Reg$}{0xB8}{RRR}
-Schreibt $\$N$ Bytes Daten aus dem Speicher mit Adresse $\$A$ an den Port mit
+Schreibt $\$N$ Bytes Daten aus dem Speicher ab der Adresse $\$A$ an den Port mit
 Nummer $\$P$. Die Anzahl der tatsächlich geschriebenen Bytes wird zurück in das
-Register $N$ geschrieben und beträgt $0$ bis $\$N$.
+Register $N$ geschrieben und beträgt $0$ bis $\$N$. Eine niedrigere Zahl
+as $\$N$ wird z.B. dann erreicht, wenn das Ausgabegerät die Ausgabe aus
+technischen Gründen verweigert (ausgeschaltet) oder nicht in der gewünschten
+Anzahl ausführen kann.
 
 Dieser Befehl blockiert den Kern solange, bis die I/O-Einheit fertig mit dem
 Schreiben ist.
@@ -51,6 +55,7 @@ OUT R1 R2 R3    # Ausgeben "Your name: "
 SET R1 name     # Speicheradresse
 SET R2 16       # wieviel input maximal
 SET R3 0        # Port 0 (Tastatur)
+                # Port 0 für IN und OUT sind getrennt
 IN  R1 R2 R3    # oder auch IN R1 R2 ZERO
 ### blockiert bis input fertig ###
 ### in R2 steht wieviel tatsächlich gelesen ###

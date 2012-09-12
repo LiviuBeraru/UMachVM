@@ -24,13 +24,7 @@ gefunden, so wird die gesamte Programmausführung unterbrochen und die Maschine
 hält an.
 
 Die Interruptroutinen müssen vom Hauptprogramm als Sprungadressen in der
-Interrupttabelle gesetzt werden. Jede solche Interruptroutine sollte folgendes
-beachten:
-\begin{itemize}
- \item Bevor die Routine aufgerufen wird, sichert die Maschine auf den Stack
-       nur das Register \texttt{PC}. Andere Register wie \texttt{SP} müssen
-       von der Routine selbst gesichert und wiederhergestellt werden.
-\end{itemize}
+Interrupttabelle gesetzt werden.
 
 
 \subsection{Automatische Interrupts}
@@ -72,22 +66,20 @@ Interrupts.
 
 \begin{longtable}{>{\ttfamily}ll}
 \caption{Interruptnummer}
-\label{tab:Interrupttabelle}
 \\\toprule
 {\rmfamily Nummer} & Beschreibung \\
 \midrule
-\endhead
- 0   & Standardinterrupt: Maschine ausschalten   \\
+\endfirsthead
+ 0   & Standardinterrupt: Maschine ausschalten   \\\label{tab:Interrupttabelle}
  1   & Division durch Null       \\
  2   & Arithmetischer Überlauf   \\
- 8   & Ungültiger Befehl         \\
+ 8   & Ungültiger Befehlscode    \\
  9   & Ungültige Registernummer  \\
 \midrule
  16  & Ungültige Speicheradresse  \\
  17  & Unerlaubte Speicheradresse \\
  24  & Stack Fehler               \\
  26  & Stack Überlauf             \\
- 31  & Speicher unzureichend      \\
 \midrule
  32  & I/O Port existiert nicht   \\
 \midrule
@@ -96,22 +88,5 @@ Interrupts.
 \bottomrule
 \end{longtable}
 
-
-
-Einige Interruptnummer dürften eine Erklärung brauchen:
-
-\paragraph{Stack Fehler}
-Ein Stack Fehler liegt vor, wenn Daten aus dem Stack angefordert werden, die
-nicht zuvor auf den Stack gepusht wurden.
-
-
-\paragraph{Stack Überlauf}
-Ein Stack Überlauf liegt vor, wenn der Stack-Pointer \texttt{SP} in einem
-Speicherbereich zeigt, der nicht mehr zum Stackbereich gehört. Das sind
-Adressen, die dem Programm-Bereich gehören, oder sogar niedrigere Adressen.
-
-
-
-
-
-
+Siehe auch den Abschnitt \ref{subsec:Speicherfehler}
+\nameref{subsec:Speicherfehler}, Seite \pageref{subsec:Speicherfehler}.

@@ -10,10 +10,8 @@ numerische Angabe zu interpretieren ist.
 \paragraph{Instruktionsbreite}
 \index{Instruktionsbreite}
 Jede UMach-Instruktion hat eine feste Bitlänge von 32 Bit (4 mal 8 Bit).
-Instruktionen, die für ihren
-Informationsgehalt weniger als 32 Bit brauchen, wie z.B. \texttt{NOP},
-werden mit Nullbits gefüllt. Alle Daten und Informationen, die mit einer
-Instruktion übergeben werden, müssen in diesen 32 Bit untergebracht werden.
+Alle Daten und Informationen, die mit einer Instruktion übergeben werden, müssen
+in diesen 32 Bit untergebracht werden.
 
 \paragraph{Byte Order}
 \index{Byte Order}
@@ -24,12 +22,12 @@ $2^{31}$ bis $2^{24}$) und die zuletzt gelesenen Bits sind die niedrigstwertigen
 wobei $n = k \cdot 8$ mit $k \in \{1, 4\}$ (byteweise oder wortweise).
 
 \paragraph{Allgemeines Format}
-Jede Instruktion besteht aus zwei Teilen: der erste Teil ist
-8 Bit lang und entspricht dem tatsächlichen Befehl, bzw. der Operation,
-die von der UMach virtuellen Maschine ausgeführt werden soll.
-Dieser 8-Bit-Befehl belegt also die 8 höchstwertigen Bits einer
-32-Bit-Instruktion.  Die übrigen 24 Bits, wenn sie verwendet werden, werden
-für Operanden oder Daten benutzt. Beispiel einer Instruktionszerlegung:
+Jede Instruktion besteht aus zwei Teilen: der erste Teil ist 8 Bit lang und
+entspricht dem tatsächlichen Befehlscode (Opcode), bzw. der Operation, die von
+der UMach virtuellen Maschine ausgeführt werden soll. Dieser 8-Bit-Befehlscode
+belegt also die 8 höchstwertigen Bits einer 32-Bit-Instruktion.  Die übrigen 24
+Bits, falls sie verwendet werden, werden für Operanden oder Daten benutzt.
+Beispiel einer Instruktionszerlegung:
 
 \begin{center}
   \begin{tabular}{|l|*{4}{c|}}
@@ -43,8 +41,8 @@ für Operanden oder Daten benutzt. Beispiel einer Instruktionszerlegung:
     Byte Order    &
     erstes Byte   & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline
-    Interpretation &
-    Befehl (8 Bit) &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits}
+    Interpretation&
+    Befehlscode   &  \multicolumn{3}{c|}{Operanden, Daten oder Füllbits}
     \\\hline
   \end{tabular}
 \end{center}
@@ -67,15 +65,13 @@ Die nächste Zeile gibt die spezielle Belegung der einzelnen Bytes an.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl      & \multicolumn{3}{c|}{nicht verwendet}         \\\hline
+    Befehlscode & \multicolumn{3}{c|}{nicht verwendet}         \\\hline
   \end{tabular}
 \end{center}
 
-Eine Instruktion, die das Format 000 hat, besteht lediglich aus einem Befehl
-ohne Argumenten. Die letzen drei Bytes werden von der Maschine nicht
-ausgewertet und sind somit Füllbytes. Es wird empfohlen, die letzten 3 Bytes mit
-Nullen zu füllen.
-
+Eine Instruktion, die das Format 000 hat, besteht lediglich aus einem
+Befehlscode ohne Argumenten. Die letzen drei Bytes werden von der Maschine nicht
+ausgewertet.
 
 
 
@@ -88,12 +84,12 @@ Nullen zu füllen.
   \begin{tabular}{|*{4}{c|}}
     \hline
     erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl       & \multicolumn{3}{c|}{numerische Angabe $N$}   \\\hline
+    Befehlscode  & \multicolumn{3}{c|}{numerische Angabe $N$}   \\\hline
   \end{tabular}
 \end{center}
 
-Die Instruktion im Format NNN besteht aus einem Befehl im ersten Byte und aus
-einer numerischen Angabe  $N$ (einer Zahl), die die letzten 3 Bytes belegt.
+Die Instruktion im Format NNN besteht aus einem Befehlscode im ersten Byte und
+aus einer numerischen Angabe  $N$ (einer Zahl), die die letzten 3 Bytes belegt.
 Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen.
 
 
@@ -105,12 +101,12 @@ Die Interpretation der numerischen Angabe wird dem jeweiligen Befehl überlassen
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte   \\\hline\hline
-    Befehl      & $R_{1}$ & \multicolumn{2}{c|}{nicht verwendet} \\\hline
+    Befehlscode & $R_{1}$ & \multicolumn{2}{c|}{nicht verwendet} \\\hline
   \end{tabular}
 \end{center}
-Die Instruktion im Format R00 besteht aus einem Befehl im ersten Byte gefolgt
-von der Angabe eines Registers im zweiten Byte. Die letzten zwei Bytes werden
-nicht verwendet, bzw. werden ignoriert.
+Die Instruktion im Format R00 besteht aus einem Befehlscode im ersten Byte
+gefolgt von der nummerischen Angabe eines Registers im zweiten Byte. Die letzten
+zwei Bytes werden nicht verwendet, bzw. werden ignoriert.
 
 \subsubsection{RNN}
 \label{RNN}
@@ -120,15 +116,15 @@ nicht verwendet, bzw. werden ignoriert.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte   \\\hline\hline
-    Befehl      & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe $N$} \\\hline
+    Befehlscode & $R_{1}$ & \multicolumn{2}{c|}{numerische Angabe $N$}
+\\\hline
   \end{tabular}
 \end{center}
 
-Eine Instruktion im Format RNN besteht aus einem Befehl, gefolgt von einer
-Register Nummer $R_{1}$, gefolgt von einer festen Zahl $N$, die die letzten
-2 Bytes der Instruktion belegt.
-Die genaue Interpretation der Zahl $N$ wird dem jeweiligen Befehl überlassen.
-Zum Beispiel, die Instruktion
+Eine Instruktion im Format RNN besteht aus einem Befehlscode, gefolgt von einer
+Registernummer $R_{1}$, gefolgt von einer festen Zahl $N$, die die letzten 2
+Bytes der Instruktion belegt. Die genaue Interpretation der Zahl $N$ wird dem
+jeweiligen Befehl überlassen. Zum Beispiel, die Instruktion
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
@@ -138,7 +134,7 @@ Zum Beispiel, die Instruktion
 wird folgenderweise von der UMach Maschine interpretiert: die Operation mit
 Nummer \texttt{0x20} soll ausgeführt werden, wobei die Argumenten dieser
 Operation sind das Register mit Nummer \texttt{0x01} und die numerische
-Angabe \texttt{0x0203}.
+Angabe \texttt{0x0203} (\glqq big endian\grqq\ Interpretation der Zahl $N$).
 
 
 
@@ -150,12 +146,12 @@ Angabe \texttt{0x0203}.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl       & $R_{1}$       & $R_{2}$ &  nicht verwendet   \\\hline
+    Befehlscode  & $R_{1}$       & $R_{2}$ &  nicht verwendet   \\\hline
   \end{tabular}
 \end{center}
-Eine Instruktion im Format RR0 besteht aus einem Befehl im ersten Byte, gefolgt
-von der Angabe zweier Register in den folgenden 2 Bytes.
-Das dritte Byte wird nicht verwendet, bzw. wird ignoriert.
+Eine Instruktion im Format RR0 besteht aus einem Befehlscode im ersten Byte,
+gefolgt von der Angabe zweier Registernummer in den folgenden 2 Bytes. Das
+dritte Byte wird nicht verwendet, bzw. wird ignoriert.
 
 
 \subsubsection{RRN}
@@ -166,12 +162,12 @@ Das dritte Byte wird nicht verwendet, bzw. wird ignoriert.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte  & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl       & $R_{1}$       & $R_{2}$ & numerische Angabe $N$  \\\hline
+    Befehlscode  & $R_{1}$       & $R_{2}$ & numerische Angabe $N$  \\\hline
   \end{tabular}
 \end{center}
-Eine Instruktion im Format RRN besteht aus einem Befehl, gefolgt von der
-Angabe zweier Registers $R_{1}$ und $R_{2}$, jeweils in einem Byte, gefolgt von
-einer numerischen Angabe $N$ (festen Zahl) im letzten Byte. Zum Beispiel, die
+Eine Instruktion im Format RRN besteht aus einem Befehlscode, gefolgt von der
+Angabe zweier Registernummer $R_{1}$ und $R_{2}$, jeweils in einem Byte, gefolgt
+von einer Zahlenangabe $N$ (festen Zahl) im letzten Byte. Zum Beispiel, die
 Instruktion
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
@@ -179,7 +175,7 @@ Instruktion
     \texttt{0x52} & \texttt{0x01} & \texttt{0x02} & \texttt{0x03} \\\hline
   \end{tabular}
 \end{center}
-soll wie folgt interpretiert werden: 
+wird wie folgt interpretiert: 
 die Operation mit Nummer \texttt{0x52} soll ausgeführt werden, wobei die
 Argumenten dieser Operation sind Register mit Nummer \texttt{0x01}, Register mit
 Nummer \texttt{0x02} und die Zahl \texttt{0x03}.
@@ -194,15 +190,13 @@ Nummer \texttt{0x02} und die Zahl \texttt{0x03}.
 \begin{center}
   \begin{tabular}{|*{4}{c|}} \hline
     erstes Byte & zweites Byte  & drittes Byte  & viertes Byte \\\hline\hline
-    Befehl      & $R_{1}$       & $R_{2}$       & $R_{3}$      \\\hline
+    Befehlscode & $R_{1}$       & $R_{2}$       & $R_{3}$      \\\hline
   \end{tabular}
 \end{center}
 
-Eine Instruktion im Format RRR besteht aus der Angabe eines Befehls im ersten
-Byte, gefolgt von der Angabe dreier Register $R_{1}$, $R_{2}$ und $R_{3}$ in den
-jeweiligen folgenden drei Bytes.
-Die Register werden als Zahlen angegeben und deren Bedeutung hängt vom
-jeweiligen Befehl ab.
+Eine Instruktion im Format RRR besteht aus der Angabe eines Befehlscodes im
+ersten Byte, gefolgt von der Angabe dreier Registernummer $R_{1}$, $R_{2}$ und
+$R_{3}$ in den jeweiligen folgenden drei Bytes.
 
 
 \subsubsection{Zusammenfassung}
@@ -215,13 +209,20 @@ Im folgenden werden die Instruktionsformate tabellarisch zusammengefasst.
     \hline
     Format & erstes Byte & zweites Byte  & drittes Byte  & viertes Byte
     \\\hline\hline
-    000 & Befehl & \multicolumn{3}{r|}{nicht verwendet}                 \\\hline
-    NNN & Befehl & \multicolumn{3}{l|}{numerische Angabe $N$}           \\\hline
-    R00 & Befehl & $R_{1}$ & \multicolumn{2}{r|}{nicht verwendet}       \\\hline
-    RNN & Befehl & $R_{1}$ & \multicolumn{2}{l|}{numerische Angabe $N$} \\\hline
-    RR0 & Befehl & $R_{1}$ & $R_{2}$ &  nicht verwendet                 \\\hline
-    RRN & Befehl & $R_{1}$ & $R_{2}$ & numerische Angabe $N$            \\\hline
-    RRR & Befehl & $R_{1}$ & $R_{2}$ & $R_{3}$                          \\\hline
+    000 & Befehlscode & \multicolumn{3}{r|}{nicht verwendet}               
+\\\hline
+    NNN & Befehlscode & \multicolumn{3}{l|}{numerische Angabe $N$}          
+\\\hline
+    R00 & Befehlscode & $R_{1}$ & \multicolumn{2}{r|}{nicht verwendet}      
+\\\hline
+    RNN & Befehlscode & $R_{1}$ & \multicolumn{2}{l|}{numerische Angabe $N$}
+\\\hline
+    RR0 & Befehlscode & $R_{1}$ & $R_{2}$ &  nicht verwendet                
+\\\hline
+    RRN & Befehlscode & $R_{1}$ & $R_{2}$ & numerische Angabe $N$           
+\\\hline
+    RRR & Befehlscode & $R_{1}$ & $R_{2}$ & $R_{3}$                         
+\\\hline
   \end{tabular}
 \end{center}
 

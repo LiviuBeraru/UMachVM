@@ -8,8 +8,8 @@ Befehl und zugehörigen Operanden in einem gemeinsamen Schritt durchgeführt
 werden kann. Somit besteht der Zyklus aus einem beginnenden \textsc{Fetch}. Bei
 diesem wird der an der im Programmcounter \texttt{PC} liegende Adresse
 gespeicherte Befehl in das Instruktionsregister \texttt{IR} geladen. Danach
-wird der im ersten Byte liegende Befehl mit Hilfe des Befehlsdecoders decodiert
-und an der \textsc{ALU} entsprechend eingestellt. 
+wird der im ersten Byte liegende Instruktionscode (Opcode) mit Hilfe des
+Befehlsdecoders decodiert und an der \textsc{ALU} entsprechend eingestellt.
 
 In einem dritten Schritt \textsc{Execute} wird die Instruktion ausgeführt. Der
 theoretisch 4. Schritt, das Inkrementieren des Programmcounters \texttt{PC},
@@ -22,7 +22,8 @@ Auflistung der Schritte:
 
 \begin{enumerate}
  \item \textsc{Fetch} --
-       Holen der Instruktion aus dem Speicher an der im \texttt{PC} vorliegenden Adresse.
+       Holen der Instruktion aus dem Speicher an der im \texttt{PC} 
+       vorliegenden Adresse.
  \item \textsc{Decode} --
        Decodieren des Befehles und Einstellen der \textsc{ALU}.
  \item \textsc{Execute} --

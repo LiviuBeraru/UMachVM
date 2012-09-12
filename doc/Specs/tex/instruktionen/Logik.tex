@@ -15,13 +15,13 @@ Zahl aus dem Bereich $[0, 255]$. Wird eine größere Zahl angegeben, so wird sie
 modulo $256$ berechnet -- mit anderen Worten, nur das letzte Byte zählt.
 Andere Schreibweise:
 \[
-    X \gets (\$Y \land (N \bmod 256))
+    X \gets (\$Y \land (N \bmod 256)), \qquad N \in [0, 255]
 \]
 \paragraph{Bemerkung}
 Die natürliche Zahl $N$ wird auf die Länge von 32 Bit mit Nullen verlängert
-(Links-Verlängerung).
-Deshalb setzt diese Instruktion alle Bits mit Wertigkeiten von $2^{8}$ bis
-$2^{31}$ im Register $X$ auf Null.
+(Links-Verlängerung). Deshalb setzt diese Instruktion alle Bits mit Wertigkeiten
+von $2^{8}$ bis $2^{31}$ im Register $X$ auf Null. Da diese Bits auf Null
+gesetzt sind, wird das Ergebnis immer kleiner als $2^{8} = 256$ sein.
 
 \paragraph{Beispiel}
 für die Verwendung von \texttt{ANDI}:
@@ -48,7 +48,7 @@ $N \in [0, 255]$ auf die Länge von 32 Bit mit Nullen verlängert
 (Links-Verlängerung). Wird für $N$ einen Wert größer als $255$ angegeben, so
 wird er modulo $256$ berechnet.
 \[
-    X \gets (\$Y \lor (N \bmod 256))
+    X \gets (\$Y \lor (N \bmod 256)), \qquad N \in [0, 255]
 \]
 
 
@@ -63,9 +63,13 @@ in das Register $X$.
 \opdef{XORI}{$X, Y \in \Reg$, $N \in \mathds{N}$}{0x55}{RRN}
 \glqq Xor Immediate\grqq.
 Analog zur Instruktion \opref{XOR} mit dem Unterschied, dass $N$ eine direkt
-angegebene Zahl aus dem Intervall $[0, 255]$ ist.
+angegebene Zahl aus dem Intervall $[0, 255]$ ist. Wird eine Zahl angegeben, die
+größer als $255$ ist, die also mehr als 8 Bit braucht, wird sie auf 8 Bit
+reduziert. 
+
+Die Zahl $N$ wird links auf die Länge von 32 Bit mit Nullen aufgefüllt.
 \[
-    X \gets (\$Y \oplus (N \bmod 256))
+    X \gets (\$Y \oplus (N \bmod 256)), \qquad N \in [0, 255]
 \]
 
 
@@ -94,12 +98,15 @@ Ergebnis in das Register $R1$.
 Wie die Instruktion \opref{NOT} aber $N$ ist eine natürliche Zahl aus dem
 Intervall $[0, 2^{15}-1]$. Diese konstante Zahl nach links auf die Länge von 32
 Bit mit Nullen verlängert.
+\[
+    X \gets \overline{(N \bmod 256)}, \qquad N \in [0, 255]
+\]
 
 \paragraph{Beispiel} 
 Der folgende Code invertiert alle Bits der Zahl $5$ und speichert das Ergebnis
 in das Register $R1$.
 \begin{lstlisting}
- NOT R1 5 # $R1 \gets \overline{5}$
+ NOTI R1 5 # $R1 \gets \overline{5}$
 \end{lstlisting}
 
 
@@ -122,8 +129,10 @@ Berechnet eine nand-Verknüpfung zwischen dem Inhalt des Registers $Y$ und der
 konstanten Zahl $N$ und speichert das Ergebnis in das Register $X$.
 $N \in [0, 255]$.
 \[
-    X \gets \big(\$Y \; \overline{\land} \; (N \bmod 256) \big)
+    X \gets \big(\$Y \; \overline{\land} \; (N \bmod 256) \big),
+    \qquad N \in [0, 255]
 \]
+Die Zahl $N$ wird auf die Länge von 32 Bit links mit Nullen aufgefüllt.
 
 
 \opdef{NOR}{$X, Y, Z \in \Reg$}{0x5A}{RRR}
@@ -274,7 +283,7 @@ Wie \opref{ROTL} aber $N$ ist eine konstante Zahl aus dem Intervall $[0, 255]$.
 \paragraph{Beispiel}
 Verwendung:
 \begin{lstlisting}
-  ROTL R4 R1  6 # rotiere die Bits in R1 6 stellen
+  ROTL R4 R1  6 # rotiere die Bits in R1 um 6 Stellen
   ROTL R4 R1 -6 # Fehler! da $-6 \not\in \mathds{N}$
 \end{lstlisting}
 
