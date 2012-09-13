@@ -2,11 +2,12 @@
 \index{Speichermodell}
 \label{sec:Speicher}
 
-Beim Hochfahren der Maschine wird der komplette Speicher mit dem
-Wert Null initialisiert und anschließend das angegebene Maschinenprogramm in den
-Speicher geladen. Die Größe des Speichers ist nicht festgelegt, wir gehen aber
-davon aus, dass beim Start der Maschine genügend Speicher für die
-Interrupttabelle und für das Programm vorhanden ist.
+Beim Hochfahren der Maschine wird der komplette Speicher mit dem Wert Null
+initialisiert und anschließend das angegebene Maschinenprogramm in den Speicher
+geladen. Beim Start der Maschine kann die gewünschte Größe des Speichers
+angegeben werden. Wird kein Wert vorgeschlagen, so nimmt der Speicher eine Größe
+von 512 Bytes ein (genug für die Interrupttabelle und Programm). Nach dem Start
+bleibt die Größe des Speichers fest und kann nicht mehr geändert werden.
 
 
 \subsection{Speicherstruktur}
@@ -14,7 +15,7 @@ Interrupttabelle und für das Programm vorhanden ist.
 \index{Speicherstruktur}
 
 Der Speicher der UMach Maschine hat zur Laufzeit eine bestimmte Struktur, bzw.
-wird in bestimmten Bereichen, oder Segmente, unterteilt. Diese
+wird in bestimmte Bereiche, oder Segmente, unterteilt. Diese
 Segmente\index{Segment} sind
 \begin{enumerate}
  \item Interrupttabelle
