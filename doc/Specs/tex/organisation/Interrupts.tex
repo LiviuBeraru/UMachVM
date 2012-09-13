@@ -70,15 +70,14 @@ Interrupts.
 {\rmfamily Nummer} & Beschreibung \\
 \midrule
 \endfirsthead
- 0   & Standardinterrupt: Maschine ausschalten   \\\label{tab:Interrupttabelle}
+ 0   & Standardinterrupt: Maschine ausschalten \\\label{tab:Interrupttabelle}
  1   & Division durch Null       \\
  2   & Arithmetischer Überlauf   \\
  8   & Ungültiger Befehlscode    \\
  9   & Ungültige Registernummer  \\
 \midrule
  16  & Ungültige Speicheradresse  \\
- 17  & Unerlaubte Speicheradresse \\
- 24  & Stack Fehler               \\
+ 17  & Zugriffsverletzung (segfault) \\
  26  & Stack Überlauf             \\
 \midrule
  32  & I/O Port existiert nicht   \\

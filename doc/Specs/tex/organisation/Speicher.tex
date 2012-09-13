@@ -131,6 +131,16 @@ gelesen werden, bevor Werte geschrieben wurden.
 Bei der Speicheraddressierung können während der Programmausführung
 verschiedene Fehler auftreten.
 
+\paragraph{Ungültige Speicheradresse}
+Fall das Programm eine nicht-existierende Speicheraddresse anspricht, wird von
+der Maschine der entsprechende Interrupt erzeugt. Folgende Fälle zählen dazu:
+\begin{enumerate}
+ \item Schereiben oder Lesen an Adresse kleiner Null.
+ \item Schereiben oder Lesen an Adresse größer als die maximal erreichbare
+       Adresse.
+\end{enumerate}
+
+
 \paragraph{Zugriffsverletzung}
 \index{Zugriffsverletzung}
 
@@ -140,9 +150,6 @@ eines Segments verletzt werden, oder wenn die Grenzen eines Segments
 überschritten werden, oder wenn eine ungültige (nicht-existierende) Adresse
 angesprochen wird. Konkret sind die folgenden Fälle eine Zugriffsverletzung:
 \begin{enumerate}
- \item Schereiben oder Lesen an Adresse kleiner Null.
- \item Schereiben oder Lesen an Adresse größer als die maximal erreichbare
-       Adresse.
  \item Schreiben im Programmsegment.
  \item Register \texttt{HE} auf einer Adresse größer oder gleich der Adressen in
        \texttt{SP} setzen (Heap Überlauf\index{Heap!Überlauf}).
