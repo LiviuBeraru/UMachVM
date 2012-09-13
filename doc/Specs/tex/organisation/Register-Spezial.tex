@@ -12,7 +12,7 @@ Nicht alle Spezialregister können durch Instruktionen überschrieben werden
 
 Die Registernummer der Spezialregister setzen die Registernummerierung
 der Allzweckregister zwar bei 33 fort, die Assemblernamen sind aber
-zweckspezifisch: es gibt kein Spezialregister $R33$.
+zweckspezifisch: es gibt kein Spezialregister mit dem Namen $R33$.
 Die Tabelle \ref{tab:Spezialregister} auf Seite \pageref{tab:Spezialregister}
 enthält die Liste aller Spezialregister. In der ersten
 Spalte steht der Assemblername, so wie er vom Programmierer verwendet wird. In
@@ -43,35 +43,58 @@ PC   & 33 & \glqq Instruction Pointer\grqq, oder \glqq Program Counter\grqq.
             Schreibgeschützt.
             \index{PC@\texttt{PC}}
 \\
-SP   & 34 & \glqq Stack Pointer\grqq.
-            Enthält die Speicheradresse des höchsten Eintrag auf dem Stack.
+DS   & 34 & \glqq Data Segment\grqq, Datensegment.
+            Enthält diejenige Adresse im Speicher, wo das Datensegment anfängt.
+            Ab dieser Adresse werden im Speicher die eingebetten Programmdaten
+            abgelegt.
+            Die interne Logik der UMach-Maschie geht davon aus, dass ab
+            dieser Adresse keine Instruktionen mehr vorhanden sind.
+            
+            Schreibgeschützt.
+            \index{DS@\texttt{DS}}
+\\
+HS   & 35 & \glqq Heap Segment\grqq, \glqq Heap Start\grqq, oder Freispeicher
+            Segment.
+            Enthält diejenige Speicheradresse, ab wo das Programm neuen Speicher
+            belegen kann. Dieser Speicherbereich folgt unmittelbar nach dem
+            Datensegment und wird rechts vom Stack begrenzt.
+
+            Schreibgeschützt.
+            \index{HS@\texttt{HS}}
+\\
+HE   & 36 & \glqq Heap End\grqq, oder Ende des Heaps.
+            Markiert das Ende des Heap-Bereichs.
+            \index{HE@\texttt{HE}}
+\\
+SP   & 37 & \glqq Stack Pointer\grqq.
+            Enthält die Speicheradresse des höchsten Eintrags auf dem Stack.
             Wird beim Hochfahren der Maschine auf die maximal erreichbare
             Speicheradresse plus 1 gesetzt. Die 1, die zur maximalen Adresse
             addiert wird, setzt
-            den stack pointer auf eine ungültige Adresse und sorgt dafür, dass
+            den Stack Pointer auf eine ungültige Adresse und sorgt dafür, dass
             keine Werte mittels \opref{POP} gelesen werden, bevor Werte
             auf den Stack gepusht wurden.
             Siehe auch \ref{subsec:Stack}, Seite \pageref{subsec:Stack}.
             \index{SP@\texttt{SP}}
 \\
-FP   & 35 & \glqq Frame Pointer\grqq.
+FP   & 38 & \glqq Frame Pointer\grqq.
             Enthält die Startadresse des Stack Frames einer Subroutine
             und unterstützt die Implementierung von Funktionen.
             \index{FP@\texttt{FP}}
 \\
-IR   & 36 & \glqq Instruction Register\grqq. Enthält die gerade ausgeführte
+IR   & 39 & \glqq Instruction Register\grqq. Enthält die gerade ausgeführte
             Instruktion.
 
             Schreibgeschützt.
             \index{IR@\texttt{IR}}
 \\
-STAT & 37 & Enthält Status-Informationen. Diese Informationen sind in den 
+STAT & 40 & Enthält Status-Informationen. Diese Informationen sind in den 
             einzelnen Bits dieses Register gespeichert.
             Welche Informationen vorhanden sind liegt an der jeweiligen
             Anwendung.
             \index{STAT@\texttt{STAT}}
 \\
-ERR  & 38 & \glqq Error\grqq.
+ERR  & 41 & \glqq Error\grqq.
             Fehlerregister. Die einzelnen Bits dises Registers geben Auskunft
             über Fehler, die mit der Ausführung eines Befehls verbunden sind.
             Ist ein bestimmtes Bit gesetzt, so wird dadurch der
@@ -80,7 +103,7 @@ ERR  & 38 & \glqq Error\grqq.
             der Seite \pageref{tab:ERR-register}.            
             \index{ERR@\texttt{ERR}}
 \\
-HI   & 39 & \glqq High\grqq.
+HI   & 42 & \glqq High\grqq.
             Falls eine Multiplikation durchgeführt wird, enthält dieses Register
             die höchstwertigen 32 Bits des Ergebnisses der Multiplikation und
             bildet zusammen mit dem Register \texttt{LO} das volle Ergebnis der
@@ -90,7 +113,7 @@ HI   & 39 & \glqq High\grqq.
             Quotient der Division.
             \index{HI@\texttt{HI}}
 \\
-LO   & 40 & \glqq Low\grqq.
+LO   & 43 & \glqq Low\grqq.
             Falls eine Multiplikation durchgeführt wird, enthält dieses Register
             die niedrigstwertigen 32 Bits des Ergebnisses der Multiplikation und
             bildet zusammen mit dem Register \texttt{HI} das volle Ergebnis der
@@ -100,19 +123,11 @@ LO   & 40 & \glqq Low\grqq.
             Rest der Division.
             \index{LO@\texttt{LO}}
 \\
-CMPR & 41 & \glqq Comparison Result\grqq.
+CMPR & 44 & \glqq Comparison Result\grqq.
             Enthält das Ergebnis eines Vergleichs.
             Siehe auch Abschnitt \ref{sec:Vergleichsinstruktionen}, Seite
             \pageref{sec:Vergleichsinstruktionen}.
             \index{CMPR (Reg)@\texttt{CMPR} (Reg)}
-\\
-DS   & 42 & \glqq Data Segment\grqq.
-            Enthält diejenige Adresse im Speicher, wo das Datensegment anfängt.
-            Die interne Logik der UMach-Maschie geht davon aus, dass ab
-            dieser Adresse keine Instruktionen mehr vorhanden sind.
-            
-            Schreibgeschützt.
-            \index{DS@\texttt{DS}}
 \\
 ZERO & 00 & Enthält die Zahl Null.
 

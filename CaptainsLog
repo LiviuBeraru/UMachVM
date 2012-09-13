@@ -333,3 +333,9 @@ TODO:
   Debugger und Maschine in einem einzigen Programm gebündelt. Wie kann
   man die sinnvoller trennen oder kombinieren? Das heißt, welche
   Programme werden überhaupt kompiliert?
+
+
+=== 13.09.2012 ===
+Malk.
+TODO:
+- Registernummer im C Code aktualisieren (wurden in der Spec geändert)

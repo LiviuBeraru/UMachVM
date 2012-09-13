@@ -2,9 +2,11 @@
 \index{Speichermodell}
 \label{sec:Speicher}
 
-Beim Hochfahren der Maschine wir der komplette Speicher mit dem
+Beim Hochfahren der Maschine wird der komplette Speicher mit dem
 Wert Null initialisiert und anschließend das angegebene Maschinenprogramm in den
-Speicher geladen. Die Größe des Speichers ist nicht festgelegt.
+Speicher geladen. Die Größe des Speichers ist nicht festgelegt, wir gehen aber
+davon aus, dass beim Start der Maschine genügend Speicher für die
+Interrupttabelle und für das Programm vorhanden ist.
 
 
 \subsection{Speicherstruktur}
@@ -12,20 +14,29 @@ Speicher geladen. Die Größe des Speichers ist nicht festgelegt.
 \index{Speicherstruktur}
 
 Der Speicher der UMach Maschine hat zur Laufzeit eine bestimmte Struktur, bzw.
-wird in bestimmten Bereichen unterteilt. Diese Bereiche sind
+wird in bestimmten Bereichen, oder Segmente, unterteilt. Diese
+Segmente\index{Segment} sind
 \begin{enumerate}
  \item Interrupttabelle
- \item Programm und Daten
+ \item Programmsegment (Code-Segment)
+ \item Datensegment
+ \item Heap
  \item Stack
 \end{enumerate}
 
-Siehe auch die Abbildung \ref{fig:Speicherstruktur} auf der Seite
-\pageref{fig:Speicherstruktur}.
+Diese Segmente, oder Speicherbereiche, werden in den folgenden Abschnitten
+getrennt vorgestellt. Zur Überblick  siehe auch die Abbildung
+\ref{fig:Speicherstruktur} auf der Seite \pageref{fig:Speicherstruktur}.
 
 \begin{figure}[htp]
  \centering
  \includegraphics{./img/UMach-Speicherstruktur}
- \caption[Speicherstruktur]{Speicherstruktur zur Laufzeit}
+ \caption[Speicherstruktur]
+         {Speicherstruktur zur Laufzeit. Die Begrenzungen zwischen den
+          Segmenten werden durch konstante Zahlen oder Registerinhalte
+          angegeben. Davon ist lediglich das Register \texttt{SP}
+          und \texttt{HE} veränderbar, alle anderen sind nach dem Laden des
+          Programms in den Speicher fest.}
  \label{fig:Speicherstruktur}
 \end{figure}
 
@@ -48,11 +59,11 @@ Aufgabe des Maschinenprogramms bei bedarf entsprechende Einträge der
 Interrupttabelle zu füllen und die zugehörige Funktionalität bereit zu stellen.
 Ist eine Interrupadresse nicht gesetzt, d.h. ist der entsprechende
 Tabelleneintrag Null, so reagiert die Maschine auf die Ausnahmesituation
-in dem sie hält. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
+indem sie hält. Für weitere Informationen bzgl. der Fehlerbehandlung siehe den
 Abschnitt \ref{sec:Interrupts}, ab der Seite \pageref{sec:Interrupts}.
 
-Die Interrupttabelle besteht aus 64 Einträgen, was 64 möglichen Interrupts
-entspricht. Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es
+Die Interrupttabelle besteht aus 64 Einträgen, die 64 möglichen Interrupts
+entsprechen. Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es
 64 Einträge gibt, ist die Interrupttabelle $64 \cdot 4 = 256$ Bytes groß. Die
 Interrupttabelle fängt an der Adresse Null an. Siehe auch Abbildung
 \ref{fig:Speicherstruktur} auf Seite \pageref{fig:Speicherstruktur}.
@@ -69,35 +80,50 @@ Interruptnummer\index{Interruptnummer} und deren Bedeutung auf.
 
 Nach der $256$ Bytes ($64$ mal $4$) großen Interrupttabelle
 folgt das eigentliche Programm, das von der Maschine ausgeführt werden soll.
-Dieses erste auzuführende Programm beginnt somit ab der Speicheradresse $256$.
-
 Insbesondere ist dieses Programm dafür zuständig, die Interrupttabelle zu
 füllen, falls (bestimmte) Interrupts behandelt werden sollen.
 
 
+Das Programmsegment\index{Programmsegment} fängt an der Adresse $256$ an und ist
+schreibgeschützt. Es enthält eine Kopie der ausführbaren Instruktionen aus
+der Programmdatei.
 
-\subsection{Der Stack}
+Das Datensegment\index{Datensegment} folgt nach dem Programmsegment. Seine
+Anfangsadresse wird im Register $DS$\index{DS@\texttt{DS}} gespeichert. Seine
+Größe ist fest und wird durch die Anzahl der Datenbytes bestimmt. Dieses Segment
+enthält eine Kopie der Daten, die in der Programmdatei eingebettet sind.
+Das Datensegment ist nicht schreibgeschützt.
+
+\subsection{Heap und Stack}
 \label{subsec:Stack}
+\index{Heap}
 \index{Stack}
+
+Nach dem Datensegment folgt das Heap-Segment.\index{Heap} Seine Anfangsadresse
+wird im Register \texttt{HS}\index{HS@\texttt{HS}} gespeichert. Dieses Segment,
+oder Speicherbereich, steht em Programmierer frei. Das Ende des Heap-Bereichs
+wird durch den Inhalt des Registers \texttt{HE}\index{HE@\texttt{HE}} markiert.
+Der Heap belegt also alle Speicheradressen aus dem Interval $[\$HS, \$HE]$,
+wobei $\$HS$ und $\$HE$ die Inhalte der Register \texttt{HS} und \texttt{HE}
+bezeichnen.
+
 
 Der Stack ist ein spezieller Bereich im Speicher. Dieser Bereich fängt am Ende
 des Speichers mit der größten Adresse an und erstreckt sich bis zur derjenigen
-Adresse, die im Register \texttt{SP} gespeichert ist. Die Stack-Größe ist damit
-dynamisch, denn das Register \texttt{SP} wird sowohl durch die Instruktionen
-\opref{PUSH} und \opref{POP}, als auch direkt vom Programmierer geändert.
+Adresse, die im Register \texttt{SP}\index{SP@\texttt{SP}} gespeichert ist. Die
+Stack-Größe ist damit dynamisch, denn das Register \texttt{SP} wird sowohl durch
+die Instruktionen \opref{PUSH} und \opref{POP}, als auch direkt vom
+Programmierer geändert.
 
 Das Wachsen\index{Stack!Wachsen} des Stacks bedeutet, dass das Register
 \texttt{SP} immer kleinere Werte annimmt. Das Schrumpfen\index{Stack!Schrumpfen}
-des Stacks bedeutet, dass \texttt{SP} immer größere Werte annimmt. Wird
-versucht, den Inhalt von \texttt{SP} kleiner als 
-einer bestimmten Adresse,\marginnote{TODO: ab welcher? Segmentierung}
-oder größer als die maximale
-Speicheradresse zu setzen, so wird dies von der Maschine verweigert und als
-Fehler im Register \texttt{ERR} signalisiert.
+des Stacks bedeutet, dass \texttt{SP} immer größere Werte annimmt.
 
 Beim Hochfahren der Maschine, wird das Register \texttt{SP} auf die
 maximal erreichbare Speicheradresse plus Eins gesetzt. Damit können keine Werte
 gelesen werden, bevor Werte geschrieben wurden.
+
+
 
 \subsection{Speicher Fehler}
 \label{subsec:Speicherfehler}
@@ -105,26 +131,34 @@ gelesen werden, bevor Werte geschrieben wurden.
 Bei der Speicheraddressierung können während der Programmausführung
 verschiedene Fehler auftreten.
 
-\paragraph{Stack Fehler}
-\index{Stack!Fehler}
-Ein Stack Fehler liegt vor, wenn eine ungültige Stack-Operation durchgeführt
-werden sollte. Zum Beispiel, wenn ein \opref{POP}-Befehl angegeben wird, ohne
-vorher entsprechende Daten mittels \opref{PUSH} auf den Stack gepusht zu haben,
-wenn also der Stack leer ist.
+\paragraph{Zugriffsverletzung}
+\index{Zugriffsverletzung}
+
+Eine Zugriffsverletzung (ähnlich einer \glqq segmentation fault\grqq, oder
+\glqq segfault\grqq) \index{segfault} liegt vor, wenn entweder Schreibrechte
+eines Segments verletzt werden, oder wenn die Grenzen eines Segments
+überschritten werden, oder wenn eine ungültige (nicht-existierende) Adresse
+angesprochen wird. Konkret sind die folgenden Fälle eine Zugriffsverletzung:
+\begin{enumerate}
+ \item Schereiben oder Lesen an Adresse kleiner Null.
+ \item Schereiben oder Lesen an Adresse größer als die maximal erreichbare
+       Adresse.
+ \item Schreiben im Programmsegment.
+ \item Register \texttt{HE} auf einer Adresse größer oder gleich der Adressen in
+       \texttt{SP} setzen (Heap Überlauf\index{Heap!Überlauf}).
+       \index{HE@\texttt{HE}}
+ \item Register \texttt{SP} auf einer Adresse größer als die maximal erreichbare
+       Adresse setzen (auch durch den \opref{POP} Befehl).
+\end{enumerate}
+
 
 
 \paragraph{Stack Überlauf}
 \index{Stack!Überlauf}
-Ein Stack Überlauf liegt vor, wenn der Stack Pointer (Register \texttt{SP}) auf
-einen Speicherbereich gesetzt wird, der nicht mehr zum Stack-Bereich des
-Speichers gehört. Das passiert, wenn der Stack Pointer im Program-Bereich oder
-auf noch kleinere Adressen gesetzt wird.
-
-Die UMach Maschine sollte solche kleine Werte nicht zulassen.
-
-\paragraph{Segfault}
-
-Bezug auf die Segmentierung des Speichers.
+Ein Stack Überlauf liegt vor, wenn der Stack Pointer (Register \texttt{SP})
+\index{SP@\texttt{SP}} auf eine Speicheradresse kleiner als der Wert des
+Registers \texttt{HE} gesetzt wird. Mit anderen Worten, wenn der Stack das
+Daten-, Programm- oder Heap-Segment überlappen würde.
 
 
 \subsection{Speicheradressierung}
