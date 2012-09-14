@@ -339,3 +339,12 @@ TODO:
 Malk.
 TODO:
 - Registernummer im C Code aktualisieren (wurden in der Spec geändert)
+- Interrupts Namen und Verwendung im C Code aktualisieren, da sie
+  in der Spec geändert wurden.
+
+
+=== 14.09.2012 ===
+Malk.
+TODO:
+- Bits in ERR Register an die Interrupts anpassen. Es gibt kein
+  Stack-fehler, sondern Satck-Overflow und Segmentation Fault.

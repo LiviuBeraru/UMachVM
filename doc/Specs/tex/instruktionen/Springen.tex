@@ -68,11 +68,10 @@ Instruktion das Register $PC$ automatisch um $4$ inkrementiert, so dass eine
 Korrektur gebraucht wird.
 
 \paragraph{Fehler}
-Falls das Sprungziel eine Speicheradresse ist, die außerhalb des
-Speicherbereichs liegt, wir der Interrupt mit Nummer 16 generiert (ungültige
-Speicheradresse) und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt
-(siehe auch Tabelle \ref{tab:ERR-register} auf Seite
-\pageref{tab:ERR-register}).
+Falls das Sprungziel eine Speicheradresse ist, die außerhalb des Code-Segments
+liegt, wird der Interrupt mit Nummer 17 generiert (Zugriffsverletzung, segfault)
+und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt (siehe auch Tabelle
+\ref{tab:ERR-register} auf Seite \pageref{tab:ERR-register}).
 
 
 \paragraph{Beispiel}

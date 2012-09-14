@@ -17,6 +17,12 @@ Register \texttt{CMPR} wie folgt gesetzt:
     \end{cases}
 \]
 
+Alle diese Befehle generieren den Interrupt mit Nummer 9 (ungültige
+Registernummer), falls die angegebene Registernummern ungültig sind -- das
+heißt, falls es die Register nicht gibt.
+
+
+
 \opdef{CMP}{$X, Y \in \Reg$}{0x70}{RR0}
 \glqq Compare\grqq.
 Vergleicht die Inhalte der Register $X$ und $Y$.

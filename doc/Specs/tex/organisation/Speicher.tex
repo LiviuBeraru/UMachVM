@@ -26,8 +26,8 @@ Segmente\index{Segment} sind
 \end{enumerate}
 
 Diese Segmente, oder Speicherbereiche, werden in den folgenden Abschnitten
-getrennt vorgestellt. Zur Überblick  siehe auch die Abbildung
-\ref{fig:Speicherstruktur} auf der Seite \pageref{fig:Speicherstruktur}.
+getrennt vorgestellt. Für einen Überblick siehe auch die Abbildung
+\ref{fig:Speicherstruktur}.
 
 \begin{figure}[htp]
  \centering
@@ -35,9 +35,9 @@ getrennt vorgestellt. Zur Überblick  siehe auch die Abbildung
  \caption[Speicherstruktur]
          {Speicherstruktur zur Laufzeit. Die Begrenzungen zwischen den
           Segmenten werden durch konstante Zahlen oder Registerinhalte
-          angegeben. Davon ist lediglich das Register \texttt{SP}
-          und \texttt{HE} veränderbar, alle anderen sind nach dem Laden des
-          Programms in den Speicher fest.}
+          angegeben. Von diesen sind lediglich die Register \texttt{SP}
+          und \texttt{HE} veränderbar, alle anderen sind, nach dem Laden des
+          Programms in den Speicher, fest.}
  \label{fig:Speicherstruktur}
 \end{figure}
 
@@ -55,8 +55,8 @@ intern ein Interruptsignal erzeugt, das mit einer Kennnummer (Interruptnummer)
 versehen ist. Die Interruptnummer wird als Index in dieser Tabelle verwendet.
 
 
-Die Interrupttabelle wird nicht von der Maschine nicht gefüllt, sondern es ist
-Aufgabe des Maschinenprogramms bei bedarf entsprechende Einträge der
+Die Interrupttabelle wird nicht von der Maschine gefüllt, sondern es ist
+Aufgabe des Maschinenprogramms bei Bedarf entsprechende Einträge der
 Interrupttabelle zu füllen und die zugehörige Funktionalität bereit zu stellen.
 Ist eine Interrupadresse nicht gesetzt, d.h. ist der entsprechende
 Tabelleneintrag Null, so reagiert die Maschine auf die Ausnahmesituation
@@ -70,9 +70,9 @@ Interrupttabelle fängt an der Adresse Null an. Siehe auch Abbildung
 \ref{fig:Speicherstruktur} auf Seite \pageref{fig:Speicherstruktur}.
 
 
-Tabelle \ref{tab:Interrupttabelle} auf Seite
-\pageref{tab:Interrupttabelle} listet alle definierten
-Interruptnummer\index{Interruptnummer} und deren Bedeutung auf.
+Tabelle \ref{tab:Interrupttabelle} auf Seite \pageref{tab:Interrupttabelle}
+listet alle definierten Interruptnummern\index{Interruptnummer} und deren
+Bedeutung auf.
 
 
 \subsection{Programm und Daten}
@@ -102,7 +102,7 @@ Das Datensegment ist nicht schreibgeschützt.
 
 Nach dem Datensegment folgt das Heap-Segment.\index{Heap} Seine Anfangsadresse
 wird im Register \texttt{HS}\index{HS@\texttt{HS}} gespeichert. Dieses Segment,
-oder Speicherbereich, steht em Programmierer frei. Das Ende des Heap-Bereichs
+oder Speicherbereich, steht dem Programmierer frei. Das Ende des Heap-Bereichs
 wird durch den Inhalt des Registers \texttt{HE}\index{HE@\texttt{HE}} markiert.
 Der Heap belegt also alle Speicheradressen aus dem Interval $[\$HS, \$HE]$,
 wobei $\$HS$ und $\$HE$ die Inhalte der Register \texttt{HS} und \texttt{HE}
@@ -133,7 +133,7 @@ Bei der Speicheraddressierung können während der Programmausführung
 verschiedene Fehler auftreten.
 
 \paragraph{Ungültige Speicheradresse}
-Fall das Programm eine nicht-existierende Speicheraddresse anspricht, wird von
+Falls das Programm eine nicht-existierende Speicheraddresse anspricht, wird von
 der Maschine der entsprechende Interrupt erzeugt. Folgende Fälle zählen dazu:
 \begin{enumerate}
  \item Schereiben oder Lesen an Adresse kleiner Null.
@@ -146,16 +146,15 @@ der Maschine der entsprechende Interrupt erzeugt. Folgende Fälle zählen dazu:
 \index{Zugriffsverletzung}
 
 Eine Zugriffsverletzung (ähnlich einer \glqq segmentation fault\grqq, oder
-\glqq segfault\grqq) \index{segfault} liegt vor, wenn entweder Schreibrechte
+\glqq segfault\grqq) \index{segfault} liegt vor, wenn Schreibrechte
 eines Segments verletzt werden, oder wenn die Grenzen eines Segments
-überschritten werden, oder wenn eine ungültige (nicht-existierende) Adresse
-angesprochen wird. Konkret sind die folgenden Fälle eine Zugriffsverletzung:
+überschritten werden. Konkret sind die folgenden Fälle eine Zugriffsverletzung:
 \begin{enumerate}
  \item Schreiben im Programmsegment.
- \item Register \texttt{HE} auf einer Adresse größer oder gleich der Adressen in
+ \item Register \texttt{HE} auf einer Adresse größer oder gleich der Adresse in
        \texttt{SP} setzen (Heap Überlauf\index{Heap!Überlauf}).
        \index{HE@\texttt{HE}}
- \item Register \texttt{SP} auf einer Adresse größer als die maximal erreichbare
+ \item Register \texttt{SP} auf eine Adresse größer als die maximal erreichbare
        Adresse setzen (auch durch den \opref{POP} Befehl).
 \end{enumerate}
 
@@ -164,7 +163,7 @@ angesprochen wird. Konkret sind die folgenden Fälle eine Zugriffsverletzung:
 \paragraph{Stack Überlauf}
 \index{Stack!Überlauf}
 Ein Stack Überlauf liegt vor, wenn der Stack Pointer (Register \texttt{SP})
-\index{SP@\texttt{SP}} auf eine Speicheradresse kleiner als der Wert des
+\index{SP@\texttt{SP}} auf eine Speicheradresse kleiner gleich dem Wert des
 Registers \texttt{HE} gesetzt wird. Mit anderen Worten, wenn der Stack das
 Daten-, Programm- oder Heap-Segment überlappen würde.
 

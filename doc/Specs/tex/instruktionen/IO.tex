@@ -22,8 +22,10 @@ in das Register $N$ gespeichert.
 Falls $\$P$ keine gültige Portnummer ist, wird der Interrupt mit Nummer 32
 generiert und das Bit mit Nummer 16 im Register \texttt{ERR} gesetzt.
 Falls die Speicheradressen $\$A$ bis $\$A + \$N$ keine gültigen Speicheradressen
-sind, wird der Interrupt mit Nummer 16
-generiert und das Bit mit Nummer 8 im Register \texttt{ERR} gesetzt.
+sind, d.h. falls es sie gar nicht gibt, wird der Interrupt mit Nummer 16
+(ungültige Speicheradresse) generiert und das Bit mit Nummer 8 im Register
+\texttt{ERR} gesetzt. Falls der Speicherbereich $\$A$ bis $\$A + \$N$
+schreibgeschützt ist, wird der Interrupt mit Nummer 17 (segfault) erzeugt.
 
 
 \opdef{OUT}{$A, N, P \in \Reg$}{0xB8}{RRR}
