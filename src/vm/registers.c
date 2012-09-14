@@ -56,6 +56,9 @@ Register registers[NOREGS] = {
 // special registers
 
     [PC  ] = {PC,   256, REG_READ, "PC"  },
+    [DS  ] = {PC,   0,   REG_READ, "DS"  },
+    [HS  ] = {PC,   0,   REG_READ, "HS"  },
+    [HE  ] = {PC,   0,   REG_RW,   "HE"  },
     [SP  ] = {SP,   0,   REG_RW,   "SP"  },
     [FP  ] = {FP,   0,   REG_RW,   "FP"  },
     [IR  ] = {IR,   0,   REG_READ, "IR"  },

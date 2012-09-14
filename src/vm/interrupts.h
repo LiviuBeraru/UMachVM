@@ -14,10 +14,8 @@
 
 /* 16 - 31 memory interrupts */
 #define INT_INVALID_MEM    16   // invalid memory address
-#define INT_FORBID_MEM     17   // forbidden memory address
-#define INT_STACK_ERR      24   // stack error
+#define INT_SEGFAULT       17
 #define INT_STACK_OVERFLOW 26   // stack overflow
-#define INT_INSUFF_MEM     31   // insufficient memory
 
 /* 32 - 47 IO Interrupts */
 #define INT_NO_IOPORT      32   // no such I/O port

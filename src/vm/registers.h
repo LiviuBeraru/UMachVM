@@ -3,22 +3,31 @@
 
 #include <stdint.h> // for int32_t
 
+/* register read/write modes */
 #define REG_READ  1
 #define REG_WRITE 2
 #define REG_RW    3
+
+/** maximal number of registers */
 #define NOREGS    64
 
-#define PC   33
-#define SP   34
-#define FP   35
-#define IR   36 // do we really need this?
-#define STAT 37
-#define ERR  38
-#define HI   39
-#define LO   40
-#define CMPR 41
-#define ZERO 0
+/* special register numbers */
 
+#define PC   33   // program counter
+#define DS   34   // data segment begin
+#define HS   35   // heap segment begin
+#define HE   36   // heap segmend end (last byte)
+#define SP   37   // stack pointer
+#define FP   38   // frame pointer
+#define IR   39   // instruction register
+#define STAT 40   // status register
+#define ERR  41   // error register
+#define HI   42   // higher 32 bits of mul/div
+#define LO   43   // lower 32 bits of mul/div
+#define CMPR 44   // comparison result register
+#define ZERO 0    // zero register
+
+/** Register structure. */
 typedef
 struct core_register {
     uint8_t regno; // assembler needs the register number

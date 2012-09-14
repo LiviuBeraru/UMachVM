@@ -68,6 +68,7 @@ int mem_load_program_file(const char* filename)
         return -1;
     }
 
+    //TODO: load 4 byte chunks and check for the data mark
     fread(memory + ITABLE_SIZE, 1, fsize, file);
 
     fclose(file);
@@ -77,22 +78,28 @@ int mem_load_program_file(const char* filename)
 int mem_read(uint8_t *destination, int index, int nbytes)
 {
     if (memory == NULL) {
+        /* memory was not initialized */
         logmsg(LOG_ERR, "Cannot read from NULL memory");
         interrupt(INT_INTERNAL_ERR);
         return -1;
     }
 
     if (index < 0 || index >= memsize) {
+        /* invalid memory index */
         logmsg(LOG_ERR, "Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
 
     if ((index + nbytes) > memsize) {
+        /* invalid number of bytes to read */
         logmsg(LOG_ERR, "Cannot read %d bytes from memory: too much", nbytes);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
+    
+    /* We consider all memory to be readable, 
+     * so no other checks are made */
 
     memcpy(destination, memory+index, nbytes);
     return 0;
@@ -105,16 +112,20 @@ int mem_read(uint8_t *destination, int index, int nbytes)
 int mem_write(uint8_t* source, int index, int nbytes)
 {
     if (memory == NULL) {
+        /* memory was not previously initialized */
         logmsg(LOG_ERR, "Cannot write to NULL memory");
         interrupt(INT_INTERNAL_ERR);
         return -1;
     }
 
     if (index < 0 || index >= memsize) {
+        /* wrong memory index (memory address) */
         logmsg(LOG_ERR, "Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
+    
+    //TODO: check for read only code segment
 
     if ((index + nbytes) > memsize) {
         logmsg(LOG_ERR, "Cannot write %d bytes to memory: too much", nbytes);
@@ -128,6 +139,10 @@ int mem_write(uint8_t* source, int index, int nbytes)
 
 int mem_push(int32_t word) 
 {
+    /* turn the 32 bit word into a 4 byte buffer according 
+     * to the big endian notation.
+     * we could also use the posix function htonl
+     */
     uint8_t buffer[4] = { 0x0 };
     buffer[0] = word >> 24;
     buffer[1] = word >> 16;
@@ -136,6 +151,8 @@ int mem_push(int32_t word)
 
     registers[SP].value -= 4;
     if (registers[SP].value < 0) {
+        //TODO: check  '< 0' to '< HE.value' (HE register) 
+        
         /* We generate a stack overflow interrupt if the 
          * SP register has a value less than zero. Future versions
          * should generate an interrupt if the SP register points
@@ -156,7 +173,7 @@ int mem_pop(int32_t* word)
     uint8_t buffer[4] = { 0x0 };
     if (mem_read(buffer, registers[SP].value, 4) == -1) {
         logmsg(LOG_WARN, "Mem: Stack Error: cannot POP");
-        interrupt(INT_STACK_ERR);
+        interrupt(INT_INVALID_MEM);
         return -1;
     }
     
