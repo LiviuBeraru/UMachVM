@@ -169,12 +169,11 @@ Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
 \\\toprule
  0  & Division durch Null       \\
  1  & Arithmetischer Überlauf   \\
- 5  & Ungültiger Befehl         \\
+ 5  & Ungültiger Befehlscode    \\
  6  & Ungültige Registernummer  \\
 \midrule
  8  & Ungültige Speicheradresse \\
- 9  & Unerlaubte Speicheradresse \\
-10  & Stack Fehler              \\
+ 9  & Zugriffsverletzung (segmentation fault) \\
 11  & Stack Überlauf            \\
 \midrule
 16  & I/O Port existiert nicht \\
