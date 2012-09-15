@@ -1,8 +1,8 @@
-#include "core.h"      // instruction[]
+#include "core.h"       // instruction[]
 #include "registers.h"
 #include "logmsg.h"
-#include "system.h"
-#include "interrupts.h"
+#include "system.h"     // interrupt()
+#include "interrupts.h" // interrupt numbers
 
 int core_add(void) 
 {
@@ -81,6 +81,13 @@ int core_subi(void)
     if (write_register(instruction[1], a - b)) { return -1; }
         
     return 0;
+}
+
+int core_subi2(void )
+{
+    //TODO: implement this
+    logmsg(LOG_ERR, "subi2 not implemented yet");
+    return -1;
 }
 
 int core_mul(void)
@@ -224,6 +231,14 @@ int core_divi(void)
     return 0;
 }
 
+int core_divi2(void )
+{
+    //TODO: implement this
+    logmsg(LOG_ERR, "divi2 not implemented yet");
+    return -1;
+}
+
+
 int core_abs(void) 
 {
     int dest_no = instruction[1];
@@ -336,3 +351,11 @@ int core_modi (void)
     
     return 0;
 }
+
+int core_modi2(void )
+{
+    //TODO: also, implement this
+    logmsg(LOG_ERR, "modi2 not implemented yet");
+    return -1;
+}
+

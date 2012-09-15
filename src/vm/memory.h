@@ -18,4 +18,9 @@ int    mem_push(int32_t word);
 int    mem_pop(int32_t *word);
 size_t mem_getsize(void);
 
+
+/** This 4 byte 'instruction' marks the begin of the data section of a programm. 
+ *  After this instruction, no executable commands are to be found. */
+extern uint8_t begin_data[4];
+
 #endif

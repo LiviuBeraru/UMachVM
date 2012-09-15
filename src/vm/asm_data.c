@@ -3,8 +3,7 @@
 
 #include "asm_data.h"
 #include "asm_labels.h"
-
-uint8_t begin_data[4] = {0x03, 0x00, 0x00, 0x00};
+#include "memory.h" // begin_data
 
 struct data_item {
    char *label;
@@ -64,17 +63,20 @@ void delete_data(void)
     last = NULL;
 }
 
-void translate_labels(int offset)
+void translate_data_labels(int offset)
 {
     /* the offset gives the number of instructions which were assembled.
-     * to skip the data mark which precedes the data section, we increment
-     * the offset by one */
-    offset ++;
+     * data comes into the data section after the code section
+     */
     struct data_item *item = head;
     while (item) {
         label_insert_name(item->label);
         label_insert_offset(offset);
         
+        /* offset of the next data is the current data size 
+         * divided by 4 because we count offsets in 4 bytes each
+         * data size is always a multiple of 4 so it's safe to divide by 4
+         */
         offset += (item->datasize) / 4;
         item = item->next;
     }

@@ -15,13 +15,6 @@ uint8_t instruction[4] = {0x00, 0x00, 0x00, 0x00};
 
 void core_init(void )
 {
-    if (mem_getsize() == 0) {
-        logmsg(LOG_ERR, "Core: memory not initialized.");
-        interrupt(INT_INTERNAL_ERR);
-        return;
-    }
-    registers[SP].value = mem_getsize();
-    registers[FP].value = mem_getsize();
     running = 1;
 }
 
@@ -36,7 +29,8 @@ void core_run_program(void)
 void core_fetch(void)
 {
     if (! running) {
-        logmsg(LOG_WARN, "Core: maschine is not running. Cannot fetch.");
+        logmsg(LOG_WARN, 
+        "Core: maschine is not running. Can not fetch.");
         return;
     }
     mem_read(instruction, registers[PC].value, 4);
@@ -45,14 +39,15 @@ void core_fetch(void)
 void core_execute(void)
 {
     if (! running) {
-        logmsg(LOG_ERR, "Core: maschine is not running. Cannot execute.");
+        logmsg(LOG_ERR,
+        "Core: maschine is not running. Can not execute.");
         return;
     }
     
-    /* did we hit the data section? 
+    /* did we hit the data section?
      * if yes, then stop executing
      */
-    if (memcmp(instruction, begin_data, 4) == 0) {
+    if (registers[PC].value >= registers[DS].value) {
         logmsg(LOG_INFO, "Core: hit data section. Terminating.");
         running = 0;
         return;

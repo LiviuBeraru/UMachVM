@@ -13,10 +13,6 @@ void write_data(FILE *output);
  *        The offset is given in instructions: how many instructions
  *        where assembled before the data section.
  */
-void translate_labels(int offset);
-
-/** This 4 byte 'instruction' marks the begin of the data section of a programm. 
- *  After this instruction, no executable commands are to be found. */
-extern uint8_t begin_data[4];
+void translate_data_labels(int offset);
 
 #endif

@@ -10,6 +10,9 @@
 static int8_t *memory = NULL;
 static size_t memsize = 0;
 
+uint8_t begin_data[4] = {0xFF, 'D', 'A', 'T'};
+
+
 int mem_init(size_t bytes)
 {
     if (bytes < (ITABLE_SIZE + 4)) {
@@ -29,6 +32,8 @@ int mem_init(size_t bytes)
     }
 
     memsize = bytes;
+    registers[SP].value = memsize;
+    registers[FP].value = memsize;
     return bytes;
 }
 
@@ -42,6 +47,7 @@ void mem_free(void)
 int mem_load_program_file(const char* filename)
 {
     if (memory == NULL) {
+        /* must call mem_init first */
         logmsg(LOG_ERR, "Cannot load program: memory not initialized.");
         return -1;
     }
@@ -68,8 +74,34 @@ int mem_load_program_file(const char* filename)
         return -1;
     }
 
-    //TODO: load 4 byte chunks and check for the data mark
-    fread(memory + ITABLE_SIZE, 1, fsize, file);
+    int8_t buffer[4] = { 0 };
+    int n = 0;
+    int8_t *mindex = memory + ITABLE_SIZE;
+    while( (n = fread(buffer, 1, 4, file)) > 0 ) {
+        
+        if (memcmp(buffer, begin_data, 4) == 0) {
+            /* set the DS register to the memory address where the last
+             * read word (the data marker) would have been stored. 
+             * we dont't store the data marker itself into memory because it
+             * is either code nor data.
+             */
+            //registers[DS].value = ftell(file) + ITABLE_SIZE - 4;
+            registers[DS].value = mindex - memory;
+            
+            /* -4 because now the file offset was advanced by 4 after reading */
+            logmsg(LOG_INFO, "Mem: loading file: set DS = %d", registers[DS].value);            
+        } else {
+            memcpy(mindex, buffer, 4 );
+            mindex += 4;
+        }
+        
+        memset(buffer, 0 , 4);
+    }
+    
+    /* Heap section follows just after the data section */
+    registers[HS].value = mindex - memory;
+    /* End of heap is defaulted to the heap begin */
+    registers[HE].value = registers[HS].value;
 
     fclose(file);
     return fsize;
@@ -118,18 +150,25 @@ int mem_write(uint8_t* source, int index, int nbytes)
         return -1;
     }
 
+    // check index range
     if (index < 0 || index >= memsize) {
         /* wrong memory index (memory address) */
         logmsg(LOG_ERR, "Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
-    
-    //TODO: check for read only code segment
 
     if ((index + nbytes) > memsize) {
         logmsg(LOG_ERR, "Cannot write %d bytes to memory: too much", nbytes);
         interrupt(INT_INVALID_MEM);
+        return -1;
+    }
+    
+    // check segmentation fault
+    if (ITABLE_SIZE <= index && index < registers[DS].value) {
+        /* index points to the code segment between 
+         * the interrupt table and the data segment */
+        interrupt(INT_SEGFAULT);
         return -1;
     }
 
@@ -150,16 +189,12 @@ int mem_push(int32_t word)
     buffer[3] = word;
 
     registers[SP].value -= 4;
-    if (registers[SP].value < 0) {
-        //TODO: check  '< 0' to '< HE.value' (HE register) 
-        
+    if (registers[SP].value <= registers[HE].value) {
         /* We generate a stack overflow interrupt if the 
-         * SP register has a value less than zero. Future versions
-         * should generate an interrupt if the SP register points
-         * to a memory region which is occupied by the programm itself.
-         * To do this one should store the program size in the memory.c module.
+         * SP register has a value less or equal than the HE register,
+         * which stores the address of the last byte on the heap.
          */
-        logmsg(LOG_WARN, "Mem: Stack Overflow: cannot PUSH");
+        logmsg(LOG_WARN, "Mem: Stack Overflow: can not PUSH");
         registers[SP].value += 4; // reset SP
         interrupt(INT_STACK_OVERFLOW);
         return -1;

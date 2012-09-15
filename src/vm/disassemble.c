@@ -4,7 +4,7 @@
 #include "command.h"
 #include "umach.h" // options
 #include "registers.h"
-#include "asm_data.h" // begin_data
+#include "memory.h" // begin_data
 
 /* These functions implement the different instruction formats */
 static void formatNNN(const uint8_t ins[4], char *dest);

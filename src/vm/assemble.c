@@ -75,7 +75,7 @@ void assemble_files(int argc, char** argv)
     }
     
     /* secondly, we translate the collected labels into offsets */
-    translate_labels(cmd_offset);
+    translate_data_labels(cmd_offset);
 
     cmd_offset = 0;
     for (i = 0; i < argc; i++) {
@@ -211,7 +211,7 @@ int assemble_file(FILE *output)
         }
 
         fwrite(instruction, 1, 4, output);
-        cmd_offset++;
+        cmd_offset++; // count assembled commands
     }
 clean:
     fclose(input);

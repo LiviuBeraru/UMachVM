@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     
+    /* initialize memory */
     if (mem_init(options.memory) == -1) {
         logmsg(LOG_ERR, 
         "Can not initialize memory with size %d.", 
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
     
+    /* initialize core */
     core_init();
 
     int progsize = mem_load_program_file(nargv[0]);
