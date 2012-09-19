@@ -5,7 +5,6 @@
 
 #define LABEL_LENGHT 129
 
-extern int line_number;
-extern char *current_filename;
+void printerror(const char* format, ...);
 
 #endif 

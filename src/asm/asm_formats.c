@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stddef.h>     // size_t, NULL
 #include "uasm.h"
 #include "asm_labels.h" // label_get_offset
 #include "strings.h"    // str_to_int
@@ -13,17 +13,14 @@ int assembleNUL(char** items, int n, uint8_t instruction[4])
 int assembleNNN(char** items, int n, uint8_t instruction[4])
 {
     if (n != 2) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Command <%s> takes one argument", items[0]);
+        printerror("Command <%s> takes one argument", items[0]);
         return -1;
     }
 
     long number = 0;
 
     if (str_to_int(items[1], &number) == -1) {
-        fprintf(stderr, "%s, line %d, command <%s>:", current_filename,
-line_number, items[0]);
-        fprintf(stderr, "Not a number: <%s>", items[1]);
+        printerror("Not a number: <%s>", items[1]);
         return -1;
     }
 
@@ -36,16 +33,14 @@ line_number, items[0]);
 int assembleR00(char** items, int n, uint8_t instruction[4])
 {
     if (n != 2) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Command <%s> takes one argument", items[0]);
+        printerror("Command <%s> takes one argument", items[0]);
         return -1;
     }
 
     Register *r = NULL;
     r = get_register_byname(items[1]);
     if (! r) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[1]);
+        printerror("Not a register: %s", items[1]);
         return -1;
     }
     instruction[1] = r->regno;
@@ -55,8 +50,7 @@ int assembleR00(char** items, int n, uint8_t instruction[4])
 int assembleRNN(char** items, int n, uint8_t instruction[4])
 {
     if ( n != 3) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Command <%s> takes 2 arguments", items[0]);
+        printerror("Command <%s> takes 2 arguments", items[0]);
         return -1;
     }
     
@@ -65,8 +59,7 @@ int assembleRNN(char** items, int n, uint8_t instruction[4])
 
     Register *r = get_register_byname(R);
     if (! r) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", R);
+        printerror("Not a register: %s", R);
         return -1;
     }
 
@@ -76,9 +69,7 @@ int assembleRNN(char** items, int n, uint8_t instruction[4])
            is it perhaps a label? */
         int offset = 0;
         if (label_get_offset(NN, &offset) == -1) {
-            fprintf(stderr, "%s, line %d, command <%s>:", current_filename,
-line_number, items[0]);
-            fprintf(stderr, "Undefined label: <%s>", NN);
+            printerror("Undefined label: <%s>", NN);
             return -1;
         } else {            
             number = ITABLE_SIZE + (offset * 4);
@@ -96,22 +87,18 @@ line_number, items[0]);
 int assembleRR0(char **items, int n, uint8_t instruction[4])
 {
     if (n != 3) {
-        fprintf(stderr, "%s, line %d, command <%s>:", current_filename,
-line_number, items[0]);
-        fprintf(stderr, "Command <%s> takes 2 arguments", items[0]);
+        printerror("Command <%s> takes 2 arguments", items[0]);
         return -1;
     }
 
     Register *r1 = get_register_byname(items[1]);
     if (! r1) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[1]);
+        printerror("Not a register: %s", items[1]);
         return -1;
     }
     Register *r2 = get_register_byname(items[2]);
     if (! r2) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[2]);
+        printerror("Not a register: %s", items[2]);
         return -1;
     }
 
@@ -124,30 +111,24 @@ line_number, items[0]);
 int assembleRRN(char **items, int n, uint8_t instruction[4])
 {
     if (n != 4) {
-        fprintf(stderr, "%s, line %d, command <%s>:", 
-               current_filename, line_number, items[0]);
-        fprintf(stderr, "Command <%s> takes 3 arguments", items[0]);
+        printerror("Command <%s> takes 3 arguments", items[0]);
         return -1;
     }
 
     Register *r1 = get_register_byname(items[1]);
     if (! r1) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[1]);
+        printerror("Not a register: %s", items[1]);
         return -1;
     }
     Register *r2 = get_register_byname(items[2]);
     if (! r2) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[2]);
+        printerror("Not a register: %s", items[2]);
         return -1;
     }
 
     long number = 0;
     if (str_to_int(items[3], &number) == -1) {
-        fprintf(stderr, "%s, line %d, command <%s>:",
-               current_filename, line_number, items[0]);
-        fprintf(stderr, "Not a number: <%s>", items[3]);
+        printerror("Not a number: <%s>", items[3]);
         return -1;
     }
 
@@ -163,29 +144,24 @@ int assembleRRN(char **items, int n, uint8_t instruction[4])
 int assembleRRR(char **items, int n, uint8_t instruction[4])
 {
     if (n != 4) {
-        fprintf(stderr, "%s, line %d, command <%s>:", 
-               current_filename, line_number, items[0]);
-        fprintf(stderr, "Command <%s> takes 3 register names", items[0]);
+        printerror("Command <%s> takes 3 register names", items[0]);
         return -1;
     }
 
     Register *r1 = get_register_byname(items[1]);
     if (! r1) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[1]);
+        printerror("Not a register: %s", items[1]);
         return -1;
     }
 
     Register *r2 = get_register_byname(items[2]);
     if (! r2) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[2]);
+        printerror("Not a register: %s", items[2]);
         return -1;
     }
     Register *r3 = get_register_byname(items[3]);
     if (! r3) {
-        fprintf(stderr, "%s, line %d:", current_filename, line_number);
-        fprintf(stderr, "Not a register: %s", items[3]);
+        printerror("Not a register: %s", items[3]);
         return -1;
     }
 

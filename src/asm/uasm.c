@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <string.h> // strchr
 #include <unistd.h> // getopt
+#include <stdarg.h> // va_list
 #include "uasm.h"
 #include "asm_labels.h"
 #include "asm_data.h"
@@ -19,10 +20,10 @@ static const char string_mark[] = ".string";
 static const char number_mark[] = ".number";
 
 
-char *outputname  = "u.out";
-int   line_number = 0;
-char *current_filename = "somefile";
-int   current_offset = 0;
+static char *outputname  = "u.out";
+static int   line_number = 0;
+static char *current_filename = NULL;
+static int   current_offset = 0;
 
 static int collect_code_labels(FILE *file);
 static int collect_data_labels(FILE *file);
@@ -35,7 +36,7 @@ static char *next_line(FILE *file, int skiplabels);
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
-        fprintf(stderr, "No files specified\n");
+        printerror("No files specified\n");
         exit(1);
     }
 
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
                 outputname = optarg;
                 break;
             case '?':
-                fprintf(stderr, "Unknown option: -%c\n", optopt);
+                printerror("Unknown option: -%c\n", optopt);
                 break;
             default:
                 abort();
@@ -66,7 +67,9 @@ int main(int argc, char *argv[])
             perror(outputname);
             goto clean;
         }
-
+        current_filename = argv[i];
+        line_number = 0;
+        
         cmd_count += collect_code_labels(f); // reads until .data
         if (collect_data_labels(f) == -1) {
             fclose(f);
@@ -89,7 +92,10 @@ int main(int argc, char *argv[])
     current_offset = 0;
     /* second run over the files: assemble */
     for (i = optind; i < argc; i++) {
-        f = fopen(argv[i], "r"); // don't check again for errors
+        f = fopen(argv[i], "r"); // don't check again for open errors
+        
+        current_filename = argv[i];
+        line_number = 0;
         if (assemble_file(f, output) == -1) {
             fclose(f);
             goto clean;
@@ -156,12 +162,12 @@ int collect_data_labels(FILE *file)
         type = strtok(line, whitespace);
 
         if ((label = strtok(NULL, whitespace)) == NULL) {
-            fprintf(stderr, "No label for %s provided\n", type);
+            printerror("No label for %s provided\n", type);
             return -1;
         }
 
         if ((content = strtok(NULL, "\n")) == NULL) {
-            fprintf(stderr, "No content for %s provided\n", type);
+            printerror("No content for %s provided\n", type);
             return -1;
         }
 
@@ -175,7 +181,7 @@ int collect_data_labels(FILE *file)
                 return -1;
             }
         } else {
-            fprintf(stderr, "No such data type: <%s>\n", type);
+            printerror("No such data type: <%s>\n", type);
             return -1;
         }
     }
@@ -186,14 +192,14 @@ int collect_data_labels(FILE *file)
 int collect_string_data(char *label, char *content)
 {
     if (content[0] != quotation) {
-        fprintf(stderr, "No leading quotation mark in string content <%s>\n", content);
+        printerror("No leading quotation mark in string content <%s>\n", content);
         return -1;
     }
     content++; // skip quotation mark
 
     int content_len = strlen(content);
     if (content_len < 1 || content[content_len - 1] != quotation) {
-        fprintf(stderr, "No trailing quotation mark in string content <%s>\n", content);
+        printerror("No trailing quotation mark in string content <%s>\n", content);
         return -1;
     }
     content[content_len-1] = '\0'; // delete quotation mark
@@ -207,7 +213,7 @@ int collect_numeric_data(char *label, char *content)
 {
     long number = 0;
     if (str_to_int(content, &number) == -1) {
-        fprintf(stderr, "<%s> is not a number\n", content);
+        printerror("<%s> is not a number\n", content);
         return -1;
     }
 
@@ -254,7 +260,7 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
 {
     struct command *cmd = command_by_name(items[0]);
     if (cmd == NULL) {
-        fprintf(stderr, "No such command: <%s>\n", items[0]);
+        printerror("No such command: <%s>\n", items[0]);
         return -1;
     }
 
@@ -271,15 +277,13 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
         int labeloffset = 0;
         if (itemcount < 2) {
             /* no label, just the command alone */
-            fprintf(stderr, "%s, line %d:", current_filename, line_number);
-            fprintf(stderr, "Command <%s> expects a label", cmd->opname);
+            printerror("Command <%s> expects a label", cmd->opname);
             return -1;
         }
 
         if (label_get_offset(items[1], &labeloffset) == -1) {
             /* label was not set */
-            fprintf(stderr, "%s, line %d: ", current_filename, line_number);
-            fprintf(stderr, "Unknown label <%s>", items[1]);
+            printerror("Unknown label <%s>", items[1]);
             return -1;
         } else {
             labeloffset = labeloffset - current_offset;
@@ -321,6 +325,17 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
     return func(items, itemcount, instruction);
 }
 
+void printerror(const char* format, ... )
+{
+    fprintf(stderr, "%s, line %d: ", current_filename, line_number);
+    
+    va_list al;
+    va_start(al, format);
+    vfprintf(stderr, format, al);
+    fprintf(stderr, "\n");
+    va_end(al);
+}
+
 char *next_line(FILE *file, int skiplabels)
 {
     if (feof(file) || ferror(file)) {
@@ -336,6 +351,7 @@ char *next_line(FILE *file, int skiplabels)
             // failed to read from file
             return NULL;
         }
+        line_number++;
 
         /* delete the comment character */
         char *p = strchr(buffer, comment);
