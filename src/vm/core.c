@@ -7,7 +7,6 @@
 #include "interrupts.h" // interrupt numbers
 #include "logmsg.h"
 #include "command.h"
-#include "asm_data.h"   // begin_data
 
 /* Global data */
 int     running        = 0;

@@ -9,7 +9,6 @@
 #include "command.h"
 #include "disassemble.h"
 #include "debugger.h"
-#include "assemble.h"
 
 static void parse_opts(int argc, char *argv[]);
 
@@ -25,11 +24,6 @@ int main(int argc, char *argv[])
     if (nargc <= 0) {
         logmsg(LOG_ERR, "No file names specified");
         abort();
-    }
-    
-    if (options.assemble) {
-        assemble_files(nargc, nargv);
-        return 0;
     }
 
     if (options.disassemble) {
@@ -69,7 +63,6 @@ int main(int argc, char *argv[])
 
 void parse_opts(int argc, char *argv[])
 {
-    options.assemble = 0;
     options.disassemble = 0;
     options.debug = 0;
     options.memory = 512;
@@ -87,13 +80,10 @@ void parse_opts(int argc, char *argv[])
      * -x hexa output
      * -v verbose mode 
      */
-    const char opts[] = "asdm:xvo:";
+    const char opts[] = "sdm:xvo:";
     int c;
     while((c = getopt(argc, argv, opts)) != -1) {
         switch (c) {
-            case 'a':
-                options.assemble++;
-                break;
             case 's':
                 options.disassemble++;
                 break;
