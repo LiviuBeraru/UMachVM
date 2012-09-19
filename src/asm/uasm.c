@@ -2,6 +2,7 @@
 #include <stdlib.h> // exit
 #include <ctype.h>
 #include <string.h> // strchr
+#include <unistd.h> // getopt
 #include "uasm.h"
 #include "asm_labels.h"
 #include "asm_data.h"
@@ -38,14 +39,31 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    /* parse command line options */
+    opterr = 0; // suppress getopt error messages
+    int c = 0;
+    while ((c = getopt(argc, argv, "o:")) != -1) {
+        switch(c) {
+            case 'o':
+                outputname = optarg;
+                break;
+            case '?':
+                fprintf(stderr, "Unknown option: -%c\n", optopt);
+                break;
+            default:
+                abort();
+        }
+
+    }
+
     int cmd_count = 0;
     int i;
     FILE *f;
 
     /* first run over the files: collect labels */
-    for (i = 1; i < argc; i++) {
+    for (i = optind; i < argc; i++) {
         if ((f = fopen(argv[i], "r")) == NULL) {
-            perror(argv[i]);
+            perror(outputname);
             goto clean;
         }
 
@@ -67,10 +85,10 @@ int main(int argc, char *argv[])
         perror(outputname);
         goto clean;
     }
-    
+
     current_offset = 0;
     /* second run over the files: assemble */
-    for (i = 1; i < argc; i++) {
+    for (i = optind; i < argc; i++) {
         f = fopen(argv[i], "r"); // don't check again for errors
         if (assemble_file(f, output) == -1) {
             fclose(f);
@@ -81,9 +99,6 @@ int main(int argc, char *argv[])
 
     write_data(output);
     fclose(output);
-
-    //printf("Read %d commands\n", cmd_count);
-    //print_labels();
 
 clean:
     labels_delete();
@@ -242,16 +257,16 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
         fprintf(stderr, "No such command: <%s>\n", items[0]);
         return -1;
     }
-    
+
     char labelbuffer[LABEL_LENGHT] = {'\0'};
-    
+
     /* nullify instruction */
     memset(instruction, 0, 4);
     instruction[0] = cmd->opcode;
-    
+
     /* if the command expects a label,
      * replace the label with an offset */
-    
+
     if (cmd -> labeled) {
         int labeloffset = 0;
         if (itemcount < 2) {
@@ -272,15 +287,15 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
             sprintf(labelbuffer, "%d", labeloffset);
             items[1] = labelbuffer;
         }
-        
+
     }
-    
+
     /* which assembly function we call */
     int (*func)(char **items, int n, uint8_t instruction[4]);
     switch (cmd->format) {
         case NUL:
-                func = assembleNUL;
-                break;
+            func = assembleNUL;
+            break;
         case NNN:
             func = assembleNNN;
             break;
@@ -302,7 +317,7 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
         default:
             return -1;
     }
-    
+
     return func(items, itemcount, instruction);
 }
 

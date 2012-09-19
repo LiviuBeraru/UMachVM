@@ -73,7 +73,6 @@ void parse_opts(int argc, char *argv[])
     opterr = 0;
     /*
      * Program options:
-     * -a assemble files
      * -s disassemble program files
      * -d debug mode
      * -m <number> memory size
