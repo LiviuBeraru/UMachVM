@@ -1,5 +1,5 @@
 #include <string.h>
-#include <stdlib.h> // strtol
+#include <stdlib.h> // strtoul
 
 /** Split string into maximum max items using the specified split pattern.
     The items are stored into the array items, which is supposed to be

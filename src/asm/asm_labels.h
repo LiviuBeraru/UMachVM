@@ -12,6 +12,5 @@ int  label_get_offset    (const char *labelname, int *offset);
 /** Delete all labels. */
 void labels_delete(void);
 
-void print_labels(void);
 
 #endif
