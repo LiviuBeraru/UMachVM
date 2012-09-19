@@ -75,9 +75,8 @@ int mem_load_program_file(const char* filename)
     }
 
     int8_t buffer[4] = { 0 };
-    int n = 0;
     int8_t *mindex = memory + ITABLE_SIZE;
-    while( (n = fread(buffer, 1, 4, file)) > 0 ) {
+    while( fread(buffer, 1, 4, file) > 0 ) {
         
         if (memcmp(buffer, begin_data, 4) == 0) {
             /* set the DS register to the memory address where the last
@@ -85,10 +84,7 @@ int mem_load_program_file(const char* filename)
              * we dont't store the data marker itself into memory because it
              * is either code nor data.
              */
-            //registers[DS].value = ftell(file) + ITABLE_SIZE - 4;
             registers[DS].value = mindex - memory;
-            
-            /* -4 because now the file offset was advanced by 4 after reading */
             logmsg(LOG_INFO, "Mem: loading file: set DS = %d", registers[DS].value);            
         } else {
             memcpy(mindex, buffer, 4 );
