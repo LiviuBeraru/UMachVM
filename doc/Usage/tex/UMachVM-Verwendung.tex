@@ -1,0 +1,71 @@
+\documentclass[fontsize=12pt,parskip=full,index=totoc,listof=totoc]
+{scrreprt}
+
+%\addtokomafont{disposition}{\rmfamily}
+%\addtokomafont{descriptionlabel}{\rmfamily}
+
+\usepackage[ilines,headsepline]{scrpage2}
+
+\clearscrheadfoot
+\pagestyle{scrheadings}
+\automark[chapter]{section}
+% \ihead{\rightmark}
+\chead{\leftmark}
+\cfoot{\pagemark}
+
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+
+% \usepackage{lmodern}
+\usepackage[boldsans]{concmath}
+\usepackage{blindtext}
+
+\usepackage{ellipsis}
+\usepackage{microtype}
+
+\usepackage{scrhack}%entfernt warnmeldungen von listings
+\usepackage{listings}
+\lstset{basicstyle=\small\ttfamily}
+\lstset{commentstyle=\slshape}
+\lstset{showstringspaces=false}
+\lstset{frame=leftline}
+\lstset{mathescape=true}
+
+
+\usepackage{makeidx}
+\makeindex
+
+\title{Verwendung der virtuellen UMach Maschine}
+\author{}
+
+\usepackage{xcolor}
+\usepackage[
+    pdftitle={Verwendung der UMach VM},
+    colorlinks=true,
+    linkcolor=blue!50!black]
+{hyperref} 
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+\include{Einfuehrung}
+
+
+\include{Assembler}
+
+
+\include{Debuggen}
+
+
+
+
+
+\appendix
+\printindex
+\end{document}

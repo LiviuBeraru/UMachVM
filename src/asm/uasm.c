@@ -36,7 +36,7 @@ static char *next_line(FILE *file, int skiplabels);
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
-        printerror("No files specified\n");
+        printerror("No files specified");
         exit(1);
     }
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
                 outputname = optarg;
                 break;
             case '?':
-                printerror("Unknown option: -%c\n", optopt);
+                printerror("Unknown option: -%c", optopt);
                 break;
             default:
                 abort();
@@ -162,12 +162,12 @@ int collect_data_labels(FILE *file)
         type = strtok(line, whitespace);
 
         if ((label = strtok(NULL, whitespace)) == NULL) {
-            printerror("No label for %s provided\n", type);
+            printerror("No label for %s provided", type);
             return -1;
         }
 
         if ((content = strtok(NULL, "\n")) == NULL) {
-            printerror("No content for %s provided\n", type);
+            printerror("No content for %s provided", type);
             return -1;
         }
 
@@ -181,7 +181,7 @@ int collect_data_labels(FILE *file)
                 return -1;
             }
         } else {
-            printerror("No such data type: <%s>\n", type);
+            printerror("No such data type: <%s>", type);
             return -1;
         }
     }
@@ -192,14 +192,14 @@ int collect_data_labels(FILE *file)
 int collect_string_data(char *label, char *content)
 {
     if (content[0] != quotation) {
-        printerror("No leading quotation mark in string content <%s>\n", content);
+        printerror("No leading quotation mark in string content <%s>", content);
         return -1;
     }
     content++; // skip quotation mark
 
     int content_len = strlen(content);
     if (content_len < 1 || content[content_len - 1] != quotation) {
-        printerror("No trailing quotation mark in string content <%s>\n", content);
+        printerror("No trailing quotation mark in string content <%s>", content);
         return -1;
     }
     content[content_len-1] = '\0'; // delete quotation mark
@@ -213,7 +213,7 @@ int collect_numeric_data(char *label, char *content)
 {
     long number = 0;
     if (str_to_int(content, &number) == -1) {
-        printerror("<%s> is not a number\n", content);
+        printerror("<%s> is not a number", content);
         return -1;
     }
 
@@ -260,7 +260,7 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
 {
     struct command *cmd = command_by_name(items[0]);
     if (cmd == NULL) {
-        printerror("No such command: <%s>\n", items[0]);
+        printerror("No such command: <%s>", items[0]);
         return -1;
     }
 
@@ -283,7 +283,7 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
 
         if (label_get_offset(items[1], &labeloffset) == -1) {
             /* label was not set */
-            printerror("Unknown label <%s>", items[1]);
+            printerror("Unset label <%s>", items[1]);
             return -1;
         } else {
             labeloffset = labeloffset - current_offset;
