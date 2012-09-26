@@ -1,0 +1,8 @@
+    set r1 3
+loop:
+    dec r1
+    cmp r1 zero
+    be  finish
+    jmp loop
+finish: 
+    EOP 

@@ -1,0 +1,38 @@
+[256]   SET   R1    3
+umdb > show reg r1
+R1 = 0x00000000 = 0
+umdb > s
+[260]   DEC   R1
+umdb > show reg r1
+R1 = 0x00000003 = 3
+umdb > s
+[264]   CMP   R1    ZERO  
+umdb > s
+[268]   BE    2
+umdb > s
+[272]   JMP   -3
+umdb > s
+[260]   DEC   R1
+umdb > s
+[264]   CMP   R1    ZERO  
+umdb > show reg r1
+R1 = 0x00000001 = 1
+umdb > s
+[268]   BE    2
+umdb > s
+[272]   JMP   -3
+umdb > s
+[260]   DEC   R1
+umdb > s
+[264]   CMP   R1    ZERO  
+umdb > s
+[268]   BE    2
+umdb > s
+[276]   EOP   
+umdb > s
+umdb > s
+The maschine is not running.
+umdb > show reg r1 cmpr
+R1 = 0x00000000 = 0
+CMPR = 0x00000000 = 0
+umdb > q

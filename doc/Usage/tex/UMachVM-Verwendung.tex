@@ -1,8 +1,5 @@
-\documentclass[fontsize=12pt,parskip=full,index=totoc,listof=totoc]
-{scrreprt}
-
-%\addtokomafont{disposition}{\rmfamily}
-%\addtokomafont{descriptionlabel}{\rmfamily}
+\documentclass[fontsize=12pt,parskip=full,index=totoc,listof=totoc,titlepage]
+{scrartcl}
 
 \usepackage[ilines,headsepline]{scrpage2}
 
@@ -24,15 +21,14 @@
 \usepackage{blindtext}
 
 \usepackage{ellipsis}
-\usepackage{microtype}
+\usepackage{microtype} % Grauwert noch gleichmäßiger
 
 \usepackage{scrhack}%entfernt warnmeldungen von listings
 \usepackage{listings}
-\lstset{basicstyle=\small\ttfamily}
+\lstset{basicstyle=\ttfamily}
 \lstset{commentstyle=\slshape}
 \lstset{showstringspaces=false}
 \lstset{frame=leftline}
-\lstset{mathescape=true}
 
 
 \usepackage{makeidx}
@@ -52,16 +48,16 @@
 \begin{document}
 \maketitle
 \tableofcontents
+\lstlistoflistings
 
 
 \include{Einfuehrung}
 
+\include{Ausfuehren}
 
 \include{Assembler}
 
-
 \include{Debuggen}
-
 
 
 

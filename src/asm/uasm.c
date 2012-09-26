@@ -1,3 +1,8 @@
+/**
+ * @file uasm.c
+ * @brief Main file of the UMach assembler
+ * 
+ */
 #include <stdio.h>
 #include <stdlib.h> // exit
 #include <ctype.h>
@@ -11,20 +16,25 @@
 #include "command.h"
 #include "asm_formats.h"
 
-static const char comment       = '#';
-static const char label_sep     = ':';
+/* String constants */
+static const char comment       = '#';       /// comment character
+static const char label_sep     = ':';       /// label separator
 static const char quotation     = '"';
 static const char whitespace[]  = " \t\n";
-static const char data_mark[]   = ".data";
-static const char string_mark[] = ".string";
-static const char number_mark[] = ".number";
+static const char data_mark[]   = ".data";   /// marks the data section
+static const char string_mark[] = ".string"; /// marks string data
+static const char number_mark[] = ".number"; /// marks numeric data
 
-
+/** Name of output file. */
 static char *outputname  = "u.out";
+/** Current line number in input file. Used for diagnostics. */
 static int   line_number = 0;
+/** Current input file name. Used for diagnostics in case of errors. */
 static char *current_filename = NULL;
+/** Current offset in the assembly file. */
 static int   current_offset = 0;
 
+/* Private functions */
 static int collect_code_labels(FILE *file);
 static int collect_data_labels(FILE *file);
 static int collect_string_data(char *label, char *content);
@@ -36,30 +46,37 @@ static char *next_line(FILE *file, int skiplabels);
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
-        printerror("No files specified");
-        exit(1);
+        /* We expect at least */
+        fprintf(stderr, "No program files specified.\n");
+        abort();
     }
 
     /* parse command line options */
     opterr = 0; // suppress getopt error messages
-    int c = 0;
+    int c = 0;  // current command line option
+    /* parse the command line options */
     while ((c = getopt(argc, argv, "o:")) != -1) {
         switch(c) {
-            case 'o':
+            case 'o': // output file
                 outputname = optarg;
                 break;
-            case '?':
-                printerror("Unknown option: -%c", optopt);
-                break;
             default:
+                if (optopt == 'o') {
+                    fprintf(stderr,
+                            "The option -o expects an output file name.\n");
+                    abort();
+                } else {
+                    fprintf(stderr, "Unknown option: -%c.\n", optopt);
+                }
                 abort();
         }
 
     }
-
-    int cmd_count = 0;
+    /* how many commands did we read so far 
+     * (used for computing the offset of the data section) */
+    int cmd_count = 0; 
     int i;
-    FILE *f;
+    FILE *f; // input file
 
     /* first run over the files: collect labels */
     for (i = optind; i < argc; i++) {
@@ -69,8 +86,8 @@ int main(int argc, char *argv[])
         }
         current_filename = argv[i];
         line_number = 0;
-        
-        cmd_count += collect_code_labels(f); // reads until .data
+
+        cmd_count += collect_code_labels(f); // this reads from f until .data
         if (collect_data_labels(f) == -1) {
             fclose(f);
             goto clean;
@@ -78,8 +95,8 @@ int main(int argc, char *argv[])
         fclose(f);
     }
 
-    /* associate data labels with offsets based on
-     * how many commands we read so far */
+    /* associate data labels with 4 byte offsets based on
+     * how many commands we read so far (data is stored after all commands) */
     translate_data_labels(cmd_count);
 
     /* open the ouput file */
@@ -93,7 +110,7 @@ int main(int argc, char *argv[])
     /* second run over the files: assemble */
     for (i = optind; i < argc; i++) {
         f = fopen(argv[i], "r"); // don't check again for open errors
-        
+
         current_filename = argv[i];
         line_number = 0;
         if (assemble_file(f, output) == -1) {
@@ -264,7 +281,7 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
         return -1;
     }
 
-    char labelbuffer[LABEL_LENGHT] = {'\0'};
+    char labelbuffer[LABEL_LENGHT + 1] = {'\0'};
 
     /* nullify instruction */
     memset(instruction, 0, 4);
@@ -328,7 +345,7 @@ int assemble_line(char *items[], int itemcount, uint8_t instruction[4])
 void printerror(const char* format, ... )
 {
     fprintf(stderr, "%s, line %d: ", current_filename, line_number);
-    
+
     va_list al;
     va_start(al, format);
     vfprintf(stderr, format, al);
@@ -336,6 +353,12 @@ void printerror(const char* format, ... )
     va_end(al);
 }
 
+/**
+ * Read next line from file.
+ * 
+ * @param file File to read from
+ * @param skiplabels if label lines are to be skiped
+ */
 char *next_line(FILE *file, int skiplabels)
 {
     if (feof(file) || ferror(file)) {

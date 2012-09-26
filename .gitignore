@@ -14,5 +14,6 @@
 *.ist
 *~
 *.lot
+*.lol
 *.backup
 *.o
