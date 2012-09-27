@@ -1,7 +1,7 @@
 /**
  * @file uasm.c
  * @brief Main file of the UMach assembler
- * 
+ *
  */
 #include <stdio.h>
 #include <stdlib.h> // exit
@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
         }
 
     }
-    /* how many commands did we read so far 
+    /* how many commands did we read so far
      * (used for computing the offset of the data section) */
-    int cmd_count = 0; 
+    int cmd_count = 0;
     int i;
     FILE *f; // input file
 
@@ -132,27 +132,59 @@ clean:
 int collect_code_labels(FILE *file)
 {
     char *line = NULL;    // input line
-    char *white = NULL;   // pointer to the first whitespace of line
+    char *white = NULL;   // pointer to whitespace inside the line
     char *lab_sep = NULL; // pointer to the label separator
     int  cmd_counter = 0; // how many commands did we read
 
     rewind(file); // set the read position at the begin of file
     while ((line = next_line(file, 0)) != NULL) {
-        white = strpbrk(line, whitespace);
-        if (white) {
-            *white = '\0';
-        }
-        if (strcasecmp(line, data_mark) == 0) {
-            // don't parse beyond the data mark
-            break;
-        }
+        /* search for the label separator */
         lab_sep = strchr(line, label_sep);
+
+        /* if we find the label separator, */
         if (lab_sep) {
-            /* we have found a label */
+            /* delete it before deleting other whitespace.
+             * If we delete whitespace now, we might include
+             * the label separator into the label name
+             */
             *lab_sep = '\0';
+            // now the line ends just before the label separator
+            
+            /* Now delete the first whitespace of the line. 
+             * Note that this will ignore every other words after the first
+             * label word -> labels must contain no whitespace
+             */
+            if ((white = strpbrk(line, whitespace)) != NULL) {
+                *white = '\0';
+            }
+
+            /* insert the label name to the pending list of labels
+             * these labels will wait for an offset */
             label_insert_name(line);
         } else {
-            /* not a label, must be a command */
+            /* not a label, so look for the data mark because
+             * we stop parsing for code labels if we find the data mark
+             * first, delete the first whitespace.
+             * note that in this if-branch we delete the very first whitespace.
+             * in the other branch, we delete whitespace after deleting the
+             * label separator; this adds support for whitespace between
+             * the label separator and the label name.
+             */
+            if ((white = strpbrk(line, whitespace)) != NULL) {
+                *white = '\0'; // after whitespace is now junk
+                /* consider deleting not whitespace, but only the new line
+                 * now you can write junk after ".data" */
+            }
+            if (strcasecmp(line, data_mark) == 0) {
+                // don't parse beyond the data mark
+                break;
+            }
+            
+            /* This will associate any pending labels with the current offset
+             * (which is just the command counter).
+             * If there are no pending labels, this does nothing.
+             * This is to support multilple labels pointing to the same command.
+             */
             label_insert_offset(cmd_counter);
             cmd_counter++;
         }
@@ -355,7 +387,7 @@ void printerror(const char* format, ... )
 
 /**
  * Read next line from file.
- * 
+ *
  * @param file File to read from
  * @param skiplabels if label lines are to be skiped
  */
@@ -382,16 +414,19 @@ char *next_line(FILE *file, int skiplabels)
             *p = '\0';
         }
 
-        if (skiplabels) {
-            /* we should skip lines containing labels */
-            p = strchr(buffer, label_sep);
-            if (p) {
-                /* found label separator */
-                continue;
-            }
+        /* if we should skip labels and if we find the label separator ":",
+         * then put the p pointer to the next character after
+         * the label separator
+         */
+        if (skiplabels && (p = strchr(buffer, label_sep))) {
+            p++; // skip label
+        } else {
+            /* don't skip labels or no label found,
+             * so put the p pointer at the begin of the input line
+             */
+            p = buffer;
         }
 
-        p = buffer;
         /* skip whitespace */
         while (isspace(*p)) {
             p++;
