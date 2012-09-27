@@ -1,0 +1,35 @@
+set  r1 dezimal # r1 = Adresse von 'dezimal'
+lw   r1 r1      # r1 = Wert an der Adresse 'dezimal'
+
+set  r2 hexa    # r2 = Adresse von 'hexa'
+lw   r2 r2      # r2 = Wert an der Adresse 'hexa'
+
+set  r3 oktal   # r3 = Adresse von 'oktal'
+lw   r3 r3      # r3 = Wert an der Adresse 'oktal'
+
+# hier haben r1, r2 und r3 den selben Wert
+
+set  r1 str     # r1 = Adresse der Daten 'str'
+set  r2 strsize # r2 = Adresse der Daten 'strsize'
+sub  r2 r2 r1   # r2 = laenge der Daten 'str'
+
+out  r1 r2 zero # Ausgabe "Hallo"
+
+set  r1 nl      # r1 = Adresse von nl
+addi r1 r1 3    # r1 zeigt auf das 4. Byte von nl
+set  r2 1
+out  r1 r2 zero
+
+
+.data 
+### Datenbereich ###
+
+.int dezimal 171   # dezimalsystem
+.int hexa    0xAB  # hexadezimalsystem
+.int oktal   0253  # oktalsystem
+
+# String daten
+
+.string str "Hallo Welt"
+.int    strsize 0   # dummy Wert
+.int    nl  0x0A    # new line

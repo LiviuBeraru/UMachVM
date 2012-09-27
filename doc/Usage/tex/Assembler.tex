@@ -1,4 +1,67 @@
 \section{Assembler}
 
+\subsection{Eingabe Dateien}
 
-\blindtext 
+Es können beliebig viele Programmdateien angegeben werden. Sie werden der
+Reiche nach abgearbeitet. Man beachte, dass die Instruktion \texttt{EOP} das
+Ende des Programms signalisiert. Falls nachher noch weitere Befehle, eventuell
+in anderen Datein, angegeben werden, werden diese zwar assembliert, aber nicht
+ausgeführt.
+
+Alles außer Labels is case insensitive. Man kann beliebig Leerzeichen
+(whitespace) verwenden.
+
+\subsection{Labels}
+\index{Labels}
+
+Der UMach-Assembler unterstüzt die Verwendung von sogenannten \glqq
+Labels\grqq, oder Sprungmarken. Um ein Label im Programmcode zu definieren
+schreibt man auf einer getrennten Zeile den Labelnamen, gefolgt von einem
+Doppelpunkt.
+
+Labelname ist höchstens 128 Buchstaben lang.
+
+Labels müssen keine whitespace beinhalten.
+
+Mehrfache Labels, die auf den selben Befehl zeigen, werden unterstüzt. Sie
+müssen allergings auf verschiedenen Zeilen deklariert werden, sonst wird der
+zweite Label als ein Befehl gelesen.
+
+\subsection{Programmdaten}
+\index{Programmdaten}
+
+Daten werden nach der Anweisung \texttt{.data} angegeben.
+
+\subsubsection{Strings}
+\index{Strings}
+
+String Daten werden mit der Anweisung \texttt{.string}\index{.string} angegeben.
+Nach \texttt{.string} kommt der Name des Strings und dann der eigentlich String
+zwischen Anführungszeichen. Siehe das Programm \ref{lst:Datenverwendung} für
+ein Beispiel.
+
+Strings werden so assembliert, dass sie immer ein Vielfaches von 4 Bytes
+belegen. Braucht der textuelle Inhalt des Strings weniger als 4 Byte, so wird
+der String mit Nullbytes gefüllt.
+
+
+\subsubsection{Ganze Zahlen}
+\index{Zahlen}
+
+Ganze Zahlen werden mit der Anweisung \texttt{.int}\index{.int} angegeben. Nach
+\texttt{.int} folgt der Name (Label) der Zahl, dann die eigentliche Zahl. Diese
+kann in Hexa-, Oktal- oder Dezimalsystem angegeben werden, analog wie in der
+C/Java Sprache.
+
+\lstinputlisting[caption={Verwendung der Daten},label={lst:Datenverwendung}]
+{progs/example_data.uasm}
+
+Angenommen, der Assembler \texttt{uasm}, die virtuelle Maschine
+\texttt{umach} und das Programm \texttt{example\_data.uasm} befinden sich im
+aktuellen Verzeichniss, kann das Programm \ref{lst:Datenverwendung}  wie folgt
+assembliert und ausgeführt werden:
+\begin{lstlisting}
+./uasm example_data.uasm
+./umach u.out
+\end{lstlisting}
+Es wird lediglig \glqq Hallo Welt\grqq\ ausgegeben.

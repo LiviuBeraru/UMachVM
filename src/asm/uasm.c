@@ -23,7 +23,7 @@ static const char quotation     = '"';
 static const char whitespace[]  = " \t\n";
 static const char data_mark[]   = ".data";   /// marks the data section
 static const char string_mark[] = ".string"; /// marks string data
-static const char number_mark[] = ".number"; /// marks numeric data
+static const char integer_mark[] = ".int";   /// marks numeric data
 
 /** Name of output file. */
 static char *outputname  = "u.out";
@@ -225,7 +225,7 @@ int collect_data_labels(FILE *file)
             if (collect_string_data(label, content) == -1) {
                 return -1;
             }
-        } else if (strcasecmp(type, number_mark) == 0) {
+        } else if (strcasecmp(type, integer_mark) == 0) {
             if (collect_numeric_data(label, content) == -1) {
                 return -1;
             }
@@ -244,14 +244,14 @@ int collect_string_data(char *label, char *content)
         printerror("No leading quotation mark in string content <%s>", content);
         return -1;
     }
-    content++; // skip quotation mark
+    content++; // skip first quotation mark
 
     int content_len = strlen(content);
     if (content_len < 1 || content[content_len - 1] != quotation) {
         printerror("No trailing quotation mark in string content <%s>", content);
         return -1;
     }
-    content[content_len-1] = '\0'; // delete quotation mark
+    content[content_len-1] = '\0'; // delete second quotation mark
 
     insert_data(label, content, content_len);
 
@@ -261,6 +261,7 @@ int collect_string_data(char *label, char *content)
 int collect_numeric_data(char *label, char *content)
 {
     long number = 0;
+    content = str_trim(content);
     if (str_to_int(content, &number) == -1) {
         printerror("<%s> is not a number", content);
         return -1;
