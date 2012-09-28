@@ -14,23 +14,50 @@ Alles außer Labels is case insensitive. Man kann beliebig Leerzeichen
 \subsection{Labels}
 \index{Labels}
 
-Der UMach-Assembler unterstüzt die Verwendung von sogenannten \glqq
-Labels\grqq, oder Sprungmarken. Um ein Label im Programmcode zu definieren
-schreibt man auf einer getrennten Zeile den Labelnamen, gefolgt von einem
-Doppelpunkt.
+Der UMach-Assembler unterstüzt die Verwendung von sogenannten \glqq Labels\grqq,
+oder Sprungmarken. Ein Label markiert das Sprungziel für die verschiedenen
+Sprungbefehle.
+
+Um ein Label im Programmcode zu definieren, schreibt man den
+Labelnamen, gefolgt von einem Doppelpunkt. Zwischen dem Labelnamen und dem
+Doppelpunkt können, außer das \glqq newline\grqq-Zeichen, beliebig viele
+Leerzeichen eingefügt werden.
 
 Labelname ist höchstens 128 Buchstaben lang.
 
-Labels müssen keine whitespace beinhalten.
+Labelnamen müssen selbst keine Leerzeichen (whitespace) beinhalten.
 
-Mehrfache Labels, die auf den selben Befehl zeigen, werden unterstüzt. Sie
-müssen allergings auf verschiedenen Zeilen deklariert werden, sonst wird der
-zweite Label als ein Befehl gelesen.
+Mehrfache Labels, die auf den selben Befehl zeigen, werden unterstüzt. Diese
+können beliebing im Code geschrieben werden, d.h. sie können auf verschiedenen
+Zeilen oder auf einer einzigen Zeile geschrieben werden. Mehrfache Labels
+zeigen jeweils auf den nächsten Befehl. Das Programm \ref{lst:example_labels}
+zeigt ein Beispiel für die Verwendung der (mehrfachen) Labels.
+
+\lstinputlisting[caption={Beispiel für Labels},label={lst:example_labels}]
+{progs/example_labels.uasm}
+
+In diesem Beispiel zeigen die Labels \texttt{loop}, \texttt{do}, \texttt{it} und
+\texttt{now} alle auf den selben Befehl: \texttt{cmp r1 zero}. Zu diesem Befehl
+wird gesprungen, indem man einen von diesen Labels verwendet. Hier bewirken
+beide Sprungbefehle \texttt{jmp loop} und \texttt{jmp do} einen Sprung zum
+selben \texttt{cmp}-Befehl. Die Labels \texttt{finish} und \texttt{end} zeigen
+auf den Befehl \texttt{EOP}. Man bemerkt auch die freie Verwendung der
+Leerzeichen (über die Lesbarkeit dieses Beispiels lässt sich diskutieren).
+
 
 \subsection{Programmdaten}
 \index{Programmdaten}
 
-Daten werden nach der Anweisung \texttt{.data} angegeben.
+Daten werden nach der Anweisung \texttt{.data} angegeben. Diese Anweisung muss
+alleine auf einer eigenen Zeile stehen.
+
+Die Programmdaten können auch auf
+verschiedenen Programmdateien verteilt werden, sie werden vom Assembler
+zusammengefügt und ans Ende der assemblierten Datei eingefügt.
+
+Alle Daten haben jeweils eine Länge, die ein Vielfaches von 4 Byte darstellt.
+Bedarft ein Datenelement weniger als $4k$ Bytes, so wird es trotzdem auf
+eine Länge von $4 k$ mit Nullbytes gefüllt.
 
 \subsubsection{Strings}
 \index{Strings}

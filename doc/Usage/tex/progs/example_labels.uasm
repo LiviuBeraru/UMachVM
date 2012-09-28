@@ -1,0 +1,12 @@
+set r1 5 
+
+loop  : 
+  do  :
+
+ it:now:cmp r1 zero
+    be  finish
+    dec r1
+    jmp loop
+    jmp do
+
+finish: end: EOP
