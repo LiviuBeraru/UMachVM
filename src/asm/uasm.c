@@ -31,7 +31,10 @@ static char *outputname  = "u.out";
 static int   line_number = 0;
 /** Current input file name. Used for diagnostics in case of errors. */
 static char *current_filename = NULL;
-/** Current offset in the assembly file. */
+
+/** Current offset of the current command. 
+ *  This is used either when searching for labels, 
+ *  or when assembling. */
 static int   current_offset = 0;
 
 /* Private functions */
@@ -72,13 +75,11 @@ int main(int argc, char *argv[])
         }
 
     }
-    /* how many commands did we read so far
-     * (used for computing the offset of the data section) */
-    int cmd_count = 0;
+    
     int i;
     FILE *f; // input file
-    int commands_read = 0;
 
+    current_offset = 0;
     /* first run over the files: collect labels */
     for (i = optind; i < argc; i++) {
         if ((f = fopen(argv[i], "r")) == NULL) {
@@ -88,11 +89,9 @@ int main(int argc, char *argv[])
         current_filename = argv[i];
         line_number = 0;
 
-        commands_read = collect_code_labels(f);
-        if (commands_read == -1) {
+        if (collect_code_labels(f) == -1) {
+            fclose(f);
             goto clean;
-        } else {
-            cmd_count += commands_read;
         }
 
         if (collect_data_labels(f) == -1) {
@@ -101,13 +100,13 @@ int main(int argc, char *argv[])
         }
         fclose(f);
     }
-
-    //printlabels();
     
     /* associate data labels with 4 byte offsets based on
      * how many commands we read so far (data is stored after all commands) */
-    translate_data_labels(cmd_count);
+    translate_data_labels(current_offset);
 
+    printlabels();
+    
     /* open the ouput file */
     FILE *output = fopen(outputname, "w");
     if (output == NULL) {
@@ -149,7 +148,6 @@ int collect_code_labels(FILE *file)
 {
     char *line = NULL;    // input line
     char *lab_sep = NULL; // pointer to the label separator
-    int  cmd_counter = 0; // how many commands did we read
 
     rewind(file); // set the read position at the begin of file
     while ((line = next_line(file, 0)) != NULL) {
@@ -172,12 +170,12 @@ int collect_code_labels(FILE *file)
             break;
         }
         if (*line) {
-            label_insert_offset(cmd_counter);
-            cmd_counter++;
+            label_insert_offset(current_offset);
+            current_offset++;
         }
     }
 
-    return cmd_counter;
+    return 0;
 }
 
 /* data labels have the syntax
