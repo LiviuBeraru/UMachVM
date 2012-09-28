@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h> // strncpy
 
+#include <stdio.h>
 
 struct label {
     char name[65];
@@ -101,5 +102,23 @@ void delete_list(struct label_item* head)
         next = head -> next;
         delete_label_item(head);
         head = next;
+    }
+}
+
+void printlabels(void)
+{
+    if (labels == NULL) {
+        printf(">>> No labels\n");
+        return;
+    }
+    
+    struct label_item *next = NULL;
+    struct label_item *current = labels;
+    while (current) {
+        next = current -> next;
+        printf("Label: [%s] -> [%d]\n", 
+               current->label->name,
+               current->label->offset);
+        current = next;
     }
 }

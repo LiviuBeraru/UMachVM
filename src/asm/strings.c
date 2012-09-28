@@ -43,6 +43,12 @@ int str_to_int(const char* number, long* n)
 
 char *str_trim(char* string)
 {
+    /* protect against our own stupidity */
+    if (string == NULL || *string == '\0') {
+        // nothing to trim
+        return string;
+    }
+    
     /* skip leading whitespace*/
     while(isspace(*string)) {
         *string = '\0';
@@ -55,10 +61,10 @@ char *str_trim(char* string)
         return string;
     }
     
-    char *p = string + len - 1;
-    while (isspace(*p)) {
-        *p = '\0';
-        p--;
+    char *last = string + len - 1;
+    while (isspace(*last)) {
+        *last = '\0';
+        last--;
     }
     
     return string;
