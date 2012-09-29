@@ -1,0 +1,44 @@
+# strlen, function to compute the string length
+# Arguments:    string adress (on stack)
+#               the address is supposed to be found
+#               on the stack just after the return 
+#               address
+# Return value: R32 contains the string length
+# Used registers: R17 to R20
+
+strlen:
+# we use register r17 to r20, so we save them first
+    PUSH R17
+    PUSH R18
+    PUSH R19
+    PUSH R20
+
+# The first argument is on the stack, 
+# just after the return address,
+# that is 4 bytes after SP. To reach that
+# address, we must jump over what we have
+# pushed and over the return address
+    ADDI R17 SP 20
+# argument goes into r18, 
+# this is the address of the string
+    LW   R18 R17
+
+# we store the character counter in r19
+# and the current character in r20
+    SET  R19 0
+strlen_check:
+    LW   R20 R18
+    CMP  R20 ZERO       # end of string?
+    BE   strlen_finish
+    INC  R19            # counter++
+    INC  R18            # next char
+    JMP  strlen_check
+
+strlen_finish:
+    CP   R32 R19        # R32 = string length
+    POP  R20            # restore saved registers
+    POP  R19
+    POP  R18
+    POP  R17
+    RET
+    

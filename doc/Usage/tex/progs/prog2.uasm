@@ -1,0 +1,19 @@
+## This program computes the string length
+## of the embedded string and prints the
+## length to port zero (terminal)
+
+SET  R1 str
+PUSH R1
+CALL strlen
+# string length in R32
+PUSH R32
+CALL printint
+
+SET  R1 0X0A # new line
+PUSH R1
+CALL putchar
+EOP
+
+.DATA
+
+.string str "Hello World!" 

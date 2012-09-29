@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
      * how many commands we read so far (data is stored after all commands) */
     translate_data_labels(current_offset);
 
-    printlabels();
+    //printlabels();
     
     /* open the ouput file */
     FILE *output = fopen(outputname, "w");

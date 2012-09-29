@@ -11,6 +11,11 @@ ausgeführt.
 Alles außer Labels is case insensitive. Man kann beliebig Leerzeichen
 (whitespace) verwenden.
 
+
+Siehe den Abschnitt \ref{subsubsec:Funktionen-Beispiel} ab der Seite
+\pageref{subsubsec:Funktionen-Beispiel} für ein Beispiel, wo mehrere Dateien
+für ein Programm verwendet werden.
+
 \subsection{Labels}
 \index{Labels}
 
@@ -92,3 +97,97 @@ assembliert und ausgeführt werden:
 ./umach u.out
 \end{lstlisting}
 Es wird lediglig \glqq Hallo Welt\grqq\ ausgegeben.
+
+
+
+\subsection{Funktionen}
+\index{Funktionen}
+
+\subsubsection{Ausbau einer Funktion}
+\blindtext
+
+
+
+
+\subsubsection{Ein Beispiel}
+\label{subsubsec:Funktionen-Beispiel}
+
+Das folgende Beispiel verdeutlicht die Verwendung von Funktionen anhand eines
+Programms, das die Länge eines Strings berechnet und dieses Länge ausgibt. Der
+String ist im Programm selbst einbebettet (Datensegment). Das Programm besteht
+aus mehreren Dateien, die jeweils eine Funktion implementieren:
+\begin{enumerate}
+ \item prog2.uasm, enthält das Hauptprogramm (Programm
+       \ref{lst:VerwendungFunktionen}).
+ \item strlen.uasm, enthält die Funktion \texttt{strlen}, die die Länge eines
+       Strings berechnet (Programm \ref{lst:strlen}).
+ \item printint.uasm, enhält die Funktion \texttt{printint}, die eine ganze
+       Zahle ausgibt (Programm \ref{lst:printint}).
+ \item putchar.uasm, enthält die Funktion \texttt{putchar}, die einen Buchstaben
+       ausgibt (Programm \ref{lst:putchar}).
+\end{enumerate}
+
+
+\lstinputlisting[caption={Verwendung der Funktionen},
+                 label={lst:VerwendungFunktionen}]
+                {progs/prog2.uasm}
+
+
+\lstinputlisting[caption={Funktion strlen}, label={lst:strlen}]
+                {progs/strlen.uasm}
+
+
+\lstinputlisting[caption={Funktion printint}, label={lst:printint}]
+                {progs/printint.uasm}
+
+
+\lstinputlisting[caption={Funktion putchar}, label={lst:putchar}]
+                {progs/putchar.uasm}
+
+
+Dieses Programm wird wie folgt assembliert:
+\begin{lstlisting}
+ ./uasm prog2.uasm strlen.uasm printint.uasm putchar.uasm
+\end{lstlisting}
+Bemerkungen: es werden alle benötigten Dateien angegeben. Die Reihenfolge des
+Dateien, die eine Funktion definieren ist egal, die \glqq main\grqq-Datei aber,
+die den Startpunkt des Programms beinhaltet muss aber an der ersten Stelle
+sein, denn der Code in dieser Datei muss zuerst assembliert werden.
+
+Nach dem Assemblieren wird eine Datei namens \texttt{u.out} erzeugt, die den
+\glqq Bytecode\grqq\ für die virtuelle Maschine beinhaltet. Man könnte auch die
+Option \texttt{-o} verwenden, um eine alternativen Dateinamen zu spezifizieren.
+Möchte man diese Datei ausführen, so könnte man folgendes eingeben:
+\begin{lstlisting}
+ /umach u.out
+\end{lstlisting}
+Als Ergebniss bekommt man die Fehlermeldung
+\begin{lstlisting}
+ERROR: Cannot load 268 bytes of program into 512 bytes of
+       memory
+ERROR: Cannot load program file u.out.
+Aborted
+\end{lstlisting}
+Das bedeutet, die virtuelle Maschine hat nicht genug Speicher um dieses
+Programm überhaupt laden zu können (256 Bytes werden für die Interrupttabelle
+reserviert). Man kann in diesem Fall mit der Option \texttt{-m} den Speicher
+größer spezifizieren, z.B. so:
+\begin{lstlisting}
+ /umach -m 600 u.out
+\end{lstlisting}
+Das erhöht den Speicher auf 600 Bytes. Es wird dann \glqq 12\grqq\ ausgegeben.
+
+Noch eine Bemerkung: es ist zu empfehlen, beim Start der Maschine die Option
+\texttt{-v} anzugeben, denn die viele \texttt{PUSH}-Befehle können beim
+unzureichenden Speicher einen Stack Overflow verursachen, was derzeit die
+Maschine zum Stillstand bringt -- es sei denn, man programmiert einen Interrupt
+Handler für den Stack Overflow Interrupt. Der Stack Overflow wird als Warnung
+ausgegeben und Warnungen werden erst mit der Option \texttt{-v} ausgegeben.
+
+
+
+
+
+
+
+
