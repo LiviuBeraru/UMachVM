@@ -257,6 +257,26 @@ Beispiel kann man diese Technik sehen.
 Hier ein Beispiel für den Aufruf und Implementierung einer Funktion. Es wird
 eine einfache \texttt{max} Funktion implementiert, die die größere aus zwei
 Zahlen zurückgibt. Die Rückgabe erfolgt im Register \texttt{R32}.
+
+Diese Funktion arbeitet mit den Registern \texttt{R17} und \texttt{R18}, also
+werden diese zuerst auf Stack gepusht. Das ist für dieses Beispiel nicht
+zwingend notwendig, da der restliche Code die Register nicht verwendet, aber die
+Technik soll vorgestellt werden. Danach erfolt eine Berechnung der
+Stack-Adressen, wo die zwei Argumente liegen. Dazu ist es hilfreich, sich das
+Stack-Layout nach dem Pushen der zwei Arbeitsregister klarzumachen:
+
+\begin{center}
+ \begin{tabular}{ll}
+  Adresse     & Inhalt                \\\hline
+  $\$SP + 16$ & Zweites Argument (66) \\
+  $\$SP + 12$ & Erstes Argument (55)  \\
+  $\$SP + 8$  & Rücksprungadresse     \\
+  $\$SP + 4$  & R17                   \\
+  $\$SP + 0$  & R18                   \\
+ \end{tabular}
+\end{center}
+
+
 \lstinputlisting{progs/example_args.uasm}
 
 
@@ -302,12 +322,12 @@ Dieses Programm wird wie folgt assembliert:
 \end{lstlisting}
 Bemerkungen: es werden alle benötigten Dateien angegeben. Die Reihenfolge des
 Dateien, die eine Funktion definieren ist egal, die \glqq main\grqq-Datei aber,
-die den Startpunkt des Programms beinhaltet muss aber an der ersten Stelle
+die den Startpunkt des Programms beinhaltet muss an der ersten Stelle
 sein, denn der Code in dieser Datei muss zuerst assembliert werden.
 
 Nach dem Assemblieren wird eine Datei namens \texttt{u.out} erzeugt, die den
 \glqq Bytecode\grqq\ für die virtuelle Maschine beinhaltet. Man könnte auch die
-Option \texttt{-o} verwenden, um eine alternativen Dateinamen zu spezifizieren.
+Option \texttt{-o} verwenden, um einen alternativen Dateinamen zu spezifizieren.
 Möchte man diese Datei ausführen, so könnte man folgendes eingeben:
 \begin{lstlisting}
  /umach u.out
@@ -321,7 +341,8 @@ Aborted
 \end{lstlisting}
 Das bedeutet, die virtuelle Maschine hat nicht genug Speicher um dieses
 Programm überhaupt laden zu können (256 Bytes werden für die Interrupttabelle
-reserviert). Man kann in diesem Fall mit der Option \texttt{-m} den Speicher
+reserviert und die Maschine verwendet standardmässig 512 Bytes für den
+Speicher). Man kann in diesem Fall mit der Option \texttt{-m} den Speicher
 größer spezifizieren, z.B. so:
 \begin{lstlisting}
  /umach -m 600 u.out
