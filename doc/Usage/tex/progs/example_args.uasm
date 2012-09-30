@@ -1,0 +1,39 @@
+# Example of implementing and calling
+# a function.
+
+SET  R1 55  # first argument
+SET  R2 66  # second argument
+            # push args in reverse order
+PUSH R2     # push second arg
+PUSH R1     # push first arg
+CALL max    # call function
+CP   R3 R32 # copy result from R32
+
+EOP         # stop; don't go further
+
+############# function max #############
+# Arguments: two numbers               #
+# Returns:   maximum number in R32     #
+########################################
+max:
+    PUSH R17        # save work registers
+    PUSH R18
+
+    ADDI R17 SP 12  # address of first arg
+    ADDI R18 SP 16  # address of second arg
+    LW   R17 R17    # load first arg
+    LW   R18 R18    # load second arg
+
+    CMP  R17 R18    # compare args
+    BG   max_first  # if (r17 > r18) r32 = 17
+    CP   R32 R18    # else r32 = r18
+    JMP  max_finish # ready
+
+max_first:
+    CP   R32 R17
+
+max_finish:
+    
+    POP  R18        # restore work registers
+    POP  R17        # (pop in reverse order)
+    RET             # return

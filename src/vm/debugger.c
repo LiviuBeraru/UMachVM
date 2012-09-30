@@ -155,7 +155,7 @@ void db_show(int argc, char* argv[])
         for (; i < argc; i++) {
             r = get_register_byname(argv[i]);
             if (r) {
-                printf("%s = 0x%08X = %d", r->name, r->value, r->value);
+                printf("%-4s = 0x%08X = %6d", r->name, r->value, r->value);
                 // print as char if it is a printable char
                 if (r->value > 0 && r->value < CHAR_MAX && isprint(r->value)) {
                     printf(" = '%c'\n", r->value);

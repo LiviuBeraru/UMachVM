@@ -1,0 +1,25 @@
+* Die Maschine setzt im Fehlerfall das ERR Register gar nicht. Dieses
+  Register muss noch gesetzt werden.
+* Beim Laden eines neuen Befehls (core_fetch) wird das Register IR nicht
+  gesetzt. Es muss gesetzt werden.
+* Fehlermeldungen geben die aktuelle Instruktion nicht aus. Sie sollte
+  zusammen mit PC ausgegeben werden.
+* Mehr INFO-Ausgaben. (Speichergröße etc).
+* Der Debugger braucht einen Befehl "run" oder ähnliches: das Programm soll
+  einfach bis Ende laufen und dann warten auf weitere Kommandos. Immer 'step'
+  oder 's' eingeben nervt bei größeren Programmen. Also nicht
+  mehr nach jedem Befehl warten, sondern durchlaufen.
+* Befehle finden, die noch nicht implementiert sind und sie implementieren.
+  Orientierung können die anderen Befehle geben.
+  Beispiele: IN, INT (interrupt in system.c) etc. Bitte Spezifikation
+  nachschlagen.
+* Verwendung der Maschine genauer beschreiben: Optionen beim Start etc.
+* Musterprogramme schreiben. Dafür ein getrenntes Verzeichnis wie "Demos" 
+  anlegen. In doc/Usage/tex/progs gibt es schon ein paar Nützlichkeiten wie
+  strlen und putchar.
+* Allgemein Code durchgehen und Fehler finden.
+* Testen, Testen, Testen!
+* Alternative Implementierung für den Assembler. Dafür aber auch die
+  Dokumentation in Verwendung aktualisieren.
+* Alternative Implementierung eines Debuggers.
+* GTK/ncurses/Qt Debugger... :) swing?

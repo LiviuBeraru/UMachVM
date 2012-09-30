@@ -45,9 +45,9 @@ Register registers[NOREGS] = {
 // special registers
 
     [PC  ] = {PC,   "PC"  },
-    [DS  ] = {PC,   "DS"  },
-    [HS  ] = {PC,   "HS"  },
-    [HE  ] = {PC,   "HE"  },
+    [DS  ] = {DS,   "DS"  },
+    [HS  ] = {HS,   "HS"  },
+    [HE  ] = {HE,   "HE"  },
     [SP  ] = {SP,   "SP"  },
     [FP  ] = {FP,   "FP"  },
     [IR  ] = {IR,   "IR"  },

@@ -101,15 +101,166 @@ Es wird lediglig \glqq Hallo Welt\grqq\ ausgegeben.
 
 
 \subsection{Funktionen}
-\index{Funktionen}
+\index{Funktion}
 
-\subsubsection{Ausbau einer Funktion}
-\blindtext
+Der UMach Assembler unterstützt die Verwendung von Funktionen.
+
+\subsubsection{Aufbau einer Funktion}
+\index{Funktion!Aufbau}
+
+Eine Funktion auf der Assembler-Ebene ist nichts anderes als ein Stück Code,
+das mit einem Label versehen ist und dessen letzte Instrution ein \texttt{RET}
+ist (von Return). Zu diesem Code wird mit der Anweisung \texttt{CALL}
+gesprungen. Der Label ist der Name der Funktion.
+
+Die UMach virtuelle Maschine kennt keine Funktionen, sondern nur einzelne
+Maschinenbefehle. Sie kennt also auch keine Argumente, Parameter, Blöcke und
+Rückgabewerte. Alle diese Elementen, die in höheren Programmiersprachen eine
+Funktion (Methode) ausmachen, müssen also vom Programmierer selbst implementiert
+werden. Jeder Programmierer ist also frei in der Entscheidung, wie er diese
+Elementen implementiert, wie er überhaupt einem Codeabschnitt Argumente
+übergibt, wie er Rückgabewerte darstellt usw. 
+
+Um diese Entscheidungen zu erleichtern kann man einige Konventionen vorstellen,
+wie diese Bausteine einer Funktion zu implementieren sind. Eine solche
+Konvention wird in den folgenden Punkten gegeben. Man muss aber verstehen, dass
+es sich um eine Konvention, bzw. um den Vorschlag einer Konvention handelt.
+Jeder ist frei sich andere Konventionen und Regeln auszudenken.
+
+\paragraph{Name der Funktion}
+\index{Funktion!Name}
+Der Name der Funktion wird als Label angeben. Eine Funktion fängt also wie folgt
+an:
+\begin{lstlisting}
+funktionsname:
+    anweisung
+    anweisung
+    ...
+\end{lstlisting}
 
 
+\paragraph{Ende der Funktion}
+\index{Funktion!Ende}
+Das Ende der Funktion wird durch den Befehl \texttt{RET} markiert (von
+\glqq return\grqq). Für mehr Informationen betreffend dieses Befehls siehe die
+Spezifikation der UMach Maschine (Abschnitt 3.8.3).
 
 
-\subsubsection{Ein Beispiel}
+\paragraph{Argumente}
+\index{Funktion!Argumente}
+
+Die Argumente einer Funktion werden vor dem Aufruf auf den Stack abgelegt und
+zwar in umgekehrter Reihenfolge\footnote{Dies entspricht übrigens gängiger
+Praxis.}. Innerhalb der Funktion werden die Argumente mit Hilfe des Registers
+\texttt{SP} (stack pointer) und eines Offsets abgelesen.
+
+Möchte man z.B. eine Funktion namens \texttt{max} mit zwei Argumenten aufrufen
+und befindet sich das erste Argument in \texttt{R1} und das zweite in
+\texttt{R2}, so pusht man vor dem Aufruf diese zwei Argumente auf den Stack in
+umgekehrter Reihenfolge (damit sie die Funktion in richtiger Reihenfolge liest):
+\begin{lstlisting}
+PUSH R2
+PUSH R1
+CALL max
+\end{lstlisting}
+In der Funktion, werden die Adressen der Argumente anhand eines Offsets zum
+Register \texttt{SP} berechnet und dann mit dem Befehl \texttt{LW} (load word)
+geladen. Dazu muss man auf das folgende aufpassen:
+\begin{enumerate}
+ \item Der Befehl \texttt{CALL}, mit dem man die Funktion aufruft, pusht die
+       Rücksprungadresse aus der Funktion auf den Stack bevor er den Program
+       Counter \texttt{PC} verändert. Das ergibt einen zusätzlichen Eintrag 
+       auf den Stack.
+ \item Jeder Stack Eintrag is 4 Byte groß, egal was da gespeichert wird.
+\end{enumerate}
+Das ergibt beim Eintritt in die Funktion den folgenden Stack-Layout:
+\begin{center}
+ \begin{tabular}{ll}
+  Adresse     & Inhalt \\\hline
+  $\$SP + 0$  & Rücksprungadresse \\
+  $\$SP + 4$  & Erstes Argument   \\
+  $\$SP + 8$  & Zweites Argument  \\
+  \ldots      & \ldots            \\
+  $\$SP + 4n$ & $n$. Argument
+ \end{tabular}
+\end{center}
+Um an die zwei Argumente von vorhin zu gelangen, wird also in der Funktion
+geschrieben:
+\begin{lstlisting}
+ADDI R17 SP 4
+LW   R17 R17
+
+ADDI R18 SP 8
+LW   R18 R18
+\end{lstlisting}
+Das speichert in das Register \texttt{R17} die Stack-Adresse, wo \texttt{R1}
+gepusht wurde und dann gleich aus dieser Adresse wieder in \texttt{R17} den
+Wert von \texttt{R1} geladen. Analog für \texttt{R2} und \texttt{R18}.
+
+
+\paragraph{Rückgabewert}
+\index{Funktion!Rückgabewert}
+Es gibt viele Möglichkeiten, einen Wert aus einer Funktion zurückzugeben.
+Einige davon wären:
+\begin{itemize}
+ \item Rückgabewert in einem vorgeschriebenen oder vereinbarten Register.
+ \item Rückgabewert auf dem Stack, wobei der aufrufende Code vor dem Aufruf
+       dafür sorgt, dass entsprechende Stack-Einträge reserviert werden
+       (\texttt{SP} dekrementieren).
+ \item Rückgabewert auf dem Stack, wobei die Funktion selber den Stack
+       manipuliert.
+ \item Rückgabe an vorgeschriebener oder vereinbarter Heap-Adresse.
+ \item etc.
+\end{itemize}
+Eine der gängigsten und effizientesten Methoden ist allerdings, den Wert in
+einem bestimmten Register abzulegen. Für diese Methode haben wir uns auch
+entschieden, und zwar benutzen wir das Register \texttt{R32}, das letze
+Register\footnote{Für x86 verwendet man das Register \texttt{eax} für
+Rückgabewerte.}. Wird also einen Wert zurückzugeben, so wird er vor dem
+\texttt{RET} Befehl in das Register \texttt{R32} kopiert.
+
+
+\paragraph{Überschreiben der Register}
+Es kann sehr schnell passieren, dass eine Funktion Register überschreibt, die
+von einer anderen Funktion verwendet werden. Verwendet z.B. eine Funktion die
+Register \texttt{R1} bis \texttt{R8} für ihre Berechnungen, und ruft sie
+irgendwann eine zweite Funktion auf, die die selben Register verwendet, so
+werden in der ersten Funktion die Register verändert, ohne dass sie davon
+überhaupt etwas merkt. Ein Beispiel dazu:
+\begin{lstlisting}
+main:
+   SET R1 5
+   SET R2 6
+   INC R1
+   DEC R2
+   CALL function
+   RET
+
+function:
+   CP R3 R1
+   CP R1 R2
+   CP R2 R3
+   RET
+\end{lstlisting}
+
+Hier verändert die Funktion \texttt{function} die Werte der Register \texttt{R1}
+und \texttt{R2}, die auch von der Funktion \texttt{main} verwendet werden.
+Diese Art von unfreiwilliger Überschreibung der Register führt sehr schnell zu
+schwer entdeckbaren Fehler. Daher verwenden wir eine Programmiertechnik, die
+dieses Problem aufheben sollte: wir überlegen uns vor (oder während) der
+Implementierung, welche Register wollen wir benutzen und gleich am Anfang der
+Funktion, pushen wir diese Register auf den Stack. Vor dem \texttt{RET} popen
+wir die Register wieder zurück (in umgekehrter Reihenfolge). Im nächsten
+Beispiel kann man diese Technik sehen.
+
+\paragraph{Beispiel}
+Hier ein Beispiel für den Aufruf und Implementierung einer Funktion. Es wird
+eine einfache \texttt{max} Funktion implementiert, die die größere aus zwei
+Zahlen zurückgibt. Die Rückgabe erfolgt im Register \texttt{R32}.
+\lstinputlisting{progs/example_args.uasm}
+
+
+\subsubsection{Ein größeres Beispiel}
 \label{subsubsec:Funktionen-Beispiel}
 
 Das folgende Beispiel verdeutlicht die Verwendung von Funktionen anhand eines
