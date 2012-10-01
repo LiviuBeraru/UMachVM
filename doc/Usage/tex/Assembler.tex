@@ -32,6 +32,23 @@ Labelname ist höchstens 128 Buchstaben lang.
 
 Labelnamen müssen selbst keine Leerzeichen (whitespace) beinhalten.
 
+Ein Label muss immer von einem Befehl gefolgt werden, auch wenn dieser Befehl
+ein \texttt{NOP} ist. Labels, die von keinem Befehl gefolgt werden gelten als
+undefiniert und ein Sprung zu diesem Label ist ein Fehler. Beispiel:
+\begin{lstlisting}
+jmp label
+label:
+\end{lstlisting}
+Hier wird das Label \texttt{label} nicht definiert, da kein Befehl nach diesem
+Label folgt. Die Markierung des Datenbereichs gilt nicht als Definition eines
+Labels:
+\begin{lstlisting}
+jmp label
+label:
+.data
+\end{lstlisting}
+Dieses Programm wird ebenfalls nicht assembliert.
+
 Mehrfache Labels, die auf den selben Befehl zeigen, werden unterstüzt. Diese
 können beliebing im Code geschrieben werden, d.h. sie können auf verschiedenen
 Zeilen oder auf einer einzigen Zeile geschrieben werden. Mehrfache Labels
