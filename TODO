@@ -28,3 +28,8 @@
 * GTK/ncurses/Qt Debugger... :) swing?
 * Presentation schreiben.
 * readme Datei in src/vm aktualisieren.
+* interrupt() in system.c soll auch den Namen des Interrupts augeben,
+  nicht nur die Nummer.
+
+* mem_write in memory.c prüft nicht ob es in einem Schreibgeschützen
+  Bereich schreibt. Schreibgeschützt ist der Code Segment.
