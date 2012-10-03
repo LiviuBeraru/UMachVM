@@ -33,3 +33,5 @@
 
 * mem_write in memory.c prüft nicht ob es in einem Schreibgeschützen
   Bereich schreibt. Schreibgeschützt ist der Code Segment.
+* merzeilige Strings in Assembler sollen unterstützt werden. String-Daten sollte
+  man über mehrere Zeilen angeben können.

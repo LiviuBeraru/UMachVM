@@ -1,0 +1,29 @@
+SET  R1 prompt
+SET  R2 nl
+SUB  R2 R2 R1 # R2 = length of prompt data
+OUT  R1 R2 ZERO # output prompt
+SET  R1 nl
+ADDI R1 R1 3
+SET  R2  1
+OUT  R1 R2 ZERO
+
+SET  R1 64
+SET  R2  0
+SET  R3  0x71 # ascii 'q'
+ADD  HE HE R1
+
+get_input:
+    IN   HS R1 ZERO
+    LB   R2 HS
+    CMP  R2 R3
+    BE   finish
+    OUT  HS R1 ZERO
+    JMP  get_input
+
+finish:
+    EOP
+
+.data
+
+.string prompt "Echo program. End qith q"
+.int    nl     0x0A # new line
