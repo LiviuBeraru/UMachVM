@@ -1,6 +1,6 @@
 SET  R1 prompt
 SET  R2 nl
-SUB  R2 R2 R1 # R2 = length of prompt data
+SUB  R2 R2 R1   # R2 = length of prompt data
 OUT  R1 R2 ZERO # output prompt
 SET  R1 nl
 ADDI R1 R1 3
@@ -25,5 +25,5 @@ finish:
 
 .data
 
-.string prompt "Echo program. End qith q"
+.string prompt "Echo program. End with q"
 .int    nl     0x0A # new line
