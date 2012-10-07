@@ -15,7 +15,7 @@ count:
 
 counted:
     inc r2         # one more for '\0'
-    set r1 hello   # set r1 to the string begin
+    set r1 hello   # reset r1 to the string begin
     out r1 r2 zero # output Hello!
 
 # print the new line
@@ -30,4 +30,4 @@ EOP
 
 .data
 .string hello "Hello!"
-.number nl  0x0A
+.int    nl  0x0A
