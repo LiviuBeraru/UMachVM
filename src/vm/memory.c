@@ -16,7 +16,8 @@ uint8_t begin_data[4] = {0xFF, 'D', 'A', 'T'};
 int mem_init(size_t bytes)
 {
     if (bytes < (ITABLE_SIZE + 4)) {
-        logmsg(LOG_ERR, "Memory must be at least %d+4 bytes big.", ITABLE_SIZE);
+        logmsg(LOG_ERR, "Mem: Memory must be at least %d+4 bytes big.", 
+               ITABLE_SIZE);
         return -1;
     }
 
@@ -27,7 +28,7 @@ int mem_init(size_t bytes)
     memory = calloc(bytes, sizeof(*memory));
 
     if (memory == NULL) {
-        logmsg(LOG_ERR, "%s: cannot allocate %u bytes of memory", bytes);
+        logmsg(LOG_ERR, "Mem: cannot allocate %u bytes of memory", bytes);
         return -1;
     }
 
@@ -48,7 +49,7 @@ int mem_load_program_file(const char* filename)
 {
     if (memory == NULL) {
         /* must call mem_init first */
-        logmsg(LOG_ERR, "Cannot load program: memory not initialized.");
+        logmsg(LOG_ERR, "Mem: Cannot load program: memory not initialized.");
         return -1;
     }
 
@@ -68,8 +69,8 @@ int mem_load_program_file(const char* filename)
        table and the program */
     if (ITABLE_SIZE + fsize >= memsize) {
         logmsg(LOG_ERR,
-               "Cannot load %ld bytes of program into %d bytes of memory",
-               fsize, memsize);
+               "Mem: Cannot load %ld bytes of program into %d bytes of memory",
+               fsize, mem_getsize());
         fclose(file);
         return -1;
     }
@@ -107,21 +108,21 @@ int mem_read(uint8_t *destination, int index, int nbytes)
 {
     if (memory == NULL) {
         /* memory was not initialized */
-        logmsg(LOG_ERR, "Cannot read from NULL memory");
+        logmsg(LOG_ERR, "Mem: Cannot read from NULL memory");
         interrupt(INT_INTERNAL_ERR);
         return -1;
     }
 
     if (index < 0 || index >= memsize) {
         /* invalid memory index */
-        logmsg(LOG_ERR, "Illegal memory index: %d", index);
+        logmsg(LOG_ERR, "Mem: Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
 
     if ((index + nbytes) > memsize) {
         /* invalid number of bytes to read */
-        logmsg(LOG_ERR, "Cannot read %d bytes from memory: too much", nbytes);
+        logmsg(LOG_ERR, "Mem: Cannot read %d bytes from memory: too much", nbytes);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
@@ -141,7 +142,7 @@ int mem_write(uint8_t* source, int index, int nbytes)
 {
     if (memory == NULL) {
         /* memory was not previously initialized */
-        logmsg(LOG_ERR, "Cannot write to NULL memory");
+        logmsg(LOG_ERR, "Mem: Cannot write to NULL memory");
         interrupt(INT_INTERNAL_ERR);
         return -1;
     }
@@ -149,13 +150,13 @@ int mem_write(uint8_t* source, int index, int nbytes)
     // check index range
     if (index < 0 || index >= memsize) {
         /* wrong memory index (memory address) */
-        logmsg(LOG_ERR, "Illegal memory index: %d", index);
+        logmsg(LOG_ERR, "Mem: Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
 
     if ((index + nbytes) > memsize) {
-        logmsg(LOG_ERR, "Cannot write %d bytes to memory: too much", nbytes);
+        logmsg(LOG_ERR, "Mem: Cannot write %d bytes to memory: too much", nbytes);
         interrupt(INT_INVALID_MEM);
         return -1;
     }

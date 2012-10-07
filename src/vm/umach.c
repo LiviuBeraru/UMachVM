@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
         exit(1);
     }
     
+    logmsg(LOG_INFO, "Initialized memory (%ld bytes)", mem_getsize());
+    
     /* initialize core */
     core_init();
 
@@ -65,10 +67,9 @@ void parse_opts(int argc, char *argv[])
 {
     options.disassemble = 0;
     options.debug = 0;
-    options.memory = 512;
+    options.memory = 2048; // default memory size
     options.hexa = 0;
     options.verbose = 0;
-    options.output_file = "a.ux";
 
     opterr = 0;
     /*
@@ -79,7 +80,7 @@ void parse_opts(int argc, char *argv[])
      * -x hexa output
      * -v verbose mode 
      */
-    const char opts[] = "sdm:xvo:";
+    const char opts[] = "sdm:xv";
     int c;
     while((c = getopt(argc, argv, opts)) != -1) {
         switch (c) {
@@ -97,9 +98,6 @@ void parse_opts(int argc, char *argv[])
                 break;
             case 'v':
                 options.verbose++;
-                break;
-            case 'o':
-                options.output_file = optarg;
                 break;
             case '?':
                 printf("Unknown option: -%c\n", optopt);
