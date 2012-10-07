@@ -104,8 +104,9 @@ int core_mul(void)
     int64_t b = b32;
     int64_t d = a * b;
     
-    write_register(LO, (int32_t) d);
-    write_register(HI, (int32_t) (d >> 32));
+    /* HI and LO are read only, so we write them directly */
+    registers[LO].value = (int32_t) d;
+    registers[HI].value = (int32_t) (d >> 32);
     
     return 0;
 }
@@ -125,8 +126,9 @@ int core_mulu(void)
     uint64_t b = b32;
     uint64_t d = a * b;
     
-    write_registeru(LO, (uint32_t) d);
-    write_registeru(HI, (uint32_t) (d >> 32));
+    /* write the read-only registers HI and LO directly */
+    registers[LO].value = (uint32_t) d;
+    registers[HI].value = (uint32_t) (d >> 32);
     
     return 0;
 }
@@ -147,8 +149,10 @@ int core_muli(void)
     int64_t b = b16;
     int64_t d = a * b;
     
-    write_register(LO, (int32_t) d);
-    write_register(HI, (int32_t) (d >> 32));
+    /* HI and LO are read only, so we write them directly */
+    registers[LO].value = (int32_t) d;
+    registers[HI].value = (int32_t) (d >> 32);
+    
     return 0;
 }
 
