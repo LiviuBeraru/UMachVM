@@ -1,0 +1,60 @@
+
+inputint:
+PUSH R31
+PUSH R31
+PUSH R32
+PUSH R1
+PUSH R2
+PUSH R3
+PUSH R4
+PUSH R5
+
+ADDI R32 SP 32	#Ergebniss wird auf den Stack gespeichert R32 ist die 
+		#Adresse
+CP R1 HE	#speicher auf dem heap für den input allokieren
+INC R1
+ADDI HE HE 10
+SET R2 10
+IN R1 R2 ZERO
+
+ADD R3 R1 R2	#zeiger auf letzte ziffer bewegen
+DEC R3
+
+LB R4 R3	#vergleicht ob das letzte zeichen ein newline ist
+SET R5 0x0A	#R5 = newline
+CMP R4 R5
+BNE start
+DEC R3
+
+start:
+SET R4 1	#10er faktor
+SET R31 0	#ausgaberegister leeren
+SET R5 0x30 	# ascii '0'
+
+nextnbr:
+LB R2 R3
+SUB R2 R2 R5
+MUL R2 R4
+CP R2 LO
+ADD R31 R31 R2 
+MULI R4 10
+CP R4 LO
+DEC R3
+CMP R3 R1
+BGE nextnbr
+
+SW R31 R32
+
+SUBI HE HE 10
+POP R5
+POP R4
+POP R3
+POP R2
+POP R1
+POP R32
+POP R31
+
+RET
+
+
+

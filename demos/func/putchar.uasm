@@ -1,0 +1,27 @@
+# putchar, function to print one character 
+# Arguments: character to print (on stack)
+# Returns: nothing
+# Work registers: R17 and R18, which will be saved
+# and restored to their previous values.
+
+putchar:
+
+# save registers R17 and R18 before use
+    PUSH R17
+    PUSH R18
+# jump over the pushed registers and over the
+# return address stored by the call command
+# that is R17 = SP + (2 * 4 + 4)
+    ADDI R17 SP 12
+# jump over 3 bytes to the least significant 
+# byte of the argument (one character)
+    ADDI R17 R17 3
+# we print one single byte
+    SET  R18 1
+# output 1 byte from mem[R17] to port zero
+    OUT  R17 R18 ZERO
+# restore registers R17 und R18
+    POP  R18
+    POP  R17
+    RET
+

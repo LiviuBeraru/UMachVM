@@ -1,0 +1,53 @@
+# printint, function to print an integer
+# Arguments: integer to print (on stack)
+# Returns:   nothing
+# Registers used: R17, R18, R19
+
+printint:
+# save the registers we will work with
+    PUSH R17
+    PUSH R18
+    PUSH R19
+# set R17 to the stack address of the integer argument
+# we have pushed 3 registers and after them there is
+# the return address, so we increase SP with 3*4 + 4
+# (stack entries are always 4 byte)
+    ADDI R17 SP 16
+    LW   R17 R17
+
+# Registers we use:
+# R17 current integer value, which we divide by 10
+# R18 characters counter
+# R19 division remainder
+    SET R18 0 
+printint_convert:
+    CMP  R17 ZERO
+    BE   printint_printchars
+    DIVI R17 10
+    CP   R17 HI     # R17 = R17/10
+    CP   R19 LO     # R19 = R17 mod 10
+    ADDI R19 R19 48 # R19 = ascii value of R19
+    PUSH R19        # push the ascii value of remainder
+    INC  R18        # counter++
+    JMP  printint_convert
+
+# after having pushed the string representation
+# of the integer argument, we call putchar to print
+# all those characters. This will print them in the
+# right order because now we go the stack backwards.
+printint_printchars:
+    CMP R18 ZERO       # more chars to print?
+    BE printint_finish
+    CALL putchar       # char already on stack, print it
+    ADDI SP SP 4       # move stack pointer to next char
+    DEC  R18           # counter--
+    JMP printint_printchars
+
+printint_finish:
+# restore register values which we previously
+# saved on the stack
+    POP R19
+    POP R18
+    POP R17
+    RET
+

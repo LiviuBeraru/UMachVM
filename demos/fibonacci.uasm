@@ -1,0 +1,18 @@
+SET  	R1 startmsg
+SET  	R2 nl
+SUB  	R2 R2 R1   # R2 = length of prompt data
+OUT  	R1 R2 ZERO # output prompt
+CALL 	newline
+CALL	inputint
+
+
+
+
+
+
+
+EOP
+
+.data
+.string startmsg "Wieviele Fibonacci Zahlen sollen dargestellt werden?"
+.int    nl	0x0A # new line

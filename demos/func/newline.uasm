@@ -1,0 +1,14 @@
+newline:
+
+PUSH	R1
+PUSH 	R2
+
+SET  	R1 0x0A	# R1 = newline
+ADDI 	R1 R1 3
+SET  	R2  1
+OUT  	R1 R2 ZERO
+
+POP	R2
+POP	R1
+
+RET
