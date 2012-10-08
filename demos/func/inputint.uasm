@@ -32,15 +32,15 @@ SET R31 0	#ausgaberegister leeren
 SET R5 0x30 	# ascii '0'
 
 nextnbr:
-LB R2 R3
-SUB R2 R2 R5
-MUL R2 R4
-CP R2 LO
-ADD R31 R31 R2 
-MULI R4 10
+LB R2 R3	#lade char an der adresse R3 = erste zahl von rechts
+SUB R2 R2 R5	#konvertieren von char in int R2 = R2 - ascii '0'
+MUL R2 R4	#mit dem aktuellen 10er faktor multiplizieren
+CP R2 LO	
+ADD R31 R31 R2 	#auf das gesamtergebnis draufrechnen
+MULI R4 10	#10er faktoer erhöhen
 CP R4 LO
-DEC R3
-CMP R3 R1
+DEC R3		#nächter char
+CMP R3 R1	
 BGE nextnbr
 
 SW R31 R32
