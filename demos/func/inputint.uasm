@@ -32,6 +32,7 @@ SET R31 0	#ausgaberegister leeren
 SET R5 0x30 	# ascii '0'
 
 nextnbr:
+CP R2 ZERO
 LB R2 R3	#lade char an der adresse R3 = erste zahl von rechts
 SUB R2 R2 R5	#konvertieren von char in int R2 = R2 - ascii '0'
 MUL R2 R4	#mit dem aktuellen 10er faktor multiplizieren
