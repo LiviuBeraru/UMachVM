@@ -4,9 +4,7 @@ SUB  	R2 R2 R1   # R2 = length of prompt data
 OUT  	R1 R2 ZERO # output prompt
 CALL	inputint
 
-back:			#normalerweise würde man dieses label nicht brauchen
-SET R3 2044		#normalerweise POP R3
-LW 	R3 R3		#statt diesen beiden zeilen
+POP	R3	#Argument von inputint holen
 CMP	R3 ZERO
 BE	end
 SET	R4 1

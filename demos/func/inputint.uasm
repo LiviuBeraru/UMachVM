@@ -1,6 +1,6 @@
 
 inputint:
-PUSH R31
+PUSH ZERO	#platzhalter für rückgabe hier wird später die rücksprungadresse stehn
 PUSH R31
 PUSH R32
 PUSH R1
@@ -9,8 +9,12 @@ PUSH R3
 PUSH R4
 PUSH R5
 
-ADDI R32 SP 32	#Ergebniss wird auf den Stack gespeichert R32 ist die 
+ADDI R32 SP 32	#Ergebniss wird auf den Stack gespeichert R32 ist die
 				#Adresse
+LW R31 R32	#zuvor muss die Ruecksprungadresse verschoben werden
+SUBI R32 R32 4	#um platz für die rückgabe zu schaffen
+SW R31 R32
+ADDI R32 R32 4
 CP R1 HE		#speicher auf dem heap für den input allokieren
 INC R1
 ADDI HE HE 10
@@ -55,7 +59,6 @@ POP R1
 POP R32
 POP R31
 
-JMP back		#normalerweise ohne jmp back
 RET
 
 
