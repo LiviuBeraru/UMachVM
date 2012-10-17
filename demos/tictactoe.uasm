@@ -1,0 +1,156 @@
+
+ausgabe:
+CALL newline
+CMP R1 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 1
+PUSH R11
+CALL printint
+SET R12 124 	#senkrechter strich |
+PUSH R12
+CALL putchar
+CMP R2 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 2
+PUSH R11
+CALL printint
+PUSH R12
+CALL putchar    # |
+CMP R3 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 3
+PUSH R11
+CALL printint
+CALL newline
+
+
+SET R13 45	#waagrechter strich -
+PUSH R13
+CALL putchar
+SET R14 43	#kreuz +
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+CALL newline
+
+CMP R4 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 4
+PUSH R11
+CALL printint
+SET R12 124 	#senkrechter strich |
+PUSH R12
+CALL putchar
+CMP R5 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 5
+PUSH R11
+CALL printint
+PUSH R12
+CALL putchar    # |
+CMP R6 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 6
+PUSH R11
+CALL printint
+CALL newline
+
+
+
+SET R13 45	#waagrechter strich -
+PUSH R13
+CALL putchar
+SET R14 43	#kreuz +
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+CALL newline
+
+CMP R7 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 7
+PUSH R11
+CALL printint
+SET R12 124 	#senkrechter strich |
+PUSH R12
+CALL putchar
+CMP R8 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 8
+PUSH R11
+CALL printint
+PUSH R12
+CALL putchar    # |
+CMP R9 ZERO
+BE 4
+PUSH R1
+CALL writePlayerSign 
+JMP 4
+SET R11 9
+PUSH R11
+CALL printint
+CALL newline
+
+
+
+
+finish:
+
+EOP
+
+writePlayerSign:
+POP R11
+SET R15 2
+CMP R11 R15     # if R11 = 2; print('O'); else print('X');
+BE 5
+SET R15 88      # '88' = ascii 'X'
+PUSH R15
+CALL putchar
+JMP 4
+SET R15 79      # '79' = ascii 'O'
+PUSH R15
+CALL putchar
+RET
+
+
+.data
+.string promptp1 "Spieler 1 ist an der Reihe:"
+.string promptp2 "Spieler 2 ist an der Reihe:"
+.string promptp1win "Spieler 1 gewinnt!"
+.string promptp2win "Spieler 2 gewinnt!"
+.string promptend "Für eine weitere Runde ENTER, zum beenden q tippen."
+
