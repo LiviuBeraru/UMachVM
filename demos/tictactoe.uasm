@@ -1,0 +1,173 @@
+start:
+
+
+ausgabe:
+CALL newline
+CMP R1 ZERO
+BE 1
+PUSH R1
+CALL writePlayerSign 
+JMP 2
+1:
+SET R11 1
+PUSH R11
+CALL printint
+2:
+SET R12 124 	#senkrechter strich |
+PUSH R12
+CALL putchar
+CMP R2 ZERO
+BE 3
+PUSH R2
+CALL writePlayerSign 
+JMP 4
+3:
+SET R11 2
+PUSH R11
+CALL printint
+4:
+PUSH R12
+CALL putchar    # |
+CMP R3 ZERO
+BE 5
+PUSH R3
+CALL writePlayerSign 
+JMP 6
+5:
+SET R11 3
+PUSH R11
+CALL printint
+6:
+CALL newline
+
+
+SET R13 45	#waagrechter strich -
+PUSH R13
+CALL putchar
+SET R14 43	#kreuz +
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+CALL newline
+
+CMP R4 ZERO
+BE 7
+PUSH R4
+CALL writePlayerSign 
+JMP 8
+7:
+SET R11 4
+PUSH R11
+CALL printint
+8:
+SET R12 124 	#senkrechter strich |
+PUSH R12
+CALL putchar
+CMP R5 ZERO
+BE 9
+PUSH R5
+CALL writePlayerSign 
+JMP 10
+9:
+SET R11 5
+PUSH R11
+CALL printint
+10:
+PUSH R12
+CALL putchar    # |
+CMP R6 ZERO
+BE 11
+PUSH R6
+CALL writePlayerSign 
+JMP 12
+11:
+SET R11 6
+PUSH R11
+CALL printint
+12:
+CALL newline
+
+SET R13 45	#waagrechter strich -
+PUSH R13
+CALL putchar
+SET R14 43	#kreuz +
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+PUSH R14
+CALL putchar
+PUSH R13
+CALL putchar
+CALL newline
+
+CMP R7 ZERO
+BE 13
+PUSH R7
+CALL writePlayerSign 
+JMP 14
+13:
+SET R11 7
+PUSH R11
+CALL printint
+14:
+SET R12 124 	#senkrechter strich |
+PUSH R12
+CALL putchar
+CMP R8 ZERO
+BE 15
+PUSH R8
+CALL writePlayerSign 
+JMP 16
+15:
+SET R11 8
+PUSH R11
+CALL printint
+16:
+PUSH R12
+CALL putchar    # |
+CMP R9 ZERO
+BE 17
+PUSH R9
+CALL writePlayerSign 
+JMP 18
+17:
+SET R11 9
+PUSH R11
+CALL printint
+18:
+CALL newline
+
+finish:
+
+EOP
+
+writePlayerSign:
+POP R11
+SET R15 2
+CMP R11 R15     # if R11 = 2; print('O'); else print('X');
+BE O
+SET R15 88      # '88' = ascii 'X'
+PUSH R15
+CALL putchar
+JMP X
+O:
+SET R15 79      # '79' = ascii 'O'
+PUSH R15
+CALL putchar
+X:
+RET
+
+
+.data
+.string promptp1 "Spieler 1 ist an der Reihe:"
+.string promptp2 "Spieler 2 ist an der Reihe:"
+.string promptp1win "Spieler 1 gewinnt!"
+.string promptp2win "Spieler 2 gewinnt!"
+.string promptend "Für eine weitere Runde ENTER, zum beenden q tippen."
+
