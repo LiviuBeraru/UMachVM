@@ -1,11 +1,39 @@
 start:
+SET R1 1
+SET R5 1
+SET R9 1
+SET R4 2
+SET R6 2
+SET R3 2
+
+CALL ausgabe
+
+
+finish:
+
+EOP
+
+writePlayerSign:
+SET R15 2
+CMP R11 R15     # if R11 = 2; print('O'); else print('X');
+BE O
+SET R15 88      # '88' = ascii 'X'
+PUSH R15
+CALL putchar
+JMP X
+O:
+SET R15 79      # '79' = ascii 'O'
+PUSH R15
+CALL putchar
+X:
+RET
 
 
 ausgabe:
 CALL newline
 CMP R1 ZERO
 BE 1
-PUSH R1
+CP R11 R1
 CALL writePlayerSign 
 JMP 2
 1:
@@ -18,7 +46,7 @@ PUSH R12
 CALL putchar
 CMP R2 ZERO
 BE 3
-PUSH R2
+CP R11 R2
 CALL writePlayerSign 
 JMP 4
 3:
@@ -30,7 +58,7 @@ PUSH R12
 CALL putchar    # |
 CMP R3 ZERO
 BE 5
-PUSH R3
+CP R11 R3
 CALL writePlayerSign 
 JMP 6
 5:
@@ -39,7 +67,6 @@ PUSH R11
 CALL printint
 6:
 CALL newline
-
 
 SET R13 45	#waagrechter strich -
 PUSH R13
@@ -57,7 +84,7 @@ CALL newline
 
 CMP R4 ZERO
 BE 7
-PUSH R4
+CP R11 R4
 CALL writePlayerSign 
 JMP 8
 7:
@@ -70,7 +97,7 @@ PUSH R12
 CALL putchar
 CMP R5 ZERO
 BE 9
-PUSH R5
+CP R11 R5
 CALL writePlayerSign 
 JMP 10
 9:
@@ -82,7 +109,7 @@ PUSH R12
 CALL putchar    # |
 CMP R6 ZERO
 BE 11
-PUSH R6
+CP R11 R6
 CALL writePlayerSign 
 JMP 12
 11:
@@ -108,7 +135,7 @@ CALL newline
 
 CMP R7 ZERO
 BE 13
-PUSH R7
+CP R11 R7
 CALL writePlayerSign 
 JMP 14
 13:
@@ -121,7 +148,7 @@ PUSH R12
 CALL putchar
 CMP R8 ZERO
 BE 15
-PUSH R8
+CP R11 R8
 CALL writePlayerSign 
 JMP 16
 15:
@@ -133,7 +160,7 @@ PUSH R12
 CALL putchar    # |
 CMP R9 ZERO
 BE 17
-PUSH R9
+CP R11 R9
 CALL writePlayerSign 
 JMP 18
 17:
@@ -142,25 +169,6 @@ PUSH R11
 CALL printint
 18:
 CALL newline
-
-finish:
-
-EOP
-
-writePlayerSign:
-POP R11
-SET R15 2
-CMP R11 R15     # if R11 = 2; print('O'); else print('X');
-BE O
-SET R15 88      # '88' = ascii 'X'
-PUSH R15
-CALL putchar
-JMP X
-O:
-SET R15 79      # '79' = ascii 'O'
-PUSH R15
-CALL putchar
-X:
 RET
 
 

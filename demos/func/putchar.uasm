@@ -6,13 +6,17 @@
 
 putchar:
 
-# save registers R17 and R18 before use
+# save registers R17,R18 and R19 before use
     PUSH R17
     PUSH R18
+    PUSH R19
 # jump over the pushed registers and over the
 # return address stored by the call command
-# that is R17 = SP + (2 * 4 + 4)
-    ADDI R17 SP 12
+# that is R17 = SP + (3 * 4 + 4)
+    ADDI R17 SP 16
+# load return adress
+	ADDI R19 SP 12
+	LW R19 R19
 # jump over 3 bytes to the least significant 
 # byte of the argument (one character)
     ADDI R17 R17 3
@@ -20,8 +24,14 @@ putchar:
     SET  R18 1
 # output 1 byte from mem[R17] to port zero
     OUT  R17 R18 ZERO
+# relocate the return adress on the argument of the stack
+	SUBI R17 R17 3
+	SW 	 R19 R17
 # restore registers R17 und R18
+	POP	 R19
     POP  R18
     POP  R17
+# pop the stack
+	ADDI SP SP 4
     RET
 
