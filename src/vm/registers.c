@@ -150,3 +150,49 @@ Register* get_register_byname(const char* name)
 
     return NULL;
 }
+
+static int set_unset_regbit(int regno, int bitno, int value)
+{
+    if (regno < 0 || regno >= NOREGS) {
+        logmsg(LOG_ERR, "Invalid register number %d", regno);
+        interrupt(INT_INVALID_REG);
+        return -1;
+    }
+
+    if (value == 1) {
+        registers[regno].value |=  (1 << bitno);
+    } else if (value == 0) {
+        registers[regno].value &= ~(1 << bitno);
+    } else {
+        /* we did some mistake */
+        interrupt(INT_INTERNAL_ERR);
+        return -1;
+    }
+    
+    return 0;
+}
+
+/* set bit with number bitno in register with number regno
+   return -1 on error or 0 if ok */
+int set_register_bit(int regno, int bitno)
+{
+    return set_unset_regbit(regno, bitno, 1);
+}
+
+/* unset the bit number bitno in register with number regno
+   returns 0 if ok, -1 if wrong register number */
+int unset_register_bit(int regno, int bitno)
+{
+    return set_unset_regbit(regno, bitno, 0);
+}
+
+int isset_register_bit(int regno, int bitno)
+{
+    if (regno < 0 || regno >= NOREGS) {
+        logmsg(LOG_ERR, "Invalid register number %d", regno);
+        interrupt(INT_INVALID_REG);
+        return -1;
+    }
+
+    return (registers[regno].value & (1 << bitno));
+}

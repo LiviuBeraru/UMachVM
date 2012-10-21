@@ -18,6 +18,13 @@ int    mem_push(int32_t word);
 int    mem_pop(int32_t *word);
 size_t mem_getsize(void);
 
+/**
+ * Convert the nbytes-integer stored in big-endian order
+ * at memory address mem to a 4-integer. The sign of the integer at mem
+ * is preserved.
+ */
+int32_t mem_to_int(const uint8_t *mem, int nbytes);
+
 
 /** This 4 byte 'instruction' marks the begin of the data section of a programm. 
  *  After this instruction, no executable commands are to be found. */
