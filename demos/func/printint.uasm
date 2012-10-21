@@ -8,13 +8,18 @@ printint:
     PUSH R17
     PUSH R18
     PUSH R19
+	PUSH R20
+	PUSH R21
 # set R17 to the stack address of the integer argument
 # we have pushed 3 registers and after them there is
-# the return address, so we increase SP with 3*4 + 4
+# the return address, so we increase SP with 5*4 + 4
 # (stack entries are always 4 byte)
-    ADDI R17 SP 16
+    ADDI R17 SP 24
+	CP	 R21 R17		#R21 saves the location for the return adress
     LW   R17 R17
-
+# store the return adress 
+	ADDI R20 SP 20
+	LW	 R20 R20
 # Registers we use:
 # R17 current integer value, which we divide by 10
 # R18 characters counter
@@ -39,15 +44,18 @@ printint_printchars:
     CMP R18 ZERO       # more chars to print?
     BE printint_finish
     CALL putchar       # char already on stack, print it
-    ADDI SP SP 4       # move stack pointer to next char
     DEC  R18           # counter--
     JMP printint_printchars
 
 printint_finish:
 # restore register values which we previously
 # saved on the stack
+	SW	R20 R21		   # moves the return adress
+	POP R21
+	POP R20
     POP R19
     POP R18
     POP R17
+	ADDI SP SP 4
     RET
 

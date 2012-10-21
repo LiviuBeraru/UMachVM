@@ -27,15 +27,15 @@ DEC R3
 LB R4 R3		#vergleicht ob das letzte zeichen ein newline ist
 SET R5 0x0A		#R5 = newline
 CMP R4 R5
-BNE start
+BNE start_inputint
 DEC R3
 
-start:
+start_inputint:
 SET R4 1		#10er faktor
 SET R31 0		#ausgaberegister leeren
 SET R5 0x30 	# ascii '0'
 
-nextnbr:
+inputint_nextnbr:
 CP R2 ZERO
 LB R2 R3		#lade char an der adresse R3 = erste zahl von rechts
 SUB R2 R2 R5	#konvertieren von char in int R2 = R2 - ascii '0'
@@ -46,7 +46,7 @@ MULI R4 10		#10er faktor erhöhen
 CP R4 LO
 DEC R3			#naechter char
 CMP R3 R1	
-BGE nextnbr
+BGE inputint_nextnbr
 
 SW R31 R32
 
