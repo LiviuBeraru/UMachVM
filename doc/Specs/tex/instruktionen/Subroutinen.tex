@@ -24,8 +24,30 @@ Funktionert wie der Befehl \opref{JMP} mit dem Unterschied, dass bevor
  & \text{\opref{PUSH} \texttt{PC}} \\
  & \text{\opref{JMP}  \texttt{N}} 
 \end{align*}
-Dieser Befehl dient der Implementierug und Verwendung von Funktionen (function
-call).
+
+\paragraph{Beispiel}
+Dieser Befehl dient zur Implementierug und Verwendung von Funktionen (function
+call). Verwendet man diesen Befehl zum Sprung zu einem anderen Programmteil
+(Aufruf einer Subroutine), so kann aus diesem Teil zurückgekehrt werden, indem
+man den Befehl \opref{RET} verwendet. Dies ermöglicht ein Code wie der folgende:
+\begin{lstlisting}
+CALL routine
+CP   R1 R32
+EOP
+
+routine:
+  SET R32 66
+  RET
+\end{lstlisting}
+Hier wird nach der Ausführung des ersten Befehls (ein \opref{CALL}) mit der 4.
+Instruktion weitergemacht (nach dem Label \texttt{routine}). Der letzte Befehl
+(\opref{RET}) bewirkt ein Sprung nach dem \opref{CALL}-Befehl, also zum Befehl
+\opref{CP}. Der letzte Befehl \opref{EOP} wird verwendet, um das Ende des
+Programms zu signalisieren, sonst würde die Maschine wieder die Routine
+ausführen, wobei der Befehl \opref{RET} einen Fehler erzeugen würde (da dieser
+Befehl die Return-Adresse aus dem Stack holt und dort steht möglicherweise
+keine Adresse).
+
 
 \paragraph{Fehler}
 Wie bei dem Befehl \opref{GO}.
@@ -35,13 +57,12 @@ Wie bei dem Befehl \opref{GO}.
 \opref{POP}t eine Adresse vom Stack in das Register \texttt{PC}. Dieser Befehl
 entspricht einem Rückkehr aus einer Subroutine, analog der Anweisung
 \texttt{return}\index{return} aus den höheren Programmiersprachen.
-
 \[
   \text{\opref{POP} \texttt{PC}} 
 \]
+Dieser Befehl wird in Zusammenspiel mit den Befehlen \opref{CALL} und
+\opref{INT} verwendet.
 
 \paragraph{Fehler}
 Wie bei der \opref{POP} und \opref{GO} Operation.
-
-
 

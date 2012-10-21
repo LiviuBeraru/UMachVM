@@ -52,7 +52,8 @@ zum ausführbaren Code, bzw. zu sogenannten Interruptroutinen, oder auch \glqq
 Interrupt Handlers\grqq, die in Ausnahmefällen ausgeführt werden sollen. Jedes
 mal, wenn eine Ausnahmesituation auftritt (meistens eine Fehlersituation), wird
 intern ein Interruptsignal erzeugt, das mit einer Kennnummer (Interruptnummer)
-versehen ist. Die Interruptnummer wird als Index in dieser Tabelle verwendet.
+versehen ist. Die Interruptnummer wird zur Berechnung eines Index in dieser
+Tabelle verwendet.
 
 
 Die Interrupttabelle wird nicht von der Maschine gefüllt, sondern es ist
@@ -69,6 +70,16 @@ entsprechen. Jeder Eintrag beträgt wie ein Register 32 Bit, oder 4 Byte. Da es
 Interrupttabelle fängt an der Adresse Null an. Siehe auch Abbildung
 \ref{fig:Speicherstruktur} auf Seite \pageref{fig:Speicherstruktur}.
 
+Die Berechnung der Adresse eines Interrupt-Handelers aus der Interruptnummer
+erfolgt durch Multiplizieren mit 4 der Interruptnummer. Also für sine
+Interruptnummer $n$ wird die Adresse $a$ wie folgt berechnet:
+\[
+    a = 4 \cdot n
+\]
+Als Beispiel, aus der Interruptnummer $n = 16$ wird die Adresse 
+$a = 4 \cdot 16 = 64$ berechnet. An dieser Adresse wird die Adresse einer
+Subroutine gesucht, die als Interrupt-Handler gestartet wird -- bzw. dort
+gesprungen wird.
 
 Tabelle \ref{tab:Interrupttabelle} auf Seite \pageref{tab:Interrupttabelle}
 listet alle definierten Interruptnummern\index{Interruptnummer} und deren
