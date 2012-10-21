@@ -1,14 +1,48 @@
+
+startGame:
 CALL ausgabe
 SET R10 1
 
-startGame:
+gameCycle:
 
 CALL userinput
 CALL ausgabe
+CALL checkWin
+JMP gameCycle
+
+finishGame:
+
+SET R11 promptend
+SET R12 endstr
+SUB R12 R12 R11
+OUT R11 R12 ZERO
+SET R11 4
+ADDI HE HE 1
+IN HS R11 ZERO
+LB R11 HS
+SUBI HE HE 1
+SET R12 0x71
+CMP R11 R12
+BE gameOver
+SET R12 10
+CMP R11 R12
+BE cleanUp
+JMP finishGame
+
+cleanUp:
+CP R1 ZERO
+CP R2 ZERO
+CP R3 ZERO
+CP R4 ZERO
+CP R5 ZERO
+CP R6 ZERO
+CP R7 ZERO
+CP R8 ZERO
+CP R9 ZERO
+CP R20 ZERO
 JMP startGame
 
-finish:
-
+gameOver:
 EOP
 
 writePlayerSign:
@@ -89,8 +123,7 @@ SET R11 4
 PUSH R11
 CALL printint
 8:
-SET R12 124 	#senkrechter strich |
-PUSH R12
+PUSH R12        #senkrechter strich |
 CALL putchar
 CMP R5 ZERO
 BE 9
@@ -116,11 +149,9 @@ CALL printint
 12:
 CALL newline
 
-SET R13 45	#waagrechter strich -
-PUSH R13
+PUSH R13    #waagrechter strich -
 CALL putchar
-SET R14 43	#kreuz +
-PUSH R14
+PUSH R14    #kreuz +
 CALL putchar
 PUSH R13
 CALL putchar
@@ -140,8 +171,7 @@ SET R11 7
 PUSH R11
 CALL printint
 14:
-SET R12 124 	#senkrechter strich |
-PUSH R12
+PUSH R12        #senkrechter strich |
 CALL putchar
 CMP R8 ZERO
 BE 15
@@ -231,11 +261,105 @@ POP R11
 
 RET
 
+checkWin:
+PUSH R11
+PUSH R12
+PUSH R13
+SET R11 1
+SET R12 8
+MUL R1 R2
+MUL LO R3
+CALL checkWinCase
+
+MUL R4 R5
+MUL LO R6
+CALL checkWinCase
+
+MUL R7 R8
+MUL LO R9
+CALL checkWinCase
+
+MUL R1 R4
+MUL LO R7
+CALL checkWinCase
+
+MUL R2 R5
+MUL LO R8
+CALL checkWinCase
+
+MUL R3 R6
+MUL LO R9
+CALL checkWinCase
+
+MUL R1 R5
+MUL LO R9
+CALL checkWinCase
+
+MUL R3 R5
+MUL LO R7
+CALL checkWinCase
+INC R20
+SET R21 9
+CMP R20 R21
+BE draw
+JMP checkWinFinished
+draw:
+SET R11 promptdraw
+SET R12 promptend
+SUB R12 R12 R11
+OUT R11 R12 ZERO
+CALL newline
+JMP finishGame
+checkWinFinished:
+POP R13
+POP R12
+POP R11
+RET
+
+checkWinCase:
+CMP LO R11
+BE p1Won
+CMP LO R12
+BE p2Won
+JMP nobodyWon
+p1Won:
+SET R11 promptp1win
+SET R12 promptp2win
+SUB R12 R12 R11
+OUT R11 R12 ZERO
+SET R11 1
+PUSH R11
+CALL printint
+SET R11 promptp2win
+SET R12 promptend
+SUB R12 R12 R11
+OUT R11 R12 ZERO
+CALL newline
+JMP finishGame
+p2Won:
+SET R11 promptp1win
+SET R12 promptp2win
+SUB R12 R12 R11
+OUT R11 R12 ZERO
+SET R11 2
+PUSH R11
+CALL printint
+SET R11 promptp2win
+SET R12 promptend
+SUB R12 R12 R11
+OUT R11 R12 ZERO
+CALL newline
+JMP finishGame
+nobodyWon:
+
+RET
 
 .data
 .string promptp1 "Spieler "
 .string promptp2 " ist an der Reihe:"
 .string promptp1win "Spieler "
-.string promptp2win "gewinnt!"
+.string promptp2win " gewinnt!"
+.string promptdraw "Unentschieden!"
 .string promptend "Für eine weitere Runde ENTER, zum beenden q tippen."
+.string endstr "1"
 
