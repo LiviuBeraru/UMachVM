@@ -1,13 +1,17 @@
+# Tic Tac Toe ist ein Spiel für 2 Spieler
+# zum Assemblieren benötigt es die Funktionen printint, putchar,
+# inputint und newline
 
 startGame:
 CALL ausgabe
-SET R10 1
+SET R10 1           # setze Spieler auf 1
 
-gameCycle:
+gameCycle:          # Der Spielzyklus
 
-CALL userinput
-CALL ausgabe
-CALL checkWin
+CALL userinput      # Eingabe
+CALL ausgabe        # Ausgabe
+CALL checkWin       # Prüfung
+
 JMP gameCycle
 
 finishGame:
@@ -15,23 +19,23 @@ finishGame:
 SET R11 promptend
 SET R12 endstr
 SUB R12 R12 R11
-OUT R11 R12 ZERO
-SET R11 4
+OUT R11 R12 ZERO    # Frage ob der Spieler noch eine Runde spielen
+SET R11 1           # will
 ADDI HE HE 1
 IN HS R11 ZERO
 LB R11 HS
 SUBI HE HE 1
-SET R12 0x71
+SET R12 0x71        # falls Eingabe 'q' ist (0x71)
 CMP R11 R12
-BE gameOver
+BE gameOver         # wird das Spiel beendet
 SET R12 10
-CMP R11 R12
+CMP R11 R12         # falls Eingabe ENTER ist, wird zuerst aufgeräumt
 BE cleanUp
 JMP finishGame
 
 cleanUp:
-CP R1 ZERO
-CP R2 ZERO
+CP R1 ZERO          # zurücksetzen der Register R1-R9
+CP R2 ZERO          # wo die Feldinformationen gespeichert sind
 CP R3 ZERO
 CP R4 ZERO
 CP R5 ZERO
@@ -39,55 +43,55 @@ CP R6 ZERO
 CP R7 ZERO
 CP R8 ZERO
 CP R9 ZERO
-CP R20 ZERO
-JMP startGame
+CP R20 ZERO         # das Register R20 zählt die Züge um zu
+JMP startGame       # entscheiden, ob ein Unentschieden vorliegt
 
 gameOver:
 EOP
 
-writePlayerSign:
+writePlayerSign:    #---------------------------------------------
 SET R15 2
-CMP R11 R15     # if R11 = 2; print('O'); else print('X');
+CMP R11 R15         # if R11 = 2; print('O'); else print('X');
 BE O
-SET R15 88      # '88' = ascii 'X'
+SET R15 88          # '88' = ascii 'X'
 PUSH R15
 CALL putchar
 JMP X
 O:
-SET R15 79      # '79' = ascii 'O'
+SET R15 79          # '79' = ascii 'O'
 PUSH R15
 CALL putchar
 X:
-RET
+RET                 #---------------------------------------------
 
 
-ausgabe:
-CMP R1 ZERO
-BE 1
-CP R11 R1
-CALL writePlayerSign 
-JMP 2
+ausgabe:        #-------------------------------------------------
+CMP R1 ZERO         # Für die Register R1-R9
+BE 1                # wird jeweils eine Abfrage gemacht, ob
+CP R11 R1           # ein Spieler dieses Feld bereits besetzt hat
+CALL writePlayerSign    # schreibt das Spielerzeichen falls besetzt
+JMP 2               
 1:
-SET R11 1
-PUSH R11
+SET R11 1           # schreibt die Feldnummer, hier 1, falls nicht
+PUSH R11            # besetzt. Die Feldnummern gehen von 1 bis 9
 CALL printint
 2:
-SET R12 124 	#senkrechter strich |
+SET R12 124 	    # senkrechter Strich |
 PUSH R12
 CALL putchar
-CMP R2 ZERO
-BE 3
-CP R11 R2
-CALL writePlayerSign 
-JMP 4
-3:
+CMP R2 ZERO         # Feld 2
+BE 3                    # if R2 = 0
+CP R11 R2               # write '2'
+CALL writePlayerSign    # else Call writePlayerSign
+JMP 4               # Register R11 wird zur Übergabe der
+3:                  # Spielerinformation an writePlayrSign verwendet
 SET R11 2
 PUSH R11
 CALL printint
 4:
 PUSH R12
-CALL putchar    # |
-CMP R3 ZERO
+CALL putchar        # senkrechter Strich |
+CMP R3 ZERO         # Feld 3
 BE 5
 CP R11 R3
 CALL writePlayerSign 
@@ -99,10 +103,11 @@ CALL printint
 6:
 CALL newline
 
-SET R13 45	#waagrechter strich -
+                    # Dieser Abschnitt schreibt die "-+-+-" Trennlinie
+SET R13 45	        # waagrechter Strich -
 PUSH R13
 CALL putchar
-SET R14 43	#kreuz +
+SET R14 43	        # Kreuz +
 PUSH R14
 CALL putchar
 PUSH R13
@@ -113,7 +118,7 @@ PUSH R13
 CALL putchar
 CALL newline
 
-CMP R4 ZERO
+CMP R4 ZERO         # Feld 4
 BE 7
 CP R11 R4
 CALL writePlayerSign 
@@ -123,9 +128,9 @@ SET R11 4
 PUSH R11
 CALL printint
 8:
-PUSH R12        #senkrechter strich |
+PUSH R12            # senkrechter Strich |
 CALL putchar
-CMP R5 ZERO
+CMP R5 ZERO         # Feld 5
 BE 9
 CP R11 R5
 CALL writePlayerSign 
@@ -136,7 +141,7 @@ PUSH R11
 CALL printint
 10:
 PUSH R12
-CALL putchar    # |
+CALL putchar        # senkrechter Strich |
 CMP R6 ZERO
 BE 11
 CP R11 R6
@@ -149,9 +154,9 @@ CALL printint
 12:
 CALL newline
 
-PUSH R13    #waagrechter strich -
+PUSH R13            # Trennleiste "-+-+-"
 CALL putchar
-PUSH R14    #kreuz +
+PUSH R14  
 CALL putchar
 PUSH R13
 CALL putchar
@@ -161,7 +166,7 @@ PUSH R13
 CALL putchar
 CALL newline
 
-CMP R7 ZERO
+CMP R7 ZERO         # Feld 7
 BE 13
 CP R11 R7
 CALL writePlayerSign 
@@ -171,9 +176,9 @@ SET R11 7
 PUSH R11
 CALL printint
 14:
-PUSH R12        #senkrechter strich |
+PUSH R12            # senkrechter Strich |
 CALL putchar
-CMP R8 ZERO
+CMP R8 ZERO         # Feld 8
 BE 15
 CP R11 R8
 CALL writePlayerSign 
@@ -184,8 +189,8 @@ PUSH R11
 CALL printint
 16:
 PUSH R12
-CALL putchar    # |
-CMP R9 ZERO
+CALL putchar        # senkrechter Strich |
+CMP R9 ZERO         # Feld 9
 BE 17
 CP R11 R9
 CALL writePlayerSign 
@@ -197,10 +202,10 @@ CALL printint
 18:
 CALL newline
 CALL newline
-RET
+RET             #-------------------------------------------------
 
 
-userinput:
+userinput:      #-------------------------------------------------
 PUSH R11
 PUSH R12
 PUSH R13
@@ -215,19 +220,19 @@ SET R13 promptp1win
 SUB R11 R13 R12
 OUT R12 R11 ZERO	# prompt "ist an der Reihe"
 
-CALL inputint
+CALL inputint       # Benutzer gibt ein Feld zum belegen ein
 POP R11
-SET R12 switchField
-SUBI R11 R11 1
-MULI R11 2
-CP R11 LO
-MULI R11 4
-CP R11 LO
+SET R12 switchField # Die Zielsprungadresse wird berechnet 
+SUBI R11 R11 1      # ziel = switchFieldadresse + 
+MULI R11 2          #              (spielereingabe - 1) * 2 *4
+CP R11 LO           # die 2, weil man immer 2 Befehle überspringt
+MULI R11 4          # die 4, weil Befehle 4 Byte lang sind
+CP R11 LO           
 ADD R11 R11 R12
-GO R11
-switchField:
-CP R1 R10
-JMP switchPlayer
+GO R11              # springt an die berechnete Adresse
+switchField:        # solche Sprünge, die aus der Spielereingabe
+CP R1 R10           # errechnet werden sind nicht sicher und sollten
+JMP switchPlayer    # vermieden werden.
 CP R2 R10
 JMP switchPlayer
 CP R3 R10
@@ -244,9 +249,9 @@ CP R8 R10
 JMP switchPlayer
 CP R9 R10
 
-switchPlayer:
-SET R11 1
-CMP R10 R11
+switchPlayer:           # der Benutzerwechsel erfolgt indem das
+SET R11 1               # Register R10 entweder auf 1 oder 2 
+CMP R10 R11             # gesetzt wird
 BE switchToPlayer2
 SET R10 1
 JMP switchedToPlayer1
@@ -259,31 +264,31 @@ POP R13
 POP R12
 POP R11
 
-RET
+RET             #-------------------------------------------------
 
-checkWin:
-PUSH R11
-PUSH R12
-PUSH R13
-SET R11 1
-SET R12 8
-MUL R1 R2
-MUL LO R3
-CALL checkWinCase
+checkWin:       #-------------------------------------------------
+PUSH R11        
+PUSH R12        # um zu prüfen, ob ein Spieler gewonnen hat
+PUSH R13        # müssen die 8 verschiedenen Möglichkeiten
+SET R11 1       # abgefragt werden.
+SET R12 8       
+MUL R1 R2           #   123
+MUL LO R3           #   456
+CALL checkWinCase   #   789
 
-MUL R4 R5
-MUL LO R6
-CALL checkWinCase
+MUL R4 R5       # die 8 verschiedenen Möglichkeiten sind, wenn ein
+MUL LO R6       # ein Spieler eine der folgenden Reihen voll besetzt
+CALL checkWinCase   # hat
 
-MUL R7 R8
-MUL LO R9
-CALL checkWinCase
+MUL R7 R8       # 123, 456, 789, 147, 258, 369, 159, 357
+MUL LO R9       # da für Spieler 1 in einem von ihm belegten 
+CALL checkWinCase   # Register eine 1 steht und für Spieler 2 eine 2
+                # hat einer der beiden Spieler dann gewonnen, wenn
+MUL R1 R4       # die multiplikation der Register beispielsweise
+MUL LO R7       # R1, R2, und R3 entweder das Ergebnis 1 oder 8 
+CALL checkWinCase   # liefert
 
-MUL R1 R4
-MUL LO R7
-CALL checkWinCase
-
-MUL R2 R5
+MUL R2 R5       # checkWincase überprüft das Ergebnis
 MUL LO R8
 CALL checkWinCase
 
@@ -298,12 +303,12 @@ CALL checkWinCase
 MUL R3 R5
 MUL LO R7
 CALL checkWinCase
-INC R20
-SET R21 9
-CMP R20 R21
+INC R20         # falls niemand während einem Zug gewonnen hat
+SET R21 9       # wird R20 um 1 erhöht und zählt die Züge
+CMP R20 R21     # nach 9 Zügen ohne Sieg ist Unentschieden
 BE draw
 JMP checkWinFinished
-draw:
+draw:           # Ausgabe der Unentschieden Meldung
 SET R11 promptdraw
 SET R12 promptend
 SUB R12 R12 R11
@@ -314,15 +319,15 @@ checkWinFinished:
 POP R13
 POP R12
 POP R11
-RET
+RET             #-------------------------------------------------
 
-checkWinCase:
-CMP LO R11
+checkWinCase:   #-------------------------------------------------
+CMP LO R11      # R11 = 1
 BE p1Won
-CMP LO R12
+CMP LO R12      # R11 = 8
 BE p2Won
 JMP nobodyWon
-p1Won:
+p1Won:          # die Siegesmeldung ist zusammengesetzt aus 2 Teilen
 SET R11 promptp1win
 SET R12 promptp2win
 SUB R12 R12 R11
@@ -352,7 +357,7 @@ CALL newline
 JMP finishGame
 nobodyWon:
 
-RET
+RET             #-------------------------------------------------
 
 .data
 .string promptp1 "Spieler "

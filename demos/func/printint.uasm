@@ -1,6 +1,7 @@
 # printint, function to print an integer
 # Arguments: integer to print (on stack)
 # Returns:   nothing
+# Requires function: putchar
 # Registers used: R17, R18, R19
 
 printint:
