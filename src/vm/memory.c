@@ -224,11 +224,12 @@ size_t mem_getsize(void)
 int32_t mem_to_int(const uint8_t* mem, int nbytes)
 {
     int32_t result = 0;
-    uint8_t byte   = 0; // unsigned to remove leading sign bits
-    int shift = 24;
+    uint8_t byte   = 0;  // unsigned to remove leading sign bits
+    int shift      = 24; // left shift amount of the byte we read from mem
     int i;
 
-    for (i = 0; i < nbytes; i++, shift = shift - 8) {
+    for (i = 0; i < nbytes; i++, shift = shift - 8)
+    {
         byte = mem[i];
         result = result | (byte << shift);
     }
