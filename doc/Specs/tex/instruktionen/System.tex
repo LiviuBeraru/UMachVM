@@ -2,10 +2,18 @@
 
 \opdef{INT}{$N \in \mathds{N}$}{0xA0}{NNN}
 \glqq Interrupt\grqq.
-Generiert ein Interrupt\index{Interrupt} in der Programmausführung.
-Falls die Interruptnummer $N$ keine von der Maschine erkannte Interruptnummer
-ist, wird der Interrupt mit Nummer 0 ausgeführt (Maschine ausschalten).
-Für mehr Informationen betreffend das Interrupt-System der UMach Maschine siehe
-den Abschnitt \ref{sec:Interrupts} auf der Seite \pageref{sec:Interrupts}.
+Generiert ein Interrupt\index{Interrupt} in der Programmausführung. Die Zahl $N$
+ist 3 Byte groß und wird als Interruptnummer interpretiert (siehe dazu auch den
+Abschnitt \ref{subsubsec:Interrupttabelle} auf der Seite
+\pageref{subsubsec:Interrupttabelle}). Falls die Interruptnummer $N$ keine von
+der Maschine erkannte Interruptnummer ist, wird der Interrupt mit Nummer 0
+ausgeführt. Für mehr Informationen betreffend das Interrupt-System der UMach
+Maschine siehe den Abschnitt \ref{sec:Interrupts} auf der Seite
+\pageref{sec:Interrupts}.
 
-
+Der Befehl \opref{INT} speichert, wie der Befehle \opref{CALL} auch, den
+aktuellen Wert des Registers \texttt{PC} auf den Stack. Dies erlaubt einem
+Interrupt-Handler, zur normalen Ausführung des Programms zurückzukehren, indem
+er den Befehl \opref{RET} verwendet. Ein Interrupt-Handler ist somit wie
+eine normale Subroutine, die entweder direkt mittels \opref{CALL}, oder indirekt
+mit dem Befehl \opref{INT} aufgerufen werden kann.

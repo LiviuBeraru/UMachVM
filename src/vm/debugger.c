@@ -80,6 +80,9 @@ void debugger_run(void)
             } else {
                 fprintf(stderr, "No such command: <%s>\n", argv[0]);
             }
+        } else {
+            // empty input
+            db_step(argc, argv);
         }
     }
 

@@ -160,7 +160,9 @@ Die Bits im \texttt{ERR} Register werden in die folgenden 4 Gruppen unterteilt:
 \end{center}
 
 Tabelle \ref{tab:ERR-register} listet alle Fehler auf, die in dem
-\texttt{ERR} Register signalisiert werden können.
+\texttt{ERR} Register signalisiert werden können. Alle nicht spezifizierten
+Bitnummer können frei verwendet werden -- das bedeutet, sie werden von der
+Maschine selbst nicht berücksichtigt.
 
 
 \begin{longtable}{>{\ttfamily}ll}
@@ -184,4 +186,30 @@ Siehe auch den Abschnitt \ref{subsec:Speicherfehler}
 \nameref{subsec:Speicherfehler}, Seite \pageref{subsec:Speicherfehler}.
 
 
+\subsection{Das STAT Register}
+\index{STAT@\texttt{STAT}}
+
+Das \texttt{STAT}-Register wird zur Speicherung verschiedener
+Status-Informationen verwendet. Dabei sind diese Informationen als boolsche
+Werte (gesetzt oder nicht gesetzt) in den einzelnen Bits des Register
+gespeichert. Ein Überblick über die verwendeten Bits wird in der Tabelle
+\ref{tab:STAT-register} angeboten. Dort wird zu jeder Bitnummer seine Funktion
+angegeben. 
+
+Zum Beispiel, ist das Bit mit Nummer $0$ (Wertigkeit $2^0$) in diesem Register
+gesetzt, so bedeutet das, dass Interrupts nicht ausgewertet werden. Das wird
+z.B. intern vom Befehl \opref{INT}\index{INT@\texttt{INT}} verwendet, um sich
+selber zu blockieren, wenn der Befehl den Speicher anspricht, was wiederum einen
+Interrupt generieren kann.
+
+
+\begin{longtable}{>{\ttfamily}ll}
+\caption[STAT Register]{Bedeutung der einzelnen Bits im STAT Register}
+\label{tab:STAT-register}
+\\\toprule
+ 0  & Interrupts sind blockiert (werden nicht ausgeführt)   \\
+\bottomrule
+\end{longtable}
+
+Die nicht spezifizierten Bitnummer können frei verwendet werden.
 

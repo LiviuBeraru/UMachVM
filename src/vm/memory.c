@@ -7,7 +7,7 @@
 #include "interrupts.h"
 #include "registers.h"
 
-static int8_t *memory = NULL;
+static uint8_t *memory = NULL;
 static size_t memsize = 0;
 
 uint8_t begin_data[4] = {0xFF, 'D', 'A', 'T'};
@@ -75,8 +75,8 @@ int mem_load_program_file(const char* filename)
         return -1;
     }
 
-    int8_t buffer[4] = { 0 };
-    int8_t *mindex = memory + ITABLE_SIZE;
+    uint8_t buffer[4] = { 0 };
+    uint8_t *mindex = memory + ITABLE_SIZE;
     while( fread(buffer, 1, 4, file) > 0 ) {
         
         if (memcmp(buffer, begin_data, 4) == 0) {
@@ -104,7 +104,7 @@ int mem_load_program_file(const char* filename)
     return fsize;
 }
 
-int mem_read(uint8_t *destination, int index, int nbytes)
+int mem_read(uint8_t* destination, int index, int nbytes)
 {
     if (memory == NULL) {
         /* memory was not initialized */
@@ -128,7 +128,7 @@ int mem_read(uint8_t *destination, int index, int nbytes)
     }
     
     /* We consider all memory to be readable, 
-     * so no other checks are made */
+     * so no further checks are made */
 
     memcpy(destination, memory+index, nbytes);
     return 0;
@@ -209,10 +209,7 @@ int mem_pop(int32_t* word)
         return -1;
     }
     
-    *word = (buffer[0] << 24) | 
-            (buffer[1] << 16) | 
-            (buffer[2] <<  8) | 
-             buffer[3];
+    *word = mem_to_int(buffer, 4);
     
     registers[SP].value += 4;
     return 0;
@@ -222,4 +219,22 @@ int mem_pop(int32_t* word)
 size_t mem_getsize(void)
 {
     return memsize;
+}
+
+int32_t mem_to_int(const uint8_t* mem, int nbytes)
+{
+    int32_t result = 0;
+    uint8_t byte   = 0;  // unsigned to remove leading sign bits
+    int shift      = 24; // left shift amount of the byte we read from mem
+    int i;
+
+    for (i = 0; i < nbytes; i++, shift = shift - 8)
+    {
+        byte = mem[i];
+        result = result | (byte << shift);
+    }
+
+    result = result / (1 << ((4 - nbytes) * 8));
+
+    return result;
 }

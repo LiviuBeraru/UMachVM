@@ -27,9 +27,14 @@
 #define CMPR 44   // comparison result register
 #define ZERO 0    // zero register
 
+/* Bits of the STAT Register*/
+
+#define STAT_INTDISABLE  0 // interrupts are disabled
+
 /** Register structure. */
 typedef
-struct core_register {
+struct
+{
     int32_t value;
     int32_t mode;
     const char * const name;
@@ -45,4 +50,9 @@ int read_register   (int regno, int32_t* dest);
 int read_registeru  (int regno, uint32_t* dest);
 int write_register  (int regno, int32_t value);
 int write_registeru (int regno, uint32_t value);
+
+int set_register_bit   (int regno, int bitno);
+int unset_register_bit (int regno, int bitno);
+int isset_register_bit (int regno, int bitno);
+
 #endif

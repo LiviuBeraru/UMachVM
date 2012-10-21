@@ -62,7 +62,7 @@ void core_execute(void)
         interrupt(INT_INVALID_CMD);
     }
 
-    registers[PC].value += 4;
+    registers[PC].value += 4; // next instruction please
     if (registers[PC].value >= mem_getsize()) {
         logmsg(LOG_WARN, 
         "Core: Program Counter greater than memory size. Terminating.");

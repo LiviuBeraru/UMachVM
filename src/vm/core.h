@@ -4,8 +4,8 @@
 #include <stdint.h> // uint8_t
 
 /* Global data of the core */
-extern int       running;
-extern uint8_t   instruction[4];
+extern int      running;
+extern uint8_t  instruction[4];
 
 void core_init(void);
 void core_run_program(void);

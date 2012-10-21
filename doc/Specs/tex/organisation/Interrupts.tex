@@ -14,17 +14,20 @@ Umständen. Die UMach Maschine verwendet die folgenden Arten von Interrupts:
 \end{enumerate}
 
 Jeder Interrupt hat eine bestimmte Nummer, die ganzzahlige Werte von 0 bis 63
-annimmt. Die Interruptnummer wird als Index in der Interrupttabelle
-verwendet, um die Speicheradresse einer Interruptroutine zu finden (siehe den
-Abschnitt \ref{subsubsec:Interrupttabelle}, besonders die Tabelle
-\ref{tab:Interrupttabelle} auf der Seite \pageref{tab:Interrupttabelle}). Ist
-diese Adresse ungleich Null, so wird das \texttt{PC} Register auf diese Adresse
-gesetzt und die Interruptroutine wird ausgeführt. Wird keine solche Routine
-gefunden, so wird die gesamte Programmausführung unterbrochen und die Maschine
-hält an.
+annimmt. Die Interruptnummer wird zur Berechnung eines Index in der
+Interrupttabelle verwendet, um die Speicheradresse einer Interruptroutine zu
+finden (siehe den Abschnitt \ref{subsubsec:Interrupttabelle}, besonders die
+Tabelle \ref{tab:Interrupttabelle} auf der Seite
+\pageref{tab:Interrupttabelle}). Ist diese Adresse ungleich Null, so wird das
+\texttt{PC} Register auf diese Adresse gesetzt und die Interruptroutine wird
+ausgeführt. Wird keine solche Routine gefunden, so wird die gesamte
+Programmausführung unterbrochen und die Maschine hält an.
 
 Die Interruptroutinen müssen vom Hauptprogramm als Sprungadressen in der
-Interrupttabelle gesetzt werden.
+Interrupttabelle gesetzt werden. Dabei ist die Struktur der Interrupttabelle zu
+beachten, so wie sie im Abschnitt \ref{subsubsec:Interrupttabelle} auf Seite
+\pageref{subsubsec:Interrupttabelle} beschrieben wird.
+
 
 
 \subsection{Automatische Interrupts}

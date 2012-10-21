@@ -25,4 +25,6 @@
 #define INT_SYSCALL        63   // syscall for operating system
 
 
+#define INT_MAX            63   // maximum interrupt number
+
 #endif

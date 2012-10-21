@@ -15,7 +15,7 @@ static void formatRRN(const uint8_t ins[4], char *dest);
 static void formatRRR(const uint8_t ins[4], char *dest);
 static int  disassemble_file(FILE* file);
 
-void disassemble(const uint8_t instruction[4], char *destination, int printhex)
+void disassemble(const uint8_t instruction[4], char* destination, int printhex)
 {
     if (printhex) {
         sprintf(destination,
