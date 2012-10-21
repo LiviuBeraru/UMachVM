@@ -1,7 +1,7 @@
 
 inputint:
-PUSH ZERO	#platzhalter für rückgabe hier wird später die rücksprungadresse stehn
-PUSH R31
+PUSH ZERO       # Platzhalter für Rückgabe, hier wird später 
+PUSH R31        # die Rücksprungadresse stehn
 PUSH R32
 PUSH R1
 PUSH R2
@@ -9,42 +9,42 @@ PUSH R3
 PUSH R4
 PUSH R5
 
-ADDI R32 SP 32	#Ergebniss wird auf den Stack gespeichert R32 ist die
-				#Adresse
-LW R31 R32	#zuvor muss die Ruecksprungadresse verschoben werden
-SUBI R32 R32 4	#um platz für die rückgabe zu schaffen
+ADDI R32 SP 32  # Ergebniss wird auf den Stack gespeichert R32 ist die
+				# Adresse
+LW R31 R32      # zuvor muss die Ruecksprungadresse verschoben werden
+SUBI R32 R32 4  # um Platz für die Rückgabe zu schaffen
 SW R31 R32
 ADDI R32 R32 4
-CP R1 HE		#speicher auf dem heap für den input allokieren
+CP R1 HE        # Speicher auf dem Heap für den input allokieren
 INC R1
 ADDI HE HE 10
 SET R2 10
 IN R1 R2 ZERO
 
-ADD R3 R1 R2	#zeiger auf letzte ziffer bewegen
+ADD R3 R1 R2    # Zeiger auf letzte Ziffer bewegen
 DEC R3
 
-LB R4 R3		#vergleicht ob das letzte zeichen ein newline ist
-SET R5 0x0A		#R5 = newline
+LB R4 R3        # vergleicht ob das letzte Zeichen ein newline ist
+SET R5 0x0A     # R5 = newline
 CMP R4 R5
 BNE start_inputint
 DEC R3
 
 start_inputint:
-SET R4 1		#10er faktor
-SET R31 0		#ausgaberegister leeren
-SET R5 0x30 	# ascii '0'
+SET R4 1        # 10er Faktor
+SET R31 0       # Ausgaberegister leeren
+SET R5 0x30     # ascii '0'
 
 inputint_nextnbr:
 CP R2 ZERO
-LB R2 R3		#lade char an der adresse R3 = erste zahl von rechts
-SUB R2 R2 R5	#konvertieren von char in int R2 = R2 - ascii '0'
-MUL R2 R4		#mit dem aktuellen 10er faktor multiplizieren
+LB R2 R3        # lade char an der Adresse R3 = erste Zahl von rechts
+SUB R2 R2 R5    # konvertieren von char in int R2 = R2 - ascii '0'
+MUL R2 R4       # mit dem aktuellen 10er Faktor multiplizieren
 CP R2 LO	
-ADD R31 R31 R2 	#auf das gesamtergebnis draufrechnen
-MULI R4 10		#10er faktor erhöhen
+ADD R31 R31 R2  # auf das Gesamtergebnis draufrechnen
+MULI R4 10      # 10er Faktor erhöhen
 CP R4 LO
-DEC R3			#naechter char
+DEC R3          # nächter char
 CMP R3 R1	
 BGE inputint_nextnbr
 

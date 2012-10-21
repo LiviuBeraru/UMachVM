@@ -1,18 +1,18 @@
 newline:
 
 PUSH    R1
-PUSH 	R2
+PUSH    R2
 
-SET    R1 0x0A	# R1 = newline
+SET     R1 0x0A	    # R1 = newline
 PUSH    R1
-CP    R1 SP
+CP      R1 SP
 ADDI    R1 R1 3
-SET    R2  1
-OUT    R1 R2 ZERO
-POP    R1
+SET     R2 1
+OUT     R1 R2 ZERO
+POP     R1
 
-POP    R2
-POP    R1
+POP     R2
+POP     R1
 
 RET
 
