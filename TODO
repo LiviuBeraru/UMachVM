@@ -38,5 +38,4 @@
 * Stellen finden, die selber ein int aus einem Speicherbereich parsen und sie
   durch Aufrufe an die Funktion mem_to_int in memory.h ersetzen.
   Beispiel Verwendung in core_int (system.c).
-* Debugger: leere Eingabe soll 'step' ausführen
 
