@@ -136,7 +136,10 @@ int mem_read(uint8_t* destination, int index, int nbytes)
 
 /** Writes nbytes bytes from source into memory beginning
     from the specified index.
-    This function will generate interrups.
+    This function will generate interrups if the memory was
+    not initialized, or if the index is out of bounds, or if
+    that amount of memory cannot be written or if the memory
+    region is read only.
     */
 int mem_write(uint8_t* source, int index, int nbytes)
 {

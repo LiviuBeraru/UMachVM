@@ -2,8 +2,6 @@
   Register muss noch gesetzt werden.
 * Beim Laden eines neuen Befehls (core_fetch in core.c) wird das Register
   IR nicht gesetzt. Es muss gesetzt werden.
-* Fehlermeldungen geben die aktuelle Instruktion nicht aus. Sie sollte
-  zusammen mit PC ausgegeben werden (Funktion logmsg).
 * Mehr INFO-Ausgaben. (Speichergröße etc).
 * Der Debugger braucht einen Befehl "run" oder ähnliches: das Programm soll
   einfach bis Ende laufen und dann warten auf weitere Kommandos. Immer 'step'
@@ -31,8 +29,6 @@
 * interrupt() in system.c soll auch den Namen des Interrupts augeben,
   nicht nur die Nummer.
 
-* mem_write in memory.c prüft nicht ob es in einem Schreibgeschützen
-  Bereich schreibt. Schreibgeschützt ist der Code Segment.
 * merzeilige Strings in Assembler sollen unterstützt werden. String-Daten sollte
   man über mehrere Zeilen angeben können.
 * Stellen finden, die selber ein int aus einem Speicherbereich parsen und sie
