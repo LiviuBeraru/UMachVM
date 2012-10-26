@@ -24,24 +24,27 @@ struct db_command {
 };
 
 static const char prompt[]  = "umdb > ";
-static int        db_run    = 0;
-static int        pc = 0; // last PC
+static int        db_run    = 0; // debugger is running
+static int        step      = 1; // we should wait for input after each step
+static int        pc = 0;        // last PC
 
 static cmd_fcn find_cmd(const char *name);
 static void    print_current_instr(void);
 
 /* Command functions */
-static void    db_step(int argc, char *argv[]);
-static void    db_quit(int argc, char *argv[]);
-static void    db_help(int argc, char *argv[]);
-static void    db_show(int argc, char *argv[]);
-static void    dump_regs(void);
-static void    dump_memory(int address, int nbytes);
+static void db_step(int argc, char *argv[]);
+static void db_quit(int argc, char *argv[]);
+static void db_help(int argc, char *argv[]);
+static void db_show(int argc, char *argv[]);
+static void db_runtoend(int argc, char *argv[]);
+static void dump_regs(void);
+static void dump_memory(int address, int nbytes);
 
 static
 struct db_command db_cmd_map[] = {
     {"step", db_step, "Step one instruction"},
     {"s",    db_step, "Same as step"},
+    {"run",  db_runtoend, "Run program to end"},
     {"quit", db_quit, "Quit debugger"},
     {"q",    db_quit, "Same as quit"},
     {"help", db_help, "Show help"},
@@ -64,6 +67,15 @@ void debugger_run(void)
 
     db_run = 1;
     while (db_run) {
+        if (! step) {
+            while (running) {
+                core_execute();
+                if (running) {
+                    /* execution might have stoped the machine */
+                    core_fetch();
+                }
+            }
+        }
         if (running && pc != registers[PC].value) {
             printf("[%03d]", registers[PC].value);
             print_current_instr();
@@ -236,7 +248,7 @@ void dump_regs(void)
         } else {
             printf("| %-4s = %8d ", registers[i].name, registers[i].value);
         }
-        
+
         if (i % 4 == 0) {
             printf("|\n");
         }
@@ -270,4 +282,9 @@ void dump_memory(int address, int nbytes)
         }
     }
     printf("\n");
+}
+
+void db_runtoend(int argc, char* argv[])
+{
+    step = 0;
 }
