@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "logmsg.h"
-#include "umach.h"
+#include "options.h"
 
 /**
  * This function behaves mostly like the standard printf function, except that

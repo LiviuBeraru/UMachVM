@@ -2,7 +2,7 @@
 #include <string.h>
 #include "disassemble.h"
 #include "command.h"
-#include "umach.h" // options
+#include "options.h" // options
 #include "registers.h"
 #include "memory.h" // begin_data
 

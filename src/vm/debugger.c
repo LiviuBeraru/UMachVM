@@ -9,7 +9,7 @@
 #include "registers.h"
 #include "memory.h"
 #include "strings.h"
-#include "umach.h"
+#include "options.h" // program options
 
 /** Maximum numbers of items of a debugger command */
 #define MAX_ARGS 10
