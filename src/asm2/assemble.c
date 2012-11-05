@@ -99,7 +99,7 @@ static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count
         fclose(f);
     }
 
-    cntxt->current_addr += 4; // space for .dat marker
+    // cntxt->current_addr += 4; // space for .dat marker
     insert_data_symbols(cntxt);
 
     return TRUE;
