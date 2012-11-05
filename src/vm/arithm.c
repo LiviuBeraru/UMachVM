@@ -1,3 +1,14 @@
+/**
+ * @file arithm.c implementation of the arithmetic commands
+ *
+ * This file implements all the arithmetic commands of the UMach Machine.
+ * The name of every function is the same as the command name except that
+ * it is prepended by the prefix core_. For example, the function core_add
+ * implements the machine command add.
+ * For more information about every command please consult the machine
+ * specification (chapter about the arithmetic commands).
+ */
+
 #include "core.h"       // instruction[]
 #include "registers.h"
 #include "logmsg.h"
@@ -85,9 +96,13 @@ int core_subi(void)
 
 int core_subi2(void )
 {
-    //TODO: implement this
-    logmsg(LOG_ERR, "subi2 not implemented yet");
-    return -1;
+    int32_t a = 0;
+    if (read_register(instruction[2], &a))     { return -1; }
+    int8_t  b = instruction[3];
+
+    if (write_register(instruction[1], b - a)) { return -1; }
+
+    return 0;
 }
 
 int core_mul(void)
@@ -220,15 +235,15 @@ int core_divi(void)
     int32_t reg_value = 0;
     
     if (read_register(reg_no, &reg_value) == -1) { return -1; }
+    // the immediate value takes the last two bytes
     immediate = (instruction[2] << 8) | instruction[3];
     
     if (immediate == 0) {
         // division by zero
-        logmsg(LOG_WARN, "Immediate value is zero. Interrupting. PC = %d", 
-               registers[PC].value);
+        logmsg(LOG_WARN, "Immediate value is zero");
         interrupt(INT_DIVNULL);
         return -1;
-    }    
+    }
     registers[HI].value = reg_value / immediate;
     registers[LO].value = reg_value % immediate;
     
@@ -237,9 +252,25 @@ int core_divi(void)
 
 int core_divi2(void )
 {
-    //TODO: implement this
-    logmsg(LOG_ERR, "divi2 not implemented yet");
-    return -1;
+    int32_t reg_no = instruction[1];
+    int16_t immediate = 0;
+
+    int32_t reg_value = 0;
+
+    if (read_register(reg_no, &reg_value) == -1) { return -1; }
+    // the immediate value takes the last two bytes
+    immediate = (instruction[2] << 8) | instruction[3];
+
+    if (reg_value == 0) {
+        // division by zero
+        logmsg(LOG_WARN, "Register value is zero");
+        interrupt(INT_DIVNULL);
+        return -1;
+    }
+    registers[HI].value = immediate / reg_value;
+    registers[LO].value = immediate / reg_value;
+
+    return 0;
 }
 
 
@@ -341,7 +372,7 @@ int core_modi (void)
     int32_t result    = 0;
     
     if (immediate == 0) {
-        logmsg(LOG_ERR, "Modulo NULL");
+        logmsg(LOG_ERR, "Modulo zero undefined");
         interrupt(INT_DIVNULL);
         return -1;
     }
@@ -358,8 +389,28 @@ int core_modi (void)
 
 int core_modi2(void )
 {
-    //TODO: also, implement this
-    logmsg(LOG_ERR, "modi2 not implemented yet");
-    return -1;
+    /* extract register numbers and immediate value from instruction */
+    uint8_t dest_no = instruction[1];
+    uint8_t reg_no  = instruction[2];
+    uint8_t imm8    = instruction[3];// immediate value
+
+    int32_t reg_value = 0;
+    int32_t immediate = imm8;
+    int32_t result    = 0;
+
+    // read register value
+    if (read_register(reg_no, &reg_value) == -1) { return -1; }
+    
+    if (reg_value == 0) {
+        logmsg(LOG_ERR, "Modulo zero undefined");
+        interrupt(INT_DIVNULL);
+        return -1;
+    }
+
+    result = immediate % reg_value;
+
+    if (write_register(dest_no, result) == -1) { return -1; }
+
+    return 0;
 }
 

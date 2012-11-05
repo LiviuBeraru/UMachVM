@@ -2,7 +2,7 @@
 #include <stdlib.h>    // exit
 #include <unistd.h>    // getopt
 
-#include "umach.h"
+#include "options.h"
 #include "core.h"
 #include "memory.h"
 #include "logmsg.h"
@@ -11,9 +11,6 @@
 #include "debugger.h"
 
 static void parse_opts(int argc, char *argv[]);
-
-struct umach_options options;
-
 
 int main(int argc, char *argv[])
 {
