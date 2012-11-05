@@ -1,5 +1,19 @@
 \section{Ausführen}
 
 \subsection{Optionen}
-\Blindtext
+Vor der Ausführung ist es möglich, Optionen anzugeben, die die Ausführung in bestimmter Weise beeinflussen. Es stehen die Optionen ''-m'', ''-d'', ''-s'', ''-x'' und ''-v'' zur Verfügung.
+\begin{description}
+\item[-m]
+Mit ''-m z'', wobei ''z'' eine ganze Zahl ist, kann der Arbeitsspeicher der virtuellen Maschine auf z Bytes festgelegt werden. ''./umach myProg -m 4096'' startet das Programm ''myProg'' mit einem Arbeitsspeicher von 4096 Bytes. Ist die ''-m'' Option bei der Ausführung nicht angegeben, so wird das Programm mit 2048 Bytes Arbeitsspeicher gestartet.
+\item[-d]
+Diese Option veranlasst die Maschine im ''debug''-Modus zu starten. Vor der Ausführung eines Befehls hält die Maschine an und der Benutzer ist aufgefordert Kommandos einzugeben. Mit den Kommandos kann der Benutzer den Speicher und den Inhalt der Register betrachten, jedoch nicht modifizieren. Mit dem ''step''-Kommando gibt er die Maschine zum Abarbeiten des aktuellen Befehls frei.
+\item[-s]
+Disassembliert das angegebene Programm und zeigt das Ergebnis in der Konsole an.
+\item[-x]
+Die Darstellung von Zahlenwerten in der Ausgabe des ''debug''-Modus, oder beim Disassemblieren, wird nach Angabe dieser Option hexadezimal sein.
+\item[-v]
+
+
+
+\end{description}
 
