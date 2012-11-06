@@ -83,3 +83,24 @@ int insert_data_symbols(asm_context_t *cntxt) {
 
     return TRUE;
 }
+
+static void free_data_helper(gpointer data) {
+    data_t *d = data;
+
+    switch (d->type) {
+    case DATATYPE_INT:
+        free(d->int_data.label);
+        free(d);
+        break;
+    case DATATYPE_STRING:
+        free(d->string_data.label);
+        free(d->string_data.value);
+        free(d);
+        break;
+    }
+}
+
+void free_data() {
+    g_slist_free_full(data_list, free_data_helper);
+    data_list = NULL;
+}

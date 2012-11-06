@@ -65,10 +65,14 @@ int assemble(asm_context_t *cntxt, char *files[], int file_count) {
         fclose(debugfile);
     }
 
+    free_data();
+    free_symbols();
+
     return TRUE;
 
 cleanup:
-    // TODO: free some memory ;-)
+    free_data();
+    free_symbols();
     return FALSE;
 }
 

@@ -30,5 +30,6 @@ GSList *get_data_list();
 void insert_string_data(char *label, char *value);
 void insert_int_data(char *label, int32_t value);
 int insert_data_symbols(asm_context_t *cntxt);
+void free_data();
 
 #endif
