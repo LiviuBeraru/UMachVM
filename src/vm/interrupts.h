@@ -11,6 +11,7 @@
 // arguments wrong
 #define INT_INVALID_CMD    8    // invalid command (opcode)
 #define INT_INVALID_REG    9    // invalid register number
+#define INT_ILLEGAL_ARG    10   // invalid argument
 
 /* 16 - 31 memory interrupts */
 #define INT_INVALID_MEM    16   // invalid memory address

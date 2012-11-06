@@ -6,7 +6,8 @@
 \opdef{IN}{$A, N, P \in \Reg$}{0xB0}{RRR}
 
 Veranlasst die I/O-Einheit, $\$N$ Bytes Daten aus dem Gerät am Port $\$P$, zum
-Speicher ab der Adresse $\$A$ zu übertragen. $A$, $N$ und $P$ sind Register.
+Speicher ab der Adresse $\$A$ zu übertragen. $A$, $N$ und $P$ sind
+Registernummer.
 
 \[
   read(\$P) \to mem_{\$N}(\$A)
@@ -19,6 +20,8 @@ in das Register $N$ gespeichert.
 
 
 \paragraph{Fehler}
+Falls die Längenangabe $\$N$ oder die Speicheradresse $\$A$ negativ sind, wird
+der Interrupt mit Nummer 10 ausgelöst (ungültiges Argument).
 Falls $\$P$ keine gültige Portnummer ist, wird der Interrupt mit Nummer 32
 (nicht existentes I/O Port) generiert und das Bit mit Nummer 16 im Register
 \texttt{ERR} gesetzt. Falls die Speicheradressen $\$A$ bis $\$A + \$N$ keine
@@ -27,6 +30,9 @@ Interrupt mit Nummer 16 (ungültige Speicheradresse) generiert und das Bit mit
 Nummer 8 im Register \texttt{ERR} gesetzt. Falls der Speicherbereich $\$A$ bis
 $\$A + \$N$ schreibgeschützt ist, wird der Interrupt mit Nummer 17 (segfault)
 erzeugt und das Bit mit Nummer 9 im Register \texttt{ERR} gesetzt.
+
+Siehe auch die Tabelle \ref{tab:Interrupttabelle} auf der Seite
+\pageref{tab:Interrupttabelle}.
 
 
 \opdef{OUT}{$A, N, P \in \Reg$}{0xB8}{RRR}

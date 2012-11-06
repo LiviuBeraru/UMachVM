@@ -106,6 +106,7 @@ int mem_load_program_file(const char* filename)
 
 int mem_read(uint8_t* destination, int index, int nbytes)
 {
+    // did we initialize our memory?
     if (memory == NULL) {
         /* memory was not initialized */
         logmsg(LOG_ERR, "Mem: Cannot read from NULL memory");
@@ -113,6 +114,15 @@ int mem_read(uint8_t* destination, int index, int nbytes)
         return -1;
     }
 
+    // did he initialized his memory?
+    if (destination == NULL) {
+        /* memory was not initialized */
+        logmsg(LOG_WARN, "Mem: Cannot write from NULL argument memory");
+        interrupt(INT_ILLEGAL_ARG);
+        return -1;
+    }
+
+    // does the index point to a legal memory adress?
     if (index < 0 || index >= memsize) {
         /* invalid memory index */
         logmsg(LOG_ERR, "Mem: Illegal memory index: %d", index);
@@ -120,6 +130,14 @@ int mem_read(uint8_t* destination, int index, int nbytes)
         return -1;
     }
 
+    // we hope he doesn't want to read -4 bytes...
+    if (nbytes < 0) {
+        logmsg(LOG_WARN, "Mem: Illegal amount of bytes to read: %d", nbytes);
+        interrupt(INT_ILLEGAL_ARG);
+        return -1;
+    }
+
+    // do we have enough memory to read?
     if ((index + nbytes) > memsize) {
         /* invalid number of bytes to read */
         logmsg(LOG_ERR, "Mem: Cannot read %d bytes from memory: too much", nbytes);
@@ -142,11 +160,18 @@ int mem_read(uint8_t* destination, int index, int nbytes)
     region is read only.
     */
 int mem_write(uint8_t* source, int index, int nbytes)
-{
+{// error checking code more than 80% of this function :)
     if (memory == NULL) {
         /* memory was not previously initialized */
         logmsg(LOG_ERR, "Mem: Cannot write to NULL memory");
         interrupt(INT_INTERNAL_ERR);
+        return -1;
+    }
+
+    if (source == NULL) {
+        /* user wants to trick me into reading from his null pointer */
+        logmsg(LOG_WARN, "Mem: Cannot read from NULL argument address");
+        interrupt(INT_ILLEGAL_ARG);
         return -1;
     }
 
@@ -158,13 +183,25 @@ int mem_write(uint8_t* source, int index, int nbytes)
         return -1;
     }
 
+    // check the amount of bytes to write
+    if (nbytes < 0) {
+        logmsg(LOG_WARN, "Mem: can not write %d bytes (negative number)", nbytes);
+        interrupt(INT_ILLEGAL_ARG);
+        return -1;
+    }
+
     if ((index + nbytes) > memsize) {
         logmsg(LOG_ERR, "Mem: Cannot write %d bytes to memory: too much", nbytes);
         interrupt(INT_INVALID_MEM);
         return -1;
     }
     
-    // check segmentation fault
+    /* check segmentation fault, this happens when the user wants
+     * to write into the code segment, which is between the interrupt
+     * table and the data section. Perhaps we should also segfault if
+     * he wants to write into the data section? This woule mean to
+     * replace DS by HS.
+     */
     if (ITABLE_SIZE <= index && index < registers[DS].value) {
         /* index points to the code segment between 
          * the interrupt table and the data segment */

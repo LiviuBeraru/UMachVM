@@ -73,11 +73,12 @@ Interrupts.
 {\rmfamily Nummer} & Beschreibung \\
 \midrule
 \endfirsthead
- 0   & Standardinterrupt: Maschine ausschalten \\\label{tab:Interrupttabelle}
+ 0   & Standardinterrupt         \\\label{tab:Interrupttabelle}
  1   & Division durch Null       \\
  2   & Arithmetischer Überlauf   \\
  8   & Ungültiger Befehlscode    \\
  9   & Ungültige Registernummer  \\
+ 10  & Ungültiges Argument       \\
 \midrule
  16  & Ungültige Speicheradresse  \\
  17  & Zugriffsverletzung (segfault) \\
@@ -89,6 +90,12 @@ Interrupts.
  63  & Syscall, Aufruf an das Betriebssystem \\
 \bottomrule
 \end{longtable}
+
+Eine Bemerkung zum Interrupt mit Nummer 10: dieser Interrupt wird dann erzeugt,
+wenn zwar eine Registernummer oder Adresse in Ordnung ist, dafür aber der Inhalt
+nicht. Dies passiert z.B. wenn negativen Längen für den Befehl \opref{OUT}
+verwendet werden.
+
 
 Siehe auch den Abschnitt \ref{subsec:Speicherfehler}
 \nameref{subsec:Speicherfehler}, Seite \pageref{subsec:Speicherfehler}.
