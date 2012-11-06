@@ -277,20 +277,25 @@ void assemble_data(FILE *outfile) {
 
     fwrite(BEGIN_DATA, 1, 4, outfile);
 
-    for (GSList *l = get_int_data_list(); l != NULL; l = g_slist_next(l)) {
-        int_data_t *data = l->data;
-        fwrite(&(data->value), sizeof(int32_t), 1, outfile);
-    }
+    for (GSList *l = get_data_list(); l != NULL; l = g_slist_next(l)) {
+        data_t *data = l->data;
+        size_t len;
 
-    for (GSList *l = get_string_data_list(); l != NULL; l = g_slist_next(l)) {
-        string_data_t *data = l->data;
-        size_t len = strlen(data->value) + 1; // strlen() + 1: also write out '\0'
+        switch (data->type) {
+        case DATATYPE_INT:
+            fwrite(&(data->int_data.value), sizeof(int32_t), 1, outfile);
+            break;
+        case DATATYPE_STRING:
+            len = strlen(data->string_data.value) + 1; // strlen() + 1: also write out '\0'
 
-        fwrite(data->value, sizeof(char), len, outfile);
+            fwrite(data->string_data.value, sizeof(char), len, outfile);
 
-        while (len % 4 != 0) {
-            fputc('\0', outfile);
-            len++;
+            while (len % 4 != 0) {
+                 fputc('\0', outfile);
+                 len++;
+            }
+
+            break;
         }
     }
 }

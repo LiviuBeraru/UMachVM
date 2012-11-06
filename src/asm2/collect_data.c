@@ -5,84 +5,80 @@
 #include "collect_data.h"
 #include "symbols.h"
 
-static GSList *str_data_list = NULL;
-static GSList *int_data_list = NULL;
+static GSList *data_list = NULL;
 
-GSList *get_int_data_list() {
-    return int_data_list;
-}
-
-GSList *get_string_data_list() {
-    return str_data_list;
+GSList *get_data_list() {
+    return data_list;
 }
 
 void insert_string_data(char *label, char *value) {
-    string_data_t *data = malloc(sizeof(string_data_t));
+    data_t *data = malloc(sizeof(data_t));
     
-    data->label = malloc(sizeof(char) * (strlen(label) + 1));
-    data->value = malloc(sizeof(char) * (strlen(value) + 1));
-    strcpy(data->label, label);
-    strcpy(data->value, value);
+    data->type = DATATYPE_STRING;
+    data->string_data.label = malloc(sizeof(char) * (strlen(label) + 1));
+    data->string_data.value = malloc(sizeof(char) * (strlen(value) + 1));
+    strcpy(data->string_data.label, label);
+    strcpy(data->string_data.value, value);
 
-    str_data_list = g_slist_prepend(str_data_list, data);
+    data_list = g_slist_prepend(data_list, data);
 }
 
 void insert_int_data(char *label, int32_t value) {
-    int_data_t *data = malloc(sizeof(int_data_t));
-    
-    data->label = malloc(sizeof(char) * (strlen(label) + 1));
-    
-    strcpy(data->label, label);
-    data->value = value;
+    data_t *data = malloc(sizeof(data_t));
+   
+    data->type = DATATYPE_INT;
+    data->int_data.label = malloc(sizeof(char) * (strlen(label) + 1));
+    strcpy(data->int_data.label, label);
+    data->int_data.value = value;
 
-    int_data_list = g_slist_prepend(int_data_list, data);
+    data_list = g_slist_prepend(data_list, data);
 }
 
 int insert_data_symbols(asm_context_t *cntxt) {
-    str_data_list = g_slist_reverse(str_data_list);
-    int_data_list = g_slist_reverse(int_data_list);
+    data_list = g_slist_reverse(data_list);
 
-    for (GSList *l = int_data_list; l != NULL; l = g_slist_next(l)) {
-        int_data_t *data = l->data;
-
-        symbol_t *sym = malloc(sizeof(symbol_t));
-
-        sym->symname = malloc(sizeof(char) * (strlen(data->label) + 1));
-        strcpy(sym->symname, data->label);
-        sym->symtype = SYMTYPE_DATA;
-        sym->symaddr = cntxt->current_addr;
-
-        if (!insert_symbol(sym)) {
-            print_error(cntxt, "Integer constant %s already defined", sym->symname);
-            free(sym->symname);
-            free(sym);
-            return FALSE;
-        }
-
-        cntxt->current_addr += 4;
-    }
-
-    for (GSList *l = str_data_list; l != NULL; l = g_slist_next(l)) {
-        string_data_t *data = l->data;
+    for (GSList *l = data_list; l != NULL; l = g_slist_next(l)) {
+        data_t *data = l->data;
 
         symbol_t *sym = malloc(sizeof(symbol_t));
+        
+        switch (data->type) {
+        case DATATYPE_STRING:
+            sym->symname = malloc(sizeof(char) * (strlen(data->string_data.label) + 1));
+            strcpy(sym->symname, data->string_data.label);
+            sym->symtype = SYMTYPE_DATA;
+            sym->symaddr = cntxt->current_addr;
 
-        sym->symname = malloc(sizeof(char) * (strlen(data->label) + 1));
-        strcpy(sym->symname, data->label);
-        sym->symtype = SYMTYPE_DATA;
-        sym->symaddr = cntxt->current_addr;
+            if (!insert_symbol(sym)) {
+                print_error(cntxt, "String constant %s already defined", sym->symname);
+                free(sym->symname);
+                free(sym);
+                return FALSE;
+            }
 
-        if (!insert_symbol(sym)) {
-            print_error(cntxt, "String constant %s already defined", sym->symname);
-            free(sym->symname);
-            free(sym);
-            return FALSE;
+            // find next ALIGNED addr
+            cntxt->current_addr += (strlen(data->string_data.value) + 1);
+            while (cntxt->current_addr % 4 != 0)
+                cntxt->current_addr++;
+                
+            break;
+            
+        case DATATYPE_INT:
+            sym->symname = malloc(sizeof(char) * (strlen(data->int_data.label) + 1));
+            strcpy(sym->symname, data->int_data.label);
+            sym->symtype = SYMTYPE_DATA;
+            sym->symaddr = cntxt->current_addr;
+
+            if (!insert_symbol(sym)) {
+                print_error(cntxt, "Integer constant %s already defined", sym->symname);
+                free(sym->symname);
+                free(sym);
+                return FALSE;
+            }
+
+            cntxt->current_addr += 4;
+            break;
         }
-
-        // find next ALIGNED addr
-        cntxt->current_addr += (strlen(data->value) + 1);
-        while (cntxt->current_addr % 4 != 0)
-            cntxt->current_addr++;
     }
 
     return TRUE;
