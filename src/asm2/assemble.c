@@ -325,12 +325,17 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
             label->symtype = SYMTYPE_JUMP;
             label->symaddr = cntxt->current_addr;
 
-            insert_symbol(label);
+            if (!insert_symbol(label)) {
+                print_error(cntxt, "Label %s already exists", label->symname);
+                free(label->symname);
+                free(label);
+                return FALSE;
+            }
         }
         else if (strcasecmp(line, DATA_MARK) == 0)
             break; // don't parse beyond the data mark
         else
-            cntxt->current_addr += 4; // line is a instruction
+            cntxt->current_addr += 4; // line is an instruction
     }
 
     return TRUE;
