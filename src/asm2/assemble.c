@@ -100,7 +100,8 @@ static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count
     }
 
     // cntxt->current_addr += 4; // space for .dat marker
-    insert_data_symbols(cntxt);
+    if (!insert_data_symbols(cntxt))
+        return FALSE;
 
     return TRUE;
 }

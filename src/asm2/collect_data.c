@@ -38,7 +38,7 @@ void insert_int_data(char *label, int32_t value) {
     int_data_list = g_slist_prepend(int_data_list, data);
 }
 
-void insert_data_symbols(asm_context_t *cntxt) {
+int insert_data_symbols(asm_context_t *cntxt) {
     str_data_list = g_slist_reverse(str_data_list);
     int_data_list = g_slist_reverse(int_data_list);
 
@@ -52,7 +52,12 @@ void insert_data_symbols(asm_context_t *cntxt) {
         sym->symtype = SYMTYPE_DATA;
         sym->symaddr = cntxt->current_addr;
 
-        insert_symbol(sym);
+        if (!insert_symbol(sym)) {
+            print_error(cntxt, "Integer constant %s already defined", sym->symname);
+            free(sym->symname);
+            free(sym);
+            return FALSE;
+        }
 
         cntxt->current_addr += 4;
     }
@@ -67,11 +72,18 @@ void insert_data_symbols(asm_context_t *cntxt) {
         sym->symtype = SYMTYPE_DATA;
         sym->symaddr = cntxt->current_addr;
 
-        insert_symbol(sym);
+        if (!insert_symbol(sym)) {
+            print_error(cntxt, "String constant %s already defined", sym->symname);
+            free(sym->symname);
+            free(sym);
+            return FALSE;
+        }
 
         // find next ALIGNED addr
         cntxt->current_addr += (strlen(data->value) + 1);
         while (cntxt->current_addr % 4 != 0)
             cntxt->current_addr++;
     }
+
+    return TRUE;
 }
