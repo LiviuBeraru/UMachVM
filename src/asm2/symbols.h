@@ -17,5 +17,6 @@ typedef struct {
 int  insert_symbol(symbol_t *symbol);
 int  get_symbol(const char *name, symbol_t *result);
 void free_symbols();
+void write_symbols_file();
 
 #endif

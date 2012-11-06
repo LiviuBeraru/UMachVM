@@ -63,6 +63,20 @@ int assemble(asm_context_t *cntxt, char *files[], int file_count) {
     if (cntxt->gen_debuginf) {
         fclose(fmapfile);
         fclose(debugfile);
+
+        FILE *sym_file;
+        char *sym_file_name = malloc(sizeof(char) * (strlen(cntxt->output_file) + 8));
+        strcpy(sym_file_name, cntxt->output_file);
+        strcat(sym_file_name, ".sym");
+
+        if ((sym_file = fopen(sym_file_name, "w")) == NULL) {
+            perror(sym_file_name);
+            goto cleanup;
+        }
+
+        write_symbols_file(sym_file);
+        fclose(sym_file);
+        free(sym_file_name);
     }
 
     free_data();

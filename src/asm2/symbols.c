@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "symbols.h"
 
 static GHashTable *symbols_ht = NULL;
@@ -50,4 +51,19 @@ static gboolean free_symbol_helper(gpointer key, gpointer value, gpointer user_d
 
 void free_symbols() {
     g_hash_table_foreach_remove(symbols_ht, free_symbol_helper, NULL);
+}
+
+static void write_symbols_file_helper(gpointer key, gpointer value, gpointer user_data) {
+    FILE *f = user_data;
+    symbol_t *sym = value;
+    (void) key;
+
+    if (sym->symtype == SYMTYPE_JUMP)
+        fprintf(f, "%08x jmp %s\n", sym->symaddr, sym->symname);
+    else if (sym->symtype == SYMTYPE_DATA)
+        fprintf(f, "%08x dat %s\n", sym->symaddr, sym->symname);    
+}
+
+void write_symbols_file(FILE *f) {
+    g_hash_table_foreach(symbols_ht, write_symbols_file_helper, f);
 }
