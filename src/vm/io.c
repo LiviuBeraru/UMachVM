@@ -13,6 +13,7 @@
 #include "io.h"
 #include "system.h"     // interrupt()
 #include "interrupts.h" // interrupt numbers
+#include "logmsg.h"
 
 /* specify read or write when calling inout */
 #define IO_IN  0
@@ -62,7 +63,26 @@ int inout(int readwrite)
         return -1;
     }
 
-    /* Check the port number*/
+    /* check arguments */
+    if (address < 0) {
+        logmsg(LOG_WARN, "IO: using negative address %d in register %d",
+               address, address_reg);
+        interrupt(INT_ILLEGAL_ARG);
+        return -1;
+    }
+
+    /* nbytes (data length) must be positive */
+    if (nbytes < 0) {
+        logmsg(LOG_WARN,
+               "IO: negative value %d in register %d as length. Programming error?",
+               nbytes, nbytes_reg);
+        /* we should really have an interrupt for illegal arguments
+           now just using 'invalid register' */
+        interrupt(INT_ILLEGAL_ARG);
+        return -1;
+    }
+
+    /* Check the port number */
     if(inport < 0 || inport >= NO_IOPORTS) {
         interrupt(INT_NO_IOPORT);
         return -1;
@@ -70,6 +90,13 @@ int inout(int readwrite)
 
     /* allocate enough zeroed memory to store the input/output */
     uint8_t *mem = calloc(nbytes + 1, 1); // man calloc
+    if (mem == NULL) {
+        logmsg(LOG_INFO, "%s: cannot allocate memory of size %d",
+            __func__, nbytes + 1);
+        interrupt(INT_INTERNAL_ERR);
+        return -1;
+    }
+
     int status = 0;
 
     if (readwrite == IO_IN)

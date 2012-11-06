@@ -113,10 +113,23 @@ int mem_read(uint8_t* destination, int index, int nbytes)
         return -1;
     }
 
+    if (destination == NULL) {
+        /* memory was not initialized */
+        logmsg(LOG_WARN, "Mem: Cannot write from NULL argument memory");
+        interrupt(INT_ILLEGAL_ARG);
+        return -1;
+    }
+
     if (index < 0 || index >= memsize) {
         /* invalid memory index */
         logmsg(LOG_ERR, "Mem: Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
+        return -1;
+    }
+
+    if (nbytes < 0) {
+        logmsg(LOG_WARN, "Mem: Illegal amount of bytes to read: %d", nbytes);
+        interrupt(INT_ILLEGAL_ARG);
         return -1;
     }
 
@@ -142,11 +155,18 @@ int mem_read(uint8_t* destination, int index, int nbytes)
     region is read only.
     */
 int mem_write(uint8_t* source, int index, int nbytes)
-{
+{// error checking code more than 80% of this function :)
     if (memory == NULL) {
         /* memory was not previously initialized */
         logmsg(LOG_ERR, "Mem: Cannot write to NULL memory");
         interrupt(INT_INTERNAL_ERR);
+        return -1;
+    }
+
+    if (source == NULL) {
+        /* memory was not previously initialized */
+        logmsg(LOG_WARN, "Mem: Cannot read from NULL argument memory");
+        interrupt(INT_ILLEGAL_ARG);
         return -1;
     }
 
@@ -155,6 +175,12 @@ int mem_write(uint8_t* source, int index, int nbytes)
         /* wrong memory index (memory address) */
         logmsg(LOG_ERR, "Mem: Illegal memory index: %d", index);
         interrupt(INT_INVALID_MEM);
+        return -1;
+    }
+
+    if (nbytes < 0) {
+        logmsg(LOG_WARN, "Mem: can not write %d bytes (negative number)", nbytes);
+        interrupt(INT_ILLEGAL_ARG);
         return -1;
     }
 

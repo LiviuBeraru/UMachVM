@@ -16,7 +16,9 @@ int interrupt(int number)
     char dis_instr[128] = { '\0' };
     disassemble(instruction, dis_instr, 0); // 0 for don't print hex
     
-    logmsg(LOG_INFO, "Interrupt: <%s> at PC = %d caused Interrupt %d",
+    logmsg(LOG_INFO,
+           "Interrupt: instruction\n"
+           "\t<%s>\n\tat PC = %d\n\tcaused Interrupt %d",
            dis_instr, registers[PC].value, number);
 
     if (number < 0 || number > INT_MAX) {
