@@ -76,8 +76,6 @@ int inout(int readwrite)
         logmsg(LOG_WARN,
                "IO: negative value %d in register %d as length. Programming error?",
                nbytes, nbytes_reg);
-        /* we should really have an interrupt for illegal arguments
-           now just using 'invalid register' */
         interrupt(INT_ILLEGAL_ARG);
         return -1;
     }
