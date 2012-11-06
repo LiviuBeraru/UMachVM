@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 typedef enum {
-	SYMTYPE_JUMP,
-	SYMTYPE_DATA
+    SYMTYPE_JUMP,
+    SYMTYPE_DATA
 } symbol_type_t;
 
 typedef struct {

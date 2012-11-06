@@ -5,7 +5,7 @@
 
 int str_to_int(const char *str, long *num) {
     if (str == NULL || num == NULL)
-    	return FALSE;
+        return FALSE;
 
     char *endprt = 0;
     
@@ -17,11 +17,11 @@ int str_to_int(const char *str, long *num) {
     long result = strtoul(str, &endprt, 0); // base "0" means base 16
     
     if (*endprt == '\0') {
-    	*num = result;
+        *num = result;
         return TRUE;
     }
-	
-	return FALSE;
+    
+    return FALSE;
 }
 
 char *str_trim(char *str) {
@@ -29,20 +29,20 @@ char *str_trim(char *str) {
 }
 
 void str_strip_comment(char *str) {
-	while (*str) {
-		if (*str == '#') {
-			*str = '\0';
-			return;
-		}
-		str++;
-	}
+    while (*str) {
+        if (*str == '#') {
+            *str = '\0';
+            return;
+        }
+        str++;
+    }
 }
 
 void str_strip_comment_2(char *str) {
-	char *c = strchr(str, '#');
-	
-	if (c != NULL)
-		*c = '\0';
+    char *c = strchr(str, '#');
+    
+    if (c != NULL)
+        *c = '\0';
 }
 
 /*

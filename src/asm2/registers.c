@@ -54,28 +54,28 @@ static const register_t umach_registers[] = {
 static GHashTable *registers_ht = NULL;
 
 static void init_registers_ht() {
-	registers_ht = g_hash_table_new(g_str_hash, g_str_equal);
-	
-	const int reg_cnt = sizeof(umach_registers) / sizeof(register_t);
-	
-	for (int i = 0; i < reg_cnt; i++)
-		g_hash_table_insert(registers_ht, umach_registers[i].regname,
-		                    (gpointer) &(umach_registers[i]));
+    registers_ht = g_hash_table_new(g_str_hash, g_str_equal);
+    
+    const int reg_cnt = sizeof(umach_registers) / sizeof(register_t);
+    
+    for (int i = 0; i < reg_cnt; i++)
+        g_hash_table_insert(registers_ht, umach_registers[i].regname,
+                            (gpointer) &(umach_registers[i]));
 }
 
 int get_register_by_name(const char *name, register_t *result) {
-	if (registers_ht == NULL)
-		init_registers_ht();
-		
+    if (registers_ht == NULL)
+        init_registers_ht();
+        
     char *reg_name = g_ascii_strup(name, -1);
     register_t *reg = g_hash_table_lookup(registers_ht, reg_name);
     g_free(reg_name);
-	
-	if (reg != NULL) {
-		result->regname = reg->regname;
-		result->regcode = reg->regcode;
-		return TRUE;
-	} else
-		return FALSE;
+    
+    if (reg != NULL) {
+        result->regname = reg->regname;
+        result->regcode = reg->regcode;
+        return TRUE;
+    } else
+        return FALSE;
 }
 

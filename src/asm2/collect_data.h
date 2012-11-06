@@ -4,13 +4,13 @@
 #include <stdint.h>
 
 typedef struct {
-	char *label;
-	char *value;
+    char *label;
+    char *value;
 } string_data_t;
 
 typedef struct {
-	char   *label;
-	int32_t value;
+    char   *label;
+    int32_t value;
 } int_data_t;
 
 GSList *get_int_data_list();

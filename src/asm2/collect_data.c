@@ -17,25 +17,25 @@ GSList *get_string_data_list() {
 }
 
 void insert_string_data(char *label, char *value) {
-	string_data_t *data = malloc(sizeof(string_data_t));
-	
-	data->label = malloc(sizeof(char) * (strlen(label) + 1));
-	data->value = malloc(sizeof(char) * (strlen(value) + 1));
-	strcpy(data->label, label);
-	strcpy(data->value, value);
+    string_data_t *data = malloc(sizeof(string_data_t));
+    
+    data->label = malloc(sizeof(char) * (strlen(label) + 1));
+    data->value = malloc(sizeof(char) * (strlen(value) + 1));
+    strcpy(data->label, label);
+    strcpy(data->value, value);
 
     str_data_list = g_slist_prepend(str_data_list, data);
 }
 
 void insert_int_data(char *label, int32_t value) {
-	int_data_t *data = malloc(sizeof(int_data_t));
-	
-	data->label = malloc(sizeof(char) * (strlen(label) + 1));
-	
-	strcpy(data->label, label);
-	data->value = value;
+    int_data_t *data = malloc(sizeof(int_data_t));
+    
+    data->label = malloc(sizeof(char) * (strlen(label) + 1));
+    
+    strcpy(data->label, label);
+    data->value = value;
 
-	int_data_list = g_slist_prepend(int_data_list, data);
+    int_data_list = g_slist_prepend(int_data_list, data);
 }
 
 void insert_data_symbols(asm_context_t *cntxt) {
