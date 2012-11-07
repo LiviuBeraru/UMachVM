@@ -3,8 +3,6 @@
 * Beim Laden eines neuen Befehls (core_fetch in core.c) wird das Register
   IR nicht gesetzt. Es muss gesetzt werden.
 * Mehr INFO-Ausgaben. (Speichergröße etc).
-* Der Assembler sollte im Fehlerfall die schon erzeugte Output-Datei löschen.
-  Jetzt bleibt eine unfertige Datei hinterher.
 * Verwendung der Maschine genauer beschreiben: Optionen beim Start etc.
 * Musterprogramme schreiben. Dafür ein getrenntes Verzeichnis wie "Demos" 
   anlegen. In doc/Usage/tex/progs gibt es schon ein paar Nützlichkeiten wie

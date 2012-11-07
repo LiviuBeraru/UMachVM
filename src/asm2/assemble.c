@@ -27,45 +27,41 @@ static int collect_int_data(asm_context_t *cntxt, char *label, char *content);
 static char *read_line(FILE *file);
 
 int assemble(asm_context_t *cntxt, char *files[], int file_count) {
-    FILE *fmapfile = NULL, *debugfile = NULL;
+    const size_t outfile_name_len = strlen(cntxt->output_file);
+    FILE *fmap_file = NULL, *debug_file = NULL;
 
+    char *fmap_name  = malloc(sizeof(char) * (outfile_name_len + 8));
+    char *debug_name = malloc(sizeof(char) * (outfile_name_len + 8));
+    
     if (cntxt->gen_debuginf) {
-        size_t len = strlen(cntxt->output_file);
-        char *fmapname  = malloc(sizeof(char) * (len + 8));
-        char *debugname = malloc(sizeof(char) * (len + 8));
+        strcpy(fmap_name, cntxt->output_file);
+        strcat(fmap_name, ".fmap");
+        strcpy(debug_name, cntxt->output_file);
+        strcat(debug_name, ".debug");
 
-        strcpy(fmapname, cntxt->output_file);
-        strcat(fmapname, ".fmap");
-        strcpy(debugname, cntxt->output_file);
-        strcat(debugname, ".debug");
-
-        if ((fmapfile = fopen(fmapname, "w")) == NULL) {
-            perror(fmapname);
-            free(fmapname); free(debugname);
+        if ((fmap_file = fopen(fmap_name, "w")) == NULL) {
+            perror(fmap_name);
             goto cleanup;
         }
 
-        if ((debugfile = fopen(debugname, "w")) == NULL) {
-            perror(debugname);
-            free(fmapname); free(debugname);
+        if ((debug_file = fopen(debug_name, "w")) == NULL) {
+            perror(debug_name);
             goto cleanup;
         }
-
-        free(fmapname); free(debugname);
     }
 
     if (!assemble_pass_one(cntxt, files, file_count))
         goto cleanup;
 
-    if (!assemble_pass_two(cntxt, files, file_count, fmapfile, debugfile))
+    if (!assemble_pass_two(cntxt, files, file_count, fmap_file, debug_file))
         goto cleanup;
 
     if (cntxt->gen_debuginf) {
-        fclose(fmapfile);
-        fclose(debugfile);
+        fclose(fmap_file);
+        fclose(debug_file);
 
         FILE *sym_file;
-        char *sym_file_name = malloc(sizeof(char) * (strlen(cntxt->output_file) + 8));
+        char *sym_file_name = malloc(sizeof(char) * (outfile_name_len + 8));
         strcpy(sym_file_name, cntxt->output_file);
         strcat(sym_file_name, ".sym");
 
@@ -81,12 +77,25 @@ int assemble(asm_context_t *cntxt, char *files[], int file_count) {
 
     free_data();
     free_symbols();
+    free(fmap_name);
+    free(debug_name);
 
     return TRUE;
 
 cleanup:
     free_data();
     free_symbols();
+    
+    remove(cntxt->output_file);
+
+    if (cntxt->gen_debuginf) {
+        remove(fmap_name);
+        remove(debug_name);
+    }
+    
+    free(fmap_name);
+    free(debug_name);
+    
     return FALSE;
 }
 
