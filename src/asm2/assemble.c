@@ -457,14 +457,16 @@ static int collect_int_data(asm_context_t *cntxt, char *label, char *content) {
 }
 
 static char *read_line(FILE *file) {
-    static char read_buf[256] = {'\0'};
-
-    if (feof(file) || ferror(file))
-        return NULL;
+    static char  *read_buf = NULL;
+    static size_t read_buf_size = 0;
 
     // read one line
-    if (fgets(read_buf, sizeof(read_buf), file) == NULL)
-        return NULL; // failed to read from file
+    if (getline(&read_buf, &read_buf_size, file) == -1) {
+        free(read_buf);
+        read_buf = NULL;
+        read_buf_size = 0;
+        return NULL;
+    }
 
     // remove comments
     str_strip_comment_2(read_buf);
