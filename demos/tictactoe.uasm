@@ -2,6 +2,8 @@
 # zum Assemblieren benötigt es die Funktionen printint, putchar,
 # inputint und newline
 
+CP  R23 SP          # Stackpointer sichern
+
 startGame:
 CALL ausgabe
 SET R10 1           # setze Spieler auf 1
@@ -34,6 +36,7 @@ BE cleanUp
 JMP finishGame
 
 cleanUp:
+CP SP R23           # Stackpointer wiederherstellen
 CP R1 ZERO          # zurücksetzen der Register R1-R9
 CP R2 ZERO          # wo die Feldinformationen gespeichert sind
 CP R3 ZERO
@@ -361,7 +364,7 @@ RET             #-------------------------------------------------
 
 .data
 .string promptp1 "Spieler "
-.string promptp2 " ist an der Reihe:"
+.string promptp2 " ist an der Reihe: "
 .string promptp1win "Spieler "
 .string promptp2win " gewinnt!"
 .string promptdraw "Unentschieden!"

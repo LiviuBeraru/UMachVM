@@ -2,7 +2,7 @@
 # Arguments: integer to print (on stack)
 # Returns:   nothing
 # Requires function: putchar
-# Registers used: R17, R18, R19
+# Registers used: R17, R18, R19, R20, R21
 
 printint:
 # save the registers we will work with
@@ -12,13 +12,21 @@ printint:
 	PUSH R20
 	PUSH R21
 # set R17 to the stack address of the integer argument
-# we have pushed 3 registers and after them there is
+# we have pushed 5 registers and after them there is
 # the return address, so we increase SP with 5*4 + 4
 # (stack entries are always 4 byte)
     ADDI R17 SP 24
-	CP	 R21 R17		#R21 saves the location for the return adress
+	CP	 R21 R17		# R21 holds the target location for the 
+                        # return adress
     LW   R17 R17
-# store the return adress 
+    CMP  R17 ZERO
+    BGE  printint_start_convert
+    SET  R20 45         # print a "-" if the number is negative and
+    PUSH R20            # proceed with R17 = |R17|
+    CALL putchar
+    SUB  R17 ZERO R17
+printint_start_convert:
+# store the return adress in R20
 	ADDI R20 SP 20
 	LW	 R20 R20
 # Registers we use:
