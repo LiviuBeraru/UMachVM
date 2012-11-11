@@ -1,0 +1,24 @@
+
+CALL inputint
+POP R1
+SET R2 17       # Formel für Pseudozufallszahlen
+SET R3 23       # R1' = (R2 + R1*R3) mod R4
+SET R4 269      # die Formel wird R6 mal aufgerufen
+SET R6 59
+
+startRndLoop:
+
+MUL R1 R3
+ADD R1 LO R2
+DIV R1 R4
+CP R1 LO
+INC R5
+CMP R5 R6
+BLE startRndLoop
+
+PUSH R1
+CALL printint
+CALL newline
+
+EOP
+
