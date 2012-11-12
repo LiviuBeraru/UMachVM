@@ -15,23 +15,21 @@ int main(int argc, char *argv[]) {
     asm_context.output_file  = "u.out";
     asm_context.gen_debuginf = FALSE;
 
-    if (argc < 2) {
-        /* We need at least one assembly source */
-        fprintf(stderr, "No program files specified.\n");
-        exit(EXIT_FAILURE);
-    }
-
     /* parse command line options */
     opterr = 0; // suppress getopt error messages
     int c = 0;  // current command line option
 
-    while ((c = getopt(argc, argv, "o:g")) != -1) {
+    while ((c = getopt(argc, argv, "o:gh")) != -1) {
         switch (c) {
             case 'o': // output file
                 asm_context.output_file = optarg;
                 break;
             case 'g':
                 asm_context.gen_debuginf = TRUE;
+                break;
+            case 'h':
+                fprintf(stdout, "Usage: %s [-o outfile] [-g] file(s)\n", argv[0]);
+                exit(EXIT_SUCCESS);
                 break;
             default:
                 if (optopt == 'o')
@@ -41,6 +39,13 @@ int main(int argc, char *argv[]) {
 
                 exit(EXIT_FAILURE);
         }
+    }
+
+    if (argc - optind < 1) {
+        /* We need at least one assembly source */
+        fprintf(stderr, "No program files specified, ");
+        fprintf(stderr, "run \"%s -h\" for usage info.\n", argv[0]);
+        exit(EXIT_FAILURE);
     }
 
     if (assemble(&asm_context, &(argv[optind]), argc - optind))

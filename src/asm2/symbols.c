@@ -50,7 +50,11 @@ static gboolean free_symbol_helper(gpointer key, gpointer value, gpointer user_d
 }
 
 void free_symbols() {
+    if (symbols_ht == NULL)
+        return;
+
     g_hash_table_foreach_remove(symbols_ht, free_symbol_helper, NULL);
+    symbols_ht = NULL;
 }
 
 static void write_symbols_file_helper(gpointer key, gpointer value, gpointer user_data) {
@@ -65,5 +69,8 @@ static void write_symbols_file_helper(gpointer key, gpointer value, gpointer use
 }
 
 void write_symbols_file(FILE *f) {
+    if (symbols_ht == NULL)
+        return;
+
     g_hash_table_foreach(symbols_ht, write_symbols_file_helper, f);
 }
