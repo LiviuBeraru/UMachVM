@@ -15,11 +15,13 @@ int main(int argc, char *argv[]) {
     asm_context.output_file  = "u.out";
     asm_context.gen_debuginf = FALSE;
 
+    int wait_on_error = FALSE;
+
     /* parse command line options */
     opterr = 0; // suppress getopt error messages
     int c = 0;  // current command line option
 
-    while ((c = getopt(argc, argv, "o:gh")) != -1) {
+    while ((c = getopt(argc, argv, "o:ghw")) != -1) {
         switch (c) {
             case 'o': // output file
                 asm_context.output_file = optarg;
@@ -30,6 +32,9 @@ int main(int argc, char *argv[]) {
             case 'h':
                 fprintf(stdout, "Usage: %s [-o outfile] [-g] file(s)\n", argv[0]);
                 exit(EXIT_SUCCESS);
+                break;
+            case 'w':
+                wait_on_error = TRUE;
                 break;
             default:
                 if (optopt == 'o')
@@ -48,10 +53,14 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if (assemble(&asm_context, &(argv[optind]), argc - optind))
-        return EXIT_SUCCESS;
-    else
-        return EXIT_FAILURE;
+    int success = assemble(&asm_context, &(argv[optind]), argc - optind);
+
+    if (!success && wait_on_error) {
+        fprintf(stderr, "Press ENTER to quit.\n");
+        getchar();
+    }
+
+    return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 void print_error(asm_context_t *cntxt, const char *format, ...) {
