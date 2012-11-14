@@ -79,3 +79,10 @@ int get_register_by_name(const char *name, register_t *result) {
         return FALSE;
 }
 
+void free_registers_ht() {
+    if (registers_ht == NULL)
+        return;
+
+    g_hash_table_destroy(registers_ht);
+    registers_ht = NULL;
+}

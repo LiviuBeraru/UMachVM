@@ -54,6 +54,7 @@ void free_symbols() {
         return;
 
     g_hash_table_foreach_remove(symbols_ht, free_symbol_helper, NULL);
+    g_hash_table_destroy(symbols_ht);
     symbols_ht = NULL;
 }
 

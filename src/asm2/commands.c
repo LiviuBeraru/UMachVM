@@ -106,3 +106,11 @@ int get_command_by_name(const char *name, command_t *result)
     } else
         return FALSE;
 }
+
+void free_commands_ht() {
+    if (commands_ht == NULL)
+        return;
+
+    g_hash_table_destroy(commands_ht);
+    commands_ht = NULL;
+}

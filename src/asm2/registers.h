@@ -28,6 +28,7 @@ typedef enum {
     REG_CMPR = 44    // comparison result register
 } register_codes_t;
 
-int get_register_by_name(const char *name, register_t *result);
+int  get_register_by_name(const char *name, register_t *result);
+void free_registers_ht();
 
 #endif
