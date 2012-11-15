@@ -1,18 +1,17 @@
 startGame:
-SET R10 prompt1
-SET R11 48
-OUT R10 R11 ZERO
+
 SET R8 1            # R8 = Anzahl der Versuche
 
-
-
+SET R10 prompt1
+SET R11 48
+OUT R10 R11 ZERO    # Schreibt prompt "größtmögliche ZZahl?"
 CALL inputint
 POP R4
 
 start_raten:
 SET R10 promptRndSeed
 SET R11 52
-OUT R10 R11 ZERO
+OUT R10 R11 ZERO    # fragt nach dem Seed für den ZZGenerator
 CALL inputint
 POP R1
 SET R2 17       # Formel für Pseudozufallszahlen
@@ -37,43 +36,43 @@ SUB R1 ZERO R1
 endRndLoop:
 
 rateLoop:
-PUSH R8 
+PUSH R8             # Schreibt die Anzahl der Versuche
 CALL printint
-INC  R8
-SET  R10 prompt2
+INC  R8             # Anzahl der Versuche++
+SET  R10 prompt2    
 SET  R11 32
-OUT  R10 R11 ZERO
+OUT  R10 R11 ZERO   # schreibt den prompt ". Versuch. Wie lautet ..."
 
 CALL inputint
-POP  R7
+POP  R7             # R7 ist die geratene Zahl
 PUSH R7
-CALL printint
+CALL printint       # erst wird sie ausgegeben
 CMP  R7 R1
-BL   zahl_kleiner
-BG   zahl_groesser
-BE   zahl_gleich
+BL   zahl_kleiner   # und dann kommt der Status ob sie kleiner
+BG   zahl_groesser  # größer
+BE   zahl_gleich    # oder gleich der gesuchten Zahl ist
 
 zahl_kleiner:
 SET  R10 prompt3
 SET  R11 36
-OUT  R10 R11 ZERO
+OUT  R10 R11 ZERO   # schreibt "X ist kleiner als die gesuchte Zahl"
 CALL newline
-JMP  rateLoop
-
+JMP  rateLoop       # nach jedem misslungenen Rateversuch gehts zurück
+                    # in die Rateschleife
 zahl_groesser:
 SET  R10 prompt4
 SET  R11 35
-OUT  R10 R11 ZERO
+OUT  R10 R11 ZERO   # schreibt "X ist größer als die gesuchte Zahl"
 CALL newline
-JMP  rateLoop
+JMP  rateLoop       # hier wieder zurück in die Rateschleife
 
 zahl_gleich:
 SET  R10 prompt5
 SET  R11 37
-OUT  R10 R11 ZERO
+OUT  R10 R11 ZERO   # Ausgabe "X ist die gesuchte Zahl. Glückwunsch!"
 CALL newline
 
-exitGame:
+
 EOP
 
 .data
