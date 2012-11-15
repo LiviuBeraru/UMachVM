@@ -1,24 +1,83 @@
+startGame:
+SET R10 prompt1
+SET R11 48
+OUT R10 R11 ZERO
+SET R8 1            # R8 = Anzahl der Versuche
 
+CALL inputint
+POP R4
+
+start_raten:
 CALL inputint
 POP R1
 SET R2 17       # Formel für Pseudozufallszahlen
 SET R3 23       # R1' = (R2 + R1*R3) mod R4
-SET R4 269      # die Formel wird R6 mal aufgerufen
-SET R6 59
+SET R6 59       # die Formel wird R6 mal aufgerufen
+
 
 startRndLoop:
 
 MUL R1 R3
 ADD R1 LO R2
 DIV R1 R4
-CP R1 LO
+CP  R1 LO
 INC R5
 CMP R5 R6
-BLE startRndLoop
+BL  startRndLoop
 
+CMP R1 ZERO         # nimmt den Betrag von der Zufallszahl
+BG  endRndLoop      # falls sie negativ ist
+SUB R1 ZERO R1
+
+endRndLoop:
 PUSH R1
 CALL printint
 CALL newline
 
+rateLoop:
+PUSH R8 
+CALL printint
+INC  R8
+SET  R10 prompt2
+SET  R11 32
+OUT  R10 R11 ZERO
+
+CALL inputint
+POP  R7
+PUSH R7
+CALL printint
+CMP  R7 R1
+BL   zahl_kleiner
+BG   zahl_groesser
+BE   zahl_gleich
+
+zahl_kleiner:
+SET  R10 prompt3
+SET  R11 36
+OUT  R10 R11 ZERO
+CALL newline
+JMP  rateLoop
+
+zahl_groesser:
+SET  R10 prompt4
+SET  R11 35
+OUT  R10 R11 ZERO
+CALL newline
+JMP  rateLoop
+
+zahl_gleich:
+SET  R10 prompt5
+SET  R11 37
+OUT  R10 R11 ZERO
+CALL newline
+
+exitGame:
 EOP
+
+.data
+.string prompt1 "Was soll die größtmögliche Zufallszahl sein? "
+.string prompt2 ". Versuch. Wie lautet die Zahl? "
+.string prompt3 " ist kleiner als die gesuchte Zahl."
+.string prompt4 " ist größer als die gesuchte Zahl."
+.string prompt5 " ist die gesuchte Zahl, Glückwunsch!"
 
