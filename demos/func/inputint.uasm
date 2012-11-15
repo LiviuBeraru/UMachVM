@@ -23,8 +23,8 @@ IN R1 R2 ZERO
 
 ADD R3 R1 R2    # Zeiger auf letzte Ziffer bewegen
 DEC R3
-
-LB R4 R3        # vergleicht ob das letzte Zeichen ein newline ist
+CP  R4 ZERO
+LB  R4 R3       # vergleicht ob das letzte Zeichen ein newline ist
 SET R5 0x0A     # R5 = newline
 CMP R4 R5
 BNE start_inputint
