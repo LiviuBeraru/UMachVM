@@ -4,10 +4,15 @@ SET R11 48
 OUT R10 R11 ZERO
 SET R8 1            # R8 = Anzahl der Versuche
 
+
+
 CALL inputint
 POP R4
 
 start_raten:
+SET R10 promptRndSeed
+SET R11 52
+OUT R10 R11 ZERO
 CALL inputint
 POP R1
 SET R2 17       # Formel für Pseudozufallszahlen
@@ -30,9 +35,6 @@ BG  endRndLoop      # falls sie negativ ist
 SUB R1 ZERO R1
 
 endRndLoop:
-PUSH R1
-CALL printint
-CALL newline
 
 rateLoop:
 PUSH R8 
@@ -75,6 +77,7 @@ exitGame:
 EOP
 
 .data
+.string promptRndSeed "Geben sie einen Seed für den Zufallsgenerator ein: "
 .string prompt1 "Was soll die größtmögliche Zufallszahl sein? "
 .string prompt2 ". Versuch. Wie lautet die Zahl? "
 .string prompt3 " ist kleiner als die gesuchte Zahl."
