@@ -9,9 +9,9 @@ typedef enum {
 } symbol_type_t;
 
 typedef struct {
-    char         *symname;
-    symbol_type_t symtype;
-    uint32_t      symaddr;
+    char         *sym_name;
+    symbol_type_t sym_type;
+    uint32_t      sym_addr;
 } symbol_t;
 
 int  insert_symbol(symbol_t *symbol);

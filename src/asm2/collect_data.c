@@ -44,14 +44,14 @@ int insert_data_symbols(asm_context_t *cntxt) {
         
         switch (data->type) {
         case DATATYPE_STRING:
-            sym->symname = malloc(sizeof(char) * (strlen(data->string_data.label) + 1));
-            strcpy(sym->symname, data->string_data.label);
-            sym->symtype = SYMTYPE_DATA;
-            sym->symaddr = cntxt->current_addr;
+            sym->sym_name = malloc(sizeof(char) * (strlen(data->string_data.label) + 1));
+            strcpy(sym->sym_name, data->string_data.label);
+            sym->sym_type = SYMTYPE_DATA;
+            sym->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(sym)) {
-                print_error(cntxt, "String constant %s already defined", sym->symname);
-                free(sym->symname);
+                print_error(cntxt, "String constant %s already defined", sym->sym_name);
+                free(sym->sym_name);
                 free(sym);
                 return FALSE;
             }
@@ -64,14 +64,14 @@ int insert_data_symbols(asm_context_t *cntxt) {
             break;
             
         case DATATYPE_INT:
-            sym->symname = malloc(sizeof(char) * (strlen(data->int_data.label) + 1));
-            strcpy(sym->symname, data->int_data.label);
-            sym->symtype = SYMTYPE_DATA;
-            sym->symaddr = cntxt->current_addr;
+            sym->sym_name = malloc(sizeof(char) * (strlen(data->int_data.label) + 1));
+            strcpy(sym->sym_name, data->int_data.label);
+            sym->sym_type = SYMTYPE_DATA;
+            sym->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(sym)) {
-                print_error(cntxt, "Integer constant %s already defined", sym->symname);
-                free(sym->symname);
+                print_error(cntxt, "Integer constant %s already defined", sym->sym_name);
+                free(sym->sym_name);
                 free(sym);
                 return FALSE;
             }

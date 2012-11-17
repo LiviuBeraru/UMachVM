@@ -81,7 +81,7 @@ int assemble_rnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
         symbol_t label;
 
         if (get_symbol(nn_part, &label)) {
-            number = label.symaddr;
+            number = label.sym_addr;
         } else {            
             print_error(cntxt, "Undefined label: <%s>", nn_part);
             return FALSE;

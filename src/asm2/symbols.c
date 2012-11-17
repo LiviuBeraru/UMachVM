@@ -13,10 +13,10 @@ int insert_symbol(symbol_t *symbol) {
     if (symbols_ht == NULL)
         init_symbols_ht();
 
-    if (g_hash_table_contains(symbols_ht, symbol->symname))
+    if (g_hash_table_contains(symbols_ht, symbol->sym_name))
         return FALSE;
 
-    g_hash_table_insert(symbols_ht, symbol->symname, symbol);
+    g_hash_table_insert(symbols_ht, symbol->sym_name, symbol);
     return TRUE;
 }
 
@@ -27,9 +27,9 @@ int get_symbol(const char *name, symbol_t *result) {
     symbol_t *sym = g_hash_table_lookup(symbols_ht, name);
     
     if (sym != NULL) {
-        result->symname = sym->symname;
-        result->symtype = sym->symtype;
-        result->symaddr = sym->symaddr;
+        result->sym_name = sym->sym_name;
+        result->sym_type = sym->sym_type;
+        result->sym_addr = sym->sym_addr;
         return TRUE;
     } else
         return FALSE;
@@ -43,7 +43,7 @@ static gboolean free_symbol_helper(gpointer key, gpointer value, gpointer user_d
     (void) key;
     (void) user_data;
 
-    free(sym->symname);
+    free(sym->sym_name);
     free(sym);
 
     return TRUE;
@@ -63,10 +63,10 @@ static void write_symbols_file_helper(gpointer key, gpointer value, gpointer use
     symbol_t *sym = value;
     (void) key;
 
-    if (sym->symtype == SYMTYPE_JUMP)
-        fprintf(f, "%08x jmp %s\n", sym->symaddr, sym->symname);
-    else if (sym->symtype == SYMTYPE_DATA)
-        fprintf(f, "%08x dat %s\n", sym->symaddr, sym->symname);    
+    if (sym->sym_type == SYMTYPE_JUMP)
+        fprintf(f, "%08x jmp %s\n", sym->sym_addr, sym->sym_name);
+    else if (sym->sym_type == SYMTYPE_DATA)
+        fprintf(f, "%08x dat %s\n", sym->sym_addr, sym->sym_name);    
 }
 
 void write_symbols_file(FILE *f) {

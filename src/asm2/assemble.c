@@ -255,7 +255,7 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
         symbol_t label;
 
         if (get_symbol(items[1], &label)) {
-            int32_t label_offset = (label.symaddr - cntxt->current_addr) / 4;
+            int32_t label_offset = (label.sym_addr - cntxt->current_addr) / 4;
             static char label_buf[12];
 
             sprintf(label_buf, "%d", label_offset);
@@ -353,14 +353,14 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
 
             // create a symbol
             symbol_t *label = malloc(sizeof(symbol_t));
-            label->symname = malloc(sizeof(char) * (len + 1));
-            strcpy(label->symname, line);
-            label->symtype = SYMTYPE_JUMP;
-            label->symaddr = cntxt->current_addr;
+            label->sym_name = malloc(sizeof(char) * (len + 1));
+            strcpy(label->sym_name, line);
+            label->sym_type = SYMTYPE_JUMP;
+            label->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(label)) {
-                print_error(cntxt, "Label %s already exists", label->symname);
-                free(label->symname);
+                print_error(cntxt, "Label %s already exists", label->sym_name);
+                free(label->sym_name);
                 free(label);
                 return FALSE;
             }
