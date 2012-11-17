@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
                 asm_context.gen_debuginf = TRUE;
                 break;
             case 'h':
-                fprintf(stdout, "Usage: %s [-o outfile] [-g] file(s)\n", argv[0]);
+                fprintf(stdout, "Usage: %s [-o outfile] [-g] [-w] file(s)\n", argv[0]);
                 exit(EXIT_SUCCESS);
                 break;
             case 'w':
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
                 if (optopt == 'o')
                     fprintf(stderr, "The option -o expects an output file name.\n");
                 else
-                    fprintf(stderr, "Unknown option: -%c.\n", optopt);
+                    fprintf(stderr, "Unknown option: -%c. Try -h to show usage.\n", optopt);
 
                 exit(EXIT_FAILURE);
         }

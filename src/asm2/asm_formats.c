@@ -76,8 +76,8 @@ int assemble_rnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
     long number = 0;
 
     if (!str_to_int(nn_part, &number)) {
-        // the command argument is not a number
-        // check whether it's a label
+        /* the command argument is not a number
+         * check whether it is a label */
         symbol_t label;
 
         if (get_symbol(nn_part, &label)) {

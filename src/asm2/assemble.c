@@ -13,6 +13,7 @@
 static const char    DATA_MARK[] = ".data";   // marks the data section
 static const char  STRING_MARK[] = ".string"; // marks string data
 static const char INTEGER_MARK[] = ".int";    // marks numeric data
+static const char COMMENT_MARK   = '#';       // marks the beginning of a comment
 
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count);
 static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count,
