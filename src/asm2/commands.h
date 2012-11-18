@@ -17,5 +17,6 @@ typedef struct {
 
 int  get_command_by_name(const char *name, command_t *result);
 void free_commands_ht();
+const char *get_cmdfmt_name(cmdformat_t fmt);
 
 #endif

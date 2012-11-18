@@ -76,6 +76,16 @@ static const command_t umach_commands[] = {
     {0xB8, "OUT",   CMDFMT_RRR, FALSE}
 };
 
+static const char *umach_cmdfmt_names[] = {
+    [CMDFMT_NUL] = "NUL: nothing",
+    [CMDFMT_NNN] = "NNN: NUM(24) or LABEL",
+    [CMDFMT_R00] = "R00: REG",
+    [CMDFMT_RNN] = "RNN: REG, NUM(16)",
+    [CMDFMT_RR0] = "RR0: REG, REG",
+    [CMDFMT_RRN] = "RRN: REG, REG, NUM(8)",
+    [CMDFMT_RRR] = "RRR: REG, REG, REG"
+};
+
 static GHashTable *commands_ht = NULL;
 
 static void init_commands_ht() {
@@ -113,4 +123,8 @@ void free_commands_ht() {
 
     g_hash_table_destroy(commands_ht);
     commands_ht = NULL;
+}
+
+const char *get_cmdfmt_name(cmdformat_t fmt) {
+    return umach_cmdfmt_names[fmt];
 }

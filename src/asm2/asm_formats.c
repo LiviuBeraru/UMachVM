@@ -4,13 +4,17 @@
 #include "str_func.h"   // str_to_int
 #include "registers.h"  // also includes stdint.h
 #include "symbols.h"
+#include "commands.h"
 
 int assemble_nul(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
-    // Those arguments are formally required, but we don't need them.
+    // "items" is formally required, but we don't need it.
     // Let's keep the compiler silent!
-    (void) cntxt;
     (void) items;
-    (void) n;
+
+    if (n != 1) {
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_NUL));
+        return FALSE;
+    }
 
     instruction[1] = 0x00;
     instruction[2] = 0x00;
@@ -20,7 +24,7 @@ int assemble_nul(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
 
 int assemble_nnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
     if (n != 2) {
-        print_error(cntxt, "Command <%s> takes one argument", items[0]);
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_NNN));
         return FALSE;
     }
 
@@ -40,14 +44,14 @@ int assemble_nnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
 
 int assemble_r00(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
     if (n != 2) {
-        print_error(cntxt, "Command <%s> takes one argument", items[0]);
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_R00));
         return FALSE;
     }
 
     register_t r;
 
     if (!get_register_by_name(items[1], &r)) {
-        print_error(cntxt, "Not a register: %s", items[1]);
+        print_error(cntxt, "Not a register: <%s>", items[1]);
         return FALSE;
     }
 
@@ -60,7 +64,7 @@ int assemble_r00(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
 
 int assemble_rnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
     if ( n != 3) {
-        print_error(cntxt, "Command <%s> takes 2 arguments", items[0]);
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_RNN));
         return FALSE;
     }
     
@@ -69,7 +73,7 @@ int assemble_rnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
     register_t r;
 
     if (!get_register_by_name(items[1], &r)) {
-        print_error(cntxt, "Not a register: %s", items[1]);
+        print_error(cntxt, "Not a register: <%s>", items[1]);
         return FALSE;
     }
 
@@ -98,19 +102,19 @@ int assemble_rnn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
 
 int assemble_rr0(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
     if (n != 3) {
-        print_error(cntxt, "Command <%s> takes 2 arguments", items[0]);
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_RR0));
         return FALSE;
     }
 
     register_t r1, r2;
 
     if (!get_register_by_name(items[1], &r1)) {
-        print_error(cntxt, "Not a register: %s", items[1]);
+        print_error(cntxt, "Not a register: <%s>", items[1]);
         return FALSE;
     }
 
     if (!get_register_by_name(items[2], &r2)) {
-        print_error(cntxt, "Not a register: %s", items[2]);
+        print_error(cntxt, "Not a register: <%s>", items[2]);
         return FALSE;
     }
 
@@ -123,19 +127,19 @@ int assemble_rr0(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
 
 int assemble_rrn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
     if (n != 4) {
-        print_error(cntxt, "Command <%s> takes 3 arguments", items[0]);
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_RRN));
         return FALSE;
     }
 
     register_t r1, r2;
 
     if (!get_register_by_name(items[1], &r1)) {
-        print_error(cntxt, "Not a register: %s", items[1]);
+        print_error(cntxt, "Not a register: <%s>", items[1]);
         return FALSE;
     }
 
     if (!get_register_by_name(items[2], &r2)) {
-        print_error(cntxt, "Not a register: %s", items[2]);
+        print_error(cntxt, "Not a register: <%s>", items[2]);
         return FALSE;
     }
 
@@ -155,24 +159,24 @@ int assemble_rrn(asm_context_t *cntxt, char *items[], int n, uint8_t instruction
 
 int assemble_rrr(asm_context_t *cntxt, char *items[], int n, uint8_t instruction[4]) {
     if (n != 4) {
-        print_error(cntxt, "Command <%s> takes 3 register names", items[0]);
+        print_error(cntxt, "Command <%s> expects %s", items[0], get_cmdfmt_name(CMDFMT_RRR));
         return FALSE;
     }
 
     register_t r1, r2, r3;
 
     if (!get_register_by_name(items[1], &r1)) {
-        print_error(cntxt, "Not a register: %s", items[1]);
+        print_error(cntxt, "Not a register: <%s>", items[1]);
         return FALSE;
     }
 
     if (!get_register_by_name(items[2], &r2)) {
-        print_error(cntxt, "Not a register: %s", items[2]);
+        print_error(cntxt, "Not a register: <%s>", items[2]);
         return FALSE;
     }
 
     if (!get_register_by_name(items[3], &r3)) {
-        print_error(cntxt, "Not a register: %s", items[3]);
+        print_error(cntxt, "Not a register: <%s>", items[3]);
         return FALSE;
     }
 
