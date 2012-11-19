@@ -1,0 +1,273 @@
+%%%%%%%%%%%%%%%%%%%%
+%%  (C) by init0  %%
+%%%%%%%%%%%%%%%%%%%%
+
+\section{Zielsetzung}
+
+\subsection{Aufgabe des Assemblers}
+
+\begin{frame}{\insertsubsection}
+    Der Assembler übersetzt Quelltext in UMach Bytecode
+    und erstellt Debuginformationen.
+\end{frame}
+
+
+\subsection{Erwünschte Eigenschaften}
+
+\begin{frame}{\insertsubsection}
+    \begin{itemize}
+        \item ``Angenehme'' Syntax
+        \item Performance
+        \item Aussagekräftige Fehlermeldungen
+        \item Nützliche Debuginformationen
+    \end{itemize}
+\end{frame}
+
+\section{Bedienung \& Syntax}
+
+\subsection{Bedienung}
+
+\begin{frame}{\insertsubsection}
+    Der Assembler ``\texttt{uasm}'' wird über eine Shell aufgerufen. \\~\\
+    Aufrufsyntax: \texttt{uasm [-o outfile] [-g] [-w] file(s)}
+\end{frame}
+
+\subsection{Assembler Syntax Beispiel}
+
+\begin{frame}[fragile]{\insertsubsection}
+\begin{verbatim}
+SET R1 hello
+myloop:  #useful comment
+    CALL println
+    DEC R2
+    CMP R2 ZERO
+BNE myloop
+#lines containing only a comment or nil are ignored
+SET R1 9000
+EOP
+.data  #begin of data definitions
+.string hello  "Hello World!"
+.int    answer 42
+.int    drink  0xCAFE
+\end{verbatim}
+\end{frame}
+
+\subsection{Assembler Syntax Regeln}
+
+\begin{frame}[fragile]{\insertsubsection}
+    \begin{itemize}
+        \item Beliebig viele \verb#`\t'# und \verb*#` '# vor und nach Tokens
+        \item Nur Symbolbezeichner sind case-sensitiv
+        \item Symbolbezeichner sind keine gültigen Zahlwerte
+        \item Symbolbezeichner bestehen aus genau einem Wort
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\insertsubsection}
+    \begin{itemize}
+        \item Definition einer Sprungmarke endet mit \verb#`:'#
+        \item Für alle Dateien gilt der gleiche Namensraum
+        \item Ab \verb|`#'| beginnt ein Kommentar bis einschl. \verb#`\n'#
+    \end{itemize}
+\end{frame}
+
+\section{Implementierung}
+
+\begin{frame}[fragile]{\insertsection}
+    \begin{itemize}
+        \item 2-pass Assembler, geschrieben in C99
+        \item Abhängigkeiten: \texttt{glibc} und \texttt{glib}
+        \item ca. 1500 LOC
+    \end{itemize}
+\end{frame}
+
+\subsection{Datenstrukturen}
+
+\begin{frame}{\insertsection}{\insertsubsection}
+    Drei Hashtabellen für
+    \begin{enumerate}
+        \item Befehle
+        \item Register
+        \item Symbole
+    \end{enumerate}
+    Eine verkettete Liste für den Inhalt von Daten
+\end{frame}
+
+\subsection{Commands}
+
+\begin{frame}[fragile]{\insertsubsection}
+\begin{lstlisting}
+typedef enum {
+    CMDFMT_NUL, CMDFMT_NNN, CMDFMT_R00,
+    CMDFMT_RNN, CMDFMT_RR0, CMDFMT_RRN,
+    CMDFMT_RRR
+} cmdformat_t;
+
+typedef struct {
+    uint8_t     opcode;
+    char       *opname;
+    cmdformat_t format;
+    char        has_label;
+} command_t;
+\end{lstlisting}
+\end{frame}
+
+\subsection{Register}
+
+\begin{frame}[fragile]{\insertsubsection}
+\begin{lstlisting}
+typedef struct {
+    uint8_t regcode;
+    char   *regname;
+} register_t;
+\end{lstlisting}
+\end{frame}
+
+\subsection{Symbole}
+
+\begin{frame}[fragile]{\insertsubsection}
+\begin{lstlisting}
+typedef enum {
+    SYMTYPE_JUMP,
+    SYMTYPE_DATA
+} symbol_type_t;
+
+typedef struct {
+    char         *sym_name;
+    symbol_type_t sym_type;
+    uint32_t      sym_addr;
+} symbol_t;
+\end{lstlisting}
+\end{frame}
+
+\subsection{Variablen}
+
+\begin{frame}[fragile]{\insertsubsection}
+\begin{lstlisting}
+typedef struct {
+    char *label;
+    char *value;
+} string_data_t;
+
+typedef struct {
+    char   *label;
+    int32_t value;
+} int_data_t;
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{\insertsubsection}
+\begin{lstlisting}
+typedef enum {
+    DATATYPE_INT, DATATYPE_STRING
+} data_type_t;
+
+typedef struct {
+    data_type_t type;
+    union {
+        string_data_t string_data;
+        int_data_t    int_data;
+    };
+} data_t;
+\end{lstlisting}
+\end{frame}
+
+\subsection{Assembler Pass 1}
+
+\begin{frame}{\insertsection}{\insertsubsection}
+    ``Predict''
+    \begin{itemize}
+        \item Findet Sprungmarken und berechnet deren Adresse
+        \item Berechnet die Codegröße
+        \item Speichert Werte von Daten
+        \item Berechnet Adressen von Daten
+    \end{itemize}
+\end{frame}
+
+\subsection{Assembler Pass 2}
+
+\begin{frame}{\insertsection}{\insertsubsection}
+    ``Execute''
+    \begin{itemize}
+        \item Generiert UMach Bytecode
+        \item Generiert Debuginformationen
+        \item Speichert Werte von Daten in das Outputfile
+    \end{itemize}
+\end{frame}
+
+\section{Performance}
+
+\begin{frame}[fragile]{\insertsection}
+    $Durchsatz \approx 1.4 \times 10^6 \frac{Zeilen}{Sekunde}$
+    (AMD Athlon II X2 250, 3 GHz) \\~\\
+    Speicherbedarf wächst linear mit der Anzahl der Symbolen \\~\\
+    Auflösung von Symbolen meist in $\mathcal{O}(1)$ \\~\\
+    Keine linearen Suchen; Programmlaufzeit in $\mathcal{O}(n)$
+\end{frame}
+
+\section{Debuginformationen}
+
+\begin{frame}{\insertsection}
+    Wird das generieren von Debuginformationen per ``\texttt{\$uasm~-g}~\ldots''
+    aktiviert, werden folgende Dateien erstellt:
+    \begin{itemize}
+        \item \texttt{u.out.fmap}
+        \item \texttt{u.out.sym}
+        \item \texttt{u.out.debug}
+    \end{itemize}
+\end{frame}
+
+\subsection{File Map}
+
+\begin{frame}[fragile]{\insertsubsection}
+    Die Textdatei \texttt{u.out.fmap} enthält $n$ 1:1 Relationen (File-ID,~File-Name).
+    \\~\\
+    Beispiel:
+\begin{verbatim}
+0 tictactoe.uasm
+1 func/inputint.uasm
+2 func/newline.uasm
+3 func/printint.uasm
+4 func/putchar.uasm
+\end{verbatim}
+\end{frame}
+
+\subsection{Debug File}
+
+\begin{frame}[fragile]{\insertsubsection}
+    Die Binärdatei \texttt{u.out.debug} enthält $n$ Datentripel (File-ID,~Line-No,~Address).
+    \\~\\
+    Beispiel:
+\begin{verbatim}
+00:  00 00 00 00 00 00 00 05  00 00 01 00 00 00 00 00
+10:  00 00 00 08 00 00 01 04  00 00 00 00 00 00 00 09
+20:  00 00 01 08 00 00 00 00  00 00 00 0d 00 00 01 0c
+30:  00 00 00 00 00 00 00 0e  00 00 01 10 00 00 00 00
+40:  00 00 00 0f 00 00 01 14  00 00 00 00 00 00 00 11
+50:  00 00 01 18 00 00 00 00  00 00 00 15 00 00 01 1c
+60:  00 00 00 00 00 00 00 16  00 00 01 20 00 00 00 00
+70:  00 00 00 17 00 00 01 24  00 00 00 00 00 00 00 18
+80:  00 00 01 28 00 00 00 00  00 00 00 19 00 00 01 2c
+90:  00 00 00 00 00 00 00 1a  00 00 01 30 00 00 00 00
+a0:  00 00 00 1b 00 00 01 34  00 00 00 00 00 00 00 1c
+\end{verbatim}
+\end{frame}
+
+\subsection{Symbol File}
+
+\begin{frame}[fragile]{\insertsubsection}
+    Die Textdatei \texttt{u.out.sym} enthält $n$ Datentripel (Address,~Symbol-Type,~Symbol-Name).
+    \\~\\
+    Beispiel:
+\begin{verbatim}
+000005e0 jmp start_inputint
+000006b4 jmp printint_convert
+0000050c jmp p1Won
+000004d0 jmp draw
+0000070c jmp putchar
+00000784 dat promptdraw
+00000794 dat promptend
+00000540 jmp p2Won
+000005ec jmp inputint_nextnbr
+\end{verbatim}
+\end{frame}
