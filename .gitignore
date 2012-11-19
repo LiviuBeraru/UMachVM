@@ -17,6 +17,9 @@
 *.lol
 *.backup
 *.o
+*.nav
+*.snm
+*.vrb
 umach
 uasm
 core

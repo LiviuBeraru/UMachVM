@@ -42,7 +42,9 @@
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
-\AtBeginPart{\frame{\partpage}\frame{\frametitle{Inhalt}\tableofcontents}}
+\AtBeginPart{%
+\frame{\partpage}%
+\frame[allowframebreaks]{\frametitle{Inhalt}\tableofcontents}}
 
 
 \title{UMach}
