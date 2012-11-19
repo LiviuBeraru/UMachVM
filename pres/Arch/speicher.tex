@@ -1,0 +1,32 @@
+ 
+\begin{tikzpicture}
+\tikzset{
+  mmatrix/.style={
+    matrix of nodes,
+    nodes={
+      draw,
+      minimum height=8ex,
+      text depth=0ex,
+      align=center,
+      anchor=center,
+      font=\small
+    }
+  }
+};
+
+\tikzstyle{lab}=[yshift=-2ex,anchor=center]
+
+ \matrix (m) [mmatrix]
+ {
+    |[text width=1.7cm]|Interrupt\-tabelle & 
+    Programm & Daten & Heap & frei & Stack \\
+ };
+
+  \draw[thick] (m-1-1.north west) -- ++(0,-2) node[lab] {0};
+  \draw[thick] (m-1-1.north east) -- ++(0,-2) node[lab] {256};
+  \draw[thick] (m-1-2.north east) -- ++(0,-2) node[lab] {DS};
+  \draw[thick] (m-1-3.north east) -- ++(0,-2) node[lab] {HS};
+  \draw[thick,dashed] (m-1-4.north east) -- ++(0,-2) node[lab] {HE};
+  \draw[thick,dashed] (m-1-5.north east) -- ++(0,-2) node[lab] {SP};
+  \draw[thick] (m-1-6.north east) -- ++(0,-2) node[lab] {max};
+\end{tikzpicture}

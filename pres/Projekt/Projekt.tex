@@ -1,0 +1,87 @@
+
+\section{Zielsetzung}
+
+\begin{frame}{Das Ziel}
+ Es soll eine komplette virtuelle und programmierbare Maschine entworfen,
+ dokumentiert und implementiert werden.
+
+ Dabei soll die Maschine auch praktisch benutzbar sein -- man sollte Programme
+ assemblieren und ausführen können.
+\end{frame}
+
+\begin{frame}[fragile]{Gewünschter Workflow}
+ \begin{enumerate}
+  \item Assembler Programm editieren.
+\begin{lstlisting}
+ loop:   SET R1 137
+         CMP R1 ZERO
+         BE  finish
+         DEC R1
+         JMP loop
+ finish: EOP
+\end{lstlisting}
+  \item Das Programm assemblieren.
+\begin{lstlisting}
+ uasm -o myprog.umx myprog.uasm
+\end{lstlisting}
+  \item \glqq{}Bytecode\grqq{} ausführen.
+\begin{lstlisting}
+ umach -v myprog.umx
+\end{lstlisting}
+ \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{Nützlichkeit}
+ \begin{itemize}
+  \item Studienmaterial für GDI, Rechnerarchitektur, Betriebssysteme, virtuelle
+        Maschinen.
+  \item Interesse an der ISA-Ebene, Low Level Arbeit mit Bits, Adressen,
+        Registern.
+  \item Alternative zur MIPS ASM?
+ \end{itemize}
+\end{frame}
+
+
+\section{Was wird geliefert}
+
+\begin{frame}{\insertsection}
+ \begin{enumerate}
+  \item Spezifikation der Maschine
+  \item Spezifikation des Assemblers
+  \item Maschine in C99
+  \item Assembler in C99
+  \item Debugger (integriert und als Qt-Anwendung)
+  \item Demos
+ \end{enumerate}
+\end{frame}
+
+
+
+\section{Ähnliche Werke}
+
+\begin{frame}{\insertsection}
+ \begin{description}
+  \item[JVM]
+    Die Java Virtual Machine. 
+    Kennen nur wenige als virtuelle Stackmaschine.
+  \item[MMIX]
+    Wurde von Donald Knuth entwickelt 
+    (der Mann hinter \TeX{} und Literate Programming).
+    
+    Wird in \glqq The Art of Computer Programming\grqq{} als hypothetischer
+    Rechner benutzt.
+
+    64 Bit, RISC, 256 Befehle, 256 Register, MMIXAL als ASM-Sprache.
+    
+    Kennt keiner.
+    
+    Wichtigste Inspirationsquelle.
+ \end{description}
+
+\end{frame}
+
+
+
+

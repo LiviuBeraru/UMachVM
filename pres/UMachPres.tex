@@ -1,0 +1,81 @@
+% \RequirePackage{scrlfile}
+% \makeatletter
+% \AfterPackage{beamerbasemodes}{\beamer@amssymbfalse}
+% \makeatother
+
+\documentclass{beamer}
+
+\usepackage{fix-cm}
+\usepackage[ngerman]{babel} 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{tgschola}
+% \usepackage{droid}
+% \usepackage{bera}
+% \usepackage[boldsans]{concmath}
+\renewcommand{\ttdefault}{lmtt}
+\usefonttheme{serif}
+
+\usepackage{listings}
+\lstset{language=C}
+\lstset{showstringspaces=false}
+\lstset{basicstyle=\ttfamily}
+\lstset{commentstyle=\slshape}
+\lstset{keywordstyle=\color{teal}}
+\lstset{mathescape=true}
+
+\usepackage{booktabs}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,matrix,decorations.pathreplacing,shapes}
+\tikzset{>=stealth'}
+\tikzset{decoration={brace,amplitude=8pt,mirror}}
+
+\usetheme[compress]{Dresden}
+% \usetheme{Pittsburgh}
+\usecolortheme{dove}
+% \usecolortheme{seagull}
+% this will eliminate warnings about font size substitution
+% when using concrete roman
+% \setbeamerfont{sidebar}{size=\tiny}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\AtBeginPart{\frame{\partpage}\frame{\frametitle{Inhalt}\tableofcontents}}
+
+
+\title{UMach}
+\subtitle{eine virtuelle Maschine}
+\author{}
+\institute{Georg-Simon-Ohm-Hochschule}
+\date{}
+
+
+%%%% When printing, put 4 pages on 1
+% \usepackage{pgfpages}
+% \pgfpagesuselayout{4 on 1}[a4paper,border shrink=2mm,landscape]
+
+\begin{document}
+
+\frame{\titlepage}
+
+\input{./Intro/Intro}
+
+\part{Projektbeschreibung}
+\input{./Projekt/Projekt}
+
+\part{Architektur und Implementierung}
+\input{./Arch/Architektur}
+
+% \part{Assembler}
+% \input{./Asm/Assembler}
+
+%\part{Debugger}
+%\input{./Debugger/Debugger}
+
+\part{Demos}
+\input{./Demos/Demos}
+
+
+\end{document}

@@ -1,0 +1,16 @@
+ 
+\begin{tikzpicture} [font=\ttfamily]
+
+\tikzstyle{lab}=[midway,yshift=-10pt,align=center,anchor=north]
+
+  \matrix (m) 
+ [matrix of nodes,
+  nodes={draw,text height=2ex,text depth=0.25ex,
+  minimum width=5em}]
+ {
+    0x88 & 0xFF & 0xFF & 0xFD \\
+ };
+ 
+ \draw[decorate] (m-1-1.south west) -- (m-1-1.south east) node [lab] {JMP};
+ \draw[decorate] (m-1-2.south west) -- (m-1-4.south east) node [lab] {-3};
+\end{tikzpicture}

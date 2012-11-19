@@ -1,0 +1,33 @@
+\begin{tikzpicture} [->,node distance=1.8cm,auto]
+
+\tikzset{every label/.style={font=\scriptsize,red!80!black}}
+\tikzstyle{start}=[draw=blue!20!black,circle]
+\tikzstyle{block}=[draw]
+\tikzstyle{end}  =[draw=green!60!black,rounded corners,double]
+\tikzstyle{err}  =[draw=red!60!black,rounded corners,double]
+\tikzstyle{ask}  =[draw,diamond,align=center,text badly centered,inner sep=0pt,
+                   text width=4em,aspect=2]
+\tikzstyle{away} =[node distance=4cm]
+
+ 
+ 
+ \node[start,label=below:{segfault}]
+                              (A) {\texttt{INT} $x$};
+ \node[ask,right of=A,away]   (B) {$x \geq 0 \;\land\; x \leq 63$?};
+ \node[block,right of=B,away] (C) {$x \gets 0$};
+ \node[block,below of=B]      (D) {$y \gets$ interrupt\_table[$x$]};
+ \node[ask,below of=D]        (E) {$y = 0$?};
+ \node[err,right of=E,away]   (F) {stop Umach};
+ \node[end,below of=E]        (G) {\texttt{PUSH PC}; \texttt{GOTO} $y$};
+
+ \draw (A) --                  (B);
+ \draw (B) -- node {nein}      (C);
+ \draw (B) -- node {ja}        (D);
+ \draw[rounded corners] (C) |- (D);
+ \draw (D) --                  (E);
+ \draw (E) -- node {ja}        (F);
+ \draw (E) -- node {nein}      (G);
+\end{tikzpicture}
+
+
+

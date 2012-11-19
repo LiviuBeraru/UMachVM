@@ -1,0 +1,129 @@
+
+\section{Meist verwendete Befehle}
+
+\begin{frame}{\texttt{SET}}
+ \texttt{SET R1 5} oder \texttt{SET R1 label}
+ 
+ Tut das und jenes. Label wird durch Adresse ersetzt.
+ 
+ Beispiel:
+\end{frame}
+
+
+\begin{frame}{Sprungbefehle}
+ \begin{itemize}
+  \item \texttt{JMP label}
+  \item \texttt{BL label}
+        springt zum angegebenen Label, falls R1 kleiner R2 ist
+        Weitere Möglichkeiten: \texttt{BLE, BG, BGE, BE}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Vergleiche}
+ \texttt{CMP R1 R2}
+ 
+ Immer or einer bedingten Verzweigung.
+\end{frame}
+
+\begin{frame}{IO-Befehle}
+ \begin{itemize}
+  \item \texttt{IN R1 R2 ZERO}
+  \item \texttt{OUT R1 R2 ZERO}
+ \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Arithmetische Befehle}
+ \begin{description}
+  \item [\texttt{ADD}] Addiert $a+b = 0$
+  \item [\texttt{SUB}]
+  \item [\texttt{INC}]
+  \item [\texttt{DEC}] Berechnet $\pi^{2} = \frac{a^i}{e}$
+  \item [\texttt{MUL}]
+  \item [\texttt{DIV}] Muss man auf die Null aufpassen, denn die Null
+        wurde erst im 9ten Jahrhundert erfunden und alte Programme nicht
+        mehr kompilieren.
+ \end{description}
+ 
+und die entsprechenden Immediate-Varianten
+\end{frame}
+
+
+\begin{frame}{Funktionen}  
+ \texttt{CALL funktion} 
+\end{frame}
+
+
+
+\section{Hilfsfunktionen}
+
+\begin{frame}{Hilfsfunktionen}
+ \begin{itemize}
+  \item inputint
+  \item printint
+  \item putchar
+  \item newline
+ \end{itemize}
+\end{frame}
+
+
+
+\section{Hello World}
+
+\begin{frame}[fragile]{Hello World}
+ \begin{lstlisting}
+  SET R1 hello
+  SET R2 13
+  OUT R1 R2 ZERO
+  .data
+  .string hello "Hello World!"
+ \end{lstlisting}
+\end{frame}
+
+
+\section{Fibonacci Zahlen}
+
+\begin{frame}{\insertsection}% name der aktuellen section
+ Folge $X_{n} = X_{n-1} + X_{n-2}$
+ mit $X_{1} = 1$, und $X_{2} = 2$
+\end{frame}
+
+
+
+\section{Zahl raten}
+
+\begin{frame}{\insertsection}% name der aktuellen section
+ Erzeugt eine Pseudozufallszahl aus dem eingegebenen Seed.
+ Gibt Rückmeldung ob die geratene Zahl kleiner oder größer 
+ als die gesuchte ist.
+ 
+ Zählt die Anzahl der Versuche.
+\end{frame}
+
+
+\section{Tic Tac Toe}
+
+\begin{frame}{\insertsection}
+ Belegung der Register:
+  \begin{itemize}
+   \item R1-R9: Spielfelder
+   \item R10: Aktueller Spieler
+   \item R20: Anzahl der Spielzüge
+  \end{itemize}
+
+ Spielzyklus:
+  \begin{enumerate}
+  \item Eingabe
+  \item Ausgabe
+  \item Auswertung
+  \end{enumerate}
+
+
+Am ende des Spiels:
+\begin{itemize}
+ \item neue Runde oder Beenden
+ \item bei neuer Runde aufräumen
+\end{itemize}
+\end{frame}
+
+
