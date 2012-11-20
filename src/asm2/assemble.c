@@ -351,6 +351,12 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
             // remove trailing ':' from jump label
             line[len - 1] = '\0';
 
+            // check whether the jump label is a single word
+            if (strchr(line, ' ') != NULL || strchr(line, '\t') != NULL) {
+                print_error(cntxt, "Label <%s> contains a whitespace", line);
+                return FALSE;
+            }
+
             // create a symbol
             symbol_t *label = malloc(sizeof(symbol_t));
             label->sym_name = malloc(sizeof(char) * (len + 1));
