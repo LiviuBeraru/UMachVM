@@ -352,7 +352,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
             line[len - 1] = '\0';
 
             // check whether the jump label is a single word
-            if (strchr(line, ' ') != NULL || strchr(line, '\t') != NULL) {
+            if (strpbrk(line, " \t") != NULL) {
                 print_error(cntxt, "Label <%s> contains a whitespace", line);
                 return FALSE;
             }
