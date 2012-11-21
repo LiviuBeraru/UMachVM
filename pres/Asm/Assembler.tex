@@ -43,7 +43,7 @@ myloop:  #useful comment
     CMP R2 ZERO
 BNE myloop
 #lines containing only a comment or nil are ignored
-SET R1 9000
+SET R1 9001
 EOP
 .data  #begin of data definitions
 .string hello  "Hello World!"
@@ -66,6 +66,7 @@ EOP
 \begin{frame}[fragile]{\insertsubsection}
     \begin{itemize}
         \item Definition einer Sprungmarke endet mit \verb#`:'#
+        \item Sprungmarken stehen in einer eigenen Zeile
         \item Für alle Dateien gilt der gleiche Namensraum
         \item Ab \verb|`#'| beginnt ein Kommentar bis einschl. \verb#`\n'#
     \end{itemize}
@@ -203,6 +204,36 @@ typedef struct {
     Speicherbedarf wächst linear mit der Anzahl der Symbolen \\~\\
     Auflösung von Symbolen meist in $\mathcal{O}(1)$ \\~\\
     Keine linearen Suchen; Programmlaufzeit in $\mathcal{O}(n)$
+\end{frame}
+
+\section{Fehlerdiagnose}
+
+\begin{frame}{\insertsection}
+    Der \texttt{uasm} Assembler informiert den Benutzer u.a. über folgende
+    Fehler im Quelltext:
+    \begin{itemize}
+        \item Unbekannte Befehle
+        \item Ungültige Argumente zu einem Befehl
+        \item Unbekannte Symbole (Sprungmarken und Variablen)
+        \item Unbekannte Register
+        \item Ungültige Deklaration einer Variable
+        \item Re-Definition einer Sprungmarke
+        \item etc\ldots{}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\insertsection}
+    Zusätzlich zur Art des Fehlers wird Name \& Zeilennummer der Quelltextdatei
+    in welcher der Fehler gefunden wurde ausgegeben.\newline
+    Beispiele:
+\begin{verbatim}
+echo.uasm, line 1: No such command: <FOO>
+echo.uasm, line 2: Command <CMP> expects RR0: REG,REG
+echo.uasm, line 3: Unset label <getinput>
+echo.uasm, line 4: Not a register: <R77>
+echo.uasm, line 6: Label <get_input> already exists
+echo.uasm, line 8: No content for .int provided
+\end{verbatim}
 \end{frame}
 
 \section{Debuginformationen}
