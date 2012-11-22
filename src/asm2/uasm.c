@@ -9,11 +9,13 @@
 int main(int argc, char *argv[]) {
     asm_context_t asm_context;
 
-    asm_context.current_addr = INTTABLE_SIZE;
-    asm_context.current_line = 0;
-    asm_context.current_file = NULL;
-    asm_context.output_file  = "u.out";
-    asm_context.gen_debuginf = FALSE;
+    asm_context.current_addr  = INTTABLE_SIZE;
+    asm_context.current_line  = 0;
+    asm_context.current_file  = NULL;
+    asm_context.output_file   = "u.out";
+    asm_context.gen_debuginf  = FALSE;
+    asm_context.read_buf      = NULL;
+    asm_context.read_buf_size = 0;
 
     int wait_on_error = FALSE;
 
