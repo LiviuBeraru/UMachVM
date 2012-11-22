@@ -25,8 +25,8 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file);
 static int collect_data_labels(asm_context_t *cntxt, FILE *file);
 static int collect_string_data(asm_context_t *cntxt, char *label, char *content);
 static int collect_int_data(asm_context_t *cntxt, char *label, char *content);
-static void free_dynamic_data(asm_context_t *cntxt);
-static char *read_line(asm_context_t *cntxt, FILE *file);
+static void free_dynamic_data();
+static char *read_line(FILE *file);
 
 int assemble(asm_context_t *cntxt, char *files[], int file_count) {
     const size_t outfile_name_len = strlen(cntxt->output_file);
@@ -77,14 +77,14 @@ int assemble(asm_context_t *cntxt, char *files[], int file_count) {
         free(sym_file_name);
     }
 
-    free_dynamic_data(cntxt);
+    free_dynamic_data();
     free(fmap_name);
     free(debug_name);
 
     return TRUE;
 
 cleanup:
-    free_dynamic_data(cntxt);
+    free_dynamic_data();
     
     remove(cntxt->output_file);
 
@@ -179,7 +179,7 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
     char *line;
     uint8_t instruction[4];
 
-    while ((line = read_line(cntxt, infile)) != NULL) {
+    while ((line = read_line(infile)) != NULL) {
         cntxt->current_line++;
 
         const size_t len = strlen(line);
@@ -332,7 +332,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
 
     rewind(file); // set the read position at the begin of file
 
-    while ((line = read_line(cntxt, file)) != NULL) {
+    while ((line = read_line(file)) != NULL) {
         cntxt->current_line++;
 
         const size_t len = strlen(line);
@@ -383,7 +383,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
 static int collect_data_labels(asm_context_t *cntxt, FILE *file) {
     char *line;
 
-    while ((line = read_line(cntxt, file)) != NULL) {
+    while ((line = read_line(file)) != NULL) {
         cntxt->current_line++;
 
         if (strlen(line) == 0)
@@ -464,27 +464,30 @@ static int collect_int_data(asm_context_t *cntxt, char *label, char *content) {
 
 void free_registers_ht();
 
-static void free_dynamic_data(asm_context_t *cntxt) {
+static void free_dynamic_data() {
     free_data();
     free_symbols();
     free_commands_ht();
     free_registers_ht();
-
-    free(cntxt->read_buf);
-    cntxt->read_buf = NULL;
-    cntxt->read_buf_size = 0;
 }
 
-static char *read_line(asm_context_t *cntxt, FILE *file) {
+static char *read_line(FILE *file) {
+    static char  *read_buf = NULL;
+    static size_t read_buf_size = 0;
+
     // read one line
-    if (getline(&(cntxt->read_buf), &(cntxt->read_buf_size), file) == -1)
+    if (getline(&read_buf, &read_buf_size, file) == -1) {
+        free(read_buf);
+        read_buf = NULL;
+        read_buf_size = 0;
         return NULL;
+    }
 
     // remove comments
-    str_strip_comment_2(cntxt->read_buf);
+    str_strip_comment_2(read_buf);
 
     // trim
-    str_trim(cntxt->read_buf);
+    str_trim(read_buf);
 
-    return cntxt->read_buf;
+    return read_buf;
 }
