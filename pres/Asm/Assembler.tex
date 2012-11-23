@@ -196,6 +196,24 @@ typedef struct {
     \end{itemize}
 \end{frame}
 
+\subsection{Alternativen}
+
+\begin{frame}{\insertsection}{\insertsubsection}
+    Der Parser muss nicht unbedingt selbst geschrieben werden,
+    Tools wie z.B. \textit{GNU Bison} können aus einer Grammatik einen
+    Parser generieren.\\~\\
+    Vorteile:
+    \begin{itemize}
+        \item Flexibel
+        \item Weniger Aufwand bei komplexer Syntax
+    \end{itemize}
+    Nachteile:
+    \begin{itemize}
+        \item Hoher Lernaufwand
+        \item Geringere Performance
+    \end{itemize}
+\end{frame}
+
 \section{Performance}
 
 \begin{frame}[fragile]{\insertsection}
@@ -266,7 +284,8 @@ echo.uasm, line 8: No content for .int provided
 \subsection{Debug File}
 
 \begin{frame}[fragile]{\insertsubsection}
-    Die Binärdatei \texttt{u.out.debug} enthält $n$ Datentripel (File-ID,~Line-No,~Address).
+    Die Binärdatei \texttt{u.out.debug} enthält $n$ 32Bit-Datentripel
+    (File-ID,~Line-No,~Address).
     \\~\\
     Beispiel:
 \begin{verbatim}
