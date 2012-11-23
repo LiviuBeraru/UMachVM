@@ -14,8 +14,9 @@ int main(int argc, char *argv[]) {
     asm_context.current_file  = NULL;
     asm_context.output_file   = "u.out";
     asm_context.gen_debuginf  = FALSE;
-    asm_context.read_buf      = NULL;
-    asm_context.read_buf_size = 0;
+    /* init size of read_buf is 0xff, but getline() might enlarge it */
+    asm_context.read_buf      = malloc(sizeof(char) * 0xff); 
+    asm_context.read_buf_size = sizeof(char) * 0xff;
 
     int wait_on_error = FALSE;
 
