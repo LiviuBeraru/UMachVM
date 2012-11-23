@@ -365,7 +365,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
             label->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(label)) {
-                print_error(cntxt, "Label %s already exists", label->sym_name);
+                print_error(cntxt, "Label <%s> already exists", label->sym_name);
                 free(label->sym_name);
                 free(label);
                 return FALSE;
@@ -402,7 +402,7 @@ static int collect_data_labels(asm_context_t *cntxt, FILE *file) {
         char *value = strtok_r(NULL, "", &saveptr);
 
         if (value == NULL) {
-            print_error(cntxt, "No content for %s provided", type);
+            print_error(cntxt, "No content for <%s> provided", label);
             goto error;
         }
 
