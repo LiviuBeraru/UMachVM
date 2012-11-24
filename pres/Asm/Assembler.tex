@@ -145,7 +145,8 @@ typedef struct {
 \begin{lstlisting}
 typedef enum {
     SYMTYPE_JUMP,
-    SYMTYPE_DATA
+    SYMTYPE_INTDAT,
+    SYMTYPE_STRDAT
 } symbol_type_t;
 
 typedef struct {
@@ -260,7 +261,7 @@ typedef struct {
     in welcher der Fehler gefunden wurde ausgegeben.\\~\\
     Beispiele:
 \begin{verbatim}
-echo.uasm, line 1: No such command: <FOO>
+echo.uasm, line 1: No such command: <SQRT>
 echo.uasm, line 2: Command <CMP> expects RR0: REG,REG
 echo.uasm, line 3: Unset label <getinput>
 echo.uasm, line 4: Not a register: <R77>
@@ -330,8 +331,8 @@ a0:  00 00 00 1b 00 00 01 34  00 00 00 00 00 00 00 1c
 0000050c jmp p1Won
 000004d0 jmp draw
 0000070c jmp putchar
-00000784 dat promptdraw
-00000794 dat promptend
+00000784 str promptdraw
+00000794 str promptend
 00000540 jmp p2Won
 000005ec jmp inputint_nextnbr
 \end{verbatim}
