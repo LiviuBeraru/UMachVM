@@ -63,10 +63,17 @@ static void write_symbols_file_helper(gpointer key, gpointer value, gpointer use
     symbol_t *sym = value;
     (void) key;
 
-    if (sym->sym_type == SYMTYPE_JUMP)
+    switch (sym->sym_type) {
+    case SYMTYPE_JUMP:
         fprintf(f, "%08x jmp %s\n", sym->sym_addr, sym->sym_name);
-    else if (sym->sym_type == SYMTYPE_DATA)
-        fprintf(f, "%08x dat %s\n", sym->sym_addr, sym->sym_name);    
+        break;
+    case SYMTYPE_INTDAT:
+        fprintf(f, "%08x int %s\n", sym->sym_addr, sym->sym_name);
+        break;
+    case SYMTYPE_STRDAT:
+        fprintf(f, "%08x str %s\n", sym->sym_addr, sym->sym_name);
+        break;
+    }  
 }
 
 void write_symbols_file(FILE *f) {

@@ -5,7 +5,8 @@
 
 typedef enum {
     SYMTYPE_JUMP,
-    SYMTYPE_DATA
+    SYMTYPE_INTDAT,
+    SYMTYPE_STRDAT
 } symbol_type_t;
 
 typedef struct {

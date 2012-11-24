@@ -46,7 +46,7 @@ int insert_data_symbols(asm_context_t *cntxt) {
         case DATATYPE_STRING:
             sym->sym_name = malloc(sizeof(char) * (strlen(data->string_data.label) + 1));
             strcpy(sym->sym_name, data->string_data.label);
-            sym->sym_type = SYMTYPE_DATA;
+            sym->sym_type = SYMTYPE_STRDAT;
             sym->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(sym)) {
@@ -66,7 +66,7 @@ int insert_data_symbols(asm_context_t *cntxt) {
         case DATATYPE_INT:
             sym->sym_name = malloc(sizeof(char) * (strlen(data->int_data.label) + 1));
             strcpy(sym->sym_name, data->int_data.label);
-            sym->sym_type = SYMTYPE_DATA;
+            sym->sym_type = SYMTYPE_INTDAT;
             sym->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(sym)) {
