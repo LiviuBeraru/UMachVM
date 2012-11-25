@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/toolbar">
+        <file>stop.png</file>
+        <file>run.png</file>
+        <file>next_step.png</file>
+        <file>next_bp.png</file>
+    </qresource>
+    <qresource prefix="/application">
+        <file>app_icon.png</file>
+    </qresource>
+</RCC>
