@@ -1,4 +1,4 @@
 UMachGui:
 
 IMPORTANT:
-At the moment, to run the GUI without any problems, the uasm(asm2) and the UMachCore binary executables must be aviable in the GUI root/working directory.
+At the moment, to run the GUI without any problems, the uasm(asm2) and the UMachCore binary executables must be available in the GUI root/working directory.
