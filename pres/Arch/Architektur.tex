@@ -6,7 +6,7 @@
  \begin{itemize}
   \item UMach ist eine registerbasierte RISC Maschine.
         
-        Wenige Befehle (69) mit fester Länge.        
+        Wenige Befehle (69) mit fester Länge (32 Bit).        
   \item Load/Store Speicherzugriff über Registerangabe.
 \begin{lstlisting}
 LW   R1 R2 # R1 $\gets$ mem(R2)
@@ -65,9 +65,9 @@ OUT R1  R2  R3
  \begin{tabular}{lcl}
 Name  & Nummer & Beschreibung                \\\toprule
 PC    & 33     & Program Counter             \\ 
-DS    & 34     & Data Section (begin)        \\ 
-HS    & 35     & Heap Section (first byte)   \\ 
-HE    & 36     & Heap Section (last byte)    \\ 
+DS    & 34     & Data Segment                \\ 
+HS    & 35     & Heap Segment                \\ 
+HE    & 36     & Heap End                    \\ 
 SP    & 37     & Stack Pointer               \\
 FP    & 38     & Frame Pointer               \\
 IR    & 39     & Instruction Register        \\
@@ -86,6 +86,7 @@ ZERO  & 0      & Immer konstant Null         \\\bottomrule
 
 \begin{frame}{\insertsubsection}
 \framesubtitle{Allgemeines Format}
+ Befehlslänge: 4 Byte. Erstes Byte ist der Befehlscode.
  \begin{center}
   \input{./Arch/befehl0}
  \end{center} 
@@ -137,6 +138,7 @@ Alle Zahlenangaben: big endian.
 \subsection{Befehlsmenge}
 
 \begin{frame}{\insertsubsection}
+\framesubtitle{Kategorien}
 \begin{enumerate}
   \item Kontrollinstruktionen: \texttt{NOP}, \texttt{EOP}
   \item Lade- und Speicherbefehle: 
@@ -199,7 +201,8 @@ Insgesamt 69 Befehle.
 \subsection{I/O}
 
 \begin{frame}{Port I/O}
-   \begin{center}
+\framesubtitle{$\neq$ Memory Mapped I/O}
+ \begin{center}
   \input{./Arch/ioeinheit}
  \end{center}
 \end{frame}
@@ -232,11 +235,11 @@ Insgesamt 69 Befehle.
 \subsection{Interrupts}
 
 \begin{frame}{\insertsubsection}
- Unterbrechungen im normalen Programmfluss.
+ Unterbrechungen im normalen Programmfluss
+ (analog zu \glqq exceptions\grqq{} in Java/C++).
  \begin{itemize}
    \item Mit einer Interruptnummer versehen (\texttt{INT 26}).
    \item Können abgefangen werden (interrupt handlers).
-   \item Analog zu \glqq exceptions\grqq{} in Java/C++.
  \end{itemize}
 \end{frame}
 
@@ -314,16 +317,20 @@ Puffer \texttt{uint8\_t instruction[4]}.
 
 \begin{frame}[fragile]{Execute}
  Befehl ausführen und \texttt{PC} inkrementieren.
+
 \begin{lstlisting}
-struct command *cmd = 
-       command_by_opcode(instruction[0]);
-if   (cmd != NULL) 
-     { cmd->opfunc();              } 
+int opcode = instruction[0];
+
+int (*cmd) (void) =
+      command_by_opcode(opcode);
+
+if   (cmd != NULL) { cmd();        } 
 else { interrupt(INT_INVALID_CMD); }
 registers[PC].value += 4;
 \end{lstlisting}
 
-Es wird nach einem Funktionszeiger gesucht, der dem Befehlscode entspricht.
+Es wird nach einem Funktionszeiger \texttt{cmd} gesucht, der dem Befehlscode
+entspricht.
 Fall vorhanden, ausführen. Falls nicht, Interrupt generieren.
 \end{frame}
 
@@ -337,14 +344,14 @@ Fall vorhanden, ausführen. Falls nicht, Interrupt generieren.
 
 \begin{frame}[fragile]{\insertsubsection{} -- Auszug}
 \begin{lstlisting}
-struct command opmap[OPMAX] = {
-/*  opcode ->  function
-    ----------------------*/
+int (*opmap[]) (void) = {
+//  opcode ->  function   
+//  --------------------
     [0x00]  =  core_nop,
     [0x04]  =  core_eop,
     [0x10]  =  core_set,
+    [0x30]  =  core_add,
     ....
-    [0x90]  =  core_go ,
     [0x91]  =  core_cal,
     [0x92]  =  core_ret,
     [0xA0]  =  core_int,
@@ -355,23 +362,11 @@ struct command opmap[OPMAX] = {
 Suchaufwand $O(1)$. Schneller geht's nicht.
 \end{frame}
 
-\begin{frame}[fragile]{Suchen in der Sprungtabelle}
- Wie findet mal die Funktion, die einem Befehlscode entspricht?
-\begin{lstlisting}
-struct command* command_by_opcode
-(int opcode)
-{
-    return opmap[opcode];
-}
-\end{lstlisting}
-(Vereinfachte Version)
-\end{frame}
-
 
 \begin{frame}[fragile]{Ein Beispiel: \texttt{ADD}-Befehl}
 \begin{center}
   \input{./Arch/befehl1}
- \end{center}
+\end{center}
  
 Eintrag in der Sprungtabelle:
 \begin{lstlisting}
