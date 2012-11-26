@@ -7,19 +7,6 @@
     zur Entwicklung und für das Debuggen
 \end{frame}
 
-\subsection{Übersicht}
-
-\begin{frame}{\insertsubsection}
-    \begin{itemize}
-         \item Anforderungen
-         \item Debugging
-         \item Kommunikation zischen GUI und VM
-         \item QT Bibliothek
-         \item Demonstration der GUI
-         \item Ausblick
-    \end{itemize}
-\end{frame}
-
 \subsection{Anforderungen}
 
 \begin{frame}{\insertsubsection}
@@ -89,12 +76,12 @@
 \begin{frame}{\insertsubsection}
     \begin{itemize}
          \item Ressourcenzähler
-         \item Blockiert Prozess wenn keine Ressource verfügbar
-         \item Zugriff über ID
          \item aquire()\\
          Ressource anfordern
          \item release()\\
          Ressource freigeben
+         \item Blockiert Prozess wenn keine Ressource verfügbar
+         \item Zugriff über ID
     \end{itemize}
 \end{frame}
 
@@ -129,18 +116,6 @@
          \item Plattformunabhängigkeit
          \item Flache Hierarchie - Einfach zu erweitern
          \item Vorhandene Erfahrungswerte
-    \end{itemize}
-\end{frame}
-
-\subsection{Nachteile von QT}
-
-\begin{frame}{\insertsubsection}
-    \begin{itemize}
-         \item Große Bibliothek\\
-         für kleine Anwendungen ungeeignet
-         \item Beispiel Digitaluhr\\
-         \includegraphics[scale=0.2]{g3}
-         \item Großer Einrichtungsaufwand unter Windows (64 Bit)
     \end{itemize}
 \end{frame}
 
@@ -187,7 +162,7 @@
 
 \begin{frame}{\insertsubsection}
     \begin{itemize}
-         \item Projektdateu .umproject
+         \item Projektdatei .umproject
          \begin{itemize}
          	\item Zugehörige Assemblerdateien
 			\item Speicherung von Einstellungen und Haltepunkten
