@@ -4,7 +4,7 @@
 
 \begin{frame}[fragile]{\insertsubsection}
  \begin{itemize}
-  \item UMach ist eine registerbasierte RISC Maschine.\\
+  \item UMach ist eine registerbasierte RISC Maschine.
         
         Wenige Befehle (69) mit fester Länge.        
   \item Load/Store Speicherzugriff über Registerangabe.
@@ -12,13 +12,12 @@
 LW   R1 R2 # R1 $\gets$ mem(R2)
 SW   R1 R2 # R1 $\to$ mem(R2)
 \end{lstlisting}
+  \item Big endian
   \item Port I/O
 \begin{lstlisting}
 IN  R17 R18 R19
 OUT R1  R2  R3
 \end{lstlisting}
-  \item Keine Pipeline
-  \item Big endian
  \end{itemize}
 \end{frame}
 
@@ -26,26 +25,25 @@ OUT R1  R2  R3
 \subsection{Register}
 
 \begin{frame}{\insertsubsection}
- Die UMach Maschine hat 32 Allzweckregister
- und 13 Spezialregister.
- 
- Jedes Register ist genau 32 Bit lang.
- 
- Die Register werden intern durch Nummern identifiziert:
- Register Nummer 0, Nummer 1, Nummer 2\ldots{} Nummer 44.
+ \begin{itemize}
+   \item 32 Allzweckregister und 13 Spezialregister.
+   \item Jedes Register ist genau 32 Bit lang.
+   \item Register werden intern durch Nummern identifiziert:
+         Register Nummer 0, 1, 2\ldots{} 44.
+ \end{itemize}
 \end{frame}
 
 
 \subsubsection{Allzweckregister}
 
 \begin{frame}{\insertsubsubsection}
- Die Register mit Nummern 1 bis 32 können frei verwendet werden.
- Sie werden von der Maschine ohne explizite Anweisung nicht geändert, außer
- dass sie beim Start der Maschine mit dem Wert Null belegt werden.
-
- Die Allzweckregister haben die Namen $R1$, $R2$, \ldots{} $R32$.
- 
- Register mit den Namen $R0$ und $R33$ gibt es nicht.
+ \begin{itemize}
+   \item Register mit Nummern 1 bis 32 können frei verwendet werden.
+   \item Werden von der Maschine ohne explizite Anweisung nicht geändert, außer
+         dass sie mit Null initialisiert werden.
+   \item Namen entsprechen der Nummerierung:\\
+         $R1$, $R2$, \ldots{} $R32$.
+ \end{itemize}
 \end{frame}
 
 
@@ -53,55 +51,44 @@ OUT R1  R2  R3
 \subsubsection{Spezialregister}
 
 \begin{frame}{\insertsubsubsection}
- Dienen der Steuerung der Maschine und haben besondere Aufgaben. Sie werden von
- der Maschine verändert.
- 
- Die meisten sind schreibgeschützt.
+ \begin{itemize}
+   \item Dienen der Steuerung der Maschine.
+   \item Haben besondere Aufgaben.
+   \item Werden von der Maschine im Betrieb verändert.
+   \item Meisten sind schreibgeschützt.
+ \end{itemize}
 \end{frame}
+
+
 
 \begin{frame}{\insertsubsubsection{} - Liste}
  \begin{tabular}{lcl}
-Name  & Nummer & Beschreibung \\\toprule
-PC    & 33     & Program Counter   \\ 
-DS    & 34     & Data Section (begin)   \\ 
+Name  & Nummer & Beschreibung                \\\toprule
+PC    & 33     & Program Counter             \\ 
+DS    & 34     & Data Section (begin)        \\ 
 HS    & 35     & Heap Section (first byte)   \\ 
-HE    & 36     & Heap Section (last byte)   \\ 
-SP    & 37     & Stack Pointer   \\ 
-FP    & 38     & Frame Pointer  \\ 
-IR    & 39     & Instruction Register   \\ 
-STAT  & 40     & Status Register   \\ 
-ERR   & 41     & Error Register   \\ 
-HI    & 42     & Higher 32 Bits (Division, Multiplik.)   \\ 
-LO    & 43     & Lower 32 Bits (Division, Multiplik.)   \\ 
-CMPR  & 44     & Ergebniss von CMP   \\ 
-ZERO  & 0      & Immer konstant Null   \\\bottomrule
+HE    & 36     & Heap Section (last byte)    \\ 
+SP    & 37     & Stack Pointer               \\
+FP    & 38     & Frame Pointer               \\
+IR    & 39     & Instruction Register        \\
+STAT  & 40     & Status Register             \\
+ERR   & 41     & Error Register              \\
+HI    & 42     & Higher 32 Bits (Division, Multiplik.) \\
+LO    & 43     & Lower 32 Bits (Division, Multiplik.)  \\
+CMPR  & 44     & Ergebniss von CMP           \\
+ZERO  & 0      & Immer konstant Null         \\\bottomrule
  \end{tabular}
 \end{frame}
 
 
 
-
-\subsection{Befehle}
+\subsection{Befehlsformat}
 
 \begin{frame}{\insertsubsection}
- Ein Befehl ist immer 32 Bits lang (4 Byte), auch wenn er keine Argumente nimmt
- (RISC Architektur).
- Erstes Byte ist der Befehl, die anderen 3 Bytes sind eventuelle Argumente.
+\framesubtitle{Allgemeines Format}
  \begin{center}
   \input{./Arch/befehl0}
  \end{center} 
-\end{frame}
-
-
-
-\subsection{Befehlsformate}
-
-\begin{frame}{\insertsubsection}
- Wie MMIX von Knuth, hat UMach mehrere Befehlsformate, d.h. mehrere Arten, wie
- man die Argumente einteilen und interpretieren kann.
- 
- Manche Befehle erwarten Registernummern, andere direkte nummerische Angaben
- verschiedener Längen, andere eine Mischung davon, andere keine Argumente.
 \end{frame}
 
 
@@ -114,9 +101,9 @@ ZERO  & 0      & Immer konstant Null   \\\bottomrule
     NNN & \multicolumn{3}{c}{3 Bytes Zahl}              \\\midrule
     R00 & $R_{1}$ & \multicolumn{2}{c}{nicht verwendet} \\\midrule
     RNN & $R_{1}$ & \multicolumn{2}{c}{2 Bytes Zahl}    \\\midrule
-    RR0 & $R_{1}$ & $R_{2}$ &  nicht verwendet           \\\midrule
-    RRN & $R_{1}$ & $R_{2}$ &  1 Byte Zahl               \\\midrule
-    RRR & $R_{1}$ & $R_{2}$ & $R_{3}$                    \\\bottomrule
+    RR0 & $R_{1}$ & $R_{2}$ &  nicht verwendet          \\\midrule
+    RRN & $R_{1}$ & $R_{2}$ &  1 Byte Zahl              \\\midrule
+    RRR & $R_{1}$ & $R_{2}$ & $R_{3}$                   \\\bottomrule
   \end{tabular}
 \end{center}
 ($R_{1}$, $R_{2}$, $R_{3}$: erste, zweite, dritte Registernummer)
@@ -177,30 +164,14 @@ Insgesamt 69 Befehle.
 \subsection{Speichermodell}
 
 \begin{frame}{\insertsubsection}
- Der Speicher der UMach Maschine enthält hauptsächlich
- \begin{itemize}
-  \item Programmcode
-  \item Programmdaten
-  \item Freier Speicher
- \end{itemize}
-  Kein Memory Mapped I/O.
-  
-  Gesamte Speichergröße ist nach dem Start der Maschine fest.
-\end{frame}
-
-
-\begin{frame}{Segmente}
- Der Speicher wird in Segmenten eingeteilt.
- \begin{enumerate}
-  \item Interrupttabelle
-  \item Programmcode (Code-Segment)
-  \item Programmdaten (Daten-Segment)
-  \item Heap (Freispeicher)
-  \item Stack (Lokaler Speicher)
- \end{enumerate}
- Der Code- und Daten-Segment werden aus der Programmdatei geladen. 
- Der Rest ist dynamisch und kann durch Register (\texttt{HE}, \texttt{SP})
- oder Befehle (\texttt{PUSH}, \texttt{POP}) manipuliert werden.
+ \framesubtitle{Speichersegmente}
+ \begin{center}
+  \input{./Arch/speicher}
+ \end{center}
+ Segmentation Fault: schreiben in Code-Segment.
+ 
+ Stack Overflow: Befehl \texttt{PUSH} führt zum Überlappen der Register
+\texttt{SP} und \texttt{HE}.
 \end{frame}
 
 
@@ -224,41 +195,21 @@ Insgesamt 69 Befehle.
 \end{frame}
 
 
-\begin{frame}{Speicher-Layout}
- \begin{center}
-  \input{./Arch/speicher}
- \end{center}
- Segmentation Fault: schreiben in Code-Segment.
- 
- Stack Overflow: Befehl \texttt{PUSH} führt zum Überlappen der Register
-\texttt{SP} und \texttt{HE}.
-\end{frame}
-
-
 
 \subsection{I/O}
 
 \begin{frame}{Port I/O}
- Die UMach Maschine verwendet Port I/O, d.h. sie hat Befehle zum Ausgeben und
- Einlesen von Daten. Es werden Ports verwendet: durchnummerierte Ausgänge und
- Eingänge.
-\end{frame}
-
-\begin{frame}{Ports}
- Es gibt 8 Ausgabeports und 8 Eingabeports, die jeweils von 0 bis 7
- durchnummeriert sind.
- 
- Ausgabeport 0: \texttt{stdout}.
- 
- Eingabeport 0: \texttt{stdin}.
+   \begin{center}
+  \input{./Arch/ioeinheit}
+ \end{center}
 \end{frame}
 
 
-\begin{frame}{Transfer}
- Der Datentransfer findet direkt zwischen Speicher und I/O-Ports statt.
- Der Transfer blockiert die Maschine solange der Transfer noch nicht fertig ist.
- 
- Die I/O-Befehle haben das Format RRR (drei Registernummern).
+\begin{frame}{Datentransfer}
+ \begin{itemize}
+   \item Direkt zwischen Speicher und I/O-Ports.
+   \item Blockiert die Maschine solange der Transfer noch nicht fertig ist.
+ \end{itemize}
 \end{frame}
 
 

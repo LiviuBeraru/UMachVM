@@ -4,25 +4,43 @@
 \begin{frame}{\texttt{SET}}
  \texttt{SET R1 5} oder \texttt{SET R1 label}
  
- Tut das und jenes. Label wird durch Adresse ersetzt.
+ Setzt das Register R1 auf den angegebenen Wert. Labels werden durch Adressen ersetzt.
  
- Beispiel:
 \end{frame}
 
+\begin{frame}{Arithmetische Befehle}
 
-\begin{frame}{Sprungbefehle}
+\begin{center}
+\begin{tabular}{@{\ttfamily\bfseries}ll}
+ADD R1 R2 R3 & Addiert $R1 \gets R2 + R3$ \\
+SUB R1 R2 R3 & Subtrahiert $R1 \gets R2 - R3$\\
+INC R1       & Inkrementiert $R1++$\\
+DEC R1       & Dekrementiert $R1--$\\
+MUL R1 R2    & Multiplikation \\
+DIV R1 R2    & Division durch 0 führt zu Interrupt
+\end{tabular}
+\end{center}
+ 
+und die entsprechenden Immediate-Varianten
+\end{frame}
+
+\begin{frame}{Bedingte Sprünge}
+\begin{itemize}
+ \item{\texttt{\texttt{CMP R1 R2}}}
+        Vergleicht das Register R1 mit R2.
+ \item{\texttt{\texttt{BL label}}}
+        Springt zum angegebenen Label, falls R1 kleiner R2 ist.
+        Weitere Möglichkeiten: \texttt{BLE, BG, BGE, BE}
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Unbedingte Sprünge}
  \begin{itemize}
   \item \texttt{JMP label}
-  \item \texttt{BL label}
-        springt zum angegebenen Label, falls R1 kleiner R2 ist
-        Weitere Möglichkeiten: \texttt{BLE, BG, BGE, BE}
+  \item \texttt{CALL funktion} 
  \end{itemize}
-\end{frame}
-
-\begin{frame}{Vergleiche}
- \texttt{CMP R1 R2}
- 
- Immer or einer bedingten Verzweigung.
 \end{frame}
 
 \begin{frame}{IO-Befehle}
@@ -33,25 +51,7 @@
 \end{frame}
 
 
-\begin{frame}{Arithmetische Befehle}
- \begin{description}
-  \item [\texttt{ADD}] Addiert $a+b = 0$
-  \item [\texttt{SUB}]
-  \item [\texttt{INC}]
-  \item [\texttt{DEC}] Berechnet $\pi^{2} = \frac{a^i}{e}$
-  \item [\texttt{MUL}]
-  \item [\texttt{DIV}] Muss man auf die Null aufpassen, denn die Null
-        wurde erst im 9ten Jahrhundert erfunden und alte Programme nicht
-        mehr kompilieren.
- \end{description}
- 
-und die entsprechenden Immediate-Varianten
-\end{frame}
 
-
-\begin{frame}{Funktionen}  
- \texttt{CALL funktion} 
-\end{frame}
 
 
 
@@ -86,6 +86,9 @@ und die entsprechenden Immediate-Varianten
 \begin{frame}{\insertsection}% name der aktuellen section
  Folge $X_{n} = X_{n-1} + X_{n-2}$
  mit $X_{1} = 1$, und $X_{2} = 2$
+ \begin{itemize}
+ \item Unterscheidung zwischen $n = 1$, $n = 2$ und $n \geq 3$ notwendig
+ \end{itemize}
 \end{frame}
 
 
@@ -93,11 +96,14 @@ und die entsprechenden Immediate-Varianten
 \section{Zahl raten}
 
 \begin{frame}{\insertsection}% name der aktuellen section
- Erzeugt eine Pseudozufallszahl aus dem eingegebenen Seed.
- Gibt Rückmeldung ob die geratene Zahl kleiner oder größer 
- als die gesuchte ist.
- 
- Zählt die Anzahl der Versuche.
+  \begin{itemize}
+   \item Seed erzeugen
+   \item Pseudozufallszahl generieren
+   \item Formel: $X_{n+1} = (a + b*X_n) \mod m$
+   \item Spieler rät die Zahl
+   \item Rückmeldung ob die geratene Zahl größer oder kleiner der gesuchten ist
+   \item Anzahl der Versuche
+  \end{itemize}
 \end{frame}
 
 
@@ -119,7 +125,7 @@ und die entsprechenden Immediate-Varianten
   \end{enumerate}
 
 
-Am ende des Spiels:
+Am Ende des Spiels:
 \begin{itemize}
  \item neue Runde oder Beenden
  \item bei neuer Runde aufräumen
