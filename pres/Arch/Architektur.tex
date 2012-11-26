@@ -232,14 +232,12 @@ Insgesamt 69 Befehle.
 \subsection{Interrupts}
 
 \begin{frame}{\insertsubsection}
- Unterbrechungen im normalen Programmfluss, die mit einer Interruptnummer
- versehen sind und die abgefangen werden können. 
- Analog zu \glqq exceptions\grqq{} in Java/C++.
- 
- Abfangen heißt, dass eine Subroutine mit der Interruptnummer verbunden wird.
- 
- Ist ein Interrupt nicht mit einer Subroutine verbunden, so stoppt die Maschine
- wenn der Interrupt passiert.
+ Unterbrechungen im normalen Programmfluss.
+ \begin{itemize}
+   \item Mit einer Interruptnummer versehen (\texttt{INT 26}).
+   \item Können abgefangen werden (interrupt handlers).
+   \item Analog zu \glqq exceptions\grqq{} in Java/C++.
+ \end{itemize}
 \end{frame}
 
 
@@ -256,18 +254,14 @@ Insgesamt 69 Befehle.
 
 
 \begin{frame}{Interrupttabelle}
- Die Interrupttabelle startet an der Addresse Null und besteht aus 64 Einträgen,
- jeweils 32 Bit groß (=256 Bytes).
- 
- Jeder der $64$ Einträge entspricht einer Interruptnummer.
- 
- Interrupt 26 $\to$ Adresse $26 \cdot 4 = 104$.
- 
- An jedem Index steht entweder Null oder die Addresse einer Subroutine
- (Interrupt Handler). Diese wird ausgeführt, wenn der entsprechende Interrupt
- generiert wird.
- 
- Adresse des Interrupt Handlers ist Null $\mapsto$ Maschine ausschalten.
+ \begin{itemize}
+   \item Startet an der Addresse Null.
+   \item 64 Einträge, jeweils 32 Bit groß.
+   \item Jeder Eintrag entspricht einer Interruptnummer.\\
+         Interrupt 26 $\to$ Adresse $26 \cdot 4 = 104$.
+   \item Eintrag enthält entweder Null oder die Adresse eines
+         \glqq interrupt handlers\grqq.
+ \end{itemize}
 \end{frame}
 
 
@@ -285,8 +279,8 @@ Insgesamt 69 Befehle.
 \subsection{Programmablauf}
 
 \begin{frame}[fragile]{\insertsubsection}
- Die Maschine hat grundsätzlich zwei Schritte, die sie immer wieder wiederholt: 
- fetch und execute. 
+ Die Maschine führt grundsätzlich zwei Schritte aus, die sich immer wieder
+ wiederholen: fetch und execute. 
  \begin{lstlisting}
 void core_run_program(void)
 {
@@ -312,11 +306,8 @@ void core_fetch(void)
     );
 }
 \end{lstlisting}
-Lese 4 Bytes aus dem Speicher ab der Adresse \texttt{PC} in den
-Puffer \texttt{instruction}.
-
-Nach \texttt{fetch} steht der neue Befehl im globalen Array
-\texttt{instruction[4]}. (big endian)
+Lese 4 Bytes aus dem Speicher ab der Adresse \texttt{\$PC} in den globalen
+Puffer \texttt{uint8\_t instruction[4]}.
 \end{frame}
 
 
@@ -332,43 +323,36 @@ else { interrupt(INT_INVALID_CMD); }
 registers[PC].value += 4;
 \end{lstlisting}
 
-Es wird nach einem Funktionszeiger gesucht, der dem Befehlscode entspricht
-(die Funktion implementiert den Befehl).
+Es wird nach einem Funktionszeiger gesucht, der dem Befehlscode entspricht.
 Fall vorhanden, ausführen. Falls nicht, Interrupt generieren.
-
-(Der Funktionszeiger ist in einer Struktur \texttt{command} gepackt.)
 \end{frame}
 
 
 \subsection{Sprungtabellen}
 
-\begin{frame}{\insertsubsection}
- Wie wird schnell nach einem Funktionszeiger gesucht?
- 
- Mit Sprungtabellen: ein Array von Funktionszeigern in Strukturen gepackt, wo
- jede Struktur genau an dem Index steht, der gleich dem entsprechenden
- Befehlscode ist.
- 
- Suchaufwand $O(1)$. Schneller geht's nicht.
+\begin{frame}{Frage}
+  Wie wird schnell nach einem Funktionszeiger gesucht?
 \end{frame}
 
 
 \begin{frame}[fragile]{\insertsubsection{} -- Auszug}
 \begin{lstlisting}
 struct command opmap[OPMAX] = {
-    [0x00] = {0x00, "NOP", core_nop ,NUL},
-    [0x04] = {0x04, "EOP", core_eop ,NUL},
-    [0x10] = {0x10, "SET", core_set ,RNN},
+/*  opcode ->  function
+    ----------------------*/
+    [0x00]  =  core_nop,
+    [0x04]  =  core_eop,
+    [0x10]  =  core_set,
     ....
-    [0x90] = {0x90, "GO" , core_go  ,R00},
-    [0x91] = {0x91, "CALL, core_call,NNN},
-    [0x92] = {0x92, "RET", core_ret ,NUL},
-    [0xA0] = {0xA0, "INT", core_int ,NNN},
-    [0xB0] = {0xB0, "IN" , core_in  ,RRR},
-    [0xB8] = {0xB8, "OUT", core_out ,RRR}
+    [0x90]  =  core_go ,
+    [0x91]  =  core_cal,
+    [0x92]  =  core_ret,
+    [0xA0]  =  core_int,
+    [0xB0]  =  core_in ,
+    [0xB8]  =  core_out,
 };
 \end{lstlisting}
-(C99 Magie.)
+Suchaufwand $O(1)$. Schneller geht's nicht.
 \end{frame}
 
 \begin{frame}[fragile]{Suchen in der Sprungtabelle}
@@ -376,25 +360,23 @@ struct command opmap[OPMAX] = {
 \begin{lstlisting}
 struct command* command_by_opcode
 (int opcode)
-{  
-    if (opmap[opcode].opname) {
-        return & opmap[opcode];
-    } else {
-        return NULL;
-    }
+{
+    return opmap[opcode];
 }
 \end{lstlisting}
+(Vereinfachte Version)
 \end{frame}
 
 
 \begin{frame}[fragile]{Ein Beispiel: \texttt{ADD}-Befehl}
+\begin{center}
+  \input{./Arch/befehl1}
+ \end{center}
+ 
 Eintrag in der Sprungtabelle:
 \begin{lstlisting}
-[0x30] = {0x30, "ADD", core_add, RRR}
+[0x30] = core_add,
 \end{lstlisting}
-
-Der Befehl \texttt{ADD} hat die Befehlsnummer \texttt{0x30} und die Funktion
-\texttt{core\_add} steht am Index \texttt{0x30} in der Sprungtabelle.
 \end{frame}
 
 
