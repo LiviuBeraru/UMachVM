@@ -58,27 +58,28 @@ void free_symbols() {
     symbols_ht = NULL;
 }
 
-static void write_symbols_file_helper(gpointer key, gpointer value, gpointer user_data) {
-    FILE *f = user_data;
-    symbol_t *sym = value;
-    (void) key;
-
-    switch (sym->sym_type) {
-    case SYMTYPE_JUMP:
-        fprintf(f, "%08x jmp %s\n", sym->sym_addr, sym->sym_name);
-        break;
-    case SYMTYPE_INTDAT:
-        fprintf(f, "%08x int %s\n", sym->sym_addr, sym->sym_name);
-        break;
-    case SYMTYPE_STRDAT:
-        fprintf(f, "%08x str %s\n", sym->sym_addr, sym->sym_name);
-        break;
-    }  
-}
-
 void write_symbols_file(FILE *f) {
     if (symbols_ht == NULL)
         return;
 
-    g_hash_table_foreach(symbols_ht, write_symbols_file_helper, f);
+    GHashTableIter iter;
+    gpointer key, value;
+
+    g_hash_table_iter_init(&iter, symbols_ht);
+    
+    while (g_hash_table_iter_next(&iter, &key, &value)) {
+        symbol_t *sym = value;
+
+        switch (sym->sym_type) {
+        case SYMTYPE_JUMP:
+            fprintf(f, "%08x jmp %s\n", sym->sym_addr, sym->sym_name);
+            break;
+        case SYMTYPE_INTDAT:
+            fprintf(f, "%08x int %s\n", sym->sym_addr, sym->sym_name);
+            break;
+        case SYMTYPE_STRDAT:
+            fprintf(f, "%08x str %s\n", sym->sym_addr, sym->sym_name);
+            break;
+        } 
+    }
 }
