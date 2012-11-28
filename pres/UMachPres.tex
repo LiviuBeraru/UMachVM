@@ -3,6 +3,8 @@
 % \AfterPackage{beamerbasemodes}{\beamer@amssymbfalse}
 % \makeatother
 
+%% Remove subsections from navigation bar
+\PassOptionsToPackage{subsection=false}{beamerouterthememiniframes}
 \documentclass{beamer}
 
 \usepackage{bookmark}
@@ -46,6 +48,7 @@
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
+
 \AtBeginPart{%
 \frame{\partpage}%
 \frame[allowframebreaks]{\frametitle{Inhalt}\tableofcontents}}
@@ -53,7 +56,7 @@
 
 \title{UMach}
 \subtitle{eine virtuelle Maschine}
-\author{L. Beraru \and W. Linne \and W. Fink \and S. Beer}
+\author{L. Beraru \and W. Linne \and S. Beer \and W. Fink}
 \institute{Betreuer: Prof. Dr. Kern\\Georg-Simon-Ohm-Hochschule}
 \date{}
 
