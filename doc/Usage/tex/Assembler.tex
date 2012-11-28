@@ -3,17 +3,17 @@
 \subsection{Eingabe Dateien}
 
 Es können beliebig viele Programmdateien angegeben werden. Sie werden der
-Reiche nach abgearbeitet. Man beachte, dass die Instruktion \texttt{EOP} das
+Reihe nach abgearbeitet. Man beachte, dass die Instruktion \texttt{EOP} das
 Ende des Programms signalisiert. Falls nachher noch weitere Befehle, eventuell
 in anderen Datein, angegeben werden, werden diese zwar assembliert, aber nicht
 ausgeführt.
 
-Alles außer Labels is case insensitive. Man kann beliebig Leerzeichen
-(whitespace) verwenden.
+Alles außer Labels ist case insensitive. Man kann beliebig Leerzeichen und
+Tabulatoren (whitespaces) verwenden.
 
 
 Siehe den Abschnitt \ref{subsubsec:Funktionen-Beispiel} ab der Seite
-\pageref{subsubsec:Funktionen-Beispiel} für ein Beispiel, wo mehrere Dateien
+\pageref{subsubsec:Funktionen-Beispiel} für ein Beispiel, in dem mehrere Dateien
 für ein Programm verwendet werden.
 
 \subsection{Labels}
@@ -28,9 +28,10 @@ Labelnamen, gefolgt von einem Doppelpunkt. Zwischen dem Labelnamen und dem
 Doppelpunkt können, außer das \glqq newline\grqq-Zeichen, beliebig viele
 Leerzeichen eingefügt werden.
 
-Labelname ist höchstens 128 Buchstaben lang.
+%% ...im alten schrott-Assembler %%
+%Labelname sind höchstens 128 Buchstaben lang.
 
-Labelnamen müssen selbst keine Leerzeichen (whitespace) beinhalten.
+Labelnamen dürfen selbst keine Leerzeichen (whitespaces) beinhalten.
 
 Ein Label muss immer von einem Befehl gefolgt werden, auch wenn dieser Befehl
 ein \texttt{NOP} ist. Labels, die von keinem Befehl gefolgt werden gelten als
