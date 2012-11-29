@@ -100,13 +100,15 @@ EOP
 \subsection{Datenstrukturen}
 
 \begin{frame}{\insertsection}{\insertsubsection}
-    Drei Hashtabellen für
-    \begin{enumerate}
-        \item Befehle \textit{(statisch)}
-        \item Register \textit{(statisch)}
-        \item Symbole \textit{(dynamisch)}
-    \end{enumerate}
-    Eine verkettete Liste für den Inhalt von Daten
+    \begin{itemize}
+        \item Drei Hashtabellen für
+        \begin{enumerate}
+            \item Befehle \textit{(statisch)}
+            \item Register \textit{(statisch)}
+            \item Symbole \textit{(dynamisch)}
+        \end{enumerate}
+        \item Eine verkettete Liste für den Inhalt von Variablen
+    \end{itemize}
 \end{frame}
 
 \subsection{Commands}
@@ -195,9 +197,9 @@ typedef struct {
     ``Predict''
     \begin{itemize}
         \item Findet Sprungmarken und berechnet deren Adresse
-        \item Berechnet die Codegröße
-        \item Speichert Werte von Daten
-        \item Berechnet Adressen von Daten
+        \item Berechnet die gesamte Codegröße
+        \item Speichert init. Werte von Variablen
+        \item Berechnet Adressen von Variablen
     \end{itemize}
 \end{frame}
 
@@ -208,7 +210,7 @@ typedef struct {
     \begin{itemize}
         \item Generiert UMach Bytecode
         \item Generiert Debuginformationen
-        \item Speichert Werte von Daten in das Outputfile
+        \item Speichert init. Werte von Variablen in das Outputfile
     \end{itemize}
 \end{frame}
 
@@ -220,7 +222,7 @@ typedef struct {
     Parser generieren.\\~\\
     Vorteile:
     \begin{itemize}
-        \item Flexibel
+        \item Verständlich
         \item Weniger Aufwand bei komplexer Syntax
     \end{itemize}
     Nachteile:
@@ -331,7 +333,7 @@ echo.uasm, line 8: No content for <myint> provided
 000004d0 jmp draw
 0000070c jmp putchar
 00000784 str promptdraw
-00000794 str promptend
+00000794 int newln
 00000540 jmp p2Won
 000005ec jmp inputint_nextnbr
 \end{verbatim}
