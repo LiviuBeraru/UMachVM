@@ -15,10 +15,8 @@ void insert_string_data(char *label, char *value) {
     data_t *data = malloc(sizeof(data_t));
     
     data->type = DATATYPE_STRING;
-    data->string_data.label = malloc(sizeof(char) * (strlen(label) + 1));
-    data->string_data.value = malloc(sizeof(char) * (strlen(value) + 1));
-    strcpy(data->string_data.label, label);
-    strcpy(data->string_data.value, value);
+    data->string_data.label = g_strdup(label);
+    data->string_data.value = g_strcompress(value);
 
     data_list = g_slist_prepend(data_list, data);
 }
@@ -93,8 +91,8 @@ static void free_data_helper(gpointer data) {
         free(d);
         break;
     case DATATYPE_STRING:
-        free(d->string_data.label);
-        free(d->string_data.value);
+        g_free(d->string_data.label);
+        g_free(d->string_data.value);
         free(d);
         break;
     }
