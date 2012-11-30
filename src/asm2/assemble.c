@@ -359,8 +359,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
 
             // create a symbol
             symbol_t *label = malloc(sizeof(symbol_t));
-            label->sym_name = malloc(sizeof(char) * (len + 1));
-            strcpy(label->sym_name, line);
+            label->sym_name = strdup(line);
             label->sym_type = SYMTYPE_JUMP;
             label->sym_addr = cntxt->current_addr;
 
