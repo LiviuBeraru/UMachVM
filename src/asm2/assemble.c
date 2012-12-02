@@ -258,11 +258,11 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
             int32_t label_offset = (label.sym_addr - cntxt->current_addr) / 4;
             static char label_buf[12];
 
-            sprintf(label_buf, "%d", label_offset);
+            snprintf(label_buf, sizeof(label_buf), "%d", label_offset);
             items[1] = label_buf;
         } else {
             /* label was not set */
-            print_error(cntxt, "Unset label <%s>", items[1]);
+            print_error(cntxt, "Unset label: <%s>", items[1]);
             return FALSE;
         }
     }
@@ -300,7 +300,7 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
 }
 
 void assemble_data(FILE *outfile) {
-    const uint8_t BEGIN_DATA[4] = {0xFF, 'D', 'A', 'T'};
+    const uint8_t BEGIN_DATA[4] = {0xff, 'D', 'A', 'T'};
 
     fwrite(BEGIN_DATA, 1, 4, outfile);
 
