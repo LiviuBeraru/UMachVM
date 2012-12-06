@@ -395,33 +395,30 @@ static int collect_data_labels(asm_context_t *cntxt, FILE *file) {
 
         if (label == NULL) {
             print_error(cntxt, "No label for %s provided", type);
-            goto error;
+            return FALSE;
         }
 
         char *value = strtok_r(NULL, "", &saveptr);
 
         if (value == NULL) {
             print_error(cntxt, "No content for <%s> provided", label);
-            goto error;
+            return FALSE;
         }
 
         /* decide what to do depending on the type of the label */
         if (strcasecmp(type, STRING_MARK) == 0) {
             if (!collect_string_data(cntxt, label, value))
-                goto error;
+                return FALSE;
         } else if (strcasecmp(type, INTEGER_MARK) == 0) {
             if (!collect_int_data(cntxt, label, value))
-                goto error;
+                return FALSE;
         } else {
             print_error(cntxt, "No such data type: <%s>", type);
-            goto error;
+            return FALSE;
         }
     }
 
     return TRUE;
-
-error:
-    return FALSE;
 }
 
 static int collect_string_data(asm_context_t *cntxt, char *label, char *content) {
