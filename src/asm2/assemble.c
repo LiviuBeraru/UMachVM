@@ -480,7 +480,7 @@ static char *read_line(asm_context_t *cntxt, FILE *file) {
         return NULL;
 
     // remove comments
-    str_strip_comment_2(cntxt->read_buf);
+    str_strip_comment(cntxt->read_buf);
 
     // trim
     str_trim(cntxt->read_buf);
