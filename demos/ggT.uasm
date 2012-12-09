@@ -22,7 +22,7 @@ CALL inputint
 POP R2
 CMP R1 R2
 BG start_ggT_loop
-CP R1 R20
+CP R20 R1
 CP R1 R2
 CP R2 R20
 
@@ -49,7 +49,7 @@ CALL newline
 EOP
 
 .data
-.string p1 "Dieses Programm ermilltelt den größten gemeinsamen Teiler."
+.string p1 "Dieses Programm ermittelt den größten gemeinsamen Teiler."
 .string nbr1 "Bitte geben sie die erste Zahl ein: "
 .string nbr2 "und nun die zweite: "
 .string finish "Der ggT dieser Zahlen ist: "

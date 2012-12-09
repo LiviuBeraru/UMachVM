@@ -10,10 +10,11 @@
 #include "asm_formats.h"
 #include "collect_data.h"
 
-static const char    DATA_MARK[] = ".data";   // marks the data section
-static const char  STRING_MARK[] = ".string"; // marks string data
-static const char INTEGER_MARK[] = ".int";    // marks numeric data
-static const char COMMENT_MARK   = '#';       // marks the beginning of a comment
+static const char     DATA_MARK[] = ".data";   // marks the data section
+static const char   STRING_MARK[] = ".string"; // marks string data
+static const char  INTEGER_MARK[] = ".int";    // marks numeric data
+static const char  COMMENT_MARK   = '#';       // marks the beginning of a comment
+static const char JMPLABEL_MARK   = ':';       // marks the end of a jump label definition
 
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count);
 static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count,
@@ -201,7 +202,7 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
             fwrite(&addr_be, sizeof(uint32_t), 1, debugfile);
         }
 
-        if (line[len - 1] == ':') // found a jump label
+        if (line[len - 1] == JMPLABEL_MARK) // found a jump label
             continue;
 
         /* split the input line into components */
@@ -337,7 +338,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
         if (len == 0)
             continue; // empty line or comment
 
-        if (line[len - 1] == ':') { // found a jump label
+        if (line[len - 1] == JMPLABEL_MARK) { // found a jump label
             if (len == 1) {
                 /* empty label, this happens if the user
                    just writes ":" instead of "label:" */
