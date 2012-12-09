@@ -22,7 +22,7 @@ CALL inputint
 POP R2
 CMP R1 R2
 BG start_ggT_loop
-CP R1 R20
+CP R20 R1
 CP R1 R2
 CP R2 R20
 
