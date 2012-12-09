@@ -186,6 +186,20 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
 
         if (len == 0)
             continue; // empty line or comment
+            
+        // don't parse beyond the data mark
+        if (strcasecmp(line, DATA_MARK) == 0)
+            break;
+            
+        if (cntxt->gen_debuginf) {
+            uint32_t f_id_be = GUINT32_TO_BE(cntxt->current_f_id);
+            uint32_t line_be = GUINT32_TO_BE(cntxt->current_line);
+            uint32_t addr_be = GUINT32_TO_BE(cntxt->current_addr);
+
+            fwrite(&f_id_be, sizeof(uint32_t), 1, debugfile);
+            fwrite(&line_be, sizeof(uint32_t), 1, debugfile);
+            fwrite(&addr_be, sizeof(uint32_t), 1, debugfile);
+        }
 
         if (line[len - 1] == ':') // found a jump label
             continue;
@@ -204,27 +218,10 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
         while (parts[nparts] != NULL)
             nparts++;
 
-        // don't parse beyond the data mark
-        if (strcasecmp(parts[0], DATA_MARK) == 0) {
-            break;
-        }
-
-        if (!assemble_line(cntxt, parts, nparts, instruction)) {
-            /* error while assembling this line */
-            return FALSE;
-        }
+        if (!assemble_line(cntxt, parts, nparts, instruction))
+            return FALSE; // error while assembling this line
 
         fwrite(instruction, sizeof(uint32_t), 1, outfile);
-
-        if (cntxt->gen_debuginf) {
-            uint32_t f_id_be = GUINT32_TO_BE(cntxt->current_f_id);
-            uint32_t line_be = GUINT32_TO_BE(cntxt->current_line);
-            uint32_t addr_be = GUINT32_TO_BE(cntxt->current_addr);
-
-            fwrite(&f_id_be, sizeof(uint32_t), 1, debugfile);
-            fwrite(&line_be, sizeof(uint32_t), 1, debugfile);
-            fwrite(&addr_be, sizeof(uint32_t), 1, debugfile);
-        }
 
         cntxt->current_addr += 4;
     }
