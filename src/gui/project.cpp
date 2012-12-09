@@ -7,6 +7,7 @@
 #include "assert.h"
 #include <QDir>
 #include "umachdebuginfo.h"
+#include "umachsymbolinfo.h"
 
 
 Project::Project(QString projectFile)
@@ -17,6 +18,7 @@ Project::Project(QString projectFile)
     m_name = fi.baseName();
     m_isSaved = false;
     m_debugInfo = NULL;
+    m_symbolInfo = NULL;
 }
 
 Project *Project::New(QString projectFile)
@@ -165,11 +167,11 @@ IUasmFile* Project::getFileByAbsPath(QString absPath)
 
 void Project::generateDebugInfo()
 {
-    //delete old debug info
     delete(m_debugInfo);
-
-    //create new one
     m_debugInfo = new UMachDebugInfo(this);
+
+    delete (m_symbolInfo);
+    m_symbolInfo = new UMachSymbolInfo(this);
 
     //build debug Map
     rebuildBreakPointMap();
@@ -282,4 +284,11 @@ void Project::removeDebugInfo()
 {
     delete(m_debugInfo);
     m_debugInfo = NULL;
+    delete(m_symbolInfo);
+    m_symbolInfo = NULL;
+}
+
+UMachSymbolInfo* Project::getSymbolInfo()
+{
+    return m_symbolInfo;
 }

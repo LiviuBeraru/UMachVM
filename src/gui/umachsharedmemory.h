@@ -14,6 +14,7 @@ public:
     void init();
 
     QSharedMemory *m_sharedHeaderMemory;
+    QSharedMemory *m_sharedMachineMemory;
     //QSharedMemory *m_sharedRegisterMemory;
     sharedHeaderStruct *m_sharedHeaderData;
     //sharedRegisterStruct *m_sharedRegisterData;

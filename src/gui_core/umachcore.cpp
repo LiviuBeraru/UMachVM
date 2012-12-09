@@ -12,10 +12,11 @@ extern "C" {
 #include "../vm/options.h"
 }
 
+#include <fstream>
 
 UMachCore::UMachCore(const char *executable, bool debug, size_t memory)
 {
-    QSystemSemaphore *processStarted = new QSystemSemaphore("startDone_UMCore45");
+    QSystemSemaphore *processStarted = new QSystemSemaphore(KEY_DONE_RUN);
 
     //create shared Memory for header info
     m_sharedHeaderMemory = new QSharedMemory();
@@ -23,17 +24,16 @@ UMachCore::UMachCore(const char *executable, bool debug, size_t memory)
     m_sharedHeaderMemory->create(sizeof(sharedHeaderStruct), QSharedMemory::ReadWrite);
     m_sharedHeaderData = (sharedHeaderStruct*)m_sharedHeaderMemory->data();
 
-//    //create shared Memory for register info
-//    m_sharedRegisterMemory = new QSharedMemory();
-//    m_sharedRegisterMemory->setKey(KEY_REGISTER);
-//    m_sharedRegisterMemory->create(sizeof(sharedRegisterStruct), QSharedMemory::ReadWrite);
-//    m_sharedRegisterData = (sharedRegisterStruct*)m_sharedRegisterMemory->data();
+    //create shared Memory for Memory
+    m_sharedMachineMemory = new QSharedMemory();
+    m_sharedMachineMemory->setKey(KEY_MEMORY);
+    m_sharedMachineMemory->create(memory, QSharedMemory::ReadWrite);
 
     //System Semaphores for process sync
-    m_waitForExecuteReqest = new QSystemSemaphore("executeRequest_UMCore45", 0, QSystemSemaphore::Create);
-    m_waitForExecuteDone = new QSystemSemaphore("executeDone_UMCore45", 0, QSystemSemaphore::Create);
-    m_waitForFetchRequest = new QSystemSemaphore("fetchRequest_UMCore45", 0, QSystemSemaphore::Create);
-    m_waitForFetchDone = new QSystemSemaphore("fetchDone_UMCore45", 0, QSystemSemaphore::Create);
+    m_waitForExecuteReqest = new QSystemSemaphore(KEY_REQ_EXEC, 0, QSystemSemaphore::Create);
+    m_waitForExecuteDone = new QSystemSemaphore(KEY_DONE_EXEC, 0, QSystemSemaphore::Create);
+    m_waitForFetchRequest = new QSystemSemaphore(KEY_REQ_FETCH, 0, QSystemSemaphore::Create);
+    m_waitForFetchDone = new QSystemSemaphore(KEY_DONE_FETCH, 0, QSystemSemaphore::Create);
 
 
     options.disassemble = 0;
@@ -52,6 +52,7 @@ UMachCore::~UMachCore()
 {
     //clean up
     delete(m_sharedHeaderMemory);
+    delete(m_sharedMachineMemory);
     delete(m_waitForExecuteDone);
     delete(m_waitForExecuteReqest);
 }
@@ -84,8 +85,14 @@ void UMachCore::run()
 
     logmsg(LOG_INFO, "Loaded %d bytes program", progsize);
 
+    //first time copy of memory
+    m_sharedMachineMemory->lock();
+    mem_read((uint8_t*)m_sharedMachineMemory->data(), 0, mem_getsize());
+    m_sharedMachineMemory->unlock();
+
     m_sharedHeaderMemory->lock();
     m_sharedHeaderData->m_runFlag = true;
+    m_sharedHeaderData->m_copyMemory = false;
     m_sharedHeaderData->sizeDataArray = 120;
     m_sharedHeaderMemory->unlock();
 
@@ -112,6 +119,15 @@ void UMachCore::run()
                 m_sharedHeaderMemory->unlock();
                 break;
             }
+
+           //coverwrite machine memory if requested
+
+            if (m_sharedHeaderData->m_copyMemory) {
+                m_sharedMachineMemory->lock();
+                mem_write((uint8_t*)m_sharedMachineMemory->data(), 0, mem_getsize());
+                m_sharedMachineMemory->unlock();
+                m_sharedHeaderData->m_copyMemory = false;
+            }
             m_sharedHeaderMemory->unlock();
 
             //if not, execute
@@ -121,8 +137,9 @@ void UMachCore::run()
             m_sharedHeaderMemory->lock();
             for (int i = 1; i <= 44; i++){
                 m_sharedHeaderData->m_registers[i - 1] = registers[i].value;
-            }
+            } 
             m_sharedHeaderMemory->unlock();
+
 
             //set shared flag, if not running anymore
             if (!running) {
@@ -170,6 +187,9 @@ void UMachCore::run()
     catch (...) {
         //clean up on error
         delete(m_sharedHeaderMemory);
+        delete(m_sharedMachineMemory);
+        delete(m_waitForExecuteDone);
+        delete(m_waitForExecuteReqest);
         delete(m_waitForExecuteDone);
         delete(m_waitForExecuteReqest);
     }

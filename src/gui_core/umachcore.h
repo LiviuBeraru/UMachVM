@@ -16,14 +16,13 @@ public:
 private:
 
     QSharedMemory *m_sharedHeaderMemory;
-    //QSharedMemory *m_sharedRegisterMemory;
+    QSharedMemory *m_sharedMachineMemory;
     QSystemSemaphore *m_waitForExecuteReqest;
     QSystemSemaphore *m_waitForExecuteDone;
     QSystemSemaphore *m_waitForFetchRequest;
     QSystemSemaphore *m_waitForFetchDone;
 
     sharedHeaderStruct *m_sharedHeaderData;
-   // sharedRegisterStruct *m_sharedRegisterData;
 
     const char *m_executable;
 
