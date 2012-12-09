@@ -481,8 +481,10 @@ void UMachGui::runExecutable()
 {
     executionGuiSetup(true);
 
-    QSystemSemaphore *processStarted = new QSystemSemaphore(KEY_DONE_RUN, 0, QSystemSemaphore::Create);
     QString param(m_project->getProjectDir()->absolutePath() + "/" + m_project->getName() + ".umx -d");
+    param.append(" -m " + QString::number(m_optionsWindow->getMemorySize()));
+
+    QSystemSemaphore *processStarted = new QSystemSemaphore(KEY_DONE_RUN, 0, QSystemSemaphore::Create);
     m_umachCore = new QProcess();
     m_umachCore->start(QString("xterm -e ./UMachCore " + param));
     processStarted->acquire();
@@ -546,7 +548,7 @@ void UMachGui::setRegisters()
 {
     m_sharedMemory->m_sharedHeaderMemory->lock();
     for (int i = 0; i < 32; i++) {
-        registersWindow->setRegisterValue(i, m_sharedMemory->m_sharedHeaderData->m_registers[i]);
+        registersWindow->setRegisterValue(i +1, m_sharedMemory->m_sharedHeaderData->m_registers[i]);
     }
     m_sharedMemory->m_sharedHeaderMemory->unlock();
 }
