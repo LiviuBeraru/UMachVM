@@ -34,6 +34,11 @@ int main(int argc, char *argv[]) {
                 break;
             case 'h':
                 fprintf(stdout, "Usage: %s [-o outfile] [-g] [-w] file(s)\n", argv[0]);
+                fprintf(stdout, "Options:\n");
+                fprintf(stdout, "  -o <outfile> Place the output into <outfile>\n");
+                fprintf(stdout, "  -g           Produce debugging information\n");
+                fprintf(stdout, "  -w           Wait on error for ENTER key\n");
+                fprintf(stdout, "  -h           Print this text and quit\n");
                 exit(EXIT_SUCCESS);
                 break;
             case 'w':
