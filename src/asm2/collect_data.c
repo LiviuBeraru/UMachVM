@@ -46,7 +46,7 @@ int insert_data_symbols(asm_context_t *cntxt) {
             sym->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(sym)) {
-                print_error(cntxt, "String constant %s already defined", sym->sym_name);
+                print_error(cntxt, "String constant <%s> already defined", sym->sym_name);
                 free(sym->sym_name);
                 free(sym);
                 return FALSE;
@@ -65,7 +65,7 @@ int insert_data_symbols(asm_context_t *cntxt) {
             sym->sym_addr = cntxt->current_addr;
 
             if (!insert_symbol(sym)) {
-                print_error(cntxt, "Integer constant %s already defined", sym->sym_name);
+                print_error(cntxt, "Integer constant <%s> already defined", sym->sym_name);
                 free(sym->sym_name);
                 free(sym);
                 return FALSE;
