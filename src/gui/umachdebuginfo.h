@@ -29,11 +29,12 @@ public:
     bool setAdressForEntry(debugAddressEntry *entry);
     debugAddressEntry* getFileAndLineByAddress(uint32_t address);
 
+    static uint32_t swap_uint32( uint32_t val );
+
 private:
     //Hashlist holding all the debug info
     QHash <uint32_t, debugAddressEntry*> m_addressTable;
 
-    static uint32_t swap_uint32( uint32_t val );
 
 };
 

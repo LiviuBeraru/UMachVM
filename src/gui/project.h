@@ -9,6 +9,7 @@ class IUasmFile;
 class UAsmFile;
 class QDir;
 class UMachDebugInfo;
+class UMachSymbolInfo;
 struct debugAddressEntry;
 
 
@@ -51,6 +52,8 @@ public:
 
     void removeDebugInfo();
 
+    UMachSymbolInfo* getSymbolInfo();
+
 private:
     Project(QString projectFile);
     QVector<UAsmFile*> m_projectUasmFiles;
@@ -60,6 +63,7 @@ private:
     bool m_isSaved;
 
     UMachDebugInfo *m_debugInfo;
+    UMachSymbolInfo *m_symbolInfo;
 
     QList <debugAddressEntry*> m_breakPoints;
     QHash <uint32_t,int> m_addressBreakPointMap;

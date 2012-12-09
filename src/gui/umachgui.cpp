@@ -2,6 +2,8 @@
 #include "umachbreakpoints.h"
 #include "umachregisters.h"
 #include "umachcodeeditor.h"
+#include "umachsymbolinfo.h"
+#include "umachdebuginfo.h"
 #include "IUasmFile.h"
 #include "project.h"
 #include <iostream>
@@ -10,9 +12,11 @@
 #include <QMessageBox>
 #include <string>
 #include <QProcess>
+#include <QFlags>
 #include "umachmake.h"
 #include "umachsharedmemory.h"
 #include "../gui_core/sharedmemorystructs.h"
+#include "umachoptions.h"
 
 UMachGui::UMachGui(QWidget *parent) :
     QMainWindow(parent)
@@ -58,11 +62,21 @@ UMachGui::UMachGui(QWidget *parent) :
     //Registers Menu
     showRegistersWindowAction = new QAction("Registers", this);
     showBreakPointsWindowAction = new QAction("Break Points", this);
-    connect(showRegistersWindowAction, SIGNAL(triggered()), this, SLOT(showRegistersWindow()));
-    connect(showBreakPointsWindowAction, SIGNAL(triggered()), this, SLOT(showBreakPointsWindow()));
+    m_showOptionsWindow = new QAction("Options", this);
+    m_optionsWindow = new UMachOptions(this);
+
+
+    //Sub Windows
+    registersWindow = new UMachRegisters(this);
+    breakPointsWindow = new UMachBreakPoints(this);
+
+    connect(showRegistersWindowAction, SIGNAL(triggered()), registersWindow, SLOT(show()));
+    connect(showBreakPointsWindowAction, SIGNAL(triggered()), breakPointsWindow, SLOT(show()));
+    connect(m_showOptionsWindow, SIGNAL(triggered()), m_optionsWindow, SLOT(show()));
     windowsMenu = menuBar()->addMenu("Windows");
     windowsMenu->addAction(showRegistersWindowAction);
     windowsMenu->addAction(showBreakPointsWindowAction);
+    windowsMenu->addAction(m_showOptionsWindow);
     showBreakPointsWindowAction->setDisabled(true);
 
      //Toolbar
@@ -104,6 +118,16 @@ UMachGui::UMachGui(QWidget *parent) :
     //connect File list to open code
     connect(m_fileList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(openCodeInTabByWidget(QListWidgetItem*)));
 
+    //WatchList
+    m_watchList = new QDockWidget("Symbols", this);
+    m_watchListTable = new QTableWidget(this);
+    m_watchListTable->setColumnCount(3);
+    m_watchListTable->setHorizontalHeaderLabels(QStringList(QString("Label;Type;Value").split(";")));
+    m_watchListTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    m_watchList->setWidget(m_watchListTable);
+    m_watchList->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    addDockWidget(Qt::BottomDockWidgetArea, m_watchList);
+
     //CodeEditTab
     m_codeEditorTab = new QTabWidget();
     m_codeEditorTab->setTabsClosable(true);
@@ -114,12 +138,9 @@ UMachGui::UMachGui(QWidget *parent) :
     setCentralWidget(m_codeEditorTab);
 
 
-    //Sub Windows
-    registersWindow = new UMachRegisters(this);
-    breakPointsWindow = new UMachBreakPoints(this);
-
     m_project = NULL;
     m_stoppedAtBreakPoint = false;
+    m_symbolDataChanged = false;
 
     setWindowTitle("UMachGui");
     setWindowIcon(QIcon(":/application/app_icon.png"));
@@ -133,18 +154,6 @@ UMachGui::~UMachGui()
 {
     delete(registersWindow);
     delete(breakPointsWindow);
-
-}
-
-void UMachGui::showRegistersWindow()
-{
-    registersWindow->show();
-
-}
-
-void UMachGui::showBreakPointsWindow()
-{
-    breakPointsWindow->show();
 
 }
 
@@ -472,7 +481,7 @@ void UMachGui::runExecutable()
 {
     executionGuiSetup(true);
 
-    QSystemSemaphore *processStarted = new QSystemSemaphore("startDone_UMCore45", 0, QSystemSemaphore::Create);
+    QSystemSemaphore *processStarted = new QSystemSemaphore(KEY_DONE_RUN, 0, QSystemSemaphore::Create);
     QString param(m_project->getProjectDir()->absolutePath() + "/" + m_project->getName() + ".umx -d");
     m_umachCore = new QProcess();
     m_umachCore->start(QString("xterm -e ./UMachCore " + param));
@@ -484,6 +493,8 @@ void UMachGui::runExecutable()
     //doing the first fetch
     m_sharedMemory->m_waitForFetchRequest->release();
     m_sharedMemory->m_waitForFetchDone->acquire();
+    //initial Memory copy should be done by now, so we can set up watchlist
+    setWatchList();
     //call nextBreakPoint() for the start
     this->nextBreakPoint();
 }
@@ -538,6 +549,68 @@ void UMachGui::setRegisters()
         registersWindow->setRegisterValue(i, m_sharedMemory->m_sharedHeaderData->m_registers[i]);
     }
     m_sharedMemory->m_sharedHeaderMemory->unlock();
+}
+
+void UMachGui::setWatchList()
+{
+    //clear old list
+    for (int i = 0; i < m_watchListTable->rowCount(); i++) {
+        m_watchListTable->takeItem(i,0);
+        m_watchListTable->takeItem(i,1);
+        m_watchListTable->takeItem(i,3);
+        m_watchListTable->removeRow(i);
+    }
+
+    m_sharedMemory->m_sharedMachineMemory->attach();
+    UMachSymbolInfo *symInfo = m_project->getSymbolInfo();
+    m_sharedMemory->m_sharedMachineMemory->lock();
+    void *data = m_sharedMemory->m_sharedMachineMemory->data();
+
+    QStringList intLabels = symInfo->getIntegerLabels();
+    QStringList strLabels = symInfo->getStringLabels();
+
+    m_watchListTable->setRowCount(intLabels.size() + strLabels.size());
+
+    int row = 0;
+    for (int i = 0; i < intLabels.size(); i++){
+
+        QTableWidgetItem *labelItem = new QTableWidgetItem(intLabels[i]);
+        labelItem->setFlags(labelItem->flags()&~ Qt::ItemIsEditable &~ Qt::ItemIsSelectable);
+        m_watchListTable->setItem(row, 0, labelItem);
+
+        QTableWidgetItem *typeItem = new QTableWidgetItem("Integer");
+        typeItem->setFlags(labelItem->flags()&~ Qt::ItemIsEditable &~ Qt::ItemIsSelectable);
+        m_watchListTable->setItem(row, 1, typeItem);
+
+        int *val_data = (int*)((uint8_t*)data + symInfo->getAddressByLabel(intLabels[i]));
+        int value = UMachDebugInfo::swap_uint32(*val_data);
+        m_watchListTable->setItem(row, 2, new QTableWidgetItem(QString::number(value, 10)));
+        row++;
+    }
+    for (int i = 0; i < strLabels.size(); i++){
+
+        QTableWidgetItem *labelItem = new QTableWidgetItem(strLabels[i]);
+        labelItem->setFlags(labelItem->flags()&~ Qt::ItemIsEditable &~ Qt::ItemIsSelectable);
+        m_watchListTable->setItem(row, 0, labelItem);
+
+        QTableWidgetItem *typeItem = new QTableWidgetItem("String");
+        typeItem->setFlags(labelItem->flags()&~ Qt::ItemIsEditable &~ Qt::ItemIsSelectable);
+        m_watchListTable->setItem(row, 1, typeItem);
+
+        char* val_data = (char*)((uint8_t*)data + symInfo->getAddressByLabel(strLabels[i]));
+        QString value(val_data);
+        //set correct datum length
+        symInfo->setDatumLengthByLabel(strLabels[i], strlen(val_data));
+        m_watchListTable->setItem(row, 2, new QTableWidgetItem(value));
+        row++;
+    }
+
+    m_sharedMemory->m_sharedMachineMemory->unlock();
+    m_sharedMemory->m_sharedMachineMemory->detach();
+
+    //now we can connect to only get user changes
+    connect(m_watchListTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(overrideMachineData(QTableWidgetItem*)));
+
 }
 
 void UMachGui::stopExecutable()
@@ -689,6 +762,8 @@ void UMachGui::executionGuiSetup(bool state)
         runAction->setEnabled(true);
         //remove debug info
         m_project->removeDebugInfo();
+        //disconect watch table change
+        disconnect(m_watchListTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(overrideMachineData(QTableWidgetItem*)));
     } else {
         runAction->disconnect(this);
         runAction->setIcon(QIcon(":/toolbar/stop.png"));
@@ -710,4 +785,58 @@ void UMachGui::closeProjectGuiCleanup()
     m_tabFileList.clear();
     setActionsOpenProject(false);
     setWindowTitle("UMachGui");
+}
+
+void UMachGui::overrideMachineData(QTableWidgetItem *itemChanged)
+{
+    //get the symbol Info
+    UMachSymbolInfo *symInfo = m_project->getSymbolInfo();
+    //first get label
+    QString label = m_watchListTable->item(itemChanged->row(),0)->text();
+    //next we want symbol
+    symbolElement *symbol = symInfo->getSymbolByLabel(label);
+    //now we can overwrite the data
+
+    m_sharedMemory->m_sharedMachineMemory->attach();
+    m_sharedMemory->m_sharedMachineMemory->lock();
+    //calculate data pos
+    void *data = m_sharedMemory->m_sharedMachineMemory->data();
+
+    if (symbol->type == SYM_INT) {
+        int value = UMachDebugInfo::swap_uint32(itemChanged->text().toInt());
+        int *val_data = (int*)((uint8_t*)data + symbol->address);
+        *val_data = value;
+    } else if (symbol->type == SYM_STR) {
+        //data as byte array
+        QByteArray value = itemChanged->text().toAscii();
+        void *val_data = (uint8_t*)data + symbol->address;
+        //first we set original data to zero
+        memset(val_data, 0, (symbol->datumLength + 1));
+        //smaller or bigger? 0 char at end so +1
+        if (value.size() > (int)(symbol->datumLength + 1)) {
+            memcpy(val_data, value.data(), symbol->datumLength);
+        } else {
+            memcpy(val_data, value.data(), value.size());
+        }
+    }
+
+    m_sharedMemory->m_sharedMachineMemory->unlock();
+    m_sharedMemory->m_sharedMachineMemory->detach();
+
+    //now we mus set up the flag for the machine to copy the changes
+
+    bool attached = m_sharedMemory->m_sharedHeaderMemory->isAttached();
+    if (!attached) {
+        m_sharedMemory->m_sharedHeaderMemory->attach();
+    }
+
+    m_sharedMemory->m_sharedHeaderMemory->lock();
+    m_sharedMemory->m_sharedHeaderData->m_copyMemory = true;
+    m_sharedMemory->m_sharedHeaderMemory->unlock();
+
+    if (!attached) {
+        m_sharedMemory->m_sharedHeaderMemory->detach();
+    }
+
+
 }
