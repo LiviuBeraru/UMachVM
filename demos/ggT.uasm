@@ -1,0 +1,55 @@
+CALL newline
+
+SET R5 p1
+SET R6 60 
+OUT R5 R6 ZERO
+
+CALL newline
+CALL newline
+
+SET R5 nbr1
+SET R6 38
+OUT R5 R6 ZERO
+
+CALL inputint
+POP R1
+
+SET R5 nbr2
+SET R6 21
+OUT R5 R6 ZERO
+
+CALL inputint
+POP R2
+CMP R1 R2
+BG start_ggT_loop
+CP R1 R20
+CP R1 R2
+CP R2 R20
+
+start_ggT_loop:
+DIV R1 R2
+CMP LO ZERO
+BE finish_ggT_loop
+CP R1 R2
+CP R2 LO
+JMP start_ggT_loop
+
+finish_ggT_loop:
+CALL newline
+
+SET R5 finish
+SET R6 28
+OUT R5 R6 ZERO
+
+PUSH R2
+CALL printint
+CALL newline
+
+
+EOP
+
+.data
+.string p1 "Dieses Programm ermilltelt den größten gemeinsamen Teiler."
+.string nbr1 "Bitte geben sie die erste Zahl ein: "
+.string nbr2 "und nun die zweite: "
+.string finish "Der ggT dieser Zahlen ist: "
