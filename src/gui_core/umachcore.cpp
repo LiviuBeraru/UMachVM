@@ -93,7 +93,6 @@ void UMachCore::run()
     m_sharedHeaderMemory->lock();
     m_sharedHeaderData->m_runFlag = true;
     m_sharedHeaderData->m_copyMemory = false;
-    m_sharedHeaderData->sizeDataArray = 120;
     m_sharedHeaderMemory->unlock();
 
     if (options.debug) {

@@ -81,7 +81,8 @@ void UMachSymbolInfo::setDatumLengthByLabel(QString label, size_t datumLength)
 unsigned UMachSymbolInfo::getAddressByLabel(QString label)
 {
     symbolElement *element = m_symbols.value(label, NULL);
-    assert(element);
-    return element->address;
+    if(element)
+        return element->address;
+    return 0;
 }
 

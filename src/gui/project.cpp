@@ -167,32 +167,29 @@ IUasmFile* Project::getFileByAbsPath(QString absPath)
 
 void Project::generateDebugInfo()
 {
-    delete(m_debugInfo);
-    m_debugInfo = new UMachDebugInfo(this);
-
     delete (m_symbolInfo);
     m_symbolInfo = new UMachSymbolInfo(this);
+
+    delete(m_debugInfo);
+    m_debugInfo = new UMachDebugInfo(this);
 
     //build debug Map
     rebuildBreakPointMap();
 
 }
 
-bool Project::addBreakPoint(IUasmFile *file, uint32_t lineNr)
+bool Project::addBreakPoint(IUasmFile *file, uint32_t lineNr, uint32_t address, QString *label)
 {
     //check if allready in list
     for (int i = 0; i < m_breakPoints.size(); i++) {
         if (m_breakPoints[i]->uasmFile == file && m_breakPoints[i]->lineNumber == lineNr)
             return false;
+        if (m_breakPoints[i]->label == label)
+            return false;
     }
 
-    m_breakPoints.append(new debugAddressEntry(file, lineNr, 0));
+    m_breakPoints.append(new debugAddressEntry(file, lineNr, address, label));
 
-    //if debugInfo exsist, fill adress and insert in map
-    if (m_debugInfo) {
-        if (m_debugInfo->setAdressForEntry(m_breakPoints.back()))
-            m_addressBreakPointMap.insert(m_breakPoints.back()->codeAddress, m_breakPoints.size() - 1);
-    }
     return true;
 }
 
@@ -225,7 +222,7 @@ void Project::rebuildBreakPointMap()
     m_addressBreakPointMap.clear();
     //then fill in addresses for breakpoints
     for (int i = 0; i < m_breakPoints.size(); i++) {
-        if (m_debugInfo->setAdressForEntry(m_breakPoints[i]))
+        if (m_debugInfo->setAdressForEntry(m_breakPoints[i], m_symbolInfo))
             m_addressBreakPointMap.insert(m_breakPoints[i]->codeAddress,i);
     }
 }

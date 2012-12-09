@@ -839,6 +839,4 @@ void UMachGui::overrideMachineData(QTableWidgetItem *itemChanged)
     if (!attached) {
         m_sharedMemory->m_sharedHeaderMemory->detach();
     }
-
-
 }

@@ -52,6 +52,8 @@ UMachBreakPoints::UMachBreakPoints(QWidget *parent) :
     connect(m_removeRowButtons, SIGNAL(buttonClicked(int)), this, SLOT(removeBreakPoint(int)));
 
     m_project = NULL;
+
+    m_intValidator = new QIntValidator(1, 1024*1024*256, this);
 }
 
 void UMachBreakPoints::addBreakPoint()
@@ -61,9 +63,21 @@ void UMachBreakPoints::addBreakPoint()
     IUasmFilePointer filePointer = listItem.value<IUasmFilePointer>();
 
     assert(m_project);
-    if (!m_project->addBreakPoint(filePointer.m_filePointer, m_lineNumber->text().toInt())) {
-        //TODO: messagebox
-        return;
+
+    //if int add as lineNR
+    QString *line = new QString(m_lineNumber->text());
+    int pos = 0;
+
+    if (m_intValidator->validate(*line, pos) == QIntValidator::Acceptable) {
+        if (!m_project->addBreakPoint(filePointer.m_filePointer, line->toInt(), 0, NULL)) {
+            //TODO: messagebox
+            return;
+        }
+    } else {
+        if (!m_project->addBreakPoint(NULL, 0, 0, line)) {
+            //TODO: messagebox
+            return;
+        }
     }
 
     //add a new empty row before last row

@@ -57,6 +57,7 @@ private:
     void setRegisters();
     void setWatchList();
     void runExecutable();
+    void fillAddressShare();
     //override to open by file interface
 
     //SubWindows

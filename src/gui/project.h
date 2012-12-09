@@ -38,7 +38,7 @@ public:
 
     void generateDebugInfo();
 
-    bool addBreakPoint(IUasmFile *file, uint32_t lineNr);
+    bool addBreakPoint(IUasmFile *file, uint32_t lineNr, uint32_t address, QString *label);
     bool removeBreakPoint(IUasmFile *file, uint32_t lineNr);
 
     bool isBreakPoint(uint32_t address);

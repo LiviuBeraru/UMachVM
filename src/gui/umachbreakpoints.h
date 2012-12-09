@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtGui>
+#include <QIntValidator>
 
 class IUasmFile;
 class Project;
@@ -45,6 +46,7 @@ private:
 
     Project *m_project;
 
+    QIntValidator *m_intValidator;
     
 };
 
