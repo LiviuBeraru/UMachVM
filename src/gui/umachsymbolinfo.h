@@ -25,9 +25,6 @@ class UMachSymbolInfo
 {
 private:
 
-
-
-
     QMap<QString,symbolElement*> m_symbols;
 
     QStringList m_integerLabels;
