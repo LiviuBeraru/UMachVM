@@ -2,6 +2,7 @@
 #define SYMBOLS_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 typedef enum {
     SYMTYPE_JUMP,
@@ -18,6 +19,6 @@ typedef struct {
 int  insert_symbol(symbol_t *symbol);
 int  get_symbol(const char *name, symbol_t *result);
 void free_symbols();
-void write_symbols_file();
+void write_symbols_file(FILE *f);
 
 #endif

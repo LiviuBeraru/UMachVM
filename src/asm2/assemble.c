@@ -101,7 +101,7 @@ cleanup:
 }
 
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count) {
-    // 1st run: discover symbols
+    /* 1st run: discover symbols */
     FILE *f;
 
     for (int i = 0; i < file_count; i++) {
@@ -144,7 +144,7 @@ static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count
         return FALSE;
     }
 
-    // 2nd run: assemble
+    /* 2nd run: assemble */
     cntxt->current_addr = INTTABLE_SIZE;
 
     for (int i = 0; i < file_count; i++) {
@@ -188,7 +188,7 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
         if (len == 0)
             continue; // empty line or comment
             
-        // don't parse beyond the data mark
+        /* don't parse beyond the data mark */
         if (strcasecmp(line, DATA_MARK) == 0)
             break;
             
@@ -224,7 +224,7 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
 
         fwrite(instruction, sizeof(uint32_t), 1, outfile);
 
-        cntxt->current_addr += 4;
+        cntxt->current_addr += sizeof(uint32_t);
     }
 
     return TRUE;
@@ -346,16 +346,16 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
                 return FALSE;
             }
 
-            // remove trailing ':' from jump label
+            /* remove trailing ':' from jump label */
             line[len - 1] = '\0';
 
-            // check whether the jump label is a single word
+            /* check whether the jump label is a single word */
             if (strpbrk(line, " \t") != NULL) {
                 print_error(cntxt, "Label <%s> contains a whitespace", line);
                 return FALSE;
             }
 
-            // create a symbol
+            /* create a symbol */
             symbol_t *label = malloc(sizeof(symbol_t));
             label->sym_name = strdup(line);
             label->sym_type = SYMTYPE_JUMP;
@@ -371,7 +371,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
         else if (strcasecmp(line, DATA_MARK) == 0)
             break; // don't parse beyond the data mark
         else
-            cntxt->current_addr += 4; // line is an instruction
+            cntxt->current_addr += sizeof(uint32_t); // line is an instruction
     }
 
     return TRUE;
@@ -470,14 +470,14 @@ static void free_dynamic_data(asm_context_t *cntxt) {
 }
 
 static char *read_line(asm_context_t *cntxt, FILE *file) {
-    // read one line
+    /* read one line */
     if (getline(&(cntxt->read_buf), &(cntxt->read_buf_size), file) == -1)
         return NULL;
 
-    // remove comments
+    /* remove comments */
     str_strip_comment(cntxt->read_buf);
 
-    // trim
+    /* trim */
     str_trim(cntxt->read_buf);
 
     return cntxt->read_buf;
