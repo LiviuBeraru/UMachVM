@@ -1,0 +1,78 @@
+
+
+SET R1 99
+
+start_song:
+
+CALL print_bottles
+
+SET R2 prompt1
+SET R3 31 
+OUT R2 R3 ZERO
+
+CALL print_bottles
+
+SET R2 prompt2
+SET R3 18 
+OUT R2 R3 ZERO
+CALL newline
+
+SET R2 prompt3
+SET R3 48 
+OUT R2 R3 ZERO
+
+DEC R1
+
+CALL print_bottles 
+
+SET R2 prompt4
+SET R3 29
+OUT R2 R3 ZERO
+
+CALL newline
+CALL newline
+
+CMP R1 ZERO
+BG start_song
+
+SET R2 fin1
+SET R3 62
+OUT R2 R3 ZERO
+
+CALL newline
+
+SET R2 fin2
+SET R3 66
+OUT R2 R3 ZERO
+
+CALL newline
+CALL newline
+
+EOP
+
+print_bottles:
+
+CMP R1 ZERO
+BE no_more_bottles
+PUSH R1
+CALL printint
+JMP finish_print_bottles
+
+no_more_bottles:
+SET R2 no_more
+SET R3 8
+OUT R2 R3 ZERO
+
+finish_print_bottles:
+RET
+
+
+.data
+.string prompt1 " bottles of beer on the wall, "
+.string prompt2 " bottles of beer."
+.string prompt3 "Take one down and pass it around, "
+.string prompt4 " bottles of beer on the wall."
+.string no_more "no more"
+.string fin1 "No more bottles of beer on the wall, no more bottles of beer. "
+.string fin2 "Go to the store and buy some more, 99 bottles of beer on the wall."
+

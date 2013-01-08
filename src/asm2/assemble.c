@@ -10,10 +10,11 @@
 #include "asm_formats.h"
 #include "collect_data.h"
 
-static const char    DATA_MARK[] = ".data";   // marks the data section
-static const char  STRING_MARK[] = ".string"; // marks string data
-static const char INTEGER_MARK[] = ".int";    // marks numeric data
-static const char COMMENT_MARK   = '#';       // marks the beginning of a comment
+static const char     DATA_MARK[] = ".data";   // marks the data section
+static const char   STRING_MARK[] = ".string"; // marks string data
+static const char  INTEGER_MARK[] = ".int";    // marks numeric data
+static const char  COMMENT_MARK   = '#';       // marks the beginning of a comment
+static const char JMPLABEL_MARK   = ':';       // marks the end of a jump label definition
 
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count);
 static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count,
@@ -100,7 +101,7 @@ cleanup:
 }
 
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count) {
-    // 1st run: discover symbols
+    /* 1st run: discover symbols */
     FILE *f;
 
     for (int i = 0; i < file_count; i++) {
@@ -143,7 +144,7 @@ static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count
         return FALSE;
     }
 
-    // 2nd run: assemble
+    /* 2nd run: assemble */
     cntxt->current_addr = INTTABLE_SIZE;
 
     for (int i = 0; i < file_count; i++) {
@@ -186,8 +187,22 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
 
         if (len == 0)
             continue; // empty line or comment
+            
+        /* don't parse beyond the data mark */
+        if (strcasecmp(line, DATA_MARK) == 0)
+            break;
+            
+        if (cntxt->gen_debuginf) {
+            uint32_t f_id_be = GUINT32_TO_BE(cntxt->current_f_id);
+            uint32_t line_be = GUINT32_TO_BE(cntxt->current_line);
+            uint32_t addr_be = GUINT32_TO_BE(cntxt->current_addr);
 
-        if (line[len - 1] == ':') // found a jump label
+            fwrite(&f_id_be, sizeof(uint32_t), 1, debugfile);
+            fwrite(&line_be, sizeof(uint32_t), 1, debugfile);
+            fwrite(&addr_be, sizeof(uint32_t), 1, debugfile);
+        }
+
+        if (line[len - 1] == JMPLABEL_MARK) // found a jump label
             continue;
 
         /* split the input line into components */
@@ -204,29 +219,12 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
         while (parts[nparts] != NULL)
             nparts++;
 
-        // don't parse beyond the data mark
-        if (strcasecmp(parts[0], DATA_MARK) == 0) {
-            break;
-        }
-
-        if (!assemble_line(cntxt, parts, nparts, instruction)) {
-            /* error while assembling this line */
-            return FALSE;
-        }
+        if (!assemble_line(cntxt, parts, nparts, instruction))
+            return FALSE; // error while assembling this line
 
         fwrite(instruction, sizeof(uint32_t), 1, outfile);
 
-        if (cntxt->gen_debuginf) {
-            uint32_t f_id_be = GUINT32_TO_BE(cntxt->current_f_id);
-            uint32_t line_be = GUINT32_TO_BE(cntxt->current_line);
-            uint32_t addr_be = GUINT32_TO_BE(cntxt->current_addr);
-
-            fwrite(&f_id_be, sizeof(uint32_t), 1, debugfile);
-            fwrite(&line_be, sizeof(uint32_t), 1, debugfile);
-            fwrite(&addr_be, sizeof(uint32_t), 1, debugfile);
-        }
-
-        cntxt->current_addr += 4;
+        cntxt->current_addr += sizeof(uint32_t);
     }
 
     return TRUE;
@@ -258,11 +256,11 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
             int32_t label_offset = (label.sym_addr - cntxt->current_addr) / 4;
             static char label_buf[12];
 
-            sprintf(label_buf, "%d", label_offset);
+            snprintf(label_buf, sizeof(label_buf), "%d", label_offset);
             items[1] = label_buf;
         } else {
             /* label was not set */
-            print_error(cntxt, "Unset label <%s>", items[1]);
+            print_error(cntxt, "Unset label: <%s>", items[1]);
             return FALSE;
         }
     }
@@ -300,7 +298,7 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
 }
 
 void assemble_data(FILE *outfile) {
-    const uint8_t BEGIN_DATA[4] = {0xFF, 'D', 'A', 'T'};
+    const uint8_t BEGIN_DATA[4] = {0xff, 'D', 'A', 'T'};
 
     fwrite(BEGIN_DATA, 1, 4, outfile);
 
@@ -340,7 +338,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
         if (len == 0)
             continue; // empty line or comment
 
-        if (line[len - 1] == ':') { // found a jump label
+        if (line[len - 1] == JMPLABEL_MARK) { // found a jump label
             if (len == 1) {
                 /* empty label, this happens if the user
                    just writes ":" instead of "label:" */
@@ -348,19 +346,18 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
                 return FALSE;
             }
 
-            // remove trailing ':' from jump label
+            /* remove trailing ':' from jump label */
             line[len - 1] = '\0';
 
-            // check whether the jump label is a single word
+            /* check whether the jump label is a single word */
             if (strpbrk(line, " \t") != NULL) {
                 print_error(cntxt, "Label <%s> contains a whitespace", line);
                 return FALSE;
             }
 
-            // create a symbol
+            /* create a symbol */
             symbol_t *label = malloc(sizeof(symbol_t));
-            label->sym_name = malloc(sizeof(char) * (len + 1));
-            strcpy(label->sym_name, line);
+            label->sym_name = strdup(line);
             label->sym_type = SYMTYPE_JUMP;
             label->sym_addr = cntxt->current_addr;
 
@@ -374,7 +371,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
         else if (strcasecmp(line, DATA_MARK) == 0)
             break; // don't parse beyond the data mark
         else
-            cntxt->current_addr += 4; // line is an instruction
+            cntxt->current_addr += sizeof(uint32_t); // line is an instruction
     }
 
     return TRUE;
@@ -396,33 +393,30 @@ static int collect_data_labels(asm_context_t *cntxt, FILE *file) {
 
         if (label == NULL) {
             print_error(cntxt, "No label for %s provided", type);
-            goto error;
+            return FALSE;
         }
 
         char *value = strtok_r(NULL, "", &saveptr);
 
         if (value == NULL) {
             print_error(cntxt, "No content for <%s> provided", label);
-            goto error;
+            return FALSE;
         }
 
         /* decide what to do depending on the type of the label */
         if (strcasecmp(type, STRING_MARK) == 0) {
             if (!collect_string_data(cntxt, label, value))
-                goto error;
+                return FALSE;
         } else if (strcasecmp(type, INTEGER_MARK) == 0) {
             if (!collect_int_data(cntxt, label, value))
-                goto error;
+                return FALSE;
         } else {
             print_error(cntxt, "No such data type: <%s>", type);
-            goto error;
+            return FALSE;
         }
     }
 
     return TRUE;
-
-error:
-    return FALSE;
 }
 
 static int collect_string_data(asm_context_t *cntxt, char *label, char *content) {
@@ -476,14 +470,14 @@ static void free_dynamic_data(asm_context_t *cntxt) {
 }
 
 static char *read_line(asm_context_t *cntxt, FILE *file) {
-    // read one line
+    /* read one line */
     if (getline(&(cntxt->read_buf), &(cntxt->read_buf_size), file) == -1)
         return NULL;
 
-    // remove comments
-    str_strip_comment_2(cntxt->read_buf);
+    /* remove comments */
+    str_strip_comment(cntxt->read_buf);
 
-    // trim
+    /* trim */
     str_trim(cntxt->read_buf);
 
     return cntxt->read_buf;

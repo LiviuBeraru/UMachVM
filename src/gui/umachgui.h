@@ -7,6 +7,7 @@
 class UMachRegisters;
 class UMachBreakPoints;
 class UMachCodeEditor;
+class UMachOptions;
 class IUasmFile;
 class Project;
 class UmachSharedMemory;
@@ -20,8 +21,6 @@ public:
     ~UMachGui();
 
 private slots:
-    void showRegistersWindow();
-    void showBreakPointsWindow();
     void quit();
     void openProject();
     void newProject();
@@ -47,6 +46,7 @@ private slots:
 
     void showRemoveFileContextMenu(const QPoint& pos);
     void removeFileFromProject();
+    void overrideMachineData(QTableWidgetItem *itemChanged);
 private:
 
     //Function to toggle aviable actions depending if project is open or not;
@@ -55,12 +55,15 @@ private:
     void setActionsOpenProject(bool mode);
     void addFileListEntry(IUasmFile *fileToAdd);
     void setRegisters();
+    void setWatchList();
     void runExecutable();
+    void fillAddressShare();
     //override to open by file interface
 
     //SubWindows
     UMachRegisters *registersWindow;
     UMachBreakPoints *breakPointsWindow;
+    UMachOptions *m_optionsWindow;
 
     QAction *showRegistersWindowAction;
     QAction *showBreakPointsWindowAction;
@@ -69,6 +72,7 @@ private:
     QAction *newProjectAction;
     QAction *saveProjectAction;
     QAction *closeProjectAction;
+    QAction *m_showOptionsWindow;
 
     QAction *addNewFileAction;
     QAction *addExsistingFileAction;
@@ -88,6 +92,9 @@ private:
 
     QList<TabIndexFile> m_tabFileList;
 
+    QDockWidget *m_watchList;
+    QTableWidget *m_watchListTable;
+
     QTabWidget *m_codeEditorTab;
 
     QMenu *windowsMenu;
@@ -106,6 +113,8 @@ private:
     UmachSharedMemory *m_sharedMemory;
 
     bool m_stoppedAtBreakPoint;
+
+    bool m_symbolDataChanged;
 
 
 };

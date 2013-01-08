@@ -8,6 +8,7 @@
 #include <QHash>
 #include <inttypes.h>
 #include <byteswap.h>
+#include "umachsymbolinfo.h"
 
 UMachDebugInfo::UMachDebugInfo(Project *uproject)
 {
@@ -58,23 +59,33 @@ UMachDebugInfo::UMachDebugInfo(Project *uproject)
         //swap endianess to little
         uasmFile = fmapTable.value(swap_uint32(debugDatum[0]));
         uint32_t address = swap_uint32(debugDatum[2]);
-        m_addressTable.insert(address, (new debugAddressEntry(uasmFile, swap_uint32(debugDatum[1]), address)));
+        m_addressTable.insert(address, (new debugAddressEntry(uasmFile, swap_uint32(debugDatum[1]), address, NULL)));
     }
 
     debug.close();
 
 }
 
-bool UMachDebugInfo::setAdressForEntry(debugAddressEntry *entry)
+bool UMachDebugInfo::setAdressForEntry(debugAddressEntry *entry, UMachSymbolInfo *symInfo)
 {
     //search entry;
+    //check if entry has label
+    if (entry->label){
+        entry->codeAddress = symInfo->getAddressByLabel(*entry->label);
+        if (entry->codeAddress == 0)
+            return false;
+        entry->uasmFile = m_addressTable.value(entry->codeAddress)->uasmFile;
+        entry->lineNumber = m_addressTable.value(entry->codeAddress)->lineNumber;
+        return true;
+    } else {
     //first we get a list, so that we can step trough without problems
-    QList<debugAddressEntry*> entriesList = m_addressTable.values();
-    for (int i = 0; i < entriesList.size(); i++) {
-        if (entriesList[i]->uasmFile == entry->uasmFile
-                && entriesList[i]->lineNumber == entry->lineNumber) {
-            entry->codeAddress = entriesList[i]->codeAddress;
-            return true;
+        QList<debugAddressEntry*> entriesList = m_addressTable.values();
+        for (int i = 0; i < entriesList.size(); i++) {
+            if (entriesList[i]->uasmFile == entry->uasmFile
+                    && entriesList[i]->lineNumber == entry->lineNumber) {
+                entry->codeAddress = entriesList[i]->codeAddress;
+                return true;
+            }
         }
     }
     //nothing found :-(

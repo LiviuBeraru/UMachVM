@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     project.cpp \
     umachmake.cpp \
     umachdebuginfo.cpp \
-    umachsharedmemory.cpp
+    umachsharedmemory.cpp \
+    umachoptions.cpp \
+    umachsymbolinfo.cpp
 
 HEADERS  += umachgui.h \
     umachregisters.h \
@@ -35,7 +37,9 @@ HEADERS  += umachgui.h \
     umachmake.h \
     umachdebuginfo.h \
     umachsharedmemory.h \
-    ../gui_core/sharedmemorystructs.h
+    ../gui_core/sharedmemorystructs.h \
+    umachoptions.h \
+    umachsymbolinfo.h
 
 FORMS    +=
 

@@ -10,17 +10,15 @@
 * Allgemein Code durchgehen und Fehler finden.
 * Code dokumentieren.
 * Testen, Testen, Testen!
-* Alternative Implementierung für den Assembler. Dafür aber auch die
-  Dokumentation in Verwendung aktualisieren.
-* Alternative Implementierung eines Debuggers.
-* GTK/ncurses/Qt Debugger... :) swing?
-* Presentation schreiben.
+* Doku für den Asm2
 * readme Datei in src/vm aktualisieren.
 * interrupt() in system.c soll auch den Namen des Interrupts augeben,
   nicht nur die Nummer.
 
-* merzeilige Strings in Assembler sollen unterstützt werden. String-Daten sollte
-  man über mehrere Zeilen angeben können.
+//* merzeilige Strings in Assembler sollen unterstützt werden. String-Daten sollte
+//  man über mehrere Zeilen angeben können.
+  ^ Nein, ich baue Unterstützung zum Escapen ein, zB .string foo "bar\nbaz"
+
 * Stellen finden, die selber ein int aus einem Speicherbereich parsen und sie
   durch Aufrufe an die Funktion mem_to_int in memory.h ersetzen.
   Beispiel Verwendung in core_int (system.c).
