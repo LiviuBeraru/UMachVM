@@ -1,19 +1,46 @@
 \section{Ausführen}
 
+Das \texttt{umach} Programm kann wie folgt ausgeführt werden:
+\begin{lstlisting}
+  ./umach [optionen] programdatei.umx
+\end{lstlisting}
+
+Dabei wir die Datei \texttt{programdatei.umx} ausgeführt. Die Optionen sind
+unten erläutert.
+
+
 \subsection{Optionen}
-Vor der Ausführung ist es möglich, Optionen anzugeben, die die Ausführung in bestimmter Weise beeinflussen. Es stehen die Optionen ''-m'', ''-d'', ''-s'', ''-x'' und ''-v'' zur Verfügung.
+Bei der Ausführung eines UMach-Programm ist es möglich, Optionen anzugeben, die
+die Ausführung in bestimmter Weise beeinflussen. Alle Optionen sind optional und
+werden mit Startwerten gesetzt. Es stehen die folgenden Optionen zur Verfügung.
 \begin{description}
 \item[-m]
-Mit ''-m z'', wobei ''z'' eine ganze Zahl ist, kann der Arbeitsspeicher der virtuellen Maschine auf z Bytes festgelegt werden. ''./umach myProg -m 4096'' startet das Programm ''myProg'' mit einem Arbeitsspeicher von 4096 Bytes. Ist die ''-m'' Option bei der Ausführung nicht angegeben, so wird das Programm mit 2048 Bytes Arbeitsspeicher gestartet.
+Mit \glqq{}-m $z$\grqq{}, wobei \glqq{}z\grqq{} eine ganze Zahl ist, kann der
+Arbeitsspeicher der virtuellen Maschine auf $z$ Bytes festgelegt werden.
+\grqq{}./umach myProg -m 4096\grqq{} startet das Programm \glqq{}myProg\grqq{}
+mit einem Arbeitsspeicher von $4096$ Bytes. Ist die \glqq{}-m\grqq{} Option bei
+der Ausführung nicht angegeben, so wird das Programm mit $2048$ Bytes
+Arbeitsspeicher gestartet.
 \item[-d]
-Diese Option veranlasst die Maschine im ''debug''-Modus zu starten. Vor der Ausführung eines Befehls hält die Maschine an und der Benutzer ist aufgefordert Kommandos einzugeben. Mit den Kommandos kann der Benutzer den Speicher und den Inhalt der Register betrachten, jedoch nicht modifizieren. Mit dem ''step''-Kommando gibt er die Maschine zum Abarbeiten des aktuellen Befehls frei.
+Diese Option veranlasst die Maschine im \glqq{}debug\grqq{}-Modus zu starten.
+Hierbeit wird der eingebaute Debugger gestartet, nicht ein externer Debugger.
+Siehe den Abschnitt \ref{sec:debuggen} auf der Seite \pageref{sec:debuggen} für
+mehr Informationen dazu. Vor der Ausführung eines Befehls hält die Maschine an
+und der Benutzer ist aufgefordert Kommandos einzugeben. Mit den Kommandos kann
+der Benutzer den Speicher und den Inhalt der Register betrachten, jedoch nicht
+modifizieren. Mit dem \glqq{}step\grqq{}-Kommando gibt er die Maschine zum
+Abarbeiten des aktuellen Befehls frei.
 \item[-s]
 Disassembliert das angegebene Programm und zeigt das Ergebnis in der Konsole an.
 \item[-x]
-Die Darstellung von Zahlenwerten in der Ausgabe des ''debug''-Modus, oder beim Disassemblieren, wird nach Angabe dieser Option hexadezimal sein.
+Die Darstellung von Zahlenwerten in der Ausgabe des \glqq{}debug\grqq{}-Modus,
+oder beim Disassemblieren, wird nach Angabe dieser Option hexadezimal sein.
 \item[-v]
-Setzt den ''verbosity level'' auf ''warnings''. Unter zweifacher Anwendung der ''-v''-Option, entweder '''-v -v'', oder ''-vv'', wird der ''verbosity level'' auf ''info'' gestellt. Ist die Option nicht angegeben, so ist der ''verbosity level'' standardmäßig auf ''error'' gesetzt.
-
+Setzt den \glqq{}verbosity level\grqq{} auf \glqq{}warnings\grqq{}. Unter
+zweifacher Anwendung der \glqq{}-v\grqq{}-Option, entweder \glqq{}-v -v\grqq{},
+oder \glqq{}-vv\grqq{}, wird der \glqq{}verbosity level\grqq{} auf
+\glqq{}info\grqq{} gestellt. Ist die Option nicht angegeben, so ist der
+\glqq{}verbosity level\grqq{} standardmäßig auf ''error'' gesetzt.
 
 
 \end{description}

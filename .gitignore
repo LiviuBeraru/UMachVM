@@ -24,7 +24,6 @@ umach
 uasm
 core
 UMachPres.pdf
-UMachVM-Verwendung.pdf
 UMachGui
 UMachCore
 src/gui/Makefile
