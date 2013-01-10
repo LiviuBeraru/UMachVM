@@ -3,4 +3,115 @@
 Willi Fink
 \end{flushright}
 
+Um die Funktionalität der Virtuellen Maschine testen und demonstrieren zu
+können, wurden im Rahmen des Projekts Demo-Programme erstellt. 
+\subsection{Meist verwendete Befehle}
+\subsubsection{Wertzuweisung}
+ \texttt{SET R1 5} oder \texttt{SET R1 label}
+ 
+ Setzt das Register R1 auf den angegebenen Wert. Labels werden durch Adressen
+ersetzt.
+ 
+
+\subsubsection{Arithmetische Befehle}
+\begin{center}
+\begin{tabular}{@{\ttfamily}ll}
+ADD R1 R2 R3 & Addiert $R1 \gets R2 + R3$ \\
+SUB R1 R2 R3 & Subtrahiert $R1 \gets R2 - R3$\\
+INC R1 & Inkrementiert $R1++$\\
+DEC R1 & Dekrementiert $R1--$\\
+MUL R1 R2 & Multiplikation \\
+DIV R1 R2 & Division durch 0 führt zu Interrupt
+\end{tabular}
+\end{center}
+\subsubsection{Bedingte Sprünge}
+\begin{itemize}
+ \item{\texttt{\texttt{CMP R1 R2}}}
+ Vergleicht das Register R1 mit R2.
+ \item{\texttt{\texttt{BL label}}}
+ Springt zum angegebenen Label, falls R1 kleiner R2 ist.
+ Weitere Möglichkeiten: \texttt{BLE, BG, BGE, BE}
+\end{itemize}
+
+\subsubsection{Unbedingte Sprünge}
+ \begin{itemize}
+ \item \texttt{JMP label}
+ Sprung zu einem Label.
+ \item \texttt{CALL funktion} 
+ Funktionsaufruf ähnelt dem JMP Befehl, mit dem Unterschied, dass nach der
+Ausführung der Funktion ins Hauptprogramm zurückgesprungen und der nächste
+Befehl ausgeführt wird.
+ \end{itemize}
+\subsubsection{IO-Befehle}
+ \begin{itemize}
+ \item \texttt{IN R1 R2 ZERO}
+ Liest \texttt{R2} viele Bytes vom Port \texttt{ZERO}(Konsole) und schreibt sie
+an die Adresse \texttt{R1}.
+ \item \texttt{OUT R1 R2 ZERO}
+ Schreibt \texttt{R2} viele Bytes aus dem Speicher, beginnend mit dem Byte an
+der Adresse \texttt{R1}, an den Port \texttt{ZERO} raus.
+ \end{itemize}
+
+
+
+
+
+\subsection{Hilfsfunktionen}
+ \begin{itemize}
+ \item inputint
+ \item printint
+ \item putchar
+ \item newline
+ \end{itemize}
+
+
+
+\subsection{Fibonacci Zahlen}
+
+ Folge $X_{n} = X_{n-1} + X_{n-2}$
+ mit $X_{1} = 1$, und $X_{2} = 2$
+ \begin{itemize}
+ \item Unterscheidung zwischen $n = 1$, $n = 2$ und $n \geq 3$ notwendig
+ \end{itemize}
+
+
+\subsection{Zahl raten}
+ \begin{itemize}
+ \item Seed erzeugen
+ \item Pseudozufallszahl generieren
+ \item Formel: $X_{n+1} = (a + b\cdot X_n) \mod m$
+ \item Spieler rät die Zahl
+ \item Rückmeldung ob die geratene Zahl größer oder kleiner der gesuchten ist
+ \item Anzahl der Versuche
+ \end{itemize}
+
+\subsection{Tic Tac Toe}
+ Belegung der Register:
+ \begin{itemize}
+ \item R1-R9: Spielfelder
+ \item R10: Aktueller Spieler
+ \item R20: Anzahl der Spielzüge
+ \end{itemize}
+ Spielzyklus:
+ \begin{enumerate}
+ \item Eingabe
+ \item Ausgabe
+ \item Auswertung
+ \end{enumerate}
+
+Am Ende des Spiels:
+\begin{itemize}
+ \item neue Runde oder Beenden
+ \item bei neuer Runde aufräumen
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
 
