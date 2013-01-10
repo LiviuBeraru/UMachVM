@@ -1,0 +1,44 @@
+\documentclass[fontsize=12pt,parskip=full]{scrartcl}
+\addtokomafont{disposition}{\rmfamily}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+% \setcounter{secnumdepth}{0}%keine Nummerierung der Abschnitte
+
+%die Schrift
+% \usepackage{lmodern}
+\usepackage[amsfonts,amssymb,boldsans]{concmath}
+
+\usepackage{listings}
+\lstset{basicstyle=\small\ttfamily}
+
+
+\titlehead{Georg-Simon-Ohm-Hochschule, Fakultät Informatik}
+\subject{Berichterstattung zum IT-Projekt}
+\title{UMach, eine einfache virtuelle Maschine}
+% \subtitle{}
+\author
+{%
+%%%%     Name           Matrikelnummer
+         Simon Beer   \\077566
+    \and Liviu Beraru \\077566 
+    \and Willi Fink   \\077566
+    \and Werner Linne \\077566
+}
+
+\usepackage[colorlinks=true,linkcolor=black]{hyperref} 
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+\include{Umfang}
+\include{Spec-Impl}
+\include{Assembler}
+\include{Debugger}
+\include{Demos}
+
+
+\end{document}

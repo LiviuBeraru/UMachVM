@@ -1,0 +1,130 @@
+\section{Spezifikation und Implementierung}
+\begin{flushright}
+Liviu Beraru
+\end{flushright}
+
+\subsection{Spezifikation}
+Die Spezifikation der virtuellen Maschine UMach umfasst mehrere Themen, die in
+einem umfangreichen Dokument behandelt wurden. Das Dokument ist Teil der Abgabe
+und wird sowohl aus PDF-Dokument als auch schriftlich dem Projekt-Betreuer
+übergeben. Die PDF-Datei heißt \glqq{}UMachVM-Spec.pdf\grqq{}. Der Titel lautet
+\glqq{}UMach Spezifikation\grqq. Die Themen dieses Dokumentes werden im
+folgenden kurz zusammengefasst.
+
+\paragraph{Architektur}
+Die Architektur der UMach Maschine orientiert sich stark an der RISC
+Architektur. Sie ist registerbasiert und hat eine feste Instruktionslänge von 4
+Byte. Die Byte-Reihenfolge ist \glqq{}little endian\grqq{}. Die UMach Maschine
+verwendet Port I/O. Es werden 32 Allzweckregister und 13 Spezialregister
+definiert. Bestimmte Spezialregister sind schreibgeschützt.
+
+
+
+\paragraph{Instruktionssatz}
+Es wurden für die UMach-Maschine 69 Instruktionen festgelegt. Für jede
+Instruktion wird eine Befehlsnummer, einen Assemblernamen, die Argumente und ein
+Instruktionsformat festgelegt. Die Instruktionen werden in mehreren Kategorien
+unterteilt: arithmetische, logische, Speicher-, Vergleichs-, Sprunginstruktionen
+usw. Die Spezifikation wird nach diesen Kategorien strukturiert.
+
+Jede Instruktion besteht aus einer Befehlsnummer im ersten Byte und aus
+Befehlsargumenten in den folgenden 3 Bytes. Zur Interpretieung der
+Instruktionsargumente wurden Instruktionsformate definiert. Gemäß dieser
+Formate, können die 3 Argumentenbytes entweder als Registernummer, oder direkte
+nummerische Angaben interpretiert werden, die 1, 2 oder 3 Bytes groß sind.
+
+
+\paragraph{Speichermodell}
+Die UMach Maschine verwendet nur absoluten Speicheradressen. Der gesamte
+Adressraum wird für den Speicher verwendet (kein Mapping für I/O-Ports). Der
+Speicher wird in 5 Segmenten eingeteilt: Interrupttabelle, Code-Segment,
+Datensegment, Heap und Stack. Zur Abgrenzung der Segmente dienen Registerwerte.
+Ausnahme macht die Interrupttabelle, die die Adressen 0 bis 255 belegt.
+
+Lese- und Schreibeoperationen werden durch geeignete \emph{load}-, 
+\emph{store}-, \emph{push}- und \emph{pop}-Instruktionen ausgeführt. Zudem
+können die Grenzen der Speichersegmente durch Änderung bestimmter Registerwerte
+verändert werden, insebesondere durch die Register \texttt{HE} (heap end) und
+\texttt{SP} (stack pointer).
+
+
+\paragraph{I/O Modell}
+Die UMach Maschine verwendet Port I/O, als Gegenteil zu Memory Mapped I/O. Die
+Spezifikation beschreibt die Struktur der I/O-Einheit, die für die Eingabe und
+Ausgabe verantwortlich ist. Sie beinhaltet 8 Ausgabeports und 8 Eingabeports.
+Für Eingabe und Ausgabe werden spezielle \texttt{IN} und \texttt{OUT}
+Instruktionen zur Verfügung gestellt.
+
+
+\paragraph{Interruptmodell}
+
+Für die UMach Maschine wurde ein Interrupt-Mechanismus konzipiert und
+entwickelt. Die Spezifikation beschreibt diesen Mechanismus in Detail.
+Interrupts sind Signale, die entweder von der Maschine selber oder vom
+Programmierer generiert werden können. Jeder Interrupt wird eine Interruptnummer
+vergeben. Von der Maschine werden sie in Fehlerfälle generiert, vom
+Programmierer werden die mit der Instruktion \texttt{INT}. Ein Interrupt kann
+abgefangen werden indem in der Interrupttabelle die Adresse einer entsprechenden
+Routine eingetragen wird.
+
+
+\subsection{Implementierung}
+
+Die UMach Maschine wurde in C99 implementiert. Das Programm heißt
+\texttt{umach} und wurde für Linux geschrieben. Beim Start dieses Programms
+können verschiedene Argumente übergeben werden. Siehe dazu das Dokument
+UMachVM-Verwendung.pdf.
+
+Die Implementierung erstreckt sich über 38 C-Dateien, die unten kurz vorgestellt
+werden.
+
+\subsubsection{Grundablauf}
+Die \texttt{main}-Funktion befindet sich in der Datei umach.c. Das Programm
+fängt gewöhnlich damit an, dass der UMach-Speicher gemäß Programmoptionen
+initialisiert wird. Dabei wird die Programmdatei, die als Programmargument
+übergeben wird, in den Code-Segment geladen und entsprechend die
+Segment-Register initialisiert. Danach wird aus \texttt{main} in das Modul
+\texttt{core} gesprungen (Datei core.c, Funktion \texttt{core\_run\_program})
+und dort innerhalb einer Schleife alle Instruktionen aus dem Code-Segment
+ausgeführt. Das Programm stoppt in folgenden Fällen:
+\begin{itemize}
+  \item Der Wert des Registers \texttt{PC} zeigt in den Datensegment
+(überschreitet den Code-Segment).
+  \item Die Instruktion \texttt{EOP} (end of programm) wurde ausgeführt.
+  \item Ein Interrupt wurde generiert, der von keiner Subroutine abgefangen
+wird.
+\end{itemize}
+
+
+Die Ausführung jeder Instruktion hat zwei Schritte, die sich nach dem Von
+Neumann Zyklus orientieren:
+\begin{enumerate}
+  \item fetch: die nächste Instruktion wir aus dem Code-Segment in ein globales
+4-bytiges Array geladen. 
+  \item execute: die jenige Funktion, die der Befehlsnummer im Byte 0 der
+Instruktion entspricht wird ausgeführt. Diese Funktion liest die Argumente aus
+dem globalen Array wo die Instruktion geladen wurde. Anschließend wird der Wert
+des \texttt{PC} Registers mit 4 inkrementiert.
+\end{enumerate}
+
+
+\subsubsection{Sprungtabelle}
+
+Ein wichtiges Konzept in der Implementierung der UMach Maschine ist die
+sogenannte Sprungtabelle. Sie besteht aus einem Array von Strukturen, die nach
+einem Schlüssel indiziert wird. Sie ist eine einfache Hashtabelle und wird
+verwendet, um die jenige Funktion zu finden, die eine Instruktion
+implementiert. Schlüssel ist die Befehlsnummer.
+
+
+
+
+
+
+
+
+
+
+
+
+
