@@ -116,8 +116,71 @@ einem Schlüssel indiziert wird. Sie ist eine einfache Hashtabelle und wird
 verwendet, um die jenige Funktion zu finden, die eine Instruktion
 implementiert. Schlüssel ist die Befehlsnummer.
 
+Um das Konzept deutlicher zu machen, betrachte man als Beispiel die folgende
+Struktur:
+\begin{lstlisting}
+typedef struct command 
+{
+    int (*execute) (void);
+}
+command;
+\end{lstlisting}
+
+Sie besteht aus einem einzigen Feld: ein Funktionszeiger namens
+\texttt{execute}. Die gezeigte Funktion hat eine bestimmte Signatur: sie nimmt
+keine Argumente und gibt ein Integer zurück. Nun kann man eine Sprungtabelle wie
+folgt definieren:
+\begin{lstlisting}
+command opmap[OPMAX] = 
+{
+  [0x00] = { core_nop },
+  [0x04] = { core_eop },
+  [0x10] = { core_set },
+  [0x11] = { core_cp  },
+  [0x12] = { core_lb  },
+  [0x13] = { core_lw  },
+  [0x14] = { core_sb  },
+  [0x15] = { core_sw  },
+  ...
+  [0xB8] = { core_out }
+}
+\end{lstlisting}
+
+Alle Funktionsnamen auf der rechten Seite sind Namen von Funktionen, die wir
+implementiert haben. Die ausdrückliche Index-Zuweisung gehört zum C99-Standard
+und war einer der Gründe, warum C99 für dieses Projekt ausgewählt wurde. Möchte
+man jetzt die Instruktion mit Nummer \texttt{0x13} ausführen, so schaut man in
+dieser Tabelle (Array) am Index \texttt{0x13} nach und falls der Eintrag nicht
+Null ist, führt man die Funktion aus:
+
+\begin{lstlisting}
+command cmd = opmap[0x13];
+if (cmd.execute) {
+    cmd.execute();
+}
+\end{lstlisting}
+
+Nach diesem Prinzip funktioniert der Kern der UMach Maschine, bzw. die Funktion
+\texttt{core\_execute}, die den \glqq{}execute\grqq{}-Schritt implementiert und
+in der Datei core.c definiert ist. Die \texttt{command}-Struktur, die hier
+vereinfacht wurde, wird in der Datei command.h definiert, die Sprungtabelle
+selbst in command.c. Dort enthält die \texttt{command}-Struktur Felder für das
+Instruktionsformat, Name der Instruktion etc, die vom Assembler und Disassembler
+verwendet werden.
+
+Diese Sprungtabelle ist eine Art, den \glqq{}command pattern\grqq{} in C zu
+implementieren.
 
 
+\subsubsection{Registertabelle}
+
+Für die Register der Maschine wurde ein ähnliches Konzept wie für die
+Sprungtabelle der Instruktionsfunktionen verwendet: eine Tabelle (Array) von
+Strukturen, die nach Registernummer indiziert wird. Die entsprechende Struktur
+\texttt{register} wird in der Datei register.h definiert und enthält Felder für
+den Registerwert, Zugriffsrechte und für den Registernamen, der vom Disassembler
+gebraucht wird. Um den Wert eines Registers mit Nummer $x$ zu setzen,
+adressiert man die Tabelle an Index $x$ und setzte das entsprechende Feld.
 
 
 
