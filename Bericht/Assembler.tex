@@ -3,3 +3,93 @@
 Werner Linne
 \end{flushright}
 
+\subsection{Zielsetzung}
+
+\paragraph{Aufgabe des Assemblers}
+
+Der \emph{uasm} Assembler übersetzt Quelltext in UMach Bytecode und erstellt
+Debuginformationen.
+
+\paragraph{Erwünschte Eigenschaften}
+
+Die aus meiner Sicht wichtigsten Eigenschaften des Assemblers sind:
+\begin{itemize}
+\item \textbf{Effektive Syntax:} Die Syntax des UMach Assemblers soll verständlich
+und komfortabel sein. Dadurch wird das Codieren eines UMach Programms erleichtert.
+
+\item \textbf{Performance:} Der Assembler soll auch größere Mengen an Quelltext
+mit wenig CPU-Zeit und wenig Arbeitsspeicherbedarf übersetzten können.
+
+\item \textbf{Aussagekräftige Fehlermeldungen:} Bei syntaktischen Fehlern im
+Quelltext soll der Benutzer möglichts genau über Art und Position des gefundenen
+Fehlers informiert werden.
+
+\item \textbf{Nützliche Debuginformationen:} Der Assembler generiert bei der
+Übersetzung des Quelltexts (optional) Debuginformationen. Art und Format dieser
+Informationen wurden maßgeschneidert auf die Bedürfnisse des UMach Debuggers
+festgelegt.
+\end{itemize}
+
+\subsection{Bedienung und Syntax}
+
+\paragraph{Bedienung}
+
+Der Assembler wird über die Befehlszeile bedient. Die Aufrufsyntax ist folgendermaßen
+definiert:
+\begin{quote}\texttt{uasm [-o outfile] [-g] [-w] file(s)}\end{quote}
+Die Bedeutung der einzelnen Elemente wird im folgenden genauer erklärt:
+
+Das \emph{-o} Flag ist optional und benötigt, falls es gesetzt wurde, genau ein
+Argument (\emph{outfile}). Das Argument \emph{outfile} steht für den Namen der
+Datei, in welche der vom Assembler erzeugte UMach Bytecode geschrieben wird. Ist 
+das \emph{-o} Flag nicht gesetzt wird die Datei namens \emph{u.out} verwendet.
+
+Das \emph{-g} Flag steuert die Generierung von Debuginformationen. Ist das Flag
+gesetzt werden Debuginformationen generiert, ansonsten nicht.
+
+Das \emph{-w} Flag veranlasst den Assembler im Fehlerfall erst dann zu Terminieren,
+nachdem der Benutzer die Eingabetaste gedrückt hat. Dieses Flag wird hauptsächlich
+von dem Debugger genutzt.
+
+Das Argument \emph{file(s)} steht für ein oder mehrere Dateien und wir zwingend
+benötigt. Der Assembler übersetzt alle in \emph{file(s)} genannten Quelltextdateien
+in den UMach Bytecode.
+
+\paragraph{Syntax}
+
+Die Syntax von UMach Quelltextdateien ist relativ einfach gestaltet. Wir
+unterscheiden zwischen den Abschnitten \emph{Code Section} und \emph{Data Section}.
+Jede Quelltextdatei beginnt implizit mit der \emph{Code Section}. Die
+\emph{Code Section} beinhaltet Befehle, Sprungmarken, Kommentare und Leerzeilen.
+Die \emph{Data Section} ist optional und wird durch die Textzeile ``\emph{.data}''
+eröffnet. Die \emph{Data Section} beinhaltet Definitionen von Variablen,
+Kommentare sowie Leerzeilen.
+
+Zur Veranschaulichung folgt ein fiktives Beispiel einer UMach Quelltextdatei:
+
+\begin{lstlisting}[numbers=left, numberstyle=\tiny]
+SET R1 hello
+myloop:
+    CALL println #this function is implemented somewhere else
+    DEC R2
+    CMP R2 ZERO
+BNE myloop
+#lines containing only a comment or nil are ignored
+SET R1 9001
+EOP
+
+.data #begin of data definitions
+.string hello  "Hello World!"
+.int    answer 42
+.int    drink  0xCAFE
+\end{lstlisting}
+
+In diesem Beispiel bilden die Zeilen 1 bis 10 die \emph{Code Section} und die
+\emph{Data Section} wird in Zeile 11 eingeleitet und beinhaltet Zeile 12 bis 14.
+
+Zu beachten sind folgende syntaktischen Regeln:
+\begin{itemize}
+    \item foo
+    \item bar
+    \item baz
+\end{itemize}
