@@ -1,0 +1,87 @@
+\section{Projektvorstellung}
+
+Das IT-Projekt wurde während des SS 2012 und WS 2012/13 durchgeführt. Ziel
+dieses Projektes war die Spezifikation und Implementieung einer virtuellen
+Maschine namens UMach. Dazu gehören ein Assembler und ein Debugger für diese
+Maschine. Der gewünschte Workflow bei der Fertigstellung des Projektes war der
+folgende:
+
+\begin{enumerate}
+\item Der Benutzer schreibt eine Assembler-Datei. Diese enthält Anweisungen an
+die UMach-Maschine wie die folgenden:
+\begin{lstlisting}
+SET  R2 0x1A
+MULI R2 4
+CP   R2 LO
+SET  R1 0
+SW   R1 R2
+\end{lstlisting}
+Wir nehmen an, die Datei heißt \glqq{}test.uasm\grqq{}.
+
+\item Diese Datei wird in eine Bytecode-Datei assembliert mit dem folgenden
+Befehl:
+\begin{lstlisting}
+./uasm -o test.umx test.uasm
+\end{lstlisting}
+Ergebnis ist eine Bytecode-Datei namens \glqq{}test.umx\grqq{}. Diese
+Bytecode-Datei enthält UMach-Instruktionen in binärer Form. Die oben angegebenen
+Instruktionen werden wie folgt assembliert:
+\begin{lstlisting}
+0x10 0x02 0x00 0x1A
+0x3A 0x02 0x00 0x04
+0x11 0x02 0x2B 0x00
+0x10 0x01 0x00 0x00
+0x15 0x01 0x02 0x00
+\end{lstlisting}
+
+\item Die Bytecode-Datei wird von der UMach-Maschine ausgeführt mit dem
+folgenden Befehl:
+\begin{lstlisting}
+./umach test.umx
+\end{lstlisting}
+Alternativ kann man die Maschine in Debugg-Modus starten mit dem Befehl
+\begin{lstlisting}
+./umach -d test.umx
+\end{lstlisting}
+Alternativ steht ein getrennter Qt-Debugger zur Verfügung.
+\end{enumerate}
+
+Diesen Workflow betrachten wir als implementiert. Alle diese Schritte sind
+möglich und liefern die gewünschten Ergebnisse. Das Projekt enthält auch eine
+Reihe von fertiggeschriebenen Assembler-Programmen, die gleich getestet werden
+können.
+
+
+\subsection{Teilaufgaben}
+
+Im Rahmen dieses Projektes wurden die folgenden Teilaufgaben übernommen und
+gelöst.
+
+\begin{enumerate}
+\item Konzeptioneller Entwurf der virtuellen Maschine.
+\item Spezifikation der virtuellen Maschine als PDF Dokument (Liviu Beraru).
+\item Implementieung der Maschine in C99 für Linux (Liviu Beraru).
+\item Assembler für die Maschine in C99 für Linux (Werner Linne).
+\item Qt-Debugger (Simon Beer).
+\item Demonstrationsprogramme in der UMach Assemblersprache \texttt{uasm} 
+      (Willi Fink).
+\item Anweisungen zur Verwendung der UMach virtuellen Maschine, als PDF
+Dokument.
+\end{enumerate}
+
+Die späteren Abschnitte gehen auf die Lösungswege der einzelnen Teilaufgabe
+ein. Jeder Abschnitt wurde vom zuständigen Gruppenmiglied geschrieben.
+
+
+\subsection{Organisation}
+
+Die Kommunikation unter den Gruppenmiglieder lief über Email, persönlichen
+Gespräche, Telefonaten und TODO-Dateien. Für die Verwaltung aller \LaTeX{} und C
+Dateien wurde das Versionsverwaltungssystem GIT verwendet. Für die zentralle
+Verwaltung aller Dateien wurde ein GIT-Account auf Github eingerichtet und dort
+ein Projekt angelegt. Das Projekt ist öffentlich zugänglich, Schreiberechte aber
+haben nur die Gruppenmiglieder. Das Projekt kann unter der Adresse
+
+\url{https://github.com/Malkavian/UMachVM}
+
+nachgeschlagen werden. Dort können alle Dateien heruntergeladen werden.
