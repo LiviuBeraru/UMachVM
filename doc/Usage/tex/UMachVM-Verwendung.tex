@@ -11,35 +11,29 @@
 \cfoot{\pagemark}
 
 
-
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 
-\usepackage{lmodern}
-% \usepackage[boldsans]{concmath}
+% \usepackage{lmodern}
+\usepackage[amsfonts,amssymb,boldsans]{concmath}
 \usepackage{blindtext}
 
 \usepackage{ellipsis}
-\usepackage{microtype} % Grauwert noch gleichmäßiger
+% \usepackage{microtype} % Grauwert noch gleichmäßiger
 
 \usepackage{scrhack}%entfernt warnmeldungen von listings
 \usepackage{listings}
 \lstset{basicstyle=\small\ttfamily}
 \lstset{commentstyle=\slshape}
 \lstset{showstringspaces=false}
-\lstset{frame=leftline}
 
-
-\usepackage{makeidx}
-\makeindex
-
-\title{Verwendung der virtuellen UMach Maschine}
+\title{Verwendung der virtuellen Maschine UMach}
 \author{}
 
 \usepackage{xcolor}
 \usepackage[
-    pdftitle={Verwendung der UMach VM},
+    pdftitle={Verwendung der VM UMach},
     colorlinks=true,
     linkcolor=blue!50!black]
 {hyperref} 
@@ -48,7 +42,6 @@
 \begin{document}
 \maketitle
 \tableofcontents
-
 
 \include{Einfuehrung}
 
@@ -63,5 +56,4 @@
 
 \appendix
 \lstlistoflistings
-\printindex
 \end{document}

@@ -17,7 +17,6 @@ Siehe den Abschnitt \ref{subsubsec:Funktionen-Beispiel} ab der Seite
 für ein Programm verwendet werden.
 
 \subsection{Labels}
-\index{Labels}
 
 Der UMach-Assembler unterstüzt die Verwendung von sogenannten \glqq Labels\grqq,
 oder Sprungmarken. Ein Label markiert das Sprungziel für die verschiedenen
@@ -69,7 +68,6 @@ Leerzeichen (über die Lesbarkeit dieses Beispiels lässt sich diskutieren).
 
 
 \subsection{Programmdaten}
-\index{Programmdaten}
 
 Daten werden nach der Anweisung \texttt{.data} angegeben. Diese Anweisung muss
 alleine auf einer eigenen Zeile stehen.
@@ -83,12 +81,11 @@ Bedarft ein Datenelement weniger als $4k$ Bytes, so wird es trotzdem auf
 eine Länge von $4 k$ mit Nullbytes gefüllt.
 
 \subsubsection{Strings}
-\index{Strings}
 
-String Daten werden mit der Anweisung \texttt{.string}\index{.string} angegeben.
-Nach \texttt{.string} kommt der Name des Strings und dann der eigentlich String
-zwischen Anführungszeichen. Siehe das Programm \ref{lst:Datenverwendung} für
-ein Beispiel.
+String Daten werden mit der Anweisung \texttt{.string} angegeben. Nach
+\texttt{.string} kommt der Name des Strings und dann der eigentlich String
+zwischen Anführungszeichen. Siehe das Programm \ref{lst:Datenverwendung} für ein
+Beispiel.
 
 Strings werden so assembliert, dass sie immer ein Vielfaches von 4 Bytes
 belegen. Braucht der textuelle Inhalt des Strings weniger als 4 Byte, so wird
@@ -96,9 +93,8 @@ der String mit Nullbytes gefüllt.
 
 
 \subsubsection{Ganze Zahlen}
-\index{Zahlen}
 
-Ganze Zahlen werden mit der Anweisung \texttt{.int}\index{.int} angegeben. Nach
+Ganze Zahlen werden mit der Anweisung \texttt{.int} angegeben. Nach
 \texttt{.int} folgt der Name (Label) der Zahl, dann die eigentliche Zahl. Diese
 kann in Hexa-, Oktal- oder Dezimalsystem angegeben werden, analog wie in der
 C/Java Sprache.
@@ -119,12 +115,10 @@ Es wird lediglig \glqq Hallo Welt\grqq\ ausgegeben.
 
 
 \subsection{Funktionen}
-\index{Funktion}
 
 Der UMach Assembler unterstützt die Verwendung von Funktionen.
 
 \subsubsection{Aufbau einer Funktion}
-\index{Funktion!Aufbau}
 
 Eine Funktion auf der Assembler-Ebene ist nichts anderes als ein Stück Code,
 das mit einem Label versehen ist und dessen letzte Instrution ein \texttt{RET}
@@ -146,7 +140,6 @@ es sich um eine Konvention, bzw. um den Vorschlag einer Konvention handelt.
 Jeder ist frei sich andere Konventionen und Regeln auszudenken.
 
 \paragraph{Name der Funktion}
-\index{Funktion!Name}
 Der Name der Funktion wird als Label angeben. Eine Funktion fängt also wie folgt
 an:
 \begin{lstlisting}
@@ -158,14 +151,13 @@ funktionsname:
 
 
 \paragraph{Ende der Funktion}
-\index{Funktion!Ende}
+
 Das Ende der Funktion wird durch den Befehl \texttt{RET} markiert (von
 \glqq return\grqq). Für mehr Informationen betreffend dieses Befehls siehe die
 Spezifikation der UMach Maschine (Abschnitt 3.8.3).
 
 
 \paragraph{Argumente}
-\index{Funktion!Argumente}
 
 Die Argumente einer Funktion werden vor dem Aufruf auf den Stack abgelegt und
 zwar in umgekehrter Reihenfolge\footnote{Dies entspricht übrigens gängiger
@@ -217,7 +209,6 @@ Wert von \texttt{R1} geladen. Analog für \texttt{R2} und \texttt{R18}.
 
 
 \paragraph{Rückgabewert}
-\index{Funktion!Rückgabewert}
 Es gibt viele Möglichkeiten, einen Wert aus einer Funktion zurückzugeben.
 Einige davon wären:
 \begin{itemize}
