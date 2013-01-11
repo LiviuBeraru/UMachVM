@@ -4,12 +4,15 @@ Liviu Beraru
 \end{flushright}
 
 \subsection{Spezifikation}
-Die Spezifikation der virtuellen Maschine UMach umfasst mehrere Themen, die in
-einem umfangreichen Dokument behandelt wurden. Das Dokument ist Teil der Abgabe
-und wird sowohl aus PDF-Dokument als auch schriftlich dem Projekt-Betreuer
-übergeben. Die PDF-Datei heißt \glqq{}UMachVM-Spec.pdf\grqq{}. Der Titel lautet
-\glqq{}UMach Spezifikation\grqq. Die Themen dieses Dokumentes werden im
-folgenden kurz zusammengefasst.
+Die Spezifikation der virtuellen Maschine UMach -- dessen Name von
+\glqq{}sat\emph{u}rn \emph{mach}ine\grqq{} kommt, da sie als großes entferntes
+Ziel wahrgenommen wurde -- umfasst mehrere Themen, die in einem umfangreichen
+Dokument behandelt wurden. Das Dokument ist Teil der Abgabe und wird sowohl aus
+PDF-Dokument als auch schriftlich dem Projekt-Betreuer übergeben. Die PDF-Datei
+heißt \glqq{}UMachVM-Spec.pdf\grqq{}. Der Titel lautet \glqq{}UMach
+Spezifikation\grqq. Die Themen dieses Dokumentes werden im folgenden kurz
+vorgestellt.
+
 
 \paragraph{Architektur}
 Die Architektur der UMach Maschine orientiert sich stark an der RISC
@@ -23,9 +26,11 @@ definiert. Bestimmte Spezialregister sind schreibgeschützt.
 \paragraph{Instruktionssatz}
 Es wurden für die UMach-Maschine 69 Instruktionen festgelegt. Für jede
 Instruktion wird eine Befehlsnummer, einen Assemblernamen, die Argumente und ein
-Instruktionsformat festgelegt. Die Instruktionen werden in mehreren Kategorien
-unterteilt: arithmetische, logische, Speicher-, Vergleichs-, Sprunginstruktionen
-usw. Die Spezifikation wird nach diesen Kategorien strukturiert.
+Instruktionsformat angegeben. Zudem werden für die meisten Instruktionen
+Verwendungsbeispiele und Fehlerquellen gegeben. Die Instruktionen werden in
+mehreren Kategorien unterteilt: arithmetische, logische, Speicher-, Vergleichs-,
+Sprunginstruktionen usw. Die Spezifikation wird nach diesen Kategorien
+strukturiert.
 
 Jede Instruktion besteht aus einer Befehlsnummer im ersten Byte und aus
 Befehlsargumenten in den folgenden 3 Bytes. Zur Interpretieung der
@@ -38,13 +43,14 @@ nummerische Angaben interpretiert werden, die 1, 2 oder 3 Bytes groß sind.
 Die UMach Maschine verwendet nur absoluten Speicheradressen. Der gesamte
 Adressraum wird für den Speicher verwendet (kein Mapping für I/O-Ports). Der
 Speicher wird in 5 Segmenten eingeteilt: Interrupttabelle, Code-Segment,
-Datensegment, Heap und Stack. Zur Abgrenzung der Segmente dienen Registerwerte.
-Ausnahme macht die Interrupttabelle, die die Adressen 0 bis 255 belegt.
+Datensegment, Heap und Stack. Zur Kennzeichnung der Segmentgrenzen dienen
+Registerwerte. Ausnahme macht die Interrupttabelle, die die Adressen 0 bis 255
+belegt.
 
 Lese- und Schreibeoperationen werden durch geeignete \emph{load}-, 
 \emph{store}-, \emph{push}- und \emph{pop}-Instruktionen ausgeführt. Zudem
 können die Grenzen der Speichersegmente durch Änderung bestimmter Registerwerte
-verändert werden, insebesondere durch die Register \texttt{HE} (heap end) und
+verändert werden, insbesondere durch die Register \texttt{HE} (heap end) und
 \texttt{SP} (stack pointer).
 
 
@@ -53,30 +59,59 @@ Die UMach Maschine verwendet Port I/O, als Gegenteil zu Memory Mapped I/O. Die
 Spezifikation beschreibt die Struktur der I/O-Einheit, die für die Eingabe und
 Ausgabe verantwortlich ist. Sie beinhaltet 8 Ausgabeports und 8 Eingabeports.
 Für Eingabe und Ausgabe werden spezielle \texttt{IN} und \texttt{OUT}
-Instruktionen zur Verfügung gestellt.
+Instruktionen zur Verfügung gestellt. Die aktuelle Implementierung der UMach
+Maschine bindet alle Eingabeports an die standard Eingabe (\texttt{stdin}) und
+alle Ausgabeports an die standard Ausgabe (\texttt{stdout}).
 
 
 \paragraph{Interruptmodell}
 
 Für die UMach Maschine wurde ein Interrupt-Mechanismus konzipiert und
-entwickelt. Die Spezifikation beschreibt diesen Mechanismus in Detail.
-Interrupts sind Signale, die entweder von der Maschine selber oder vom
-Programmierer generiert werden können. Jeder Interrupt wird eine Interruptnummer
-vergeben. Von der Maschine werden sie in Fehlerfälle generiert, vom
-Programmierer werden die mit der Instruktion \texttt{INT}. Ein Interrupt kann
-abgefangen werden indem in der Interrupttabelle die Adresse einer entsprechenden
-Routine eingetragen wird.
+entwickelt. Die Spezifikation beschreibt diesen Mechanismus im Detail.
+Interrupts sind Signale, die entweder von der Maschine selbst oder vom
+Programmierer generiert werden können. Jedem Interrupt wird eine Interruptnummer
+vergeben. Von der Maschine werden sie in Fehlerfälle, vom Programmierer werden
+die mit der Instruktion \texttt{INT} generiert. Ein Interrupt kann abgefangen
+werden indem in der Interrupttabelle die Adresse einer entsprechenden Routine
+eingetragen wird.
 
 
 \subsection{Implementierung}
 
-Die UMach Maschine wurde in C99 implementiert. Das Programm heißt
-\texttt{umach} und wurde für Linux geschrieben. Beim Start dieses Programms
-können verschiedene Argumente übergeben werden. Siehe dazu das Dokument
-UMachVM-Verwendung.pdf.
+Die UMach Maschine wurde in C99 implementiert. Das Programm heißt \texttt{umach}
+und wurde für Linux bzw. POSIX geschrieben. Beim Start dieses Programms können
+verschiedene Argumente übergeben werden. Siehe dazu das Dokument
+UMachVM-Verwendung.pdf. 
 
-Die Implementierung erstreckt sich über 38 C-Dateien, die unten kurz vorgestellt
-werden.
+Das \texttt{umach} Programm besteht aus mehreren Komponenten, die in der
+Abbildung \ref{fig:umachstruktur} auf Seite \pageref{fig:umachstruktur}
+dargestellt sind. Diese Komponenten sind:
+
+\begin{enumerate}
+  \item Maschine: Funktionen und Datenstrukturen, die den Kern, Speicher und
+     I/O Einheit der Maschine realisieren. Die I/O Einheit ist nicht in einer
+     Code-Datei vorhanden, sondern als Implementierung der I/O-Instruktionen.
+     Eine zukünftige Version der UMach-Maschine sollte diese Einheit getrennt
+     implementieren.
+  \item Disassembler: Ausgabe eines Bytecode-Datei in Assembler-Schreibweise.
+  \item Debugger: eingebauter einfacher Debugger.
+\end{enumerate}
+
+Der Abschnitt \ref{sec:umach-uebersicht-c-dateien} auf Seite
+\pageref{sec:umach-uebersicht-c-dateien} stellt die C-Dateien vor, die diese
+Komponenten ausmachen.
+
+\begin{figure}[h!tp]
+\centering
+\input{bilder/umachstruktur}
+\caption[Struktur des umach Programms]
+{Komponenten-Struktur des \texttt{umach} Programms}
+\label{fig:umachstruktur}
+\end{figure}
+
+
+
+
 
 \subsubsection{Grundablauf}
 Die \texttt{main}-Funktion befindet sich in der Datei umach.c. Das Programm
@@ -96,7 +131,7 @@ wird.
 \end{itemize}
 
 
-Die Ausführung jeder Instruktion hat zwei Schritte, die sich nach dem Von
+Die Ausführung jeder Instruktion hat zwei Schritte, die sich am Von
 Neumann Zyklus orientieren:
 \begin{enumerate}
   \item fetch: die nächste Instruktion wir aus dem Code-Segment in ein globales
@@ -113,8 +148,8 @@ des \texttt{PC} Registers mit 4 inkrementiert.
 Ein wichtiges Konzept in der Implementierung der UMach Maschine ist die
 sogenannte Sprungtabelle. Sie besteht aus einem Array von Strukturen, die nach
 einem Schlüssel indiziert wird. Sie ist eine einfache Hashtabelle und wird
-verwendet, um die jenige Funktion zu finden, die eine Instruktion
-implementiert. Schlüssel ist die Befehlsnummer.
+verwendet, um die jenige Funktion zu finden, die eine bestimmte Instruktion
+implementiert. Schlüssel ist die Befehlsnummer der Instruktion.
 
 Um das Konzept deutlicher zu machen, betrachte man als Beispiel die folgende
 Struktur:
@@ -176,18 +211,133 @@ implementieren.
 
 Für die Register der Maschine wurde ein ähnliches Konzept wie für die
 Sprungtabelle der Instruktionsfunktionen verwendet: eine Tabelle (Array) von
-Strukturen, die nach Registernummer indiziert wird. Die entsprechende Struktur
+Strukturen, die nach Registernummern indiziert wird. Die entsprechende Struktur
 \texttt{register} wird in der Datei register.h definiert und enthält Felder für
 den Registerwert, Zugriffsrechte und für den Registernamen, der vom Disassembler
-gebraucht wird. Um den Wert eines Registers mit Nummer $x$ zu setzen,
-adressiert man die Tabelle an Index $x$ und setzte das entsprechende Feld.
+gebraucht wird. Um den Wert eines Registers mit Nummer $x$ zu setzen, adressiert
+man die Tabelle an Index $x$ und setzt das entsprechende Feld.
 
 
 
+\subsubsection{Übersicht der C Dateien}
+\label{sec:umach-uebersicht-c-dateien}
+
+Die Implementierung erstreckt sich über 38 Dateien, die man wie folgt
+gruppieren kann:
+
+\paragraph{Main}
+Die \texttt{main} Funktion befindet sich in umach.c. Hier werden
+Programmargumente eingelesen, der UMach-Speicher initialisiert und das Programm
+in den Code-Segment geladen. Dann wird zum Modul \texttt{core} gesprungen und
+das Programm ausgeführt.
+
+\paragraph{Kern}
+Die Funktionen, die zum Kern (\texttt{core}) der UMach-Maschine gehören, sind in
+der Datei core.c implementiert und in der Headerdatei core.h deklariert. Dazu
+zählen Funktionen, die die Schritten fetch und execute implementieren. Hier
+findet man auch das globale Array \texttt{instruction}, das die aktuelle
+Instruktion enthält und den Integer \texttt{running}, der 0 wird, wenn die
+Maschine hält, sonst immer 1 ist. Die Funktion \texttt{core\_run\_program} führt
+die Schritte fetch und execute solange aus, bis die Variable \texttt{running} 0
+wird.
+
+\paragraph{Speicher}
+Der Speichermodull (Dateien memory.c und memory.h) enthält Funktionen zum
+Speicher initialisieren und freigeben, Speicher lesen und schreiben, Laden der
+Programmdatei in den Code-Segment, und Funktionen, die die Befehle
+\texttt{PUSH} und \texttt{POP} realisieren.
+
+\paragraph{Register}
+Die Dateien register.c und register.h enthalten die Registertabelle und
+Funktionen zum Lesen und Schreiben der Registerinhalte und zum Setzen einzelner
+Bits in Registern. Zusätzlich werden Registernummern definiert.
+
+\paragraph{Instruktionen}
+Die UMach-Instruktionen werden in Kategorien unterteilt: arithmetische
+Instruktionen, logische Instruktionen usw. Diese Kategorien werden in der
+Spezifikation eingeführt. Für jede Kategorie von Instruktionen, wird eine
+getrennte C-Datei und Headerdatei verwendet. In dieser Datei werden alle
+Instruktionen implementiert, die der entsprechenden Kategorie gehören. Alle
+diese Funktionen wurden nach demselben Muster benannt: \glqq{}core\_$x$\grqq{}.
+Wobei $x$ ist der Assemblername der Instruktion, so wie in der Spezifikation
+festgelegt. Beispiele wären \glqq{}core\_add\grqq{}, \glqq{}core\_sub\grqq{},
+\glqq{}core\_jmp\grqq{} usw.
+
+Möchte man also den Quellcode einer bestimmten Instruktion $\iota$ finden, so
+schaut man in der Spezifikation, zu welcher Kategorie $\kappa$ gehört die
+Instruktion $\iota$. Dann schaut man in der C-Datei zur Kategorie $\kappa$ nach
+einer Funktion mit dem Namen \glqq{}core\_$\iota$\grqq{}. Zum Beispiel die
+Instruktion \texttt{ADD} ist in der Kategorie \glqq{}Arithmetische
+Instruktionen\grqq{}, also schaut man in der Datei arithm.c nach einer Funktion
+core\_add.
+
+Hier eine Liste der Dateien:
+
+\begin{center}
+\begin{tabular}{ll}
+C-Datei      & Kategorie von Instruktionen \\
+\hline\hline
+controll.c   & Kontrollinstruktionen       \\
+loadstore.c  & Lade- und Speicherbefehle   \\
+arithm.c     & Arithmetische Instruktionen \\
+logic.c      & Logische Instruktionen      \\
+compare.c    & Vergleichsinstruktionen     \\
+branch.c     & Sprungbefehle               \\
+subroutine.c & Unterprogramminstruktionen  \\
+system.c     & Systeminstruktionen         \\
+io.c         & IO Instruktionen            \\
+\hline
+\end{tabular}
+\end{center}
+
+Zu jeder C Datei gehört eine Headerdatei gleichen Namens, die hier nicht mehr
+gezeigt wurde. Die Wörter \glqq{}Instruktion\grqq{} und \glqq{}Befehl\grqq{}
+werden in der Benennung der einzelnen Kategorien gleichgesetzt.
+
+\paragraph{Interruptnummern}
+Die Interruptnummern sind in der Headerdatei interrupts.h deklariert.
 
 
 
+\paragraph{Disassembler}
+Die Dateien disassemble.c und disassemble.h enthalten die Implementierung eines
+einfachen Disassemblers. Der Disassembler liest eine Datei Instruktion für
+Instruktion aus, disassembliert jede davon und gibt sie auf die standard
+Ausgabe aus. Der Disassembler stoppt wenn er entweder die Datei bis zu Ende
+gelesen hat, oder wenn er eine spezielle Marke (Bytemuster) einliest, die den
+Start des Datensegments signalisiert. Diese Marke wird vom Assembler am Ende
+des Code-Segments geschrieben und wird auch vom Speicher-Modull verwendet, um
+das Ende dieses Segments zu erkennen.
 
+\paragraph{Debugger}
+Die UMach Maschine besitzt einen eingebauten einfachen Debugger, der in den
+Dateien debugger.c und debugger.h implementiert wird. Der Debugger zeigt immer
+eine disassemblierte Instruktion und wartet auf einen Befehl vom Benutzer. Nach
+der Ausführung einer Funktion wartet zeigt er die nächste Instruktion und
+wartet auf einen neuen Befehl. Der Debugger benutzt den Disassembler-Modull um
+die einzelnen Instruktionen zu disassemblieren. Seine Verwendung wird in der
+Dokumentationsdatei UMachVM-Verwendung.pdf beschrieben.
 
+\paragraph{Optionen}
+Die Dateien options.h und options.c deklarieren eine Optionenstruktur, die die
+Programmoptionen enthält. Sinn davon ist, dass diese Optionen an mehreren
+Stellen in Programm verwendet werden, was eine globale Deklaration notwendig
+macht. Die Optionen werden in umach.c gesetzt, wenn die Programmargumente
+ausgelesen werden.
 
+\paragraph{Logging}
+Das Modul \texttt{logmsg} (Dateien logmsg.c und logmsg.h) enthält ein einfaches
+Mechanismus zur bedingten Ausgabe von Nachrichten. Jede Nachricht wird dem Modul
+mit einem \glqq{}level\grqq{} übergeben. Je nach Wert des Feldes
+\texttt{verbose} in der Optionenstruktur, wird die Nachricht ausgegeben oder
+nicht.
+
+\paragraph{Utils}
+Die Datei strings.c enthält ein paar nützliche Funktionen zur Bearbeitung von
+Zeichenketten: zersplittern, Leerzeichen überspringen und Zahlen parsen.
+
+\paragraph{Makefile}
+Das Makefile dient zur Kompilierung des \texttt{umach} Programms. Man kann das
+Programm kompilieren, indem man in das Quellenverzeichniss wechselt und dort
+\texttt{make} Eingibt.
 
