@@ -1,3 +1,76 @@
 \section{Qt Debugger}
 
- 
+\subsection{Kompilieren und Installation}
+
+Zum Kompilieren und Verwenden der Software wird Linux empfohlen. Unter anderen Betriebssystemen wurde die Software nicht getestet.
+
+\paragraph{Komponenten}
+Um die Software unter Linux zu kompilieren sind folgende Komponenten erforderlich:
+\begin{itemize}
+	\item Qt SDK in der Version 4.7 oder neuer.
+	\item GNU Compiler Collection.
+	\item Alle Abhängigkeiten der UMachVM
+\end{itemize}
+
+\paragraph{UMachCore}
+\emph{UMachCore} ist eine Abwandlung der \emph{UMachVM} für die \emph{UMachGUI}. Um den \emph{UMachCore}  zu kompilieren sind folgende Befehle im Quellverzeichnis aufzurufen:
+\begin{lstlisting}
+qmake
+make
+\end{lstlisting}
+
+\paragraph{UMachGUI}
+Um die Oberfläche zu kompilieren sind folgende Befehle im Quellverzeichnis dieser aufzurufen:
+\begin{lstlisting}
+qmake
+make
+\end{lstlisting}
+
+\paragraph{Installation}
+Um die Oberfläche im kompletten Funktionsumfang verwenden zu können müssen sich folgende weitere Applikationen im Anwendungs- bzw. Arbeitsverzeichnis befinden:
+\begin{itemize}
+	\item UMachCore
+	\item uasm (Version 2)
+\end{itemize}
+
+\subsection{Übersicht über die Oberfläche}
+
+Die Oberfläche besteht aus einem Hauptfenster, in dem unter anderem der \emph{Code-Editor} eingebettet ist, und weiteren Einstellungs- und Anzeigefenstern, die über das Menü angewählt werden können.
+
+\paragraph{Hauptfenster}
+Das Hauptfenster besteht aus einer Liste \emph{Project Files}, in der alle zum aktuellen Projekt zugehörigen Dateien aufgelistet sind. Daneben befindet sich der \emph{Code-Editor,} in dem in mehreren Tabs \emph{Code}-Dateien geöffnet werden können. Dies geschieht mit einem Doppel-Klick auf die entsprechende Datei in der Liste.
+Die Datei-Liste enthält ein \emph{Context}-Menü, mit dessen Hilfe Dateien zu einem Projekt hinzugefügt oder entfernt werden können.
+Weiterhin befindet sich im Hauptfenster eine Tabelle in der zur Programmlaufzeit alle Symbole, deren Typ und ihr Wert hinterlegt sind. Der Wert kann mit einem Doppelklick direkt in der Tabellenzelle manipuliert werden.
+Weiterhin befindet sich im Hauptfenster eine \emph{Toolbar}, welche folgende Buttons zum steuern des Debuggens enthält (von Rechts nach Links):
+\begin{itemize}
+	\item \emph{Build \& Run} - zur Ausführungszeit \emph{Stop}
+	\item \emph{Goto next Breakpoint}
+	\item \emph{Goto next Instruction}
+\end{itemize}
+
+\paragraph{Menü}
+Über das Menü können folgende Funktionalitäten erreicht werden:
+\begin{itemize}
+	\item Anlegen, Öffnen, Speichern und Schließen Projektdateien.
+	\item Hinzufügen von Assemblerdateien zum Projekt
+	\item Beenden des Programms
+	\item \emph{Build \& Run}
+\end{itemize}
+Unter dem Menü \emph{Windows} findet man folgende Fenster:
+\begin{itemize}
+	\item \emph{Registers} - Zum Zugriff auf die Register der Maschine
+	\item \emph{Break Points} - Zum setzen von Haltepunkten 
+	\item \emph{Options} - Einstellungen
+\end{itemize}
+
+\paragraph{Registers}
+In diesem Fenster findet sich eine Tabelle zum überwachen der Register. Mit dem \emph{Plus}-Butten kann das aktuell aus der \emph{Drop-Down-Box} ausgewählte Register zur Überwachung hinzugefügt werden. Mit dem \emph{Minus}-Button in Tabellenzeile des entsprechenden Registers, können diese wieder entfernt werden. Der aktuelle Registerinhalt wird interpretiert als Binärzahl, Hexadezimalzahl, Vorzeichenlose- und  Vorzeichenbehaftete Zahl angezeigt. 
+
+\paragraph{Break Points}
+In diesem Fenster können Haltepunkte gesetzt werden. In der letzten Zeile der Tabelle befindet sich eine Eingabemaske. Hier kann im Texteingabefeld Zeilennummer oder das Label angegeben werden. Daneben befindet sich eine \emph{Drop-Down-Box} zur Auswahl der entsprechenden Quelldatei. Mit dem \emph{Plus}-Button wird der Haltepunkt der Liste hinzugefügt. Mit dem \emph{Minus}-Button in einer Tabellenzeile kann der entsprechende Haltepunkt wieder entfernt werden.
+
+\paragraph{Options}
+In diesem Fenster kann der Arbeitsspeicher der Maschine eingestellt werden. Mit \emph{Apply \& Close} werden Änderungen übernommen und das Fenster geschlossen. Mit \emph{Cancel} werden diese verworfen.
+
+\subsection{Debuggen}
+Trifft die Maschine im Debug-Modus auf einen Haltepunkt, so wird die entsprechende Code-Zeile im \emph{Code-Editor} angezeigt und rot hinterlegt. Nun können unter den Symbolen hinterlegte Daten modifiziert, Register angezeigt und manipuliert werden. Mit einem Klick auf den \emph{Goto next Breakpoint}-Button wird die Ausführung bis zum Nächsten Haltepunkt fortgesetzt. Mit dem \emph{Goto next Instruction}-Button wird nur die nächste Instruktion ausgeführt. Danach wird die Maschine wieder angehalten.  
