@@ -4,8 +4,9 @@ Willi Fink
 \end{flushright}
 
 Um die Funktionalität der Virtuellen Maschine testen und demonstrieren zu
-können, wurden im Rahmen des Projekts Demo-Programme erstellt. 
+können, mussten im Rahmen des Projekts Demo-Programme erstellt werden. 
 \subsection{Meist verwendete Befehle}
+Die dabei am häufigsten verwendeten Befehle werden nun nähergebracht.
 \subsubsection{Wertzuweisung}
  \texttt{SET R1 5} oder \texttt{SET R1 label}
  
@@ -26,28 +27,28 @@ DIV R1 R2 & Division durch 0 führt zu Interrupt
 \end{center}
 \subsubsection{Bedingte Sprünge}
 \begin{itemize}
- \item{\texttt{\texttt{CMP R1 R2}}}
+ \item{\texttt{\texttt{CMP R1 R2}}}\\
  Vergleicht das Register R1 mit R2.
- \item{\texttt{\texttt{BL label}}}
+ \item{\texttt{\texttt{BL label}}}\\
  Springt zum angegebenen Label, falls R1 kleiner R2 ist.
  Weitere Möglichkeiten: \texttt{BLE, BG, BGE, BE}
 \end{itemize}
 
 \subsubsection{Unbedingte Sprünge}
  \begin{itemize}
- \item \texttt{JMP label}
+ \item \texttt{JMP label}\\
  Sprung zu einem Label.
- \item \texttt{CALL funktion} 
+ \item \texttt{CALL funktion} \\
  Funktionsaufruf ähnelt dem JMP Befehl, mit dem Unterschied, dass nach der
 Ausführung der Funktion ins Hauptprogramm zurückgesprungen und der nächste
 Befehl ausgeführt wird.
  \end{itemize}
 \subsubsection{IO-Befehle}
  \begin{itemize}
- \item \texttt{IN R1 R2 ZERO}
+ \item \texttt{IN R1 R2 ZERO}\\
  Liest \texttt{R2} viele Bytes vom Port \texttt{ZERO}(Konsole) und schreibt sie
 an die Adresse \texttt{R1}.
- \item \texttt{OUT R1 R2 ZERO}
+ \item \texttt{OUT R1 R2 ZERO}\\
  Schreibt \texttt{R2} viele Bytes aus dem Speicher, beginnend mit dem Byte an
 der Adresse \texttt{R1}, an den Port \texttt{ZERO} raus.
  \end{itemize}
@@ -57,53 +58,169 @@ der Adresse \texttt{R1}, an den Port \texttt{ZERO} raus.
 
 
 \subsection{Hilfsfunktionen}
+Durch wiederkehrende Muster innerhalb der Demoprogramme, wurde schon früh die 
+Notwendigkeit von Hilfsfunktionen deutlich. Folgende Hilfsfunktionen verrichten
+Aufgaben, die häufig bewältigt werden müssen:
  \begin{itemize}
  \item inputint
  \item printint
  \item putchar
  \item newline
  \end{itemize}
+ Die Funktionen arbeiten nach dem Prinzip, dass der Callee die über den Stack 
+ überreichten Argumente hinter sich aufräumt.
+
+\subsubsection{inputint}
+Diese Hilfsfunktion liest 10 Zeichen aus der Eingabe der Konsole, wandelt diese
+in ein Integer um und pusht anschließend das Ergebnis auf den Stack. Dieses
+Ergebnis kann dann im Hauptprogramm mit einem PULL-Befehl in ein beliebiges
+Register gespeichert werden. Es werden nur 10 Zeichen gelesen, weil die größte
+Zahl, die ein Register darstellen kann, zehnstellig ist.
+
+\subsubsection{printint}
+Die über den Stack übergebene Zahl wird durch fortlaufende Divisionen und das
+Aufaddieren des ASCII-Wertes der Zahl 0 nach und nach in einen String
+umgewandelt. Jedes Zeichen wird auf den Stack gepusht. Sobald die Konvertierung
+fertig ist wird die ''putchar''-Funktion entsprechend oft ausgeführt, um die
+Zeichen an die Konsole herauszuschreiben.
+
+\subsubsection{putchar}
+Das über den Stack übergebene Zeichen im ASCII-Format wird auf die Konsole 
+herausgeschrieben.
+
+\subsubsection{newline}
+Diese Funktion schreibt das ASCII-Zeichen, das einen Zeilenumbruch symbolisiert,
+auf die Konsole heraus.
 
 
+\subsection{Die Demo-Programme}
 
-\subsection{Fibonacci Zahlen}
+\subsubsection{helloWorld.uasm}
+Schreibt ein ''Hello!'' an die Konsole raus.
 
- Folge $X_{n} = X_{n-1} + X_{n-2}$
- mit $X_{1} = 1$, und $X_{2} = 2$
- \begin{itemize}
- \item Unterscheidung zwischen $n = 1$, $n = 2$ und $n \geq 3$ notwendig
- \end{itemize}
+\subsubsection{echo.uasm}
+Ein Testprogramm das die folgende Zeile ''Echo program. End with q'' an die 
+Konsole schreibt und durch die Eingabe des Zeichens 'q' beendet wirden kann.
+
+\subsubsection{99\_bottles.uasm}
+Dieses Programm schreibt den Songtext des Lieds ''99 Bottles of Beer'' an die 
+Konsole heraus. ''99 Bottles of Beer'' wurde in über 1500 verschiedenen
+Programmiersprachen als Ausgabe umgesetzt. Dieser Songtext und weitere
+Informationen sind auf der Webseite \url{www.99-bottles-of-beer.net} zu
+finden.
+
+\subsubsection{ggT.uasm}
+Der Benutzer gibt zwei Zahlen an, von diesen wird anschließend der größte 
+gemeinsame Teiler mit Hilfe des euklidischen Algorithmus berechnet und
+ausgegeben.
+\subsubsection{fibonacci.uasm}
+Dieses Programm schreibt $n$ Zahlen der Fibonacci-Folge, 
+$X_{n} = X_{n-1} + X_{n-2}$ mit $X_{1} = 1$ und $X_{2} = 2$, an die Konsole
+heraus. Die Zahl $n$ wird vom Benutzer durch die Hilfsfunktion ''inputint''
+angegeben. Es ist eine Unterscheidung zwischen $n = 1$, $n = 2$ und $n \geq 3$
+notwendig, da erst ab $n \geq 3$ alle Vorgänger für die Folge feststehen, zuvor
+muss man die Vorgänger aus der Definition entnehmen. Für den Fall $n \geq 3$
+kommt eine Schleife zum Einsatz, die die Folge entsprechend der eingegebenen
+Zahl $n$ berechnet. Am Ende jedes Durchlaufs des Schleifenrumpfs wird die
+berechnete Fibonacci Zahl ausgegeben.
 
 
-\subsection{Zahl raten}
- \begin{itemize}
- \item Seed erzeugen
- \item Pseudozufallszahl generieren
- \item Formel: $X_{n+1} = (a + b\cdot X_n) \mod m$
- \item Spieler rät die Zahl
- \item Rückmeldung ob die geratene Zahl größer oder kleiner der gesuchten ist
- \item Anzahl der Versuche
- \end{itemize}
-
-\subsection{Tic Tac Toe}
- Belegung der Register:
- \begin{itemize}
- \item R1-R9: Spielfelder
- \item R10: Aktueller Spieler
- \item R20: Anzahl der Spielzüge
- \end{itemize}
- Spielzyklus:
+\subsubsection{zahl\_raten.uasm}
+Hierbei handelt es sich um ein Spiel, bei dem es geht eine ''zufällige'' Zahl
+zu erraten. Die Vorgehensweise des Programms ist wie folgt:
  \begin{enumerate}
- \item Eingabe
+ \item Größtmögliche Zahl abfragen\\
+ Der Benutzer wird zunächst gebeten die größtmögliche Zahl $m$ einzugeben.
+ \item Seed erzeugen\\
+ Der Benutzer wird gebeten einen Seed einzugeben. Der Seed wird in Form eines 
+ Strings angegeben. Der String wird mit der ''inputint''-Funktion gelesen und in
+eine Zahl $X_0$ umgewandelt.
+ \item Pseudozufallszahl durch die Formel 
+ ''$X_{n+1} = (a + b\cdot X_n) \mod m$'' generieren\\
+ Diese Formel wird n mal aufgerufen. Hierbei sind $n$, $a$ und $b$ im Code 
+ festgelegt. Um alle Zahlen erreichen zu können, sind $a$ und $b$ als Primzahlen
+gewählt.
+ \item Spieler rät die Zahl\\
+ Der Spieler rät durch eingeben die Zahl. Dabei bekommt er jedes mal die 
+ Rückmeldung, ob die geratene Zahl größer, kleiner oder gleich der gesuchten
+ist. Die Anzahl der Versuche wird mitgezählt und bei jeder Rückmeldung mit
+ausgegeben. Hat der Spieler die gesuchte Zahl erraten, so ist das Spiel vorbei.
+ \end{enumerate}
+
+\subsubsection{tictactoe.uasm}
+Tic Tac Toe ist ein Spiel für zwei Personen. Hierbei geht es darum, abwechselnd 
+eins der neun im Quadrat angelegten Felder mit seiner Markierung zu versehen. Es
+gewinnt der Spieler, der drei Markierungen in einer Reihe, senkrecht, waagrecht,
+oder diagonal, angeordnet hat.
+
+Für die Realisierung dieses Spiels werden die Spielinformationen in den
+Registern 
+gespeichert:
+ \begin{itemize}
+ \item R1-R9: Spielfelder\\
+ Für den Wertebereich eins Spielfeldregisters gilt: 0(von niemand belegt), 
+ 1(von Spieler 1 belegt) und 2(von Spieler 2 belegt)
+ \item R10: Aktueller Spieler
+ Für den Wertebereich eins Spielfeldregisters gilt: 1(Spieler 1 ist an der 
+ Reihe), 2(Spieler 2 ist an der Reihe)
+ \item R20: Anzahl der Spielzüge\\
+ Die Anzahl der Spielzüge wird festgehalten, um während der Auswertung ein 
+ Unentschieden festzustellen zu können.
+ \end{itemize}
+Der Spielzyklus besteht aus drei wesentlichen Abschnitten:
+ \begin{enumerate}
+ \item Eingabe\\
+ Der Spieler, der an der Reihe ist wird gebeten ein Feld anzugeben, in das er 
+ seine Markierung setzen will. Dafür gibt er eine Zahl zwischen 1 und 9 an. Nach
+der Eingabe wird der Inhalt des Registers R10 in ein Register der
+Spielfelder(R1-R9) kopiert. Nach der Eingabe endet der Zug des Spielers.
  \item Ausgabe
- \item Auswertung
+ \begin{lstlisting}[xleftmargin=6cm]
+  1|2|3
+  -+-+-
+  4|5|6
+  -+-+-
+  7|8|9
+ \end{lstlisting}
+So sieht die Ausgabe der Spielfelder zu Beginn des Spiels aus. Hierbei wird
+für jedes Spielfeldregister abgefragt ob es den Wert 0 hat, oder nicht. Ist in
+einem Feld die 0, so wird eine Zahl herausgeschrieben um zu symbolisieren, dass
+dieses Feld frei ist und während der Eingabe mit der entsprechenden Zahl
+ausgewählt werden kann, anderenfalls wird der Inhalt auf den Stack gepusht und
+es wird eine Funktion aufgerufen. Diese Funktion schreibt auf die Konsole ein
+'X' heraus falls das gepushte eine '1' ist. Für eine '2' schreibt es ein 'O'.
+ \item Auswertung\\
+ Es gibt 8 Reihen die komplett mit der Markierung eines Spielers belegt werden 
+ können, damit ein Spieler gewinnt. Dem entsprechend gibt es 8 Abfragen die
+erfolgen müssen um zu prüfen ob jemand gewonnen hat. Für eine Abfrage werden die
+drei Register aus einer Reihe mit einander multipliziert. Es gibt nur drei
+relevante Äquivalenzklassen der Ergebnisse, die dabei berücksichtigt werden
+müssen. '0','2','4': Entweder eines der Felder ist nicht belegt, oder in einer
+Reihe treten sowohl '1'-en als auch '2'-en auf. '1': alle Register der Reihe
+enthalten eine '1', somit gewinnt Spieler 1. '8': alle Register der Reihe
+enthalten eine '2', somit gewinnt der Spieler 2. Steht ein Gewinner fest, so
+tritt sofort das Ende des Spiels ein. Falls kein Gewinner feststeht wird der
+Rundenzähler, das Register R20, um eins erhöht. Beinhaltet er die Zahl '9', so
+sind '9' Spielzüge vergangen, ohne dass ein Spieler gewonnen hat. Folglich sind
+alle Felder belegt und es tritt ein Unentschieden ein und somit das Ende des
+Spiels. Hat 
+niemand gewonnen und es steht auch kein Unentschieden fest, so wird das 
+Spielerregister entweder von '1' auf '2' oder von '2' auf '1' gesetzt und der
+Spielzyklus beginnt von vorn.
  \end{enumerate}
 
 Am Ende des Spiels:
-\begin{itemize}
- \item neue Runde oder Beenden
- \item bei neuer Runde aufräumen
-\end{itemize}
+\begin{enumerate}
+ \item Ausgabe des Ergebnisses\\
+ Es wird eine Nachricht ausgegeben, die entweder besagt welcher Spieler
+gewonnen 
+ hat, oder ob ein Unentschieden feststeht. Es folgt die Frage, ob eine neue
+Runde gespielt werden Soll. Ist die Eingabe ein 'q' so beendet sich das
+Programm, anderenfalls startet das Spiel neu.
+ \item bei neuer Runde aufräumen\\
+ Vor dem Neustarten müssen alle Spielfeldregister geleert werden und das 
+ Spielerregister wird wieder auf '1' gesetzt.
+\end{enumerate}
 
 
 
