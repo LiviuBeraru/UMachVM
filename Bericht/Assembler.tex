@@ -30,9 +30,7 @@ Informationen wurden maßgeschneidert auf die Bedürfnisse des UMach Debuggers
 festgelegt.
 \end{itemize}
 
-\subsection{Bedienung und Syntax}
-
-\paragraph{Bedienung}
+\subsection{Bedienung}
 
 Der Assembler wird über die Befehlszeile bedient. Die Aufrufsyntax ist folgendermaßen
 definiert:
@@ -55,7 +53,7 @@ Das Argument \emph{file(s)} steht für ein oder mehrere Dateien und wir zwingend
 benötigt. Der Assembler übersetzt alle in \emph{file(s)} genannten Quelltextdateien
 in den UMach Bytecode.
 
-\paragraph{Syntax}
+\subsection{Syntax}
 
 Die Syntax von UMach Quelltextdateien ist relativ einfach gestaltet. Wir
 unterscheiden zwischen den Abschnitten \emph{Code Section} und \emph{Data Section}.
@@ -79,7 +77,7 @@ SET R1 9001
 EOP
 
 .data #begin of data definitions
-.string hello  "Hello World!"
+.string hello  "Hello World!\n" #C-style escaping in strings is OK
 .int    answer 42
 .int    drink  0xCAFE
 \end{lstlisting}
@@ -89,7 +87,99 @@ In diesem Beispiel bilden die Zeilen 1 bis 10 die \emph{Code Section} und die
 
 Zu beachten sind folgende syntaktischen Regeln:
 \begin{itemize}
-    \item foo
-    \item bar
-    \item baz
+    \item Es sind beliebig viele Whitespaces (\verb#`\t'# und \verb*#` '#) vor
+          und nach Tokens zulässig
+    \item Nur Symbolbezeichner (Sprungmarken und Definitionen von Variablen)
+          sind case-sensitiv
+    \item Symbolbezeichner dürfen keine Zahlenwerte sein
+    \item Symbolbezeichner bestehen aus genau einem Wort
+    \item Die Definition einer Sprungmarke endet mit \verb#`:'# und steht in
+          einer eigenen Zeile im Quelltext
+    \item Für alle Dateien gilt der gleiche Namensraum, d.h. namensgleiche
+          Symbolbezeichner in verschiedenen Quelltextdateien sind nicht erlaubt
+    \item Ab \verb|`#'| beginnt ein Kommentar bis einschließlich \verb#`\n'#
 \end{itemize}
+
+\subsection{Implementierung}
+
+Der \emph{uasm} Assembler ist ein 2-pass Assembler, welcher in der
+Programmiersprache C99 implementiert ist. Das Programm benötigt lediglich
+die GNU~Standard~C~Library (\emph{glibc}) sowie die GNOME~\emph{glib} zur
+Compile- und Laufzeit. Der \emph{uasm} Assembler ist ausgelegt und getestet für
+die Nutzung auf 32- \& 64-bit Systemen.
+
+Für die Erzeugung des Programms \emph{uasm} benötigt man einen C99 konformen
+Compiler (bspw. aktuelle Versionen von \emph{GCC} oder \emph{clang}), das
+Programm \emph{GNU make} und die oben genannten Libraries.
+
+\subsubsection{Interne Datenstrukturen}
+
+Eine Hauptaufgabe des Assemblers ist die Übersetzung von Zeichenketten in die
+jeweilige UMach Bytecode Repräsentation. Ein solcher Übersetzungsvorgang kann
+mithilfe von Hashtables fast immer in $O(1)$ ausgeführt werden. Bei der
+Implementierung wurde die Datenstruktur \emph{GHashTable} der \emph{GLib}
+verwendet.
+
+Insgesamt kommen drei Hashtables zum Einsatz:
+\begin{enumerate}
+    \item Eine statische Hashtable zur Übersetzung von Befehlen
+    \item Eine statische Hashtable zur Übersetzung von Registern
+    \item Eine dynamische Hashtable zur Auflösung von Symbolbezeichner
+\end{enumerate}
+
+Bei der Speicherung der Initialisierungswerten von Variablen wird eine
+einfach verkettete Liste eingesetzt (\emph{GSList} der \emph{GLib}).
+Hierbei ist zu beachten, dass nur performante Funktionen wie
+``Einfügen am Anfang'' sowie ``Iteration über alle Elemente'' benötigt werden.
+Der Vorteil beim Einsatz der verketteten Liste ist, dass die
+Funktion ``Iteration über alle Elemente'' in $O(n)$ realisierbar ist. Bei
+Verwendung von \emph{GHashTable} würde der Aufwand für diese Operation hingegen
+in $O(n^2)$ liegen.
+
+\subsubsection{Assemblierung}
+
+Der Assembler parst jede Quelltextdatei zweimal (2-pass Assembler). Mithilfe der
+im ersten Durchgang gesammelten Informationen ist es dem Assembler möglich, im
+zweiten Durchgang den Quelltext Zeile für Zeile zu übersetzen, ohne an manchen
+Stellen ``vorauslesen'' zu müssen.
+
+Hier eine genauere Beschreibung der beiden Durchgänge:
+
+\paragraph{Assembler Pass 1}
+
+Im Pass 1 werden folgende Aufgaben erledigt:
+\begin{itemize}
+    \item Sprungmarken im Quelltext werden erkannt und deren Namen sowie deren
+          Zieladressen in die Symboltabelle eingetragen.
+    \item Die Codegröße (Summe des Speicherplatzbedarfs aller Befehle) wird
+          berechnet.
+    \item Die Initialisierungswerte von Variablen werden gespeichert.
+    \item Die Adressen von Variablen werden berechnet.
+    \item Namen und Adressen von Variablen werden in die Symboltabelle
+          eingetragen.
+\end{itemize}
+
+\paragraph{Assembler Pass 2}
+
+Im Pass 2 werden folgende Aufgaben erledigt:
+\begin{itemize}
+    \item Der UMach Bytecode wird generiert und in das \emph{outfile}
+          geschrieben.
+    \item Die (optionale) Generierung der Debuginformationen.
+    \item Initialisierungswerte von Variablen werden in das \emph{outfile}
+          geschrieben.
+\end{itemize}
+
+\subsubsection{Performance}
+
+Durch die sorgfältige Auswahl der Datenstrukturen und dem Fokus auf performanten
+C-Quelltext zeigt der \emph{uasm} Assembler gute Laufzeiteigenschaften.
+Die Ausflösung von Symbolen erfolgt (mit Ausnahme des Sonderfalls von
+Kollisionen in der Hashtable) unabhängig von der Anzahl der gespeicherten
+Symbolen in konstanter Zeit, sprich $O(1)$.
+Desweiteren wächst die Gesamtlaufzeit einer Assemblierung praktisch linear mit
+der Anzahl der zu assemblierenden Quelltextzeilen, sprich $O(n)$.
+
+In absoluten Zahlen bedeutet dies einen Durchsatz von ca.
+$1.4 \times 10^6 \frac{Zeilen}{Sekunde}$, gemessen auf einem
+AMD Athlon II X2 250 System mit 3 GHz.
