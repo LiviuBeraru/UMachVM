@@ -359,3 +359,25 @@ interpretieren.
 \subsubsection{Symbol File}
 
 Das Symbol File wird in die Datei \emph{outfile}\texttt{.sym} geschrieben.
+Es dient dazu dem Debugger mitzuteilen, auf welche Adressen die Symbole aus den
+Assemblercode-Dateien verweisen. Technisch gesehen handelt es sich um eine
+Textdatei, die $n$ Datentripel (Address, Symbol-Type, Symbol-Name) enthält.
+
+Beispiel:
+\begin{lstlisting}
+000005e0 jmp start_inputint
+000006b4 jmp printint_convert
+0000050c jmp p1Won
+000004d0 jmp draw
+0000070c jmp putchar
+00000784 str promptdraw
+00000794 int newln
+00000540 jmp p2Won
+000005ec jmp inputint_nextnbr
+\end{lstlisting}
+
+Dieses Beispiel sagt unter Anderem aus, dass die Sprungmarke ``start\_inputint''
+auf den Befehl an der Adresse 0x000005e0 im Arbeitsspeicher der UMach~VM zeigt.
+Der Inhalt der String-Variable ``promptdraw'' ist beginnend an der Adresse
+0x00000784 gespeichert. Analog befindet sich an der Adresse 0x00000794 der
+Inhalt der Integer-Variable ``newln''.
