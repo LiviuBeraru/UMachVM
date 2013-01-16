@@ -104,7 +104,7 @@ Zu beachten sind folgende syntaktischen Regeln:
 
 Der \emph{uasm} Assembler ist ein 2-pass Assembler, welcher in der
 Programmiersprache C99 implementiert ist. Das Programm benötigt lediglich
-die GNU~Standard~C~Library (\emph{glibc}) sowie die GNOME~\emph{glib} zur
+die GNU~Standard~C~Library (\emph{glibc}) sowie die GNOME~\emph{GLib} zur
 Compile- und Laufzeit. Der \emph{uasm} Assembler ist ausgelegt und getestet für
 die Nutzung auf 32- \& 64-bit Systemen.
 
@@ -135,6 +135,79 @@ Der Vorteil beim Einsatz der verketteten Liste ist, dass die
 Funktion ``Iteration über alle Elemente'' in $O(n)$ realisierbar ist. Bei
 Verwendung von \emph{GHashTable} würde der Aufwand für diese Operation hingegen
 in $O(n^2)$ liegen.
+
+\subsubsection{Interne Datentypen}
+
+In diesem Abschnitt werden die wichtigsten internen Datentypen des \emph{uasm}
+Assemblers kurz vorgestellt.
+
+\paragraph{Befehle} Befehle werden auf den Datentyp \texttt{command\_t}
+abgebildet und bestehen aus vier Attributen.
+
+\begin{description}
+    \item[opcode] Der OpCode des Befehls entsprechend der UMach Spezifikation
+    \item[opname] Der Name des Befehls entsprechend der UMach Spezifikation
+    \item[format] Das Befehlsformat entsprechend der UMach Spezifikation
+    \item[has\_label] Ein Flag das anzeigt ob der Befehl mit Sprungmarken oder
+                      Variablen verwendet werden kann
+\end{description}
+
+Der \texttt{command\_t} Datentyp ist im C-Quelltext folgendermaßen definiert:
+
+\begin{lstlisting}[language=C]
+typedef enum {
+    CMDFMT_NUL, CMDFMT_NNN, CMDFMT_R00,
+    CMDFMT_RNN, CMDFMT_RR0, CMDFMT_RRN,
+    CMDFMT_RRR
+} cmdformat_t;
+
+typedef struct {
+    uint8_t     opcode;
+    char       *opname;
+    cmdformat_t format;
+    char        has_label;
+} command_t;
+\end{lstlisting}
+
+\paragraph{Register} Register werden auf den Datentyp \texttt{register\_t}
+abgebildet und bestehen aus zwei Attributen.
+
+\begin{description}
+    \item[regcode] Die Nummer des Registers entsprechend der UMach Spezifikation
+    \item[regname] Der Name des Registers entsprechend der UMach Spezifikation
+\end{description}
+
+Der \texttt{register\_t} Datentyp ist im C-Quelltext folgendermaßen definiert:
+
+\begin{lstlisting}[language=C]
+typedef struct {
+    uint8_t regcode;
+    char   *regname;
+} register_t;
+\end{lstlisting}
+
+\paragraph{Symbole} Symbole werden auf den Datentyp \texttt{symbol\_t}
+abgebildet und bestehen aus drei Attributen.
+
+\begin{description}
+    \item[sym\_name] Der vom Benutzer gewählte Name eines Symbols
+    \item[sym\_type] Die Art des Symbols (Sprungmarke, Integer Variable, String Variable)
+    \item[sym\_addr] Die Zieladresse auf die ein Symbol verweist
+\end{description}
+
+Der \texttt{symbol\_t} Datentyp ist im C-Quelltext folgendermaßen definiert:
+
+\begin{lstlisting}[language=C]
+typedef enum {
+    SYMTYPE_JUMP, SYMTYPE_INTDAT, SYMTYPE_STRDAT
+} symbol_type_t;
+
+typedef struct {
+    char         *sym_name;
+    symbol_type_t sym_type;
+    uint32_t      sym_addr;
+} symbol_t;
+\end{lstlisting}
 
 \subsubsection{Assemblierung}
 
@@ -226,9 +299,9 @@ uasm.c          & \emph{main()} Funktion und Benutzerschnittstelle           \\
 assemble.c      & Hauptmodul für das Assemblieren                            \\
 asm\_formats.c  & Modul für das Parsen der verschiedenen Befehlsformate      \\
 symbols.c       & Modul für die Verwaltung der Symboltabelle                 \\
-collect\_data.c & Modul für die Verwaltung der Initialisierungswerten von Variablen \\
-commands.c      & Modul für die Zuordnung Befehlsname $\Rightarrow$ OpCode   \\
-registers.c     & Modul für die Zuordnung Registername $\Rightarrow$ RegCode \\
+collect\_data.c & Modul für die Verwaltung der Initialisierungswerten von Variablen       \\
+commands.c      & Modul für die Zuordnung Befehlsname $\Rightarrow$ \texttt{command\_t}   \\
+registers.c     & Modul für die Zuordnung Registername $\Rightarrow$ \texttt{register\_t} \\
 str\_func.c     & Hilfsfunktionen zur Manipulation von Zeichenketten         \\
 %\hline
 \end{tabular}
