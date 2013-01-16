@@ -309,4 +309,53 @@ str\_func.c     & Hilfsfunktionen zur Manipulation von Zeichenketten         \\
 
 \subsection{Debuginformationen}
 
-foobarbaz
+Die Debuginformationen ermöglichen dem Debugger das Setzen von Haltepunkten auf
+Sprungmarken sowie auf beliebige Zeilen mit Befehlen im Assemblercode.
+Außerdem können anhand der Debuginformationen Inhalte von Variablen ausgelesen
+und verändert werden.
+
+Ist das generieren von Debuginformationen aktiviert, werden die Dateien
+\emph{outfile}\texttt{.fmap}, \emph{outfile}\texttt{.sym} und
+\emph{outfile}\texttt{.debug} erstellt.
+Deren Bedeutung wird in den folgenden Abschnitten beschrieben.
+
+\subsubsection{File Map}
+
+Die sogenannte File Map wird in die Datei \emph{outfile}\texttt{.fmap}
+geschrieben. Sie dient der Indizierung jeder Assemblercode-Datei mit einer ID.
+Technisch gesehen handelt es sich um eine ASCII-Textdatei mit $n$ Zeilen, in
+welchen jeweils eine 1:1 Relation (File-ID, File-Name) steht.
+
+Beispiel:
+\begin{lstlisting}
+0 tictactoe.uasm
+1 func/inputint.uasm
+2 func/newline.uasm
+3 func/printint.uasm
+4 func/putchar.uasm
+\end{lstlisting}
+
+\subsubsection{Debug File}
+
+Das Debug File wird in die Datei \emph{outfile}\texttt{.debug} geschrieben.
+Es dient dazu dem Debugger mitzuteilen, auf welche Adressen die Befehle aus den
+Assemblercode-Dateien abgebildet werden. Technisch gesehen handelt es sich um
+eine Binärdatei, die $n$ 32Bit-Datentripel (File-ID, Line-No, Address) im
+Big-Endian Format enthält.
+
+Beispiel (hexadezimale Notation):\\
+\texttt{00 00 00 00 \vline\ 00 00 00 05 \vline\ 00 00 01 00}\\
+\texttt{00 00 00 00 \vline\ 00 00 00 08 \vline\ 00 00 01 04}\\
+\texttt{00 00 00 00 \vline\ 00 00 00 09 \vline\ 00 00 01 08}\\
+\texttt{00 00 00 00 \vline\ 00 00 00 0f \vline\ 00 00 01 14}\\
+\texttt{00 00 00 00 \vline\ 00 00 00 15 \vline\ 00 00 01 1c}\\
+$\vdots$
+
+Die erste Zeile aus dem Beispiel sagt aus, dass der Befehl aus Zeile 5 der
+Assemblercode-Datei mit der ID 0 an der Adresse 256 im Arbeitsspeicher der
+UMach~VM steht. Die weiteren Zeilen aus dem Beispiel kann man dem entsprechend
+interpretieren.
+
+\subsubsection{Symbol File}
+
+Das Symbol File wird in die Datei \emph{outfile}\texttt{.sym} geschrieben.
