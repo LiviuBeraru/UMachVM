@@ -179,7 +179,61 @@ Kollisionen in der Hashtable) unabhängig von der Anzahl der gespeicherten
 Symbolen in konstanter Zeit, sprich $O(1)$.
 Desweiteren wächst die Gesamtlaufzeit einer Assemblierung praktisch linear mit
 der Anzahl der zu assemblierenden Quelltextzeilen, sprich $O(n)$.
+Der Arbeitsspeicherbedarf wächst linear mit der Anzahl von definierten Symbolen.
 
 In absoluten Zahlen bedeutet dies einen Durchsatz von ca.
 $1.4 \times 10^6 \frac{Zeilen}{Sekunde}$, gemessen auf einem
 AMD Athlon II X2 250 System mit 3 GHz.
+
+\subsubsection{Fehlerdiagnose}
+
+Falls der vom Benutzer geschriebene Assemblercode syntaktische Fehler enthält,
+wird eine Fehlermeldung ausgegeben und die Assemblierung abgebrochen.
+
+Einige Fehlersituationen werden hier anhand von Beispielen genauer diskutiert:
+\begin{lstlisting}[numbers=left, numberstyle=\tiny]
+echo.uasm, line 1: No such command: <SQRT>
+echo.uasm, line 2: Command <CMP> expects RR0: REG REG
+echo.uasm, line 3: Unset label <getinput>
+echo.uasm, line 4: Not a register: <R77>
+echo.uasm, line 6: Label <get_input> already exists
+echo.uasm, line 8: No content for <myint> provided
+\end{lstlisting}
+
+\begin{description}
+    \item[Bsp. 1:] Ein unbekannter Befehl ``SQRT'' wurde verwendet.
+    \item[Bsp. 2:] Die Anzahl der Operaden für den Befehl ``CMP'' ist ungültig.
+    \item[Bsp. 3:] Es wurde versucht an die unbekannte Sprungmarke ``getinput''
+                   zu springen.
+    \item[Bsp. 4:] Ein unbekanntes Register ``R77'' wurde als Operand verwendet.
+    \item[Bsp. 5:] Die Sprungmarke ``get\_input'' wurde ein zweites mal
+                   definiert.
+    \item[Bsp. 6:] Bei der Definition der Variable ``myint'' wurde kein
+                   Initialisierungswert angegeben.
+\end{description}
+
+\subsubsection{Quelltextstruktur}
+
+Der \emph{uasm} Quelltext ist in insgesamt 8 C-Dateien zuzügich deren
+Header-Files aufgeteilt. In der folgenden Tabelle sind die Module genauer
+Spezifiziert.
+
+\begin{center}
+\begin{tabular}{ll}
+C-Datei      & Funktionalität \\
+\hline\hline
+uasm.c          & \emph{main()} Funktion und Benutzerschnittstelle           \\
+assemble.c      & Hauptmodul für das Assemblieren                            \\
+asm\_formats.c  & Modul für das Parsen der verschiedenen Befehlsformate      \\
+symbols.c       & Modul für die Verwaltung der Symboltabelle                 \\
+collect\_data.c & Modul für die Verwaltung der Initialisierungswerten von Variablen \\
+commands.c      & Modul für die Zuordnung Befehlsname $\Rightarrow$ OpCode   \\
+registers.c     & Modul für die Zuordnung Registername $\Rightarrow$ RegCode \\
+str\_func.c     & Hilfsfunktionen zur Manipulation von Zeichenketten         \\
+%\hline
+\end{tabular}
+\end{center}
+
+\subsection{Debuginformationen}
+
+foobarbaz
