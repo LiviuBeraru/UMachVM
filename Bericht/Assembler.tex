@@ -293,13 +293,13 @@ Spezifiziert.
 
 \begin{center}
 \begin{tabular}{ll}
-C-Datei      & Funktionalität \\
+C-Datei         & Funktionalität \\
 \hline\hline
 uasm.c          & \emph{main()} Funktion und Benutzerschnittstelle           \\
 assemble.c      & Hauptmodul für das Assemblieren                            \\
 asm\_formats.c  & Modul für das Parsen der verschiedenen Befehlsformate      \\
 symbols.c       & Modul für die Verwaltung der Symboltabelle                 \\
-collect\_data.c & Modul für die Verwaltung der Initialisierungswerten von Variablen       \\
+collect\_data.c & Modul für die Verwaltung der Inhalte von Variablen         \\
 commands.c      & Modul für die Zuordnung Befehlsname $\Rightarrow$ \texttt{command\_t}   \\
 registers.c     & Modul für die Zuordnung Registername $\Rightarrow$ \texttt{register\_t} \\
 str\_func.c     & Hilfsfunktionen zur Manipulation von Zeichenketten         \\
@@ -315,13 +315,13 @@ Außerdem können anhand der Debuginformationen Inhalte von Variablen ausgelesen
 und verändert werden.
 
 Ist das generieren von Debuginformationen aktiviert, werden die Dateien
-\emph{outfile}\texttt{.fmap}, \emph{outfile}\texttt{.sym} und
-\emph{outfile}\texttt{.debug} erstellt.
+\emph{outfile}.\texttt{fmap}, \emph{outfile}.\texttt{sym} und
+\emph{outfile}.\texttt{debug} erstellt.
 Deren Bedeutung wird in den folgenden Abschnitten beschrieben.
 
 \subsubsection{File Map}
 
-Die sogenannte File Map wird in die Datei \emph{outfile}\texttt{.fmap}
+Die sogenannte File Map wird in die Datei \emph{outfile}.\texttt{fmap}
 geschrieben. Sie dient der Indizierung jeder Assemblercode-Datei mit einer ID.
 Technisch gesehen handelt es sich um eine ASCII-Textdatei mit $n$ Zeilen, in
 welchen jeweils eine 1:1 Relation (File-ID, File-Name) steht.
@@ -335,21 +335,24 @@ Beispiel:
 4 func/putchar.uasm
 \end{lstlisting}
 
+In diesem Beispiel erhält also die Datei ``tictactoe.uasm'' die ID 0 und die
+Dateien mit Hilfsfunktionen erhalten die IDs 1 bis 4.
+
 \subsubsection{Debug File}
 
-Das Debug File wird in die Datei \emph{outfile}\texttt{.debug} geschrieben.
+Das Debug File wird in die Datei \emph{outfile}.\texttt{debug} geschrieben.
 Es dient dazu dem Debugger mitzuteilen, auf welche Adressen die Befehle aus den
 Assemblercode-Dateien abgebildet werden. Technisch gesehen handelt es sich um
 eine Binärdatei, die $n$ 32Bit-Datentripel (File-ID, Line-No, Address) im
 Big-Endian Format enthält.
-
-Beispiel (hexadezimale Notation):\\
+\newpage
+Beispiel (hexadezimale Notation):\\{\small
 \texttt{00 00 00 00 \vline\ 00 00 00 05 \vline\ 00 00 01 00}\\
 \texttt{00 00 00 00 \vline\ 00 00 00 08 \vline\ 00 00 01 04}\\
 \texttt{00 00 00 00 \vline\ 00 00 00 09 \vline\ 00 00 01 08}\\
 \texttt{00 00 00 00 \vline\ 00 00 00 0f \vline\ 00 00 01 14}\\
 \texttt{00 00 00 00 \vline\ 00 00 00 15 \vline\ 00 00 01 1c}\\
-$\vdots$
+$\hdots$}
 
 Die erste Zeile aus dem Beispiel sagt aus, dass der Befehl aus Zeile 5 der
 Assemblercode-Datei mit der ID 0 an der Adresse 256 im Arbeitsspeicher der
@@ -358,7 +361,7 @@ interpretieren.
 
 \subsubsection{Symbol File}
 
-Das Symbol File wird in die Datei \emph{outfile}\texttt{.sym} geschrieben.
+Das Symbol File wird in die Datei \emph{outfile}.\texttt{sym} geschrieben.
 Es dient dazu dem Debugger mitzuteilen, auf welche Adressen die Symbole aus den
 Assemblercode-Dateien verweisen. Technisch gesehen handelt es sich um eine
 Textdatei, die $n$ Datentripel (Address, Symbol-Type, Symbol-Name) enthält.
