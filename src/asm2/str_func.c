@@ -35,21 +35,3 @@ void str_strip_comment(char *str) {
         *c = '\0';
 }
 
-/*
-char *get_nth_str(char *parts[], uint32_t n) {
-    uint32_t i = 0, c = 0;
-
-    while (parts[i] != NULL) {
-        if (parts[i][0] == '\0') {
-            i++;
-            continue;
-        }
-        if (c == n)
-            return parts[i];
-        c++;
-        i++;
-    }
-
-    return NULL;
-}
-*/
