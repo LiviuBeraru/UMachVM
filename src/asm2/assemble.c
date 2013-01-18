@@ -1,3 +1,10 @@
+/*
+ * assemble.c
+ * 
+ * implements the core functionality of the assembler
+ * 
+ */
+
 #include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,6 +23,7 @@ static const char  INTEGER_MARK[] = ".int";    // marks numeric data
 static const char  COMMENT_MARK   = '#';       // marks the beginning of a comment
 static const char JMPLABEL_MARK   = ':';       // marks the end of a jump label definition
 
+// private function signatures
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count);
 static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count,
                              FILE *fmapfile, FILE *debugfile);
