@@ -1,3 +1,11 @@
+/*
+ * registers.c
+ * 
+ * translate register names to register_t
+ * see get_register_by_name()
+ * 
+ */
+
 #include <glib.h>
 #include <string.h>
 #include "registers.h"
