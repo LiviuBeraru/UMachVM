@@ -35,15 +35,15 @@ festgelegt.
 Der Assembler wird über die Befehlszeile bedient. Die Aufrufsyntax ist folgendermaßen
 definiert:
 \begin{quote}\texttt{uasm [-o outfile] [-g] [-w] file(s)}\end{quote}
-Die Bedeutung der einzelnen Elemente wird im folgenden genauer erklärt:
+Die Bedeutung der einzelnen Elemente wird im Folgenden genauer erklärt:
 
 Das \emph{-o} Flag ist optional und benötigt, falls es gesetzt wurde, genau ein
 Argument (\emph{outfile}). Das Argument \emph{outfile} steht für den Namen der
 Datei, in welche der vom Assembler erzeugte UMach Bytecode geschrieben wird. Ist 
-das \emph{-o} Flag nicht gesetzt wird die Datei namens \emph{u.out} verwendet.
+das \emph{-o} Flag nicht gesetzt, wird die Datei namens \emph{u.out} verwendet.
 
 Das \emph{-g} Flag steuert die Generierung von Debuginformationen. Ist das Flag
-gesetzt werden Debuginformationen generiert, ansonsten nicht.
+gesetzt, werden Debuginformationen generiert, ansonsten nicht.
 
 Das \emph{-w} Flag veranlasst den Assembler im Fehlerfall erst dann zu Terminieren,
 nachdem der Benutzer die Eingabetaste gedrückt hat. Dieses Flag wird hauptsächlich
@@ -148,7 +148,7 @@ abgebildet und bestehen aus vier Attributen.
     \item[opcode] Der OpCode des Befehls entsprechend der UMach Spezifikation
     \item[opname] Der Name des Befehls entsprechend der UMach Spezifikation
     \item[format] Das Befehlsformat entsprechend der UMach Spezifikation
-    \item[has\_label] Ein Flag das anzeigt ob der Befehl mit Sprungmarken oder
+    \item[has\_label] Ein Flag das anzeigt, ob der Befehl mit Sprungmarken oder
                       Variablen verwendet werden kann
 \end{description}
 
@@ -192,7 +192,7 @@ abgebildet und bestehen aus drei Attributen.
 \begin{description}
     \item[sym\_name] Der vom Benutzer gewählte Name eines Symbols
     \item[sym\_type] Die Art des Symbols (Sprungmarke, Integer Variable, String Variable)
-    \item[sym\_addr] Die Zieladresse auf die ein Symbol verweist
+    \item[sym\_addr] Die Zieladresse, auf die ein Symbol verweist
 \end{description}
 
 Der \texttt{symbol\_t} Datentyp ist im C-Quelltext folgendermaßen definiert:
@@ -226,7 +226,7 @@ Im Pass 1 werden folgende Aufgaben erledigt:
           Zieladressen in die Symboltabelle eingetragen.
     \item Die Codegröße (Summe des Speicherplatzbedarfs aller Befehle) wird
           berechnet.
-    \item Die Initialisierungswerte von Variablen werden gespeichert.
+    \item Die Initialisierungswerte von Variablen werden zwischengespeichert.
     \item Die Adressen von Variablen werden berechnet.
     \item Namen und Adressen von Variablen werden in die Symboltabelle
           eingetragen.
@@ -250,7 +250,7 @@ C-Quelltext zeigt der \emph{uasm} Assembler gute Laufzeiteigenschaften.
 Die Auflösung von Symbolen erfolgt (mit Ausnahme des Sonderfalls von Kollisionen
 in der Hashtable) unabhängig von der Anzahl der gespeicherten Symbolen in
 konstanter Zeit, sprich $O(1)$.
-Des weiteren wächst die Gesamtlaufzeit einer Assemblierung praktisch linear mit
+Des Weiteren wächst die Gesamtlaufzeit einer Assemblierung praktisch linear mit
 der Anzahl der zu assemblierenden Quelltextzeilen, sprich $O(n)$.
 Der Arbeitsspeicherbedarf wächst linear mit der Anzahl von definierten Symbolen.
 
@@ -276,7 +276,7 @@ echo.uasm, line 8: No content for <myint> provided
 \begin{description}
     \item[Bsp. 1:] Ein unbekannter Befehl ``SQRT'' wurde verwendet.
     \item[Bsp. 2:] Die Anzahl der Operanden für den Befehl ``CMP'' ist ungültig.
-    \item[Bsp. 3:] Es wurde versucht an die unbekannte Sprungmarke ``getinput''
+    \item[Bsp. 3:] Es wurde versucht, an die unbekannte Sprungmarke ``getinput''
                    zu springen.
     \item[Bsp. 4:] Ein unbekanntes Register ``R77'' wurde als Operand verwendet.
     \item[Bsp. 5:] Die Sprungmarke ``get\_input'' wurde ein zweites mal
@@ -289,7 +289,7 @@ echo.uasm, line 8: No content for <myint> provided
 
 Der \emph{uasm} Quelltext ist in insgesamt 8 C-Dateien zuzüglich deren
 Header-Files aufgeteilt. In der folgenden Tabelle sind die Module genauer
-Spezifiziert.
+spezifiziert.
 
 \begin{center}
 \begin{tabular}{ll}
@@ -341,7 +341,7 @@ Dateien mit Hilfsfunktionen erhalten die IDs 1 bis 4.
 \subsubsection{Debug File}
 
 Das Debug File wird in die Datei \emph{outfile}.\texttt{debug} geschrieben.
-Es dient dazu dem Debugger mitzuteilen, auf welche Adressen die Befehle aus den
+Es dient dazu, dem Debugger mitzuteilen, auf welche Adressen die Befehle aus den
 Assemblercode-Dateien abgebildet werden. Technisch gesehen handelt es sich um
 eine Binärdatei, die $n$ 32Bit-Datentripel (File-ID, Line-No, Address) im
 Big-Endian Format enthält.
@@ -362,7 +362,7 @@ interpretieren.
 \subsubsection{Symbol File}
 
 Das Symbol File wird in die Datei \emph{outfile}.\texttt{sym} geschrieben.
-Es dient dazu dem Debugger mitzuteilen, auf welche Adressen die Symbole aus den
+Es dient dazu, dem Debugger mitzuteilen, auf welche Adressen die Symbole aus den
 Assemblercode-Dateien verweisen. Technisch gesehen handelt es sich um eine
 Textdatei, die $n$ Datentripel (Address, Symbol-Type, Symbol-Name) enthält.
 
