@@ -1,3 +1,10 @@
+/*
+ * uasm.c
+ * 
+ * program entry point and command line interface
+ * 
+ */
+
 #include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>
