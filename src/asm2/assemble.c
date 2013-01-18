@@ -23,7 +23,7 @@ static const char  INTEGER_MARK[] = ".int";    // marks numeric data
 static const char  COMMENT_MARK   = '#';       // marks the beginning of a comment
 static const char JMPLABEL_MARK   = ':';       // marks the end of a jump label definition
 
-// private function signatures
+/* private function signatures */
 static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count);
 static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count,
                              FILE *fmapfile, FILE *debugfile);
@@ -37,6 +37,7 @@ static int collect_int_data(asm_context_t *cntxt, char *label, char *content);
 static void free_dynamic_data(asm_context_t *cntxt);
 static char *read_line(asm_context_t *cntxt, FILE *file);
 
+/* translate all elements of files[] to bytecode */
 int assemble(asm_context_t *cntxt, char *files[], int file_count) {
     const size_t outfile_name_len = strlen(cntxt->output_file);
     FILE *fmap_file = NULL, *debug_file = NULL;
@@ -135,7 +136,7 @@ static int assemble_pass_one(asm_context_t *cntxt, char *files[], int file_count
         fclose(f);
     }
 
-    // cntxt->current_addr += 4; // space for .dat marker
+    /* insert all user defined variables into the symbol table */
     if (!insert_data_symbols(cntxt))
         return FALSE;
 
@@ -152,7 +153,7 @@ static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count
         return FALSE;
     }
 
-    /* 2nd run: assemble */
+    /* 2nd run: generate bytecode */
     cntxt->current_addr = INTTABLE_SIZE;
 
     for (int i = 0; i < file_count; i++) {
@@ -182,6 +183,7 @@ static int assemble_pass_two(asm_context_t *cntxt, char *files[], int file_count
     return TRUE;
 }
 
+/* translate a single file of assembly code (infile) to bytecode (outfile) */
 int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debugfile) {
     rewind(infile); // read from begin
 
@@ -201,6 +203,7 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
             break;
             
         if (cntxt->gen_debuginf) {
+            /* assure big endian byte order */
             uint32_t f_id_be = GUINT32_TO_BE(cntxt->current_f_id);
             uint32_t line_be = GUINT32_TO_BE(cntxt->current_line);
             uint32_t addr_be = GUINT32_TO_BE(cntxt->current_addr);
@@ -238,6 +241,7 @@ int assemble_file(asm_context_t *cntxt, FILE *infile, FILE *outfile, FILE *debug
     return TRUE;
 }
 
+/* translate a line of assembly code tokens (items[]) to bytecode (instruction[]) */
 int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t instruction[4]) {
     command_t cmd;
 
@@ -305,6 +309,7 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
     return asm_func(cntxt, items, item_count, instruction);
 }
 
+/* write the initial values of variables to outfile */
 void assemble_data(FILE *outfile) {
     const uint8_t BEGIN_DATA[4] = {0xff, 'D', 'A', 'T'};
 
@@ -323,6 +328,7 @@ void assemble_data(FILE *outfile) {
 
             fwrite(data->string_data.value, sizeof(char), len, outfile);
 
+            /* assure 4-byte alignment */
             while (len % 4 != 0) {
                  fputc('\0', outfile);
                  len++;
@@ -333,6 +339,7 @@ void assemble_data(FILE *outfile) {
     }
 }
 
+/* collect all jump labels of "file" */
 static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
     char *line = NULL; // input line
 
@@ -385,6 +392,7 @@ static int collect_jump_labels(asm_context_t *cntxt, FILE *file) {
     return TRUE;
 }
 
+/* collect all variables of "file" */
 static int collect_data_labels(asm_context_t *cntxt, FILE *file) {
     char *line;
 
@@ -427,6 +435,7 @@ static int collect_data_labels(asm_context_t *cntxt, FILE *file) {
     return TRUE;
 }
 
+/* verify string data format and insert the variable into the variables list */
 static int collect_string_data(asm_context_t *cntxt, char *label, char *content) {
     if (content[0] != '"') {
         print_error(cntxt, "No leading quotation mark in string content <%s>", content);
@@ -449,6 +458,7 @@ static int collect_string_data(asm_context_t *cntxt, char *label, char *content)
     return TRUE;
 }
 
+/* verify integer data and insert the variable into the variables list */
 static int collect_int_data(asm_context_t *cntxt, char *label, char *content) {
     long number;
 
@@ -477,6 +487,7 @@ static void free_dynamic_data(asm_context_t *cntxt) {
     cntxt->read_buf_size = 0;
 }
 
+/* read one line of assembly code and remove unnecessary parts */
 static char *read_line(asm_context_t *cntxt, FILE *file) {
     /* read one line */
     if (getline(&(cntxt->read_buf), &(cntxt->read_buf_size), file) == -1)
