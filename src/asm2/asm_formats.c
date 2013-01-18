@@ -1,3 +1,10 @@
+/*
+ * asm_formats.c
+ * 
+ * translate command operands from string to bytecode format
+ * 
+ */
+
 #include <glib.h>
 #include <stddef.h>     // size_t, NULL
 #include "uasm.h"
