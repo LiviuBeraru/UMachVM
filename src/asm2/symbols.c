@@ -1,3 +1,10 @@
+/*
+ * symbols.c
+ * 
+ * functions to manage and query the symbol table
+ * 
+ */
+
 #include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -58,6 +65,7 @@ void free_symbols() {
     symbols_ht = NULL;
 }
 
+// creates the symbol file used by the debugger
 void write_symbols_file(FILE *f) {
     if (symbols_ht == NULL)
         return;
