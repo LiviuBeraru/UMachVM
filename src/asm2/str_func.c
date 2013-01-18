@@ -1,3 +1,10 @@
+/*
+ * str_func.c
+ * 
+ * helper functions for string translation / manipulation
+ * 
+ */
+
 #include <glib.h>
 #include <string.h>
 #include <stdlib.h>
@@ -9,12 +16,12 @@ int str_to_int(const char *str, long *num) {
 
     char *endprt = 0;
     
-    /* we use the unsigned version strtoul
-     * and not the signed strtol because
+    /* we use the unsigned version strtoul()
+     * and not the signed strtol() because
      * it works with signed values like
      * 0xAABBCCDD
      */
-    long result = strtoul(str, &endprt, 0); // base "0" means base 16
+    long result = strtoul(str, &endprt, 0); // base 0 accepts DEC, 0xHEX, 0OCTAL
     
     if (*endprt == '\0') {
         *num = result;
@@ -34,4 +41,3 @@ void str_strip_comment(char *str) {
     if (c != NULL)
         *c = '\0';
 }
-
