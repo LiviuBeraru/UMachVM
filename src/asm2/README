@@ -1,0 +1,17 @@
+Build Instructions
+==================
+
+To build the "uasm" assembler please make sure you have the following tools
+installed:
+
+* GCC C-Compiler
+* GNOME GLib in some recent version
+* GNU make
+* pkg-config (http://www.freedesktop.org/wiki/Software/pkg-config)
+
+These requirements are very common and most probably they are present on your
+system.
+
+Just type "make" in your shell to compile the assembler!
+
+PS: If you prefer clang over GCC change line 1 of Makefile to "CC = clang"
