@@ -1,3 +1,10 @@
+/*
+ * collect_data.c
+ * 
+ * functions to collect variables defined by the user
+ * 
+ */
+
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,6 +38,7 @@ void insert_int_data(char *label, int32_t value) {
     data_list = g_slist_prepend(data_list, data);
 }
 
+// insert all collected variables into the symbol table
 int insert_data_symbols(asm_context_t *cntxt) {
     data_list = g_slist_reverse(data_list);
 
@@ -52,7 +60,7 @@ int insert_data_symbols(asm_context_t *cntxt) {
                 return FALSE;
             }
 
-            // find next ALIGNED addr
+            // find next ALIGNED address
             cntxt->current_addr += (strlen(data->string_data.value) + 1);
             while (cntxt->current_addr % 4 != 0)
                 cntxt->current_addr++;
