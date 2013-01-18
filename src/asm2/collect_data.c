@@ -18,16 +18,19 @@ GSList *get_data_list() {
     return data_list;
 }
 
+// insert a string variable into the data_list
 void insert_string_data(char *label, char *value) {
     data_t *data = malloc(sizeof(data_t));
     
     data->type = DATATYPE_STRING;
     data->string_data.label = g_strdup(label);
+    // convert all escape sequences into the matching 1-byte ASCII code
     data->string_data.value = g_strcompress(value);
 
     data_list = g_slist_prepend(data_list, data);
 }
 
+// insert a integer variable into the data_list
 void insert_int_data(char *label, int32_t value) {
     data_t *data = malloc(sizeof(data_t));
    
