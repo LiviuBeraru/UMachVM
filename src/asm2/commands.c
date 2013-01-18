@@ -1,3 +1,11 @@
+/*
+ * commands.c
+ * 
+ * translate command names to command_t
+ * see get_command_by_name()
+ * 
+ */
+
 #include "commands.h"
 
 #include <glib.h>
