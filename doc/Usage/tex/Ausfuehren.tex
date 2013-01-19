@@ -2,14 +2,13 @@
 
 Das Programm \texttt{umach} ist die Implementierung der virtuellen Maschine. Es
 kann sein, dass man es zuerst kompilieren muss. Für die Kompilierung wird im
-Quellenverzeichnis eine Makefile Datei zur Verfügung gestellt. Wechselt man in
-das Quellenverzeichnis, so kann man das Program mit dem folgenden Befehl
+Quellenverzeichnis ein Makefile zur Verfügung gestellt. Wechselt man in
+das Quellenverzeichnis, so kann man das Programm mit dem folgenden Befehl
 kompilieren:
 \begin{lstlisting}
 make
 \end{lstlisting}
 Das Programm wurde auf Linux getestet.
-
 
 Das \texttt{umach} Programm kann wie folgt ausgeführt werden:
 \begin{lstlisting}
@@ -19,11 +18,10 @@ Das \texttt{umach} Programm kann wie folgt ausgeführt werden:
 Dabei wir die Datei \texttt{programdatei.umx} ausgeführt. Die Optionen sind
 unten erläutert.
 
-
 \subsection{Optionen}
-Bei der Ausführung eines UMach-Programm ist es möglich, Optionen anzugeben, die
+Bei der Ausführung eines UMach-Programms ist es möglich, Optionen anzugeben, die
 die Ausführung in bestimmter Weise beeinflussen. Alle Optionen sind optional und
-werden mit Startwerten gesetzt. Es stehen die folgenden Optionen zur Verfügung.
+werden mit Standardwerten initialisiert. Es stehen die folgenden Optionen zur Verfügung:
 \begin{description}
 \item[-m]
 Mit \glqq{}-m $z$\grqq{}, wobei \glqq{}z\grqq{} eine positive ganze Zahl ist,
@@ -35,13 +33,13 @@ mit $2048$ Bytes Arbeitsspeicher gestartet.
 
 \item[-d]
 Diese Option veranlasst die Maschine im \glqq{}debug\grqq{}-Modus zu starten.
-Hierbeit wird der eingebaute Debugger gestartet, nicht ein externer Debugger.
+Hierbei wird der eingebaute Debugger gestartet, nicht ein externer.
 Siehe den Abschnitt \ref{sec:debuggen} ab der Seite \pageref{sec:debuggen}.
 
 \item[-s]
 Disassembliert das angegebene Programm und zeigt das Ergebnis in der Konsole an.
 Unter Verwendung der Option -x werden alle nummerischen Werte im
-hexadezimalsystem angezeigt.
+Hexadezimalsystem angezeigt.
 
 \item[-x]
 Die Darstellung von Zahlenwerten in der Ausgabe des \glqq{}debug\grqq{}-Modus,

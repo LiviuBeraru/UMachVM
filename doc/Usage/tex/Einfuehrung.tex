@@ -1,19 +1,19 @@
 \section{Einführung}
 
 \subsection{Ein Beispiel}
-Gleich am Anfang soll ein Beispiel für die Verwendung der UMach
-virtuellen Maschine und des Assemblers gegeben werden.
+Gleich am Anfang soll ein Beispiel für die Verwendung der
+virtuellen Maschine UMach und des Assemblers gegeben werden.
 
 Wir haben ein UMach-Programm in eine normale Textdatei geschrieben. Das Programm
-kann sich über mehrere Dateien erstrecken, hier aber verwenden wir nur eine
-Datei. Das Programm sieht wie folgt aus:
+kann sich über mehrere Dateien erstrecken, hier verwenden wir nur eine Datei.
+Das Programm sieht wie folgt aus:
 
 \lstinputlisting[caption={Ein einfaches Beispiel}]{progs/prog1.uasm}
 
 Dieses Programm wurde in der Datei \texttt{prog1.uasm} gespeichert (die Endung
 der Datei ist eigentlich egal). Wir gehen davon aus, dass der Assembler
 \texttt{uasm}, die Programmdatei \texttt{prog1.uasm} und die virtuelle Maschine
-\texttt{umach} sich in dem selben Verzeichniss befinden. Sonst muss man die
+\texttt{umach} sich in dem selben Verzeichnis befinden. Sonst muss man die
 Befehle entsprechend anpassen.
 
 Das Programm kann wie folgt assembliert werden:
@@ -21,21 +21,21 @@ Das Programm kann wie folgt assembliert werden:
  ./uasm -o prog.ux prog1.uasm
 \end{lstlisting}
 
-Die Option \texttt{-o} gibt die Ausgabedatei an. Wird diese Option nicht
-angegeben, so wird das assemblierte Programm in die Datei \texttt{u.out}
-geschrieben. Ergebnis des Assemblers is also die Datei \texttt{prog.ux}. Jetzt
-kann man diese Datei \glqq ausführen\grqq:
+Die Option \texttt{-o} gibt die Ausgabedatei an. Ohne diese Option wird das
+assemblierte Programm in die Datei \texttt{u.out} geschrieben. Ergebnis des
+assemblierens ist also die Datei \texttt{prog.ux}. Jetzt kann man diese Datei
+\glqq ausführen\grqq:
 \begin{lstlisting}
  ./umach prog.ux
 \end{lstlisting}
-Das Programm beendet sich ohne Ausgabe. Starten wird also das Programm im
+Das Programm beendet sich ohne Ausgabe. Starten wir also das Programm im
 Debug-Modus (Option \texttt{-d}):
 \begin{lstlisting}
  ./umach -d prog.ux
 \end{lstlisting}
 
-Es wird die erste Anweisung angezeigt, der aktuelle Programm-Counter (Inhalt
+Es wird die erste Anweisung angezeigt, der aktuelle Program Counter (Inhalt
 des Registers \texttt{PC}) und ein Prompt, der auf eine Eingabe von uns wartet.
-So könntes es weiter gehen:
+So könnte es weiter gehen:
 
 \lstinputlisting[nolol]{progs/prog1.output}

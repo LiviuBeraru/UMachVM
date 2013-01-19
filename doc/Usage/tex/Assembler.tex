@@ -2,111 +2,82 @@
 
 \subsection{Eingabe Dateien}
 
-Es können beliebig viele Programmdateien angegeben werden. Sie werden der
-Reihe nach abgearbeitet. Man beachte, dass die Instruktion \texttt{EOP} das
-Ende des Programms signalisiert. Falls nachher noch weitere Befehle, eventuell
-in anderen Dateien, angegeben werden, werden diese zwar assembliert, aber nicht
-ausgeführt.
+Es können beliebig viele Assemblercode-Dateien angegeben werden. Sie werden der
+Reihe nach assembliert. Man beachte, dass die Instruktion \texttt{EOP} das
+Ende des Programms signalisiert und die Virtuelle Maschine anhält, falls dieser
+Befehl erreicht wird.
 
-Alles außer Labels ist case insensitive. Man kann beliebig Leerzeichen und
-Tabulatoren (Whitespaces) verwenden.
-
+Im Assemblercode wird nicht zwischen Groß- und Kleinschreibung unterschieden,
+wobei Namen von Sprungmarken und Variablen eine Ausnahme darstellen.
 
 Siehe den Abschnitt \ref{subsubsec:Funktionen-Beispiel} ab der Seite
-\pageref{subsubsec:Funktionen-Beispiel} für ein Beispiel, in dem mehrere Dateien
-für ein Programm verwendet werden.
+\pageref{subsubsec:Funktionen-Beispiel} für ein Beispiel, in dem mehrere
+Assemblercode-Dateien für ein Programm verwendet werden.
 
-\subsection{Labels}
+\subsection{Sprungmarken}
 
-Der UMach-Assembler unterstüzt die Verwendung von sogenannten \glqq Labels\grqq,
-oder Sprungmarken. Ein Label markiert das Sprungziel für die verschiedenen
-Sprungbefehle.
+Der UMach-Assembler unterstützt die Verwendung von sogenannten Sprungmarken.
+Eine Sprungmarke markiert das Sprungziel für die verschiedenen Sprungbefehle.
 
-Um ein Label im Programmcode zu definieren, schreibt man den
-Labelnamen, gefolgt von einem Doppelpunkt. Labelnamen dürfen selbst keine
-Whitespaces beinhalten.
+Um eine Sprungmarke im Programmcode zu definieren, schreibt man den Namen der
+Sprungmarke, gefolgt von einem Doppelpunkt. Namen von Sprungmarken dürfen keine
+Whitespaces (Leerzeichen oder Tabulatoren) beinhalten.
 
-Ein Label muss immer von einem Befehl gefolgt werden, auch wenn dieser Befehl
-ein \texttt{NOP} ist. Labels, die von keinem Befehl gefolgt werden gelten als
-undefiniert und ein Sprung zu diesem Label ist ein Fehler. Beispiel:
-\begin{lstlisting}
-jmp label
-label:
-\end{lstlisting}
-Hier wird das Label \texttt{label} nicht definiert, da kein Befehl nach diesem
-Label folgt. Die Markierung des Datenbereichs gilt nicht als Definition eines
-Labels:
-\begin{lstlisting}
-jmp label
-label:
-.data
-\end{lstlisting}
-Dieses Programm wird ebenfalls nicht assembliert.
+Folgen von Sprungmarken, die auf den selben Befehl zeigen, werden unterstützt.
+Dabei muss jede Sprungmarke in einer eigenen Zeile definiert sein. Sprungmarken
+zeigen immer auf den ersten Befehl der nach der Definition der Sprungmarke
+auftaucht. Das Programm \ref{lst:example_labels} zeigt ein Beispiel für die 
+Verwendung von (mehrfachen) Sprungmarken.
 
-Mehrfache Labels, die auf den selben Befehl zeigen, werden unterstützt. Diese
-können beliebig im Code geschrieben werden, d.h. sie können auf verschiedenen
-Zeilen oder auf einer einzigen Zeile geschrieben werden. Mehrfache Labels
-zeigen jeweils auf den nächsten Befehl. Das Programm \ref{lst:example_labels}
-zeigt ein Beispiel für die Verwendung der (mehrfachen) Labels.
-
-\lstinputlisting[caption={Beispiel für Labels},label={lst:example_labels}]
+\lstinputlisting[caption={Beispiel für Sprungmarken},label={lst:example_labels}]
 {progs/example_labels.uasm}
 
-In diesem Beispiel zeigen die Labels \texttt{loop}, \texttt{do}, \texttt{it} und
-\texttt{now} alle auf den selben Befehl: \texttt{cmp r1 zero}. Zu diesem Befehl
-wird gesprungen, indem man einen von diesen Labels verwendet. Hier bewirken
-beide Sprungbefehle \texttt{jmp loop} und \texttt{jmp do} einen Sprung zum
-selben \texttt{cmp}-Befehl. Die Labels \texttt{finish} und \texttt{end} zeigen
-auf den Befehl \texttt{EOP}. Man bemerkt auch die freie Verwendung der
-Leerzeichen (über die Lesbarkeit dieses Beispiels lässt sich diskutieren).
+In diesem Beispiel zeigen die Sprungmarken \texttt{loop} und \texttt{do} auf den
+gleichen Befehl: \texttt{cmp r1 zero}. Analog zeigen die Sprungmarken
+\texttt{finish} und \texttt{end} auf den Befehl \texttt{EOP}.
 
+\subsection{Variablen}
 
-\subsection{Programmdaten}
+Variablen werden nach der Anweisung \texttt{.data} angegeben. Diese Anweisung
+muss alleine in einer Zeile stehen.
 
-Daten werden nach der Anweisung \texttt{.data} angegeben. Diese Anweisung muss
-alleine in einer eigenen Zeile stehen.
+Die Variablen können auf verschiedenen Assemblercode-Dateien verteilt werden,
+sie werden vom Assembler zusammengefügt und ans Ende der assemblierten Datei
+geschrieben.
 
-Die Programmdaten können auch auf verschiedenen Assemblercode-Dateien verteilt
-werden, sie werden vom Assembler zusammengefügt und ans Ende der assemblierten
-Datei eingefügt.
-
-Alle Daten haben jeweils eine Länge, die ein Vielfaches von 4 Byte darstellt.
+Alle Variablen haben jeweils eine Länge, die ein Vielfaches von 4 Byte darstellt.
 Bedarf ein Datenelement weniger als $4 \times n$ Bytes an Speicherplatz, so wird
 es trotzdem auf eine durch 4 teilbare Länge mit Nullbytes gefüllt.
 
 \subsubsection{Strings}
 
-String Daten werden mit der Anweisung \texttt{.string} angegeben. Nach
-\texttt{.string} kommt der Name des Strings und dann der eigentlich String
-zwischen Anführungszeichen. Siehe das Programm \ref{lst:Datenverwendung} für ein
+String Variablen werden mit der Anweisung \texttt{.string} definiert. Es folgt
+der Name der String Variable und abschließend der Initialisierungswert in 
+doppelten Anführungszeichen. Siehe das Programm \ref{lst:Datenverwendung} für ein
 Beispiel.
 
-Strings werden so assembliert, dass sie immer ein Vielfaches von 4 Bytes
-belegen. Braucht der textuelle Inhalt des Strings weniger als 4 Byte, so wird
-der String mit Nullbytes gefüllt.
-
+String Variablen werden von dem Assembler automatisch mit einem Nullbyte
+terminiert.
 
 \subsubsection{Ganze Zahlen}
 
-Ganze Zahlen werden mit der Anweisung \texttt{.int} angegeben. Nach
-\texttt{.int} folgt der Name (Label) der Zahl, dann der Wert. Dieser
+Integer Variablen werden mit der Anweisung \texttt{.int} definiert. Es folgt
+der Name der Integer Variable und abschließend der Initialisierungswert. Dieser
 kann im Hexa-, Oktal- oder Dezimalsystem angegeben werden, analog zu der
-C oder Java Programmiersprache.
+C oder Java Syntax (\texttt{0x} bzw. \texttt{0} Präfix).
 
-\lstinputlisting[caption={Verwendung der Daten},label={lst:Datenverwendung}]
+\lstinputlisting[caption={Verwendung von Variablen},label={lst:Datenverwendung}]
 {progs/example_data.uasm}
 
-Angenommen, der Assembler \texttt{uasm}, die virtuelle Maschine
-\texttt{umach} und das Programm \texttt{example\_data.uasm} befinden sich im
-aktuellen Arbeitsverzeichniss, kann das Programm \ref{lst:Datenverwendung} 
-wie folgt assembliert und ausgeführt werden:
+Angenommen, der Assembler \texttt{uasm}, die virtuelle Maschine \texttt{umach}
+und das Programm \texttt{example\_data.uasm} befinden sich im aktuellen
+Arbeitsverzeichniss, kann das Programm \ref{lst:Datenverwendung}  wie folgt
+assembliert und ausgeführt werden:
 \begin{lstlisting}
 ./uasm example_data.uasm
 ./umach u.out
 \end{lstlisting}
 Es wird lediglich \glqq Hallo Welt\grqq\ ausgegeben.
-
-
 
 \subsection{Funktionen}
 
@@ -115,27 +86,24 @@ Der UMach Assembler unterstützt indirekt die Verwendung von Funktionen.
 \subsubsection{Aufbau einer Funktion}
 
 Eine Funktion auf der Assembler-Ebene ist nichts anderes als eine Codesequenz,
-die mit einem Label versehen ist und deren letzte Instruktion ein \texttt{RET}
-ist (von Return). Zu diesem Code wird mit der Anweisung \texttt{CALL}
-gesprungen. Das Label ist der Name der Funktion.
+die mit einer Sprungmarke versehen ist und deren letzte Instruktion ein
+\texttt{RET} ist (RET wie ``Return''). Zu diesem Code wird mit der Anweisung
+\texttt{CALL} gesprungen. Der Name der Sprungmarke ist auch Name der Funktion.
 
 Die virtuelle Maschine UMach kennt keine Funktionen, sondern nur einzelne
-Maschinenbefehle. Sie kennt also auch keine Argumente, Parameter, Blöcke und
-Rückgabewerte. All diese Elemente, die in höheren Programmiersprachen eine
-Funktion (Methode) ausmachen, müssen also vom Programmierer selbst implementiert
-werden. Jeder Programmierer ist also frei in der Entscheidung, wie er diese
-Elementen implementiert, wie er überhaupt einem Codeabschnitt Argumente übergibt
-und wie er Rückgabewerte darstellt. 
+Maschinenbefehle. Sie kennt also auch keine Argumente, Gültigkeitsbereiche oder
+Rückgabewerte. All diese Elemente, welche in höheren Programmiersprachen eine
+Funktion (oder Methode) ausmachen, müssen also vom Programmierer selbst
+implementiert werden. Jeder Programmierer ist frei in der Entscheidung, wie er
+diese Elemente implementiert.
 
 Um diese Entscheidungen zu erleichtern, kann man einige Konventionen befolgen.
-Eine solche Konvention wird in den folgenden Punkten gegeben. Man muss aber 
-beachten, dass es sich nur um eine Konvention, bzw. um den Vorschlag einer
-Konvention handelt. Jedem steht es frei sich andere Konventionen und Regeln
-auszudenken.
+Eine solche Konvention wird in den folgenden Punkten gegeben. Allerdings steht
+es dem Benutzer frei, sich andere Konventionen und Regeln auszudenken.
 
 \paragraph{Name der Funktion}
-Der Name der Funktion wird als Label angeben. Eine Funktion fängt also wie folgt
-an:
+Der Name der Funktion wird als Sprungmarke angeben. Eine Funktion beginnt also
+wie folgt:
 \begin{lstlisting}
 funktionsname:
     anweisung
@@ -143,41 +111,37 @@ funktionsname:
     ...
 \end{lstlisting}
 
-
 \paragraph{Ende der Funktion}
 
-Das Ende der Funktion wird durch den Befehl \texttt{RET} markiert (von
-\glqq return\grqq). Für mehr Informationen betreffend dieses Befehls siehe die
-Spezifikation der UMach Maschine (Abschnitt 3.8.3).
-
+Das Ende einer Funktion wird durch den Befehl \texttt{RET} markiert.
+Für mehr Informationen betreffend dieses Befehls siehe die Spezifikation der
+UMach Maschine (Abschnitt 3.8.3).
 
 \paragraph{Argumente}
 
-Die Argumente einer Funktion werden vor dem Aufruf auf den Stack abgelegt und
-zwar in umgekehrter Reihenfolge\footnote{Dies entspricht übrigens gängiger
-Praxis.}. Innerhalb der Funktion werden die Argumente mit Hilfe des Registers
-\texttt{SP} (Stack Pointer) und eines Offsets abgelesen.
+Die Argumente einer Funktion werden in umgekehrter Reihenfolge vor dem Aufruf
+auf den Stack abgelegt\footnote{Dies entspricht übrigens gängiger Praxis.}.
+Innerhalb der Funktion werden die Argumente mithilfe des Registers \texttt{SP}
+(Stack Pointer) und eines Offsets abgelesen.
 
 Möchte man z.B. eine Funktion namens \texttt{max} mit zwei Argumenten aufrufen
-und befindet sich das erste Argument in \texttt{R1} und das zweite in
-\texttt{R2}, so pusht man vor dem Aufruf diese zwei Argumente auf den Stack in
-umgekehrter Reihenfolge (damit sie die Funktion in richtiger Reihenfolge liest):
+und befindet sich das erste Argument in \texttt{R1} und das zweite in \texttt{R2},
+kopiert man vor dem Aufruf diese zwei Argumente in umgekehrter Reihenfolge auf
+den Stack:
 \begin{lstlisting}
 PUSH R2
 PUSH R1
 CALL max
 \end{lstlisting}
-In der Funktion, werden die Adressen der Argumente anhand eines Offsets zum
-Register \texttt{SP} berechnet und dann mit dem Befehl \texttt{LW} (load word)
+In der Funktion werden die Adressen der Argumente anhand eines Offsets relativ
+zum Register \texttt{SP} berechnet und dann mit dem Befehl \texttt{LW} (Load Word)
 geladen. Dabei muss man folgendes beachten:
 \begin{enumerate}
- \item Der Befehl \texttt{CALL}, mit dem man die Funktion aufruft, pusht die
-       Rücksprungadresse aus der Funktion auf den Stack bevor er den Program
-       Counter \texttt{PC} verändert. Das ergibt einen zusätzlichen Eintrag 
-       auf den Stack.
- \item Jeder Stack Eintrag ist 4 Byte groß, egal was in diesem gespeichert wird.
+ \item Durch den Befehl \texttt{CALL} wird die Rücksprungadresse auf den Stack
+       gelegt. Das ergibt einen zusätzlichen Eintrag auf den Stack.
+ \item Jeder Stack Eintrag ist 4 Byte groß, unabhängig von dessen Inhalt.
 \end{enumerate}
-Das ergibt beim Eintritt in die Funktion das folgende Stack-Layout:
+Daraus ergibt sich beim Eintritt in die Funktion das folgende Stack-Layout:
 \begin{center}
  \begin{tabular}{ll}
   Adresse     & Inhalt \\\hline
@@ -185,11 +149,11 @@ Das ergibt beim Eintritt in die Funktion das folgende Stack-Layout:
   $\$SP + 4$  & Erstes Argument   \\
   $\$SP + 8$  & Zweites Argument  \\
   \ldots      & \ldots            \\
-  $\$SP + 4n$ & $n$. Argument
+  $\$SP + 4n$ & $n$-tes Argument
  \end{tabular}
 \end{center}
-Um an die zwei Argumente der \texttt{max} Funktion zu gelangen, wird also in der
-Funktion geschrieben:
+Um an die zwei Argumente der \texttt{max} Funktion zu gelangen, kann man also
+folgendes schreiben:
 \begin{lstlisting}
 ADDI R17 SP 4
 LW   R17 R17
@@ -197,76 +161,74 @@ LW   R17 R17
 ADDI R18 SP 8
 LW   R18 R18
 \end{lstlisting}
-Das speichert in das Register \texttt{R17} die Stack-Adresse, wo \texttt{R1}
-gepusht wurde und dann gleich aus dieser Adresse wieder in \texttt{R17} den
-Wert von \texttt{R1} geladen. Analog für \texttt{R2} und \texttt{R18}.
+Durch diesen Code stehen also die Argumente (aus \texttt{R1}/\texttt{R2}) nach
+Aufruf der Funktion \texttt{max} in \texttt{R17}/\texttt{R18}.
 
-
-\paragraph{Rückgabewert}
+\paragraph{Rückgabewerte}
 Es gibt viele Möglichkeiten, einen Wert aus einer Funktion zurückzugeben.
 Einige davon wären:
 \begin{itemize}
- \item Rückgabewert in einem vorgeschriebenen oder vereinbarten Register.
- \item Rückgabewert auf dem Stack, wobei der aufrufende Code vor dem Aufruf
+ \item Rückgabewerte in einem vorgeschriebenen oder vereinbarten Register speichern.
+ \item Rückgabewerte auf dem Stack speichern, wobei der aufrufende Code vor dem Aufruf
        dafür sorgt, dass entsprechende Stack-Einträge reserviert werden
        (\texttt{SP} dekrementieren).
- \item Rückgabewert auf dem Stack, wobei die Funktion selber den Stack
+ \item Rückgabewerte auf dem Stack speichern, wobei die Funktion selber den Stack
        manipuliert.
- \item Rückgabe an vorgeschriebener oder vereinbarter Heap-Adresse.
+ \item Rückgabewerte an vorgeschriebener oder vereinbarter Heap-Adresse speichern.
  \item etc.
 \end{itemize}
+
 Eine der gängigsten und effizientesten Methoden ist allerdings, den Wert in
-einem bestimmten Register abzulegen. Für diese Methode haben wir uns auch
-entschieden, und zwar benutzen wir das Register \texttt{R32}, das letze
-Register\footnote{Für x86 verwendet man das Register \texttt{eax} für
-Rückgabewerte.}. Wird also einen Wert zurückzugeben, so wird er vor dem
-\texttt{RET} Befehl in das Register \texttt{R32} kopiert.
+einem bestimmten Register abzulegen. Auch wir nutzen diese Methode und verwenden
+dafür das Register \texttt{R32}. Wird ein Wert zurückzugeben, kopiert der
+\texttt{RET} Befehl diesen in das Register \texttt{R32}.
 
-
-\paragraph{Überschreiben der Register}
-Es kann sehr schnell passieren, dass eine Funktion Register überschreibt, die
-von einer anderen Funktion verwendet werden. Verwendet z.B. eine Funktion die
-Register \texttt{R1} bis \texttt{R8} für ihre Berechnungen, und ruft sie
-irgendwann eine zweite Funktion auf, die die selben Register verwendet, so
-werden in der aufrufenden Funktion die Register verändert, ohne dass diese davon
-überhaupt etwas ``merkt''. Ein Beispiel dazu:
-\begin{lstlisting}
-main:
-   SET R1 5
-   SET R2 6
-   INC R1
-   DEC R2
-   CALL function
-   RET
-
-function:
-   CP R3 R1
-   CP R1 R2
-   CP R2 R3
-   RET
-\end{lstlisting}
-
-Hier verändert die Funktion \texttt{function} die Werte der Register \texttt{R1}
-und \texttt{R2}, die auch von der Funktion \texttt{main} verwendet werden.
-Diese Art von unbeabsichtigter Überschreibung der Register führt sehr schnell zu
-schwer zu findenden Fehler. Daher verwenden wir eine Programmiertechnik, die
-dieses Problem vermeiden sollte: wir überlegen uns vor (oder während) der
-Implementierung, welche Register wollen wir benutzen und gleich am Anfang der
-Funktion, pushen wir diese Register auf den Stack. Vor dem \texttt{RET} popen
-wir die Register wieder zurück (in umgekehrter Reihenfolge). Im nächsten
-Beispiel kann man diese Technik sehen.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\paragraph{Überschreiben der Register}
+%Es kann sehr schnell passieren, dass eine Funktion Register überschreibt, die
+%von einer anderen Funktion verwendet werden. Verwendet z.B. eine Funktion die
+%Register \texttt{R1} bis \texttt{R8} für ihre Berechnungen, und ruft sie
+%irgendwann eine zweite Funktion auf, die die selben Register verwendet, so
+%werden in der aufrufenden Funktion die Register verändert, ohne dass diese davon
+%überhaupt etwas ``merkt''. Ein Beispiel dazu:
+%\begin{lstlisting}
+%main:
+%   SET R1 5
+%   SET R2 6
+%   INC R1
+%   DEC R2
+%   CALL function
+%   RET
+%
+%function:
+%   CP R3 R1
+%   CP R1 R2
+%   CP R2 R3
+%   RET
+%\end{lstlisting}
+%
+%Hier verändert die Funktion \texttt{function} die Werte der Register \texttt{R1}
+%und \texttt{R2}, die auch von der Funktion \texttt{main} verwendet werden.
+%Diese Art von unbeabsichtigter Überschreibung der Register führt sehr schnell zu
+%schwer zu findenden Fehler. Daher verwenden wir eine Programmiertechnik, die
+%dieses Problem vermeiden sollte: wir überlegen uns vor (oder während) der
+%Implementierung, welche Register wollen wir benutzen und gleich am Anfang der
+%Funktion, pushen wir diese Register auf den Stack. Vor dem \texttt{RET} popen
+%wir die Register wieder zurück (in umgekehrter Reihenfolge). Im nächsten
+%Beispiel kann man diese Technik sehen.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \paragraph{Beispiel}
-Hier ein Beispiel für den Aufruf und Implementierung einer Funktion. Es wird
-eine einfache \texttt{max} Funktion implementiert, die die größere aus zwei
-Zahlen zurückgibt. Die Rückgabe erfolgt im Register \texttt{R32}.
+Folgend ein Beispiel für den Aufruf und die Implementierung einer Funktion. Es
+wird eine einfache \texttt{max} Funktion implementiert, welche die größere aus zwei
+Zahlen ermittelt. Die Rückgabe erfolgt im Register \texttt{R32}.
 
-Diese Funktion arbeitet mit den Registern \texttt{R17} und \texttt{R18}, also
-werden diese zuerst auf Stack gepusht. Das ist für dieses Beispiel nicht
-zwingend notwendig, da der restliche Code die Register nicht verwendet, aber die
-Technik soll vorgestellt werden. Danach erfolgt eine Berechnung der
-Stack-Adressen, wo die zwei Argumente liegen. Dazu ist es hilfreich, sich das
-Stack-Layout nach dem Pushen der zwei Arbeitsregister klarzumachen:
+Diese Funktion arbeitet mit den Registern \texttt{R17} und \texttt{R18}, deshalb
+werden diese zuerst auf den Stack kopiert. Das ist für dieses Beispiel nicht
+zwingend notwendig, da der restliche Code diese Register nicht verwendet, aber
+die Technik soll vorgestellt werden. Danach erfolgt eine Berechnung der
+Stack-Adressen beider Argumente. Dazu ist es hilfreich, sich das Stack-Layout
+nach dem Kopieren der zwei Arbeitsregister zu veranschaulichen:
 
 \begin{center}
  \begin{tabular}{ll}
@@ -287,17 +249,17 @@ Stack-Layout nach dem Pushen der zwei Arbeitsregister klarzumachen:
 \label{subsubsec:Funktionen-Beispiel}
 
 Das folgende Beispiel verdeutlicht die Verwendung von Funktionen anhand eines
-Programms, das die Länge eines Strings berechnet und dieses Länge ausgibt. Der
+Programms, das die Länge eines Strings berechnet und die Länge ausgibt. Der
 String ist im Programm selbst eingebettet (Datensegment). Das Programm besteht
 aus mehreren Dateien, die jeweils eine Funktion implementieren:
 \begin{enumerate}
  \item prog2.uasm, enthält das Hauptprogramm (Programm
        \ref{lst:VerwendungFunktionen}).
- \item strlen.uasm, enthält die Funktion \texttt{strlen}, die die Länge eines
+ \item strlen.uasm, enthält die Funktion \texttt{strlen}, welche die Länge eines
        Strings berechnet (Programm \ref{lst:strlen}).
- \item printint.uasm, enhält die Funktion \texttt{printint}, die eine ganze
-       Zahle ausgibt (Programm \ref{lst:printint}).
- \item putchar.uasm, enthält die Funktion \texttt{putchar}, die einen Buchstaben
+ \item printint.uasm, enthält die Funktion \texttt{printint}, welche eine
+       beliebige ganze Zahl ausgibt (Programm \ref{lst:printint}).
+ \item putchar.uasm, enthält die Funktion \texttt{putchar}, welche einen Buchstaben
        ausgibt (Programm \ref{lst:putchar}).
 \end{enumerate}
 
@@ -323,19 +285,19 @@ Dieses Programm wird wie folgt assembliert:
 \begin{lstlisting}
  ./uasm prog2.uasm strlen.uasm printint.uasm putchar.uasm
 \end{lstlisting}
-Bemerkungen: es werden alle benötigten Dateien angegeben. Die Reihenfolge des
-Dateien, die eine Funktion definieren ist egal, die \glqq main\grqq-Datei aber,
-die den Startpunkt des Programms beinhaltet muss an der ersten Stelle
-sein, denn der Code in dieser Datei muss zuerst assembliert werden.
+Bemerkung: Es werden alle benötigten Dateien angegeben. Die Reihenfolge der
+Dateien, die eine Funktion definieren ist beliebig. Lediglich die
+\glqq main\grqq-Datei, welche den Startpunkt des Programms beinhaltet, muss an 
+der ersten Stelle stehen.
 
 Nach dem Assemblieren wird eine Datei namens \texttt{u.out} erzeugt, die den
 \glqq Bytecode\grqq\ für die virtuelle Maschine beinhaltet. Man könnte auch die
 Option \texttt{-o} verwenden, um einen alternativen Dateinamen zu spezifizieren.
-Möchte man diese Datei ausführen, so könnte man folgendes eingeben:
+Um diese Datei auszuführen, gibt man folgenden Befehl ein:
 \begin{lstlisting}
- /umach u.out
+ ./umach u.out
 \end{lstlisting}
-Als Ergebniss bekommt man die Fehlermeldung
+Als Ergebnis erscheint die Fehlermeldung
 \begin{lstlisting}
 ERROR: Cannot load 268 bytes of program into 512 bytes of
        memory
@@ -343,18 +305,18 @@ ERROR: Cannot load program file u.out.
 Aborted
 \end{lstlisting}
 Das bedeutet, die virtuelle Maschine hat nicht genug Speicher um dieses
-Programm überhaupt laden zu können (256 Bytes werden für die Interrupttabelle
+Programm überhaupt laden zu können. 256 Bytes werden für die Interrupttabelle
 reserviert und die Maschine verwendet standardmäßig 512 Bytes für den
-Speicher). Man kann in diesem Fall mit der Option \texttt{-m} den Speicher
-größer spezifizieren, z.B. so:
+Speicher. Man kann in diesem Fall mit der Option \texttt{-m} den Speicher
+größer spezifizieren. Als Beispiel Nutzen wir \texttt{-m 600}:
 \begin{lstlisting}
- /umach -m 600 u.out
+ ./umach -m 600 u.out
 \end{lstlisting}
 Das erhöht den Speicher auf 600 Bytes. Es wird dann \glqq 12\grqq\ ausgegeben.
 
-Noch eine Bemerkung: es ist zu empfehlen, beim Start der Maschine die Option
-\texttt{-v} anzugeben, denn die viele \texttt{PUSH}-Befehle können beim
-unzureichenden Speicher einen Stack Overflow verursachen, was derzeit die
-Maschine zum Stillstand bringt -- es sei denn, man programmiert einen Interrupt
-Handler für den Stack Overflow Interrupt. Der Stack Overflow wird als Warnung
-ausgegeben und Warnungen werden erst mit der Option \texttt{-v} ausgegeben.
+Bemerkung: Es ist zu empfehlen, beim Start der Maschine die Option \texttt{-v}
+anzugeben. Zu viele \texttt{PUSH}-Befehle können bei unzureichenden Speicher
+einen Stack Overflow verursachen, was derzeit die Maschine zum Stillstand bringt
+-- es sei denn, man programmiert einen Interrupt Handler für den Stack Overflow
+Interrupt. Der Stack Overflow wird als Warnung ausgegeben, welche nur mit der
+Option \texttt{-v} erscheinen.
