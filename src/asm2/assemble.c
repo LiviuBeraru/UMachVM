@@ -268,7 +268,7 @@ int assemble_line(asm_context_t *cntxt, char *items[], int item_count, uint8_t i
             int32_t label_offset = (label.sym_addr - cntxt->current_addr) / 4;
             static char label_buf[12];
 
-            snprintf(label_buf, sizeof(label_buf), "%d", label_offset);
+            int_to_str(label_offset, label_buf);
             items[1] = label_buf;
         } else {
             /* label was not set */
