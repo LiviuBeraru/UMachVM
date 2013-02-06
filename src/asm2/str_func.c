@@ -37,7 +37,7 @@ void int_to_str(const int32_t value, char *string) {
     
     /* special case where abs() would fail */
     if (value == INT32_MIN) {
-        strcpy(string, "−2147483648");
+        strcpy(string, "-2147483648");
         return;
     }
     

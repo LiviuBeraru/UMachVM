@@ -5,6 +5,5 @@ int   str_to_int(const char *str, long *num);
 void  int_to_str(const int32_t value, char *string);
 char *str_trim(char *str);
 void  str_strip_comment(char *str);
-char *get_nth_str(char *parts[], uint32_t n);
 
 #endif
