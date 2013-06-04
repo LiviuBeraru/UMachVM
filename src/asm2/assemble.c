@@ -69,9 +69,6 @@ int assemble(asm_context_t *cntxt, char *files[], int file_count) {
         goto cleanup;
 
     if (cntxt->gen_debuginf) {
-        fclose(fmap_file);
-        fclose(debug_file);
-
         FILE *sym_file;
         char *sym_file_name = malloc(sizeof(char) * (outfile_name_len + 8));
         strcpy(sym_file_name, cntxt->output_file);
@@ -79,12 +76,16 @@ int assemble(asm_context_t *cntxt, char *files[], int file_count) {
 
         if ((sym_file = fopen(sym_file_name, "w")) == NULL) {
             perror(sym_file_name);
+            free(sym_file_name);
             goto cleanup;
         }
 
         write_symbols_file(sym_file);
         fclose(sym_file);
         free(sym_file_name);
+
+        fclose(fmap_file);
+        fclose(debug_file);
     }
 
     free_dynamic_data(cntxt);
@@ -99,6 +100,11 @@ cleanup:
     remove(cntxt->output_file);
 
     if (cntxt->gen_debuginf) {
+        if (fmap_file)
+            fclose(fmap_file);
+        if (debug_file)
+            fclose(debug_file);
+
         remove(fmap_name);
         remove(debug_name);
     }
