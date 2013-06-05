@@ -34,9 +34,7 @@ int get_symbol(const char *name, symbol_t *result) {
     symbol_t *sym = g_hash_table_lookup(symbols_ht, name);
     
     if (sym != NULL) {
-        result->sym_name = sym->sym_name;
-        result->sym_type = sym->sym_type;
-        result->sym_addr = sym->sym_addr;
+        *result = *sym;
         return TRUE;
     } else
         return FALSE;

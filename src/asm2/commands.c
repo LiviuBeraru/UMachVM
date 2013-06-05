@@ -116,10 +116,7 @@ int get_command_by_name(const char *name, command_t *result)
     g_free(cmd_name);
 
     if (cmd != NULL) {
-        result->opcode = cmd->opcode;
-        result->opname = cmd->opname;
-        result->format = cmd->format;
-        result->has_label = cmd->has_label;
+        *result = *cmd;
         return TRUE;
     } else
         return FALSE;

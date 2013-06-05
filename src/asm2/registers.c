@@ -80,8 +80,7 @@ int get_register_by_name(const char *name, register_t *result) {
     g_free(reg_name);
     
     if (reg != NULL) {
-        result->regname = reg->regname;
-        result->regcode = reg->regcode;
+        *result = *reg;
         return TRUE;
     } else
         return FALSE;
