@@ -14,16 +14,16 @@
 #include "assemble.h"
 
 int main(int argc, char *argv[]) {
-    asm_context_t asm_context;
-
-    asm_context.current_addr  = INTTABLE_SIZE;
-    asm_context.current_line  = 0;
-    asm_context.current_file  = NULL;
-    asm_context.output_file   = "u.out";
-    asm_context.gen_debuginf  = FALSE;
-    /* init size of read_buf is 0xff, but getline() might enlarge it */
-    asm_context.read_buf      = malloc(sizeof(char) * 0xff); 
-    asm_context.read_buf_size = sizeof(char) * 0xff;
+    asm_context_t asm_context = {
+        .current_addr  = INTTABLE_SIZE,
+        .current_line  = 0,
+        .current_file  = NULL,
+        .output_file   = "u.out",
+        .gen_debuginf  = FALSE,
+        /* init size of read_buf is 0xff, but getline() might enlarge it */
+        .read_buf      = malloc(sizeof(char) * 0xff),
+        .read_buf_size = sizeof(char) * 0xff
+    };
 
     int wait_on_error = FALSE;
 
